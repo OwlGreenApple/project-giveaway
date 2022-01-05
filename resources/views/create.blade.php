@@ -12,7 +12,7 @@
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h4 class="main-color">Giveaway Information</h4>
+                        <h3 class="main-color main-theme">Giveaway Information</h3>
                         <div class="border-bottom info">Competition Information</div>
                         
                         <!-- begin form -->
@@ -75,7 +75,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label>Timezone</label>
-                            <select class="form-select form-select-lg" name="timezone" id="timezone" required="">
+                            <select class="form-select" name="timezone" id="timezone" required="">
                                 <option value="Pacific/Auckland">(UTC -11) Auckland</option>
                                 <option value="Pacific/Tahiti">(UTC -10) Papeete</option>
                                 <option value="America/Anchorage">(UTC -9) Anchorage </option>
@@ -138,6 +138,15 @@
                             </div>
                         </div>
                         <!-- end form -->
+                    </div>
+                </div>
+
+                <!-- form 2 -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-color main-theme">Sharing</h3>
+                        <div class="text-center">Click to select the platforms you want your contestants to use to share your giveaway:</div>
+                        
                     </div>
                 </div>
 
