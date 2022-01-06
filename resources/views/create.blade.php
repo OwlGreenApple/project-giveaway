@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 mb-3">
-            <h1 align="center">Create Giveaway</h1>
+            <h1 class="big-theme" align="center">Create Giveaway</h1>
         </div>
 
         <div class="col-md-8">
@@ -55,23 +55,29 @@
                         </div> 
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Title:<span class="text-danger">*</span></label>
+                                <label>Start At:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg" name="title" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Title:<span class="text-danger">*</span></label>
+                                <label>End At:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg" name="title" />
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Title:<span class="text-danger">*</span></label>
+                                <label>Awarded At:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg" name="title" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Title:<span class="text-danger">*</span></label>
+                                <label>Number Of Winners:<span class="text-danger">*</span></label>
                                 <input type="number" min="1" class="form-control form-control-lg w-25" name="winner" />
                             </div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                            Unlimited Campaign
+                            </label>
                         </div>
                         <div class="form-group mb-3">
                             <label>Timezone</label>
@@ -145,9 +151,68 @@
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">Sharing</h3>
-                        <div class="text-center">Click to select the platforms you want your contestants to use to share your giveaway:</div>
-                        
+                        <div class="text-justify">Click to select the platforms you want your contestants to use to share your giveaway:</div>
+                        <div class="giveaway-icons">
+                            <div class="mx-auto icon-wrapper">
+                                <i class="fab fa-twitter box"></i>
+                                <i class="fab fa-facebook-f box"></i>
+                                <i class="fab fa-whatsapp box"></i>
+                                <i class="fab fa-linkedin-in box"></i>
+                                <i class="far fa-envelope box"></i>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <!-- form 3 -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-color main-theme">Bonus Entries</h3>
+                        <div class="text-justify fst-italic border-bottom py-3 mb-4">These are actions a contestant can take to get even more entries.</div>
+                        <div class="col-lg-6">
+                            <select class="form-select">
+                                <option>Add Entry Action</option>
+                                <optgroup label="Social Follow">
+                                    <option>Facebook Like</option>
+                                    <option>Instagram Follow</option>
+                                    <option>Twitter Follow</option>
+                                    <option>Youtube Subscribe</option>
+                                    <option>Podcast Subscribe</option>
+                                </optgroup>
+                                <optgroup label="Other">
+                                    <option>Daily Entries</option>
+                                    <option>Click a Link</option>
+                                    <option>Watch Youtube Video</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- form 4 -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-color main-theme">Integration</h3>
+                        <div class="border-bottom info">Activrespon</div>
+                        <select class="form-select">
+                            <option>List 1</option>
+                            <option>List 2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- form 5 -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-theme">EU GDPR consent checkbox</h3>
+                        <p class="fcs italic">Are you planning to send your entrants marketing messages after the giveaway? Are any of your contestants located in the EU? If yes, or you’re not sure, enable the checkbox option below so your contestants can give clear consent as required by EU GDPR.</p>
+                        <input type="checkbox" class="form-checkbox me-1" />&nbsp;Require GDPR Consent
+                    </div>
+                </div>
+
+                <div class="mt-5 text-center">
+                    <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
+                    <button type="submit" class="btn bg-custom btn-lg text-white">Save</button>
                 </div>
 
             </form>

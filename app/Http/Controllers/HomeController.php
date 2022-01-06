@@ -30,4 +30,21 @@ class HomeController extends Controller
     {
         return view('create');
     }
+
+    public function accounts()
+    {
+        return view('account');
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    public function connect_wa()
+    {
+        return view('connect');
+    }
+
+/* end of class */
 }

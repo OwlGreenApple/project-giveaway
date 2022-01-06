@@ -21,3 +21,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);
+Route::get('/account', [App\Http\Controllers\HomeController::class, 'accounts']);
+Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
+Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);

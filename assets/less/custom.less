@@ -2,12 +2,29 @@
     created january 5 2022
 */
 
-.main-color {
-    color : #00c0ff;
+body {
+    font-size : 16px;
+}
+
+.main-color, .footer a {
+    color : #00c0ff !important;
+}
+
+.account-title {
+    letter-spacing: 2px;
+    color : #888;
+}
+
+[contenteditable]:focus {
+    outline: 1px solid rgb(170, 170, 170);
 }
 
 .bg-custom {
     background-color: #00c0ff !important;
+}
+
+.btn-account {
+    box-shadow:inset -2px -2px #0072a9
 }
 
 .info {
@@ -15,12 +32,67 @@
     font-weight: bold;
 }
 
+.act {
+    width : 100%;
+    max-width : 40px;
+    margin-top : 25%;
+}
+
+.big-theme {
+    font-size: 54px;
+    color : #a7a7a7;
+    padding-top : 30px;
+    padding-bottom : 16px;
+    font-weight: bold;
+}
+
 .main-theme {
-    margin-bottom:15px;
+    margin-bottom:25px;
+    font-weight: bold;
+}
+
+.giveaway-icons {
+    display : inline-block;
+    width : 100%;
+    margin-top : 24px;
+}
+
+.icon-wrapper {
+    max-width : 280px;
+}
+
+.box {
+    border : 1px solid #000;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 22px;
+    width : 44px;
+    height : 44px;
+    text-align: center;
+    margin-right : 5px;
+}
+
+.settings {
+    display : block;
+    text-decoration: none;
+    padding : 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.settings:hover {
+    color: #5ed7ff !important;
+}
+
+.settings.active {
+    border-radius : 8px;
+    color: #00c0ff !important;
+    display: block;
+   // color : #fff !important;
 }
 
 /*
-wysiwyg
+wysiwyg EDITOR
 */
 
 #editor {
@@ -33,4 +105,12 @@ wysiwyg
     background: white;
     margin:0;
     width: 100%;
+}
+
+.footer a {
+    text-decoration : none !important;
+}
+
+.footer a:hover {
+    text-decoration: underline !important;
 }

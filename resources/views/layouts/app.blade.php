@@ -60,6 +60,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('account') }}">Accounts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('contact') }}">Contact Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('scan') }}">Connect WA</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -86,6 +95,17 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <!-- footer -->
+        <div class="footer w-100 bg-white px-5 py-3 mt-2">
+            <div class="container text-center">
+                <div class="d-inline">
+                    <a href="#">FAQ</a>
+                    <a href="#">TERMS</a>
+                </div>
+                <div class="mt-2"><small>Copyright&copy; 2022 Giveaway</small></div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
