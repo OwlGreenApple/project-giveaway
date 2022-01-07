@@ -137,11 +137,15 @@
                         </div>
                         <!-- new line -->
                         <div class="border-bottom info">Prize Images Tip: use images with a 2x1 ratio (minimum of 680px width).</div>
-                        <div class="d-flex flex-wrap mb-1">
-                            <div class="add-image-file image-file" style="background-image: url('/img/add-image.svg');">
-                                <input type="file" name="images[]" accept=".jpg,.jpeg,.png" class="image-file-input" title="Click to edit" style="cursor: pointer;">
-                                <p>Add cover image <span class="text-warning">*</span></p>
+                        <div class="upload_banner">
+                            <div name="buttonid" class="image-upload">
+                                <input name="file_input" type="file"/>
+                                <p class="text">Add Image Or Youtube Video</p>
                             </div>
+                            <!-- <div name="buttonid" class="image-upload">
+                                <input name="file_input" type="file"/>
+                                <p class="text">Add Image Or Youtube Video</p>
+                            </div> -->
                         </div>
                         <!-- end form -->
                     </div>
@@ -151,7 +155,7 @@
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">Sharing</h3>
-                        <div class="text-justify">Click to select the platforms you want your contestants to use to share your giveaway:</div>
+                        <div class="text-justify title">Click to select the platforms you want your contestants to use to share your giveaway:</div>
                         <div class="giveaway-icons">
                             <div class="mx-auto icon-wrapper">
                                 <i class="fab fa-twitter box"></i>
@@ -168,8 +172,35 @@
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">Bonus Entries</h3>
-                        <div class="text-justify fst-italic border-bottom py-3 mb-4">These are actions a contestant can take to get even more entries.</div>
-                        <div class="col-lg-6">
+                        <div class="title text-justify fst-italic border-bottom py-3 mb-4">These are actions a contestant can take to get even more entries.</div>
+                        
+                        <div class="row mb-3">
+                            <div class="form-group col-md-6 col-lg-6 mb-2">
+                                <label>Action Text:<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg" name="title" />
+                            </div> 
+                            <div class="form-group col-md-6 col-lg-6 mb-2">
+                                <label>URL<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg" name="winner" />
+                            </div>
+                        
+                            <div class="form-group col-md-12 col-lg-12">
+                                <label>Number Of Entries<span class="text-danger">*</span></label>
+                                <div class="row g1">
+                                    <div class="col-auto">
+                                        <input type="number" min="1" class="form-control form-control-lg" name="winner" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="form-text title">
+                                            How many entries this action is worth
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--  -->
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mt-4">
                             <select class="form-select">
                                 <option>Add Entry Action</option>
                                 <optgroup label="Social Follow">
@@ -204,9 +235,9 @@
                 <!-- form 5 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-theme">EU GDPR consent checkbox</h3>
-                        <p class="fcs italic">Are you planning to send your entrants marketing messages after the giveaway? Are any of your contestants located in the EU? If yes, or you’re not sure, enable the checkbox option below so your contestants can give clear consent as required by EU GDPR.</p>
-                        <input type="checkbox" class="form-checkbox me-1" />&nbsp;Require GDPR Consent
+                        <h3 class="main-theme title">EU GDPR consent checkbox</h3>
+                        <p class="fcs italic title">Are you planning to send your entrants marketing messages after the giveaway? Are any of your contestants located in the EU? If yes, or you’re not sure, enable the checkbox option below so your contestants can give clear consent as required by EU GDPR.</p>
+                        <input type="checkbox" class="form-checkbox me-1" />&nbsp;<span class="title">GDPR Consent</span>
                     </div>
                 </div>
 
@@ -223,7 +254,24 @@
 </div>
 
 <script>
+document.getElementsByName('buttonid')[0].addEventListener('click', openDialog);
+// document.getElementsByName('buttonid')[1].addEventListener('click', open_upload);
+
+function openDialog() {
+  document.getElementsByName('file_input')[0].click();
+}
+
+function open_upload()
+{
+    document.getElementsByName('file_input')[1].click();
+}
+
 $(function() {
+    editor();
+});
+
+function editor()
+{
     $('#editControls a').click(function(e) {
         switch($(this).data('role')) {
         default:
@@ -235,10 +283,10 @@ $(function() {
         console.log($(this).val());
         switch($(this).val()) {
             case 'h3':
-                document.execCommand("fontSize", false, "2");
+                document.execCommand("fontSize", false, "1");
             break;
             case 'h2':
-                document.execCommand("fontSize", false, "4");
+                document.execCommand("fontSize", false, "5");
                 break;
             case 'h1':
                 document.execCommand("fontSize", false, "7");
@@ -251,6 +299,6 @@ $(function() {
                 break;
         }
     });
-});
+}
 </script>
 @endsection

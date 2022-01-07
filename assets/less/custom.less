@@ -15,6 +15,10 @@ body {
     color : #888;
 }
 
+.title {
+    color : #979797;
+}
+
 [contenteditable]:focus {
     outline: 1px solid rgb(170, 170, 170);
 }
@@ -59,10 +63,11 @@ body {
 
 .icon-wrapper {
     max-width : 280px;
+    color: #979797;
 }
 
 .box {
-    border : 1px solid #000;
+    border : 1px solid #979797;
     border-radius: 8px;
     padding: 10px;
     font-size: 22px;
@@ -89,6 +94,34 @@ body {
     color: #00c0ff !important;
     display: block;
    // color : #fff !important;
+}
+
+/* Upload */
+.upload_banner {
+    display: flex;
+}
+
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload .text{
+    color : #b9c9cd;
+    font-size: 14px;
+    text-align: center;
+    padding-top : 45px;
+    line-height: 16px;
+    letter-spacing : 2px;
+}
+
+.image-upload
+{
+    cursor : pointer;
+    margin-right : 20px;
+    width : 105px;
+    height : 105px;
+    background: url('../img/add-image.svg') no-repeat;
 }
 
 /*
