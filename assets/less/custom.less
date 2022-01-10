@@ -6,8 +6,9 @@ body {
     font-size : 16px;
 }
 
-.main-color, .footer a {
+.main-color, .footer a, .login-foot a {
     color : #00c0ff !important;
+    text-decoration: none;
 }
 
 .account-title {
@@ -17,6 +18,57 @@ body {
 
 .title {
     color : #979797;
+}
+
+.bg-login {
+    background-image: linear-gradient(90deg, #00c0ff , #66c7ff, #bee3f8);
+    width : 100%;
+    height : 100%;
+    position: relative;
+}
+
+.wave-white {
+    background:url('../img/wave-white.svg') no-repeat center;
+    position: absolute;
+    background-size: 100%;
+    width : 100%;
+    height : 100%;
+}
+
+.logo {
+    border-bottom: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: #f7f9fa;
+    text-align: center;
+}
+
+.fix-card {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.gift-strap {
+    background:url('../img/illust-top-gray.svg') no-repeat;
+    width : 120px;
+    height : 70px;
+    margin-top : -55px;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    top : 0;
+    left : 0;
+    right : 0;
+    bottom : 0;
+    z-index : 2;
+}
+
+.gift-pos {
+    margin-top : 60px;
 }
 
 [contenteditable]:focus {
@@ -93,7 +145,20 @@ body {
     border-radius : 8px;
     color: #00c0ff !important;
     display: block;
-   // color : #fff !important;
+}
+
+.wrapper {
+    border-radius: 20px;
+    background-color: #fff;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-inner {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    max-height : 405px;
 }
 
 /* Upload */
@@ -122,6 +187,53 @@ body {
     width : 105px;
     height : 105px;
     background: url('../img/add-image.svg') no-repeat;
+}
+
+/*
+    Contest 
+*/
+
+.contest-title {
+    font-size : 48px;
+    text-align: center;
+}
+
+.time-contest {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.time-contest::before, .time-contest::after {
+    content: " --------------------------- ";
+}
+
+#countdown ul li {
+    list-style-type: none;
+    display : inline-block;
+    margin-right : 10px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 30px;
+}
+
+#countdown .count {
+    font-size: 40px;
+    color : #555;
+}
+
+#countdown .count-label {
+    font-size : 14px;
+    color : #c5c5c5;
+    font-weight: bold;
+}
+
+#countdown .count-space {
+    vertical-align: top;
+    line-height: 25px;
+}
+
+.trophy {
+    color: gold;
 }
 
 /*
