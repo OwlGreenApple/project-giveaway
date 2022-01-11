@@ -13,27 +13,35 @@
             <form>
                 <div class="card px-5 py-5">
                     <div class="card-body p-0">
+                    <div class="iti-wrapper">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="628xxxxxx">
-                            <button class="btn bg-custom text-white" type="button">Connect</button>
-                        </div>
+                            <input type="text" id="phone" name="phone" class="form-control form-control-lg" required/>
+                            <span class="error phone"></span>
+                            <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
+                            <input name="data_country" type="hidden" /> 
+                            <span class="error code_country"></span>
 
-                        <table class="table table-striped mt-4 mb-0">
-                            <thead>
-                                <tr>
-                                    <th>WA Number</th>
-                                    <th>Status</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>62811111</td>
-                                    <td><span class="text-success">Connected</span></td>
-                                    <td><span class="text-danger"><i class="far fa-trash-alt"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <button type="submit" class="btn bg-custom btn-lg text-white">Enter</button>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped mt-4 mb-0">
+                        <thead>
+                            <tr>
+                                <th>WA Number</th>
+                                <th>Status</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>62811111</td>
+                                <td><span class="text-success">Connected</span></td>
+                                <td><span class="text-danger"><i class="far fa-trash-alt"></i></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--  -->
                     </div>
                 </div>
             </form>

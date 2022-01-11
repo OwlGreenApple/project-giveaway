@@ -53,14 +53,14 @@
                                 <div id='editor' contenteditable></div>
                             </div>
                         </div> 
-                        <div class="row mb-3">
+                        <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Start At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="title" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="title" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>End At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="title" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_2" name="title" />
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -268,7 +268,27 @@ function open_upload()
 
 $(function() {
     editor();
+    datetimepicker();
 });
+
+function datetimepicker()
+{
+    $('.datetimepicker_1').datetimepicker({
+        format : 'YYYY-MM-DD HH:mm',
+        minDate : new Date()
+    });
+    
+    $('.datetimepicker_2').on('focusin', function(e){ 
+        var prev_date = $('.datetimepicker_1').val();
+        var date = new Date();
+
+        $(this).datetimepicker({
+            format : 'YYYY-MM-DD HH:mm',
+            minDate : date,
+            startDate : date
+        });
+    });
+}
 
 function editor()
 {

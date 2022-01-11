@@ -23,10 +23,23 @@
 
      <!-- Font Awesome 5 -->
      <link href="{{ asset('assets/font-awesome-5/all.css') }}" rel="stylesheet">
+
+    <!-- Intl Dialing Code -->
+    <link href="{{ asset('assets/intl-tel-input/css/intlTelInput.min.css') }}" rel="stylesheet" />
+    <script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
+
+    <!-- Datetimepicker -->
+    <link href="{{ asset('/assets/datetimepicker/jquery.datetimepicker.css') }}" rel="stylesheet">
+    <link href="{{ asset('/assets/datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/moment.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script> 
+
 </head>
 <body>
     <div id="app">
-        @if(Request::segment(1) !== 'login')
+        @php $x = false; if(Request::segment(1) == 'login' || Request::segment(1) == 'register') $x = true; @endphp
+       
+        @if($x == false)
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -94,8 +107,8 @@
         </nav>
         @endif
 
-        <main class="@if(Request::segment(1) == 'login') pt-4 bg-login @else py-4 @endif">
-            @if(Request::segment(1) == 'login')<div class="wave-white"></div>@endif
+        <main class="@if(Request::segment(1) == 'login') pt-4 bg-login @elseif(Request::segment(1) == 'register')pt-4 bg-register @else py-4 @endif">
+            @if(Request::segment(1) == 'login' || Request::segment(1) == 'register')<div class="wave-white"></div>@endif
                 @yield('content')
         </main>
 
@@ -110,5 +123,9 @@
             </div>
         </div>
     </div>
-</body>
+
+    @if(Request::segment(1) == 'scan' || Request::segment(1) == 'c')
+        <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
+    @endif
+    </body>
 </html>

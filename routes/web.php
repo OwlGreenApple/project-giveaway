@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// App::setLocale('en');
+Route::get('/c', [App\Http\Controllers\ContestController::class, 'contest']);
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -24,4 +29,3 @@ Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_givea
 Route::get('/account', [App\Http\Controllers\HomeController::class, 'accounts']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
-Route::get('/c', [App\Http\Controllers\HomeController::class, 'contest']);

@@ -46,10 +46,5 @@ class HomeController extends Controller
         return view('connect');
     }
 
-    public function contest()
-    {
-        return view('contest');
-    }
-
 /* end of class */
 }
