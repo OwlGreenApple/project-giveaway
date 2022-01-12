@@ -34,6 +34,10 @@
     <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/moment.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script> 
 
+    <!-- Image Uploader -->
+    <link href="{{ asset('assets/image-uploader/dist/image-uploader.min.css') }}" rel="stylesheet" />
+    <script type="text/javascript" src="{{ asset('assets/image-uploader/dist/image-uploader.min.js') }}"></script> 
+
 </head>
 <body>
     <div id="app">

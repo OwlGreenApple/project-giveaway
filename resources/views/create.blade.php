@@ -8,7 +8,7 @@
         </div>
 
         <div class="col-md-8">
-            <form>
+            <form id="create_event">
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
@@ -66,7 +66,7 @@
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Awarded At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="title" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_3" name="title" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Number Of Winners:<span class="text-danger">*</span></label>
@@ -131,22 +131,23 @@
                                 <label>Prize Value:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text" id="inputGroup-sizing-lg">Rp</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    <input id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                                 </div>
                             </div>
                         </div>
                         <!-- new line -->
-                        <div class="border-bottom info">Prize Images Tip: use images with a 2x1 ratio (minimum of 680px width).</div>
-                        <div class="upload_banner">
-                            <div name="buttonid" class="image-upload">
-                                <input name="file_input" type="file"/>
-                                <p class="text">Add Image Or Youtube Video</p>
-                            </div>
-                            <!-- <div name="buttonid" class="image-upload">
-                                <input name="file_input" type="file"/>
-                                <p class="text">Add Image Or Youtube Video</p>
-                            </div> -->
+                        <div class="border-bottom info">Prize Images / Youtube Video, Tip: use images with a 2x1 ratio (minimum of 680px width).</div>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Youtube Video</label>
                         </div>
+
+                        <div class="upload_banner">
+                           
+                        </div>
+                        <div class="input-images"><!-- display preview here --></div>
+                        <input type="hidden" value="aaa" name="list[]" />
+                        <input type="hidden" value="bbb" name="list[]" />
                         <!-- end form -->
                     </div>
                 </div>
@@ -249,43 +250,101 @@
             </form>
         <!-- end col -->
         </div>
-        
+
     </div>
 </div>
 
+
+
 <script>
-document.getElementsByName('buttonid')[0].addEventListener('click', openDialog);
-// document.getElementsByName('buttonid')[1].addEventListener('click', open_upload);
 
-function openDialog() {
-  document.getElementsByName('file_input')[0].click();
-}
-
-function open_upload()
-{
-    document.getElementsByName('file_input')[1].click();
-}
 
 $(function() {
     editor();
     datetimepicker();
+    count_logic();
+    save_data();
+    image_uploader();
 });
+
+function image_uploader()
+{
+    $('.input-images').imageUploader({
+        label :'Maximum image is 5, must jpg, png or gif',
+        "{{ $preloaded }}": [
+            @if(count($data) > 0)
+                @foreach($data as $id=>$row)
+                    {id: "{{ $id }}", src: "{{ $row }}"},
+                @endforeach
+            @endif
+        ],
+        maxFiles : 5
+    });
+
+    $("body").on("click",".delete-image",function(){
+        var val = $("input[name='preloaded]").val();
+        console.log(val);
+    });
+}
+
+function save_data()
+{
+    $("#create_event").submit(function(e){
+        e.preventDefault();
+        var form = $("#create_event")[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method:'POST',
+            url : "{{ url('save-events') }}",
+            data : data,
+            processData : false,
+            cache : false,
+            contentType: false,
+            dataType : 'json',
+            beforeSend: function()
+            {
+                // $('#loader').show();
+                // $('.div-loading').addClass('background-load');
+                // $(".error").hide();
+            },
+            success : function(result)
+            {
+
+            },
+            error : function(xhr)
+            {
+
+            }
+        });
+    });
+}
+
+function count_logic()
+    {
+        $("#amount").on("keyup",delay(function(e){
+            var coin = $(this).val();
+            $("#amount").val(formatNumber(coin));
+        },100));
+    }
 
 function datetimepicker()
 {
+    var date = new Date();
+    var format_date = 'YYYY-MM-DD HH:mm';
+
     $('.datetimepicker_1').datetimepicker({
-        format : 'YYYY-MM-DD HH:mm',
-        minDate : new Date()
+        format : format_date,
+        minDate : date
     });
     
-    $('.datetimepicker_2').on('focusin', function(e){ 
-        var prev_date = $('.datetimepicker_1').val();
-        var date = new Date();
-
+    $('.datetimepicker_2, .datetimepicker_3').on('focusin', function(e){ 
         $(this).datetimepicker({
-            format : 'YYYY-MM-DD HH:mm',
-            minDate : date,
-            startDate : date
+            format : format_date,
+            defaultDate : date.setDate(date.getDate() + 2)
         });
     });
 }
@@ -321,4 +380,5 @@ function editor()
     });
 }
 </script>
+<script src="{{ asset('assets/js/counting.js') }}" type="text/javascript"></script>
 @endsection

@@ -25,7 +25,12 @@ Route::get('/c', [App\Http\Controllers\ContestController::class, 'contest']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);
 Route::get('/account', [App\Http\Controllers\HomeController::class, 'accounts']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
+
+
+/* EVENTS */
+Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);
+Route::get('/edit_event', [App\Http\Controllers\HomeController::class, 'edit_event']);
+Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_events']);
