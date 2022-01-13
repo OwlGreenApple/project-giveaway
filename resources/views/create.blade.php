@@ -136,18 +136,26 @@
                             </div>
                         </div>
                         <!-- new line -->
-                        <div class="border-bottom info">Prize Images / Youtube Video, Tip: use images with a 2x1 ratio (minimum of 680px width).</div>
+                        <div class="border-bottom info">Prize Images / Youtube Video.</div>
+                        <div class="text-justify title mb-3">Tip: use images with a 2x1 ratio (minimum of 680px width)</div>
                         <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Youtube Video</label>
+                            <input class="form-check-input" type="checkbox" id="media_option">
+                            <label class="form-check-label" for="media_option">Youtube Video</label>
+                            <span class="text-danger">*</span>
                         </div>
 
-                        <div class="upload_banner">
-                           
+                        <div class="upload_banner form-group d-none">
+                            <label>Youtube URL:</label>
+                            <input type="text" class="form-control form-control-lg" name="youtube_url" />
                         </div>
+
                         <div class="input-images"><!-- display preview here --></div>
-                        <input type="hidden" value="aaa" name="list[]" />
-                        <input type="hidden" value="bbb" name="list[]" />
+                        @if(count($data) > 0)
+                            @foreach($data as $id=>$row)
+                                <input type="hidden" value="{{ $id }}" name="list[]" />
+                            @endforeach
+                        @endif
+                       
                         <!-- end form -->
                     </div>
                 </div>
@@ -175,7 +183,10 @@
                         <h3 class="main-color main-theme">Bonus Entries</h3>
                         <div class="title text-justify fst-italic border-bottom py-3 mb-4">These are actions a contestant can take to get even more entries.</div>
                         
+                        @if(count($bonus) > 0)
+                        <!-- entries column -->
                         <div class="row mb-3">
+                            <div class="border-bottom info">Facebook Like <a><i class="far fa-trash-alt title"></i></a></div>
                             <div class="form-group col-md-6 col-lg-6 mb-2">
                                 <label>Action Text:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg" name="title" />
@@ -200,21 +211,27 @@
                                 <!--  -->
                             </div>
                         </div>
+                        <input type="hidden" name="entries[]" />
+                        @endif
+                        <!-- end logic bonus entry -->
+
+                        <!-- display bonus entry column -->
+                        <div id="bonus_entry"><!-- --></div>
                         
                         <div class="col-lg-6 mt-4">
-                            <select class="form-select">
+                            <select id="bonus" class="form-select">
                                 <option>Add Entry Action</option>
                                 <optgroup label="Social Follow">
-                                    <option>Facebook Like</option>
-                                    <option>Instagram Follow</option>
-                                    <option>Twitter Follow</option>
-                                    <option>Youtube Subscribe</option>
-                                    <option>Podcast Subscribe</option>
+                                    <option value="fb">Facebook Like</option>
+                                    <option value="ig">Instagram Follow</option>
+                                    <option value="tw">Twitter Follow</option>
+                                    <option value="yt">Youtube Subscribe</option>
+                                    <option value="pt">Podcast Subscribe</option>
                                 </optgroup>
                                 <optgroup label="Other">
-                                    <option>Daily Entries</option>
-                                    <option>Click a Link</option>
-                                    <option>Watch Youtube Video</option>
+                                    <option value="de">Daily Entries</option>
+                                    <option value="cl">Click a Link</option>
+                                    <option value="wyt">Watch Youtube Video</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -257,15 +274,132 @@
 
 
 <script>
-
-
 $(function() {
     editor();
     datetimepicker();
     count_logic();
     save_data();
     image_uploader();
+    display_media();
+    setup_sharing();
+    add_bonus_entry();
+    delete_bonus_entry();
 });
+
+function add_bonus_entry()
+{
+    $("#bonus").change(function(){
+        var val = $(this).val();
+
+        if(val !== 'fb')
+        {
+            return false;
+        }
+
+        var column = column_entry(val);
+        $("#bonus_entry").append(column);
+        $(this+" option").eq(0).prop('selected',true);
+    });
+}
+
+function delete_bonus_entry()
+{
+    $("body").on("click",".del-entry",function(){
+        var pos = $(this).attr('del_new_id');
+        $(".pos_"+pos).remove();
+    });
+}
+
+function column_entry(val)
+{
+    var title, col_1, col_2, col_3;
+    if(val == 'fb')
+    {
+        title = 'Facebook Like';
+        col_1 = 'Action Text';
+        col_2 = 'URL';
+        col_3 = 'Number Of Entries';
+    }
+    else if(val == 'ig')
+    {
+        title = 'Instagram Follow';
+    }
+
+    var len = $(".entries").length;
+
+    $column = '';
+    $column += '<div class="row mb-3 entries pos_'+len+'">';
+    $column += '<div class="border-bottom info">'+title+' <a del_new_id='+len+' class="del-entry"><i class="far fa-trash-alt title"></i></a></div>';
+   
+    $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
+    $column += '<label>'+col_1+':<span class="text-danger">*</span></label>';
+    $column += '<input type="text" class="form-control form-control-lg" name="new_text_'+val+'" />';
+    $column += '</div>';
+
+    $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
+    $column += '<label>'+col_2+'<span class="text-danger">*</span></label>';
+    $column += '<input type="text" class="form-control form-control-lg" name="new_url_'+val+'" />';
+    $column += '</div>';
+                      
+    $column += '<div class="form-group col-md-12 col-lg-12">';
+    $column += '<label>'+col_3+'<span class="text-danger">*</span></label>';
+    $column += '<div class="row g1">';
+    $column += '<div class="col-auto">';
+    $column += '<input type="number" min="1" class="form-control form-control-lg" name="new_entries_'+val+'" />';
+    $column += '</div>';
+
+    $column += '<div class="col-auto">';
+    $column += '<span class="form-text title">';
+    $column += 'How many entries this action is worth';
+    $column += '</span>';
+    
+    $column += '</div></div>';
+    $column += '</div></div>';
+
+    return $column;
+}
+
+// SHARING CHANGE COLOR
+function setup_sharing()
+{
+    $(".box").click(function(){
+        var box = $(this);
+        if(box.hasClass('box-color') == true)
+        {
+            $(this).removeClass('box-color');
+        }
+        else
+        {
+            $(this).addClass('box-color');
+        }
+    });
+}
+
+// DISPLAY VIDEO OR BANNER
+function display_media()
+{
+    $("#media_option").click(function(){
+        var val = $(this).val();
+        if(val == 'on')
+        {
+            $(this).val('off');
+        }
+        else
+        {
+            $(this).val('on');
+        }
+        
+        if(val == 'on'){
+            $(".upload_banner").removeClass('d-none');
+            $(".input-images").addClass('d-none');
+        }
+        else
+        {
+            $(".upload_banner").addClass('d-none');
+            $(".input-images").removeClass('d-none');
+        }
+    });
+}
 
 function image_uploader()
 {

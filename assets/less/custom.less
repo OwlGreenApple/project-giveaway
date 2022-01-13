@@ -6,7 +6,7 @@ body {
     font-size : 16px;
 }
 
-.main-color, .footer a, .login-foot a {
+.main-color, .footer a, .login-foot a, .box-color {
     color : #00c0ff !important;
     text-decoration: none;
 }
@@ -132,6 +132,15 @@ body {
     height : 44px;
     text-align: center;
     margin-right : 5px;
+    cursor : pointer;
+}
+
+.box-color {
+    border : 1px solid #00c0ff;
+}
+
+.del-entry {
+    cursor: pointer;
 }
 
 .settings {
@@ -167,10 +176,6 @@ body {
 }
 
 /* Upload */
-.upload_banner {
-    display: flex;
-}
-
 .image-upload > input
 {
     display: none;

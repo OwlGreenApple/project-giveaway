@@ -18,7 +18,7 @@ class CreateBonusesTable extends Migration
             $table->bigInteger('event_id');
             $table->string('title');
             $table->string('url')->nullable();
-            $table->boolean('type')->default(0);
+            $table->string('type');
             $table->Integer('prize');
             $table->timestamps();
         });
