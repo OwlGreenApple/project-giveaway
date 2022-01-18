@@ -29,12 +29,14 @@ class CreateEventsTable extends Migration
             $table->string('prize_name');
             $table->Integer('prize_value');
             $table->boolean('media')->default(0);
+            $table->string('youtube_banner');
             $table->boolean('tw')->default(1);
             $table->boolean('fb')->default(0);
             $table->boolean('wa')->default(1);
             $table->boolean('ln')->default(0);
             $table->boolean('mail')->default(0);
             $table->boolean('status')->default(1);
+            $table->string('timezone');
             $table->timestamps();
         });
     }

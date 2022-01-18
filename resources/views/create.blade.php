@@ -56,17 +56,17 @@
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Start At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="title" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="start" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>End At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_2" name="title" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_2" name="end" />
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Awarded At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_3" name="title" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_3" name="award" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Number Of Winners:<span class="text-danger">*</span></label>
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" name="unl_cam" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                             Unlimited Campaign
                             </label>
@@ -113,11 +113,11 @@
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Name:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="title" />
+                                <input type="text" class="form-control form-control-lg" name="owner_name" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>URL:<span class="text-danger">*</span></label>
-                                <input placeholder="http://" type="text" class="form-control form-control-lg" name="title" />
+                                <input placeholder="http://" type="text" class="form-control form-control-lg" name="owner_url" />
                             </div>
                         </div>
                         <!-- new line -->
@@ -125,13 +125,13 @@
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Name:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="title" />
+                                <input type="text" class="form-control form-control-lg" name="prize_name" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Value:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text" id="inputGroup-sizing-lg">Rp</span>
-                                    <input id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    <input name="prize_amount" id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                         <div class="border-bottom info">Prize Images / Youtube Video.</div>
                         <div class="text-justify title mb-3">Tip: use images with a 2x1 ratio (minimum of 680px width)</div>
                         <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="media_option">
+                            <input name="media_option" value="0" class="form-check-input" type="checkbox" id="media_option">
                             <label class="form-check-label" for="media_option">Youtube Video</label>
                             <span class="text-danger">*</span>
                         </div>
@@ -151,6 +151,7 @@
 
                         <div class="input-images"><!-- display preview here --></div>
                         @if(count($data) > 0)
+                            <!-- important to show which image would be deleted -->
                             @foreach($data as $id=>$row)
                                 <input type="hidden" value="{{ $id }}" name="list[]" />
                             @endforeach
@@ -167,11 +168,11 @@
                         <div class="text-justify title">Click to select the platforms you want your contestants to use to share your giveaway:</div>
                         <div class="giveaway-icons">
                             <div class="mx-auto icon-wrapper">
-                                <i class="fab fa-twitter box"></i>
-                                <i class="fab fa-facebook-f box"></i>
-                                <i class="fab fa-whatsapp box"></i>
-                                <i class="fab fa-linkedin-in box"></i>
-                                <i class="far fa-envelope box"></i>
+                                <i data-id="tw" class="fab fa-twitter box box-color"></i>
+                                <i data-id="fb" class="fab fa-facebook-f box"></i>
+                                <i data-id="wa" class="fab fa-whatsapp box box-color"></i>
+                                <i data-id="ln" class="fab fa-linkedin-in box"></i>
+                                <i data-id="mail" class="far fa-envelope box"></i>
                             </div>
                         </div>
                     </div>
@@ -286,19 +287,15 @@ $(function() {
     delete_bonus_entry();
 });
 
+// ADDING COLUMN BONUS ENTRY
 function add_bonus_entry()
 {
     $("#bonus").change(function(){
         var val = $(this).val();
-
-        if(val !== 'fb')
-        {
-            return false;
-        }
-
         var column = column_entry(val);
+
         $("#bonus_entry").append(column);
-        $(this+" option").eq(0).prop('selected',true);
+        $("#bonus option").eq(0).prop('selected',true);
     });
 }
 
@@ -312,17 +309,59 @@ function delete_bonus_entry()
 
 function column_entry(val)
 {
-    var title, col_1, col_2, col_3;
+    var title, col_1, col_2;
+    var col_3 = 'Number Of Entries';
+
     if(val == 'fb')
     {
         title = 'Facebook Like';
         col_1 = 'Action Text';
         col_2 = 'URL';
-        col_3 = 'Number Of Entries';
-    }
+    }     
     else if(val == 'ig')
     {
         title = 'Instagram Follow';
+        col_1 = 'Action Text';
+        col_2 = 'Instagram Username';
+    }
+    else if(val == 'tw')
+    {
+        title = 'Twitter Follow';
+        col_1 = 'Action Text';
+        col_2 = 'Twitter Username';
+    }
+    else if(val == 'yt')
+    {
+        title = 'YouTube Subscribe';
+        col_1 = 'Action Text';
+        col_2 = 'YouTube Channel URL';
+    }
+    else if(val == 'pt')
+    {
+        title = 'Podcast Subscribe';
+        col_1 = 'Action Text';
+        col_2 = 'Podcast URL';
+    }
+    else if(val == 'de')
+    {
+        title = 'Daily Entries';
+        col_1 = 'Action Text';
+    }
+    else if(val == 'cl')
+    {
+        title = 'Click a Link';
+        col_1 = 'Action Text';
+        col_2 = 'Action URL';
+    }
+    else if(val == 'wyt')
+    {
+        title = 'Watch a YouTube Video';
+        col_1 = 'Action Text';
+        col_2 = 'YouTube Video URL';
+    }
+    else
+    {
+        return false;
     }
 
     var len = $(".entries").length;
@@ -333,27 +372,36 @@ function column_entry(val)
    
     $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
     $column += '<label>'+col_1+':<span class="text-danger">*</span></label>';
-    $column += '<input type="text" class="form-control form-control-lg" name="new_text_'+val+'" />';
+    $column += '<input type="text" class="form-control form-control-lg" name="new_text_'+val+'[]" />';
     $column += '</div>';
 
-    $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
-    $column += '<label>'+col_2+'<span class="text-danger">*</span></label>';
-    $column += '<input type="text" class="form-control form-control-lg" name="new_url_'+val+'" />';
-    $column += '</div>';
-                      
-    $column += '<div class="form-group col-md-12 col-lg-12">';
+    if(val !== 'de')
+    {
+        $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
+        $column += '<label>'+col_2+'<span class="text-danger">*</span></label>';
+        $column += '<input type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+        $column += '</div>';
+        $column += '<div class="form-group col-md-12 col-lg-12">';
+    }
+    else{
+        $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
+    }            
+    
     $column += '<label>'+col_3+'<span class="text-danger">*</span></label>';
     $column += '<div class="row g1">';
     $column += '<div class="col-auto">';
-    $column += '<input type="number" min="1" class="form-control form-control-lg" name="new_entries_'+val+'" />';
+    $column += '<input type="number" min="1" class="form-control form-control-lg" name="new_entries_'+val+'[]" />';
     $column += '</div>';
 
-    $column += '<div class="col-auto">';
-    $column += '<span class="form-text title">';
-    $column += 'How many entries this action is worth';
-    $column += '</span>';
+    if(val !== 'de')
+    {
+        $column += '<div class="col-auto">';
+        $column += '<span class="form-text title">';
+        $column += 'How many entries this action is worth';
+        $column += '</span></div>';
+    }
     
-    $column += '</div></div>';
+    $column += '</div>';
     $column += '</div></div>';
 
     return $column;
@@ -425,8 +473,20 @@ function save_data()
 {
     $("#create_event").submit(function(e){
         e.preventDefault();
+        var desc = $("#editor").html();
+        var len = $(".box-color").length;
         var form = $("#create_event")[0];
         var data = new FormData(form);
+        data.append('desc',desc);
+
+        // retrieve data from sharing
+        for(x=0;x<len;x++)
+        {
+            var fab = $(".box-color").eq(x).attr('data-id');
+            data.append(fab,1);
+        }
+
+        // return false;
 
         $.ajax({
             headers: {
