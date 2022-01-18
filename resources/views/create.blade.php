@@ -139,7 +139,7 @@
                         <div class="border-bottom info">Prize Images / Youtube Video.</div>
                         <div class="text-justify title mb-3">Tip: use images with a 2x1 ratio (minimum of 680px width)</div>
                         <div class="form-check form-switch mb-2">
-                            <input name="media_option" value="0" class="form-check-input" type="checkbox" id="media_option">
+                            <input name="media_option" class="form-check-input" type="checkbox" id="media_option">
                             <label class="form-check-label" for="media_option">Youtube Video</label>
                             <span class="text-danger">*</span>
                         </div>
