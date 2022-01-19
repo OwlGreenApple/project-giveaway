@@ -8,6 +8,7 @@
         </div>
 
         <div class="col-md-8">
+            <div id="msg"><!-- --></div>
             <form id="create_event">
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
@@ -18,7 +19,7 @@
                         <!-- begin form -->
                         <div class="form-group mb-3">
                             <label>Title:<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" name="title" />
+                            <input type="text" @if(isset($event)) value="{{ $event->title }}" @endif class="form-control form-control-lg" name="title" />
                         </div> 
                         <div class="form-group mb-3">
                             <label>Description:<span class="text-danger">*</span></label>
@@ -56,25 +57,25 @@
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Start At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="start" />
+                                <input @if(isset($event)) value="{{ $event->start }}" @endif type="text" class="form-control form-control-lg datetimepicker_1" name="start" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>End At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_2" name="end" />
+                                <input @if(isset($event)) value="{{ $event->end }}" @endif type="text" class="form-control form-control-lg datetimepicker_2" name="end" />
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Awarded At:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_3" name="award" />
+                                <input @if(isset($event)) value="{{ $event->award }}" @endif type="text" class="form-control form-control-lg datetimepicker_3" name="award" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Number Of Winners:<span class="text-danger">*</span></label>
-                                <input type="number" min="1" class="form-control form-control-lg w-25" name="winner" />
+                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" class="form-control form-control-lg w-25" name="winner" />
                             </div>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" name="unl_cam" id="flexCheckDefault">
+                            <input @if(isset($event) && $event->unlimited == 1) checked value="on" @endif class="form-check-input" type="checkbox" name="unl_cam" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                             Unlimited Campaign
                             </label>
@@ -113,11 +114,11 @@
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Name:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="owner_name" />
+                                <input @if(isset($event)) value="{{ $event->owner }}" @endif type="text" class="form-control form-control-lg" name="owner_name" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>URL:<span class="text-danger">*</span></label>
-                                <input placeholder="http://" type="text" class="form-control form-control-lg" name="owner_url" />
+                                <input @if(isset($event)) value="{{ $event->owner_url }}" @endif placeholder="http://" type="text" class="form-control form-control-lg" name="owner_url" />
                             </div>
                         </div>
                         <!-- new line -->
@@ -125,13 +126,13 @@
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Name:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="prize_name" />
+                                <input @if(isset($event)) value="{{ $event->prize_name }}" @endif type="text" class="form-control form-control-lg" name="prize_name" />
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Value:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text" id="inputGroup-sizing-lg">Rp</span>
-                                    <input name="prize_amount" id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    <input @if(isset($event)) value="{{ $event->prize_value }}" @endif name="prize_amount" id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                                 </div>
                             </div>
                         </div>
@@ -139,14 +140,14 @@
                         <div class="border-bottom info">Prize Images / Youtube Video.</div>
                         <div class="text-justify title mb-3">Tip: use images with a 2x1 ratio (minimum of 680px width)</div>
                         <div class="form-check form-switch mb-2">
-                            <input name="media_option" class="form-check-input" type="checkbox" id="media_option">
+                            <input @if(isset($event) && $event->media == 1) value="on" checked @endif name="media_option" class="form-check-input" type="checkbox" id="media_option">
                             <label class="form-check-label" for="media_option">Youtube Video</label>
                             <span class="text-danger">*</span>
                         </div>
 
                         <div class="upload_banner form-group d-none">
                             <label>Youtube URL:</label>
-                            <input type="text" class="form-control form-control-lg" name="youtube_url" />
+                            <input @if(isset($event) && $event->media == 1) value="on" checked @endif type="text" class="form-control form-control-lg" name="youtube_url" />
                         </div>
 
                         <div class="input-images"><!-- display preview here --></div>
@@ -167,12 +168,12 @@
                         <h3 class="main-color main-theme">Sharing</h3>
                         <div class="text-justify title">Click to select the platforms you want your contestants to use to share your giveaway:</div>
                         <div class="giveaway-icons">
-                            <div class="mx-auto icon-wrapper">
-                                <i data-id="tw" class="fab fa-twitter box box-color"></i>
-                                <i data-id="fb" class="fab fa-facebook-f box"></i>
-                                <i data-id="wa" class="fab fa-whatsapp box box-color"></i>
-                                <i data-id="ln" class="fab fa-linkedin-in box"></i>
-                                <i data-id="mail" class="far fa-envelope box"></i>
+                            <div class="mx-auto icon-wrapper"> 
+                                <i data-id="tw" class="fab fa-twitter box @if(isset($event)) @if($event->tw == 1) box-color @endif @else box-color @endif"></i>
+                                <i data-id="fb" class="fab fa-facebook-f box @if(isset($event)) @if($event->fb == 1) box-color @endif @endif"></i>
+                                <i data-id="wa" class="fab fa-whatsapp box @if(isset($event)) @if($event->wa == 1) box-color @endif @else box-color @endif"></i>
+                                <i data-id="ln" class="fab fa-linkedin-in box @if(isset($event)) @if($event->ln == 1) box-color @endif @endif"></i>
+                                <i data-id="mail" class="far fa-envelope box @if(isset($event)) @if($event->mail == 1) box-color @endif @endif"></i>
                             </div>
                         </div>
                     </div>
@@ -186,33 +187,45 @@
                         
                         @if(count($bonus) > 0)
                         <!-- entries column -->
-                        <div class="row mb-3">
-                            <div class="border-bottom info">Facebook Like <a><i class="far fa-trash-alt title"></i></a></div>
-                            <div class="form-group col-md-6 col-lg-6 mb-2">
-                                <label>Action Text:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="title" />
-                            </div> 
-                            <div class="form-group col-md-6 col-lg-6 mb-2">
-                                <label>URL<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="winner" />
-                            </div>
-                        
-                            <div class="form-group col-md-12 col-lg-12">
-                                <label>Number Of Entries<span class="text-danger">*</span></label>
-                                <div class="row g1">
-                                    <div class="col-auto">
-                                        <input type="number" min="1" class="form-control form-control-lg" name="winner" />
+                            @foreach($bonus as $row)
+                                <div class="row mb-4 entries pos_edit_{{ $row['id'] }}">
+                                    <div class="border-bottom info">{{ $row['name'] }}&nbsp;<a del_edit_id="{{ $row['id'] }}" class="del-entry"><i class="far fa-trash-alt title"></i></a></div>
+                                    <div class="form-group col-md-6 col-lg-6 mb-2">
+                                        <label>{{ Lang::get('custom.act') }}<span class="text-danger">*</span></label>
+                                        <input value="{{ $row['title'] }}" type="text" class="form-control form-control-lg" name="edit_text_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                    </div> 
+
+                                    @if($row['type'] !== '5')
+                                    <div class="form-group col-md-6 col-lg-6 mb-2">
+                                        <label>{{ $row['col_name'] }}<span class="text-danger">*</span></label>
+                                        <input value="{{ $row['url'] }}" type="text" class="form-control form-control-lg" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
                                     </div>
-                                    <div class="col-auto">
-                                        <span class="form-text title">
-                                            How many entries this action is worth
-                                        </span>
+                                    @endif
+                                
+                                    @if($row['type'] !== '5')
+                                    <div class="form-group col-md-12 col-lg-12">
+                                    @else
+                                    <div class="form-group col-md-6 col-lg-6 mb-2">
+                                    @endif
+                                        <label>{{ Lang::get('custom.entry') }}<span class="text-danger">*</span></label>
+                                        <div class="row g1">
+                                            <div class="col-auto">
+                                                <input value="{{ $row['prize'] }}" type="number" min="1" class="form-control form-control-lg" name="edit_entries_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                            </div>
+                                            @if($row['type'] !== '5')
+                                            <div class="col-auto">
+                                                <span class="form-text title">
+                                                    {{Lang::get('custom.clue')}}
+                                                </span>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <!--  -->
                                     </div>
+                                    <input type="hidden" name="entries[]" value="{{ $row['id'] }}" />
                                 </div>
-                                <!--  -->
-                            </div>
-                        </div>
-                        <input type="hidden" name="entries[]" />
+                                <input type="hidden" name="compare[]" value="{{ $row['id'] }}" />
+                            @endforeach
                         @endif
                         <!-- end logic bonus entry -->
 
@@ -221,18 +234,18 @@
                         
                         <div class="col-lg-6 mt-4">
                             <select id="bonus" class="form-select">
-                                <option>Add Entry Action</option>
+                                <option>{{ Lang::get('custom.add_entry') }}</option>
                                 <optgroup label="Social Follow">
-                                    <option value="fb">Facebook Like</option>
-                                    <option value="ig">Instagram Follow</option>
-                                    <option value="tw">Twitter Follow</option>
-                                    <option value="yt">Youtube Subscribe</option>
-                                    <option value="pt">Podcast Subscribe</option>
+                                    <option value="fb">{{ Lang::get('custom.fb') }}</option>
+                                    <option value="ig">{{ Lang::get('custom.ig') }}</option>
+                                    <option value="tw">{{ Lang::get('custom.tw') }}</option>
+                                    <option value="yt">{{ Lang::get('custom.yt') }}</option>
+                                    <option value="pt">{{ Lang::get('custom.pt') }}</option>
                                 </optgroup>
                                 <optgroup label="Other">
-                                    <option value="de">Daily Entries</option>
-                                    <option value="cl">Click a Link</option>
-                                    <option value="wyt">Watch Youtube Video</option>
+                                    <option value="de">{{ Lang::get('custom.de') }}</option>
+                                    <option value="cl">{{ Lang::get('custom.cl') }}</option>
+                                    <option value="wyt">{{ Lang::get('custom.wyt') }}</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -285,7 +298,20 @@ $(function() {
     setup_sharing();
     add_bonus_entry();
     delete_bonus_entry();
+    select_timezone();
 });
+
+function select_timezone()
+{
+    var timezone
+    @if(isset($timezone))
+        timezone = '{{ $timezone }}';
+    @else
+        timezone = 'Pacific/Auckland';
+    @endif
+
+    $("#timezone option[value='"+timezone+"']").prop('selected',true);
+}
 
 // ADDING COLUMN BONUS ENTRY
 function add_bonus_entry()
@@ -303,61 +329,57 @@ function delete_bonus_entry()
 {
     $("body").on("click",".del-entry",function(){
         var pos = $(this).attr('del_new_id');
+        var edit = $(this).attr('del_edit_id');
+
         $(".pos_"+pos).remove();
+        $(".pos_edit_"+edit).remove();
     });
 }
 
 function column_entry(val)
 {
-    var title, col_1, col_2;
-    var col_3 = 'Number Of Entries';
+    var title, col_2;
+    var col_1 = "{{ Lang::get('custom.act') }}";
+    var col_3 = '{{ Lang::get("custom.entry") }}';
 
     if(val == 'fb')
     {
-        title = 'Facebook Like';
-        col_1 = 'Action Text';
-        col_2 = 'URL';
+        title = "{{ Lang::get('custom.fb') }}";
+        col_2 = "{{ Lang::get('custom.fb.col') }}";
     }     
     else if(val == 'ig')
     {
-        title = 'Instagram Follow';
-        col_1 = 'Action Text';
-        col_2 = 'Instagram Username';
+        title = "{{ Lang::get('custom.ig') }}";
+        col_2 = "{{ Lang::get('custom.ig.col') }}";
     }
     else if(val == 'tw')
     {
-        title = 'Twitter Follow';
-        col_1 = 'Action Text';
-        col_2 = 'Twitter Username';
+        title = "{{ Lang::get('custom.tw') }}";
+        col_2 = "{{ Lang::get('custom.tw.col') }}";
     }
     else if(val == 'yt')
     {
-        title = 'YouTube Subscribe';
-        col_1 = 'Action Text';
-        col_2 = 'YouTube Channel URL';
+        title = "{{ Lang::get('custom.yt') }}";
+        col_2 = "{{ Lang::get('custom.yt.col') }}";
     }
     else if(val == 'pt')
     {
-        title = 'Podcast Subscribe';
-        col_1 = 'Action Text';
-        col_2 = 'Podcast URL';
+        title = "{{ Lang::get('custom.pt') }}";
+        col_2 = "{{ Lang::get('custom.pt.col') }}";
     }
     else if(val == 'de')
     {
-        title = 'Daily Entries';
-        col_1 = 'Action Text';
+        title = "{{ Lang::get('custom.de') }}";
     }
     else if(val == 'cl')
     {
-        title = 'Click a Link';
-        col_1 = 'Action Text';
-        col_2 = 'Action URL';
+        title = "{{ Lang::get('custom.cl') }}";
+        col_2 = "{{ Lang::get('custom.cl.col') }}";
     }
     else if(val == 'wyt')
     {
-        title = 'Watch a YouTube Video';
-        col_1 = 'Action Text';
-        col_2 = 'YouTube Video URL';
+        title = "{{ Lang::get('custom.wyt') }}";
+        col_2 = "{{ Lang::get('custom.wyt.col') }}";
     }
     else
     {
@@ -367,7 +389,7 @@ function column_entry(val)
     var len = $(".entries").length;
 
     $column = '';
-    $column += '<div class="row mb-3 entries pos_'+len+'">';
+    $column += '<div class="row mb-4 entries pos_'+len+'">';
     $column += '<div class="border-bottom info">'+title+' <a del_new_id='+len+' class="del-entry"><i class="far fa-trash-alt title"></i></a></div>';
    
     $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
@@ -479,6 +501,10 @@ function save_data()
         var data = new FormData(form);
         data.append('desc',desc);
 
+        @if(isset($event))
+            data.append('edit','{{ $event->id }}');
+        @endif
+
         // retrieve data from sharing
         for(x=0;x<len;x++)
         {
@@ -501,17 +527,33 @@ function save_data()
             dataType : 'json',
             beforeSend: function()
             {
-                // $('#loader').show();
-                // $('.div-loading').addClass('background-load');
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
                 // $(".error").hide();
             },
             success : function(result)
             {
-
+                if(result.success == 1)
+                {
+                    location.href="{{ url('edit-event') }}/"+result.id;
+                }
+                else if(result.success == 2)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
+                }
+                else
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>')
+                }
             },
             error : function(xhr)
             {
-
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
             }
         });
     });
@@ -519,6 +561,12 @@ function save_data()
 
 function count_logic()
     {
+        var amount = $("#amount").val();
+        if(amount.length > 0)
+        {
+            $("#amount").val(formatNumber(amount));
+        }
+
         $("#amount").on("keyup",delay(function(e){
             var coin = $(this).val();
             $("#amount").val(formatNumber(coin));
@@ -527,7 +575,17 @@ function count_logic()
 
 function datetimepicker()
 {
-    var date = new Date();
+    var date, tdate;
+    var ndate = new Date();
+    var date_1 = $('.datetimepicker_1').val();
+    var date_2 = $('.datetimepicker_2').val();
+    var date_3 = $('.datetimepicker_3').val();
+
+    (date_1.length == 0)?date = ndate : date = moment(date_1);
+    (date_2.length == 0)?tdate = ndate.setDate(date.getDate() + 2) : tdate = moment(date_2);
+    (date_3.length == 0)?adate = ndate.setDate(date.getDate() + 2) : adate = moment(date_3);
+    
+
     var format_date = 'YYYY-MM-DD HH:mm';
 
     $('.datetimepicker_1').datetimepicker({
@@ -535,16 +593,26 @@ function datetimepicker()
         minDate : date
     });
     
-    $('.datetimepicker_2, .datetimepicker_3').on('focusin', function(e){ 
+    $('.datetimepicker_2').on('focusin', function(e){ 
         $(this).datetimepicker({
             format : format_date,
-            defaultDate : date.setDate(date.getDate() + 2)
+            defaultDate : tdate
         });
+    });
+
+    $('.datetimepicker_3').datetimepicker({
+        format : format_date,
+        minDate : adate
     });
 }
 
 function editor()
 {
+    @if(isset($event))
+        var editor = '{!! $editor !!}';
+        $("#editor").html(editor);
+    @endif
+
     $('#editControls a').click(function(e) {
         switch($(this).data('role')) {
         default:

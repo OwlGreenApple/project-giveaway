@@ -58,7 +58,8 @@
 
 $(function(){
     data_tabs();
-})(jQuery);
+    set_lang_cur();
+});
 
     function data_tabs()
     {
@@ -71,6 +72,17 @@ $(function(){
             $(".mn").removeClass('active');
             $(".mn_"+target).addClass('active');
         });
+    }
+
+    //PROFILE
+    function set_lang_cur()
+    {
+        var currency = '{{ $user->currency }}';
+        var lang = '{{ $user->lang }}';
+
+        console.log(lang);
+        $("select[name='profile_currency'] option[value='"+currency+"']").prop('selected',true);
+        $("select[name='profile_lang'] option[value='"+lang+"']").prop('selected',true);
     }
 
 </script>

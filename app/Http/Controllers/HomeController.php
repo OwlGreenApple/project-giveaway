@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Banners;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Models\Events;
+use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\QueryException;
 
 class HomeController extends Controller
@@ -31,7 +33,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $events = Events::where('events.user_id',Auth::id())->get();
+        $data = ['data'=>$events];
+        return view('home',$data);
     }
 
     public function create_giveaway()
@@ -41,13 +45,76 @@ class HomeController extends Controller
         return view('create',['data'=>$banners,'preloaded'=>$preloaded, 'bonus'=>$bonuses]);
     }
 
-    public function edit_event()
+    // Adding bonus entries title
+    function fix_array($arr)
     {
-        $banners = Banners::where('event_id',1)->get();
-        $bonuses = Bonus::where('event_id',1)->get()->toArray();
+        if($arr['type'] == 1)
+        {
+            $arr['name'] = Lang::get('custom.ig');
+            $arr['col_name'] = Lang::get('custom.ig.col');
+            $arr['mod'] = 'ig';
+        }
+        elseif($arr['type'] == 2)
+        {
+            $arr['name'] = Lang::get('custom.tw');
+            $arr['col_name'] = Lang::get('custom.tw.col');
+            $arr['mod'] = 'tw';
+        }
+        elseif($arr['type'] == 3)
+        {
+            $arr['name'] = Lang::get('custom.yt');
+            $arr['col_name'] = Lang::get('custom.yt.col');
+            $arr['mod'] = 'yt';
+        }
+        elseif($arr['type'] == 4)
+        {
+            $arr['name'] = Lang::get('custom.pt');
+            $arr['col_name'] = Lang::get('custom.pt.col');
+            $arr['mod'] = 'pt';
+        }
+        elseif($arr['type'] == 5)
+        {
+            $arr['name'] = Lang::get('custom.de');
+            $arr['col_name'] = null;
+            $arr['mod'] = 'de';
+        }
+        elseif($arr['type'] == 6)
+        {
+            $arr['name'] = Lang::get('custom.cl');
+            $arr['col_name'] = Lang::get('custom.cl.col');
+            $arr['mod'] = 'cl';
+        }
+        elseif($arr['type'] == 7)
+        {
+            $arr['name'] = Lang::get('custom.wyt');
+            $arr['col_name'] = Lang::get('custom.wyt.col');
+            $arr['mod'] = 'wyt';
+        }
+        else
+        {
+            $arr['name'] = Lang::get('custom.fb');
+            $arr['col_name'] = Lang::get('custom.fb.col');
+            $arr['mod'] = 'fb';
+        }
+
+        return $arr;
+    }
+
+    public function edit_event($id)
+    {
+        $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.id')->first();
+        
+        if(is_null($event))
+        {
+            return view('error404');
+        }
+        
         $data = $preloaded = null;
+        $banners = Banners::where('event_id',$id)->get();
 
-
+        $bonuses = Bonus::where('event_id',$id)->get()->toArray();
+        $bonuses = array_map(array($this,'fix_array'),$bonuses);
+    
         if($banners->count() > 0)
         {
             foreach($banners as $row)
@@ -58,7 +125,17 @@ class HomeController extends Controller
         }
 
         //dd($data);
-        return view('create',['data'=>$data,'preloaded'=>$preloaded, 'bonus'=>$bonuses]);
+        $timezone = $event->timezone;
+        $desc = $event->desc;
+        $arr = [
+            'data'=>$data,
+            'preloaded'=>$preloaded, 
+            'bonus'=>$bonuses, 
+            'event'=>$event,
+            'timezone'=>$timezone,
+            'editor'=>$desc,
+        ];
+        return view('create',$arr);
     }
 
     public static function convert_amount($amount)
@@ -71,6 +148,7 @@ class HomeController extends Controller
     {
         // dd($request->all());
         $req = $request->all();
+        $edit = false;
         $title = strip_tags($request->title);
         $start = strip_tags($request->start);
         $end = strip_tags($request->end);
@@ -94,7 +172,23 @@ class HomeController extends Controller
         (isset($request->ln))? $ln = $request->ln : false;
         (isset($request->mail))? $mail = $request->mail : false;
 
-        $ev = new Events;
+        if($request->edit == null)
+        {
+            $ev = new Events;
+        }
+        else
+        {
+            $edit = true;
+            $ev = Events::where([['events.id',$request->edit],['users.id',Auth::id()]])
+                ->join('users','users.id','=','events.user_id')->first();
+
+            if(is_null($ev))
+            {
+                $response['success'] = 'id';
+                return response()->json($response);
+            }
+        }
+        
         $ev->user_id = Auth::id();
         $ev->url_link = self::generate_event_link();
         $ev->title = $title;
@@ -119,23 +213,53 @@ class HomeController extends Controller
 
         try{
             $ev->save();
-            $event_id = $ev->id;
+            if($request->edit == null)
+            {
+                $event_id = $ev->id;
+            }
+            else
+            {
+                $event_id = $request->edit;
+            }  
         }
         catch(QueryException $e)
         {
             // echo $e->getMessage();
-            return response()->json(['error'=>1]);
+            return response()->json(['success'=>0]);
         }
-        
-        // BANNER IMAGES
+
+        /** BANNER IMAGES **/ 
+
+        // DELETE BANNER
+        $preload = $request->preloaded;
+        $lists = $request->list;
+
+        $t_preload = count($preload);
+        $t_lists = count($lists);
+
+        if($t_preload !== $t_lists)
+        {
+            self::delete_banner($lists,$preload);
+        }
+
+        // SAVE BANNER
         if(isset($images)): 
             $this->save_banner_image($request,$event_id);
         endif;
 
         /*** BONUS ENTRY ***/
 
+        //DELETE BONUSES
+        $t_entries = count($req['entries']);
+        $t_compare = count($req['compare']);
+
+        if($t_entries !== $t_compare)
+        {
+            $this->delete_bonuses($req['entries'],$req['compare']);            
+        }
+
         // FACEBOOK LIKE
-        if(isset($req['new_text_fb']))
+        if(isset($req['new_text_fb']) || isset($req['edit_text_fb']))
         {
             $mod = 'fb';
             $type= 0;
@@ -143,7 +267,7 @@ class HomeController extends Controller
         }
 
         // INSTAGRAM FOLLOW
-        if(isset($req['new_text_ig']))
+        if(isset($req['new_text_ig']) || isset($req['edit_text_ig']))
         {
             $mod = 'ig';
             $type= 1;
@@ -151,7 +275,7 @@ class HomeController extends Controller
         }
         
         // TWITTER FOLLOW
-        if(isset($req['new_text_tw']))
+        if(isset($req['new_text_tw']) || isset($req['edit_text_tw']))
         {
             $mod = 'tw';
             $type= 2;
@@ -159,7 +283,7 @@ class HomeController extends Controller
         }
 
         // YOUTUBE SUBSCRIBE
-        if(isset($req['new_text_yt']))
+        if(isset($req['new_text_yt']) || isset($req['edit_text_yt']))
         {
             $mod = 'yt';
             $type= 3;
@@ -167,7 +291,7 @@ class HomeController extends Controller
         }
 
         // PODCAST SUBSCRIBE
-        if(isset($req['new_text_pt']))
+        if(isset($req['new_text_pt']) || isset($req['edit_text_fb']))
         {
             $mod = 'pt';
             $type= 4;
@@ -175,7 +299,7 @@ class HomeController extends Controller
         }
 
         // DAILY ENTRY SUBSCRIBE
-        if(isset($req['new_text_de']))
+        if(isset($req['new_text_de']) || isset($req['edit_text_de']))
         {
             $mod = 'de';
             $type= 5;
@@ -183,7 +307,7 @@ class HomeController extends Controller
         }
 
         // CLICK A LINK
-        if(isset($req['new_text_cl']))
+        if(isset($req['new_text_cl']) || isset($req['edit_text_cl']))
         {
             $mod = 'cl';
             $type= 6;
@@ -191,26 +315,27 @@ class HomeController extends Controller
         }
 
         // WATCHING YOUTUBE VIDEO
-        if(isset($req['new_text_wyt']))
+        if(isset($req['new_text_wyt']) || isset($req['edit_text_wyt']))
         {
             $mod = 'wyt';
             $type= 7;
             $this->call_bonus_entry($mod,$event_id,$type,$req);
         }
+
+        return response()->json(['success'=>1,'id'=>$event_id]);
+
     }
 
     // SAVE IMAGE BANNER ON EVENTS
     private function save_banner_image($request,$event_id)
     {
+        /*
+            Banner doesn't use edit because to change image, 
+            user should delete and then reupload
+        */
+
         $images = $request->file('images');
-        $preload = $request->preloaded;
-        $lists = $request->list;
-
-        if($lists !== null)
-        {
-            self::delete_banner($lists,$preload);
-        }
-
+        
         foreach($images as $index=>$file):
             $newfile = 'banner/'.Date('Y-m-d-h-i-s-').$index.".jpg";
             Storage::disk('local')->put($newfile,file_get_contents($file));
@@ -227,28 +352,43 @@ class HomeController extends Controller
     // PASSING DATA FROM BONUS ENTRIES
     private function call_bonus_entry($mod,$event_id,$type,$req)
     {
-        if($type == 5)
+        $id = array();
+        // NEW BONUS ENTRY
+        if(isset($req['new_text_'.$mod]))
         {
-            $this->save_bonus_entry($req['new_text_'.$mod], array(), $req['new_entries_'.$mod],$event_id,$type);
+            $text = $req['new_text_'.$mod];
+            $entries = $req['new_entries_'.$mod];
+
+            ($type == 5)?$url = array(): $url = $req['new_url_'.$mod];
+           
+            $this->save_bonus_entry($text,$url,$entries,$event_id,$type,"new");
         }
-        else
+
+        //EDIT BONUS ENTRY
+        if(isset($req['edit_text_'.$mod]))
         {
-            $this->save_bonus_entry($req['new_text_'.$mod], $req['new_url_'.$mod], $req['new_entries_'.$mod],$event_id,$type);
+            $text = $req['edit_text_'.$mod];
+            $entries = $req['edit_entries_'.$mod];
+
+            ($type == 5)?$url = array(): $url = $req['edit_url_'.$mod];
+
+            $this->save_bonus_entry($text,$url,$entries,$event_id,$type,"edit");
         }
     }
 
-    function mapping_data($title,$url,$prize)
+    function mapping_data($title,$url,$prize,$index)
     {
         if($url == null)
         {
-            $data = ['title'=>$title,'prize'=>$prize];
+            $data = ['title'=>$title,'prize'=>$prize,'id'=>$index];
         }
         else
         {
             $data = [
                 'title'=>$title,
                 'url'=>$url,
-                'prize'=>$prize
+                'prize'=>$prize,
+                'id'=>$index
             ];
         }
        
@@ -256,11 +396,11 @@ class HomeController extends Controller
     }
 
     // SAVE BONUS ENTRY
-    private function save_bonus_entry($title, $url, $entries, $event_id, $type)
+    private function save_bonus_entry($title, $url, $entries, $event_id, $type ,$cond)
     {
-        $merge = array_map(array($this,'mapping_data'),$title, $url, $entries);
-        
+        $merge = array_map(array($this,'mapping_data'),$title, $url, $entries, array_keys($title));
         // dd($merge);
+        
         foreach($merge as $key=>$row):
             $row['event_id'] = $event_id;
             $row['type'] = $type;
@@ -268,19 +408,27 @@ class HomeController extends Controller
             {
                 $row['url'] = null;
             }
-            self::db_bonus($row);
+            self::db_bonus($row,$cond);
         endforeach;
     }
 
     // SAVE BONUS ENTRIES TO DATABASE
-    public static function db_bonus(array $data)
+    public static function db_bonus(array $data,$cond)
     {
-        $bonus = new Bonus;
-        $bonus->event_id = $data['event_id'];
-        $bonus->title = $data['title'];
-        $bonus->url = $data['url'];
-        $bonus->type = $data['type'];
-        $bonus->prize = $data['prize'];
+        if($cond == "new")
+        {
+            $bonus = new Bonus;
+            $bonus->event_id = $data['event_id'];
+        }
+        else
+        {
+            $bonus = Bonus::find($data['id']);
+        }
+        
+        $bonus->title = strip_tags($data['title']);
+        $bonus->url = strip_tags($data['url']);
+        $bonus->type = strip_tags($data['type']);
+        $bonus->prize = strip_tags($data['prize']);
 
         try{
             $bonus->save();
@@ -324,9 +472,30 @@ class HomeController extends Controller
         }
     }
 
+    private function delete_bonuses($compare,$entries)
+    {
+        $dels = array_diff($entries,$compare);
+       
+        if(count($dels) > 0)
+        {
+            try
+            {
+                Bonus::whereIn('id',$dels)->delete();
+            }
+            catch(QueryException $e)
+            {
+                // print($e->getMessage());
+            }
+        }
+    }
+
     public function accounts()
     {
-        return view('account');
+        // PROFILE
+        $user = User::find(Auth::id());
+
+        $data = ['user'=>$user];
+        return view('account',$data);
     }
 
     public function contact()

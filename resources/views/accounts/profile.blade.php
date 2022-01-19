@@ -4,25 +4,25 @@
     <form>
         <div class="form-group mb-4">
             <label>Name:<span class="text-danger">*</span></label>
-            <input type="text" class="form-control form-control-lg" name="user" />
+            <input name="profile_name" value="{{ $user->name }}" type="text" class="form-control form-control-lg"/>
         </div> 
         <div class="form-group mb-4">
             <label>Email:<span class="text-danger">*</span></label>
-            <input type="email" class="form-control form-control-lg" name="email" />
+            <input name="profile_email" value="{{ $user->email }}" type="email" class="form-control form-control-lg"/>
         </div> 
         <div class="row mb-4">
             <div class="form-group col-md-6 col-lg-6">
                 <label>Currency:<span class="text-danger">*</span></label>
-                <select class="form-select form-select-lg">
-                    <option>USD</option>
-                    <option>IDR</option>
+                <select name="profile_currency" class="form-select form-select-lg">
+                    <option value="usd">USD</option>
+                    <option value="idr">IDR</option>
                 </select>
             </div> 
             <div class="form-group col-md-6 col-lg-6">
                 <label>Giveaway Language:<span class="text-danger">*</span></label>
-                <select class="form-select form-select-lg">
-                    <option>English</option>
-                    <option>Bahasa</option>
+                <select name="profile_lang" class="form-select form-select-lg">
+                    <option value="en">English</option>
+                    <option value="id">Bahasa</option>
                 </select>
             </div>
         </div>

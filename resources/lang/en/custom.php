@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'add_entry'=>'Add Entry Action',
+    'act'=>'Action Text',
+    'cl'=>'Click a Link',
+    'cl.col'=>'Action URL',
+    'clue'=>'How many entries this action is worth',
+    'de'=>'Daily Entries',
+    'entry'=>'Number Of Entries',
+    'error'=>'Sorry, our server is too busy, please try again later.',
+    'error.id'=>'Invalid ID.',
+    'fb' => 'Facebook Like',
+    'fb.col'=>'Facebook URL',
+    'ig' => 'Instagram Follow',
+    'ig.col' => 'Instagram Username',
+    'no_data'=>'No Data',
+    'pt'=>'Podcast Subscribe',
+    'pt.col'=>'Podcast URL',
+    'tw'=>'Twitter Follow',
+    'tw.col'=>'Twitter Username',
+    'wyt'=>'Watch a YouTube Video',
+    'wyt.col'=>'YouTube Video URL',
+    'yt'=>'YouTube Subscribe',
+    'yt.col'=>'YouTube Channel URL',
+];

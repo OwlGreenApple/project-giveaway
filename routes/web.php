@@ -32,5 +32,5 @@ Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 
 /* EVENTS */
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);
-Route::get('/edit_event', [App\Http\Controllers\HomeController::class, 'edit_event']);
+Route::get('/edit-event/{id}', [App\Http\Controllers\HomeController::class, 'edit_event']);
 Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_events']);

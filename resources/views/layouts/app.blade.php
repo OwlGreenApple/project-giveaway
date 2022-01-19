@@ -40,6 +40,11 @@
 
 </head>
 <body>
+    <!--Loading Bar-->
+    <div class="div-loading">
+      <div id="loader" style="display: none;"></div>  
+    </div> 
+
     <div id="app">
         @php $x = false; if(Request::segment(1) == 'login' || Request::segment(1) == 'register') $x = true; @endphp
        

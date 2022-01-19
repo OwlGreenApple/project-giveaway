@@ -21,7 +21,7 @@ class Bonus extends Model
         4 -- podcast subscribe
 
         others 
-        5 -- daily click
+        5 -- daily entries
         6 -- click a link
         7 -- watching youtube
     */ 
