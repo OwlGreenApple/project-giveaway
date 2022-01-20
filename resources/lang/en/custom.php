@@ -17,6 +17,7 @@ return [
     'no_data'=>'No Data',
     'pt'=>'Podcast Subscribe',
     'pt.col'=>'Podcast URL',
+    'success'=>'Your data has been saved successfully.',
     'tw'=>'Twitter Follow',
     'tw.col'=>'Twitter Username',
     'wyt'=>'Watch a YouTube Video',

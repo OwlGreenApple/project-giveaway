@@ -1,29 +1,45 @@
 <div class="row">
     <h3 class="mb-4 account-title"><b><i class="far fa-user main-color"></i>&nbsp;Profile</b></h3>
 
-    <form>
+    <span id="msg"><!-- message --></span>
+    <form id="profile">
         <div class="form-group mb-4">
             <label>Name:<span class="text-danger">*</span></label>
             <input name="profile_name" value="{{ $user->name }}" type="text" class="form-control form-control-lg"/>
+            <span class="text-danger err_profile_name"><!-- --></span>
         </div> 
         <div class="form-group mb-4">
-            <label>Email:<span class="text-danger">*</span></label>
-            <input name="profile_email" value="{{ $user->email }}" type="email" class="form-control form-control-lg"/>
+            <label>Password:<span class="text-danger">*</span></label>
+            <input name="profile_pass" type="password" class="form-control form-control-lg"/>
+            <span class="text-danger err_profile_pass"><!-- --></span>
+        </div> 
+        <div class="form-group mb-4">
+            <label>ReType Password:<span class="text-danger">*</span></label>
+            <input name="r_profile_pass" type="password" class="form-control form-control-lg"/>
+            <span class="text-danger err_r_profile_pass"><!-- --></span>
         </div> 
         <div class="row mb-4">
             <div class="form-group col-md-6 col-lg-6">
                 <label>Currency:<span class="text-danger">*</span></label>
                 <select name="profile_currency" class="form-select form-select-lg">
-                    <option value="usd">USD</option>
-                    <option value="idr">IDR</option>
+                @if(count($helper::currency()) > 0)
+                    @foreach($helper::currency() as $key=>$val)
+                        <option value="{{ $key }}">{{ $val }}</option>
+                    @endforeach
+                @endif
                 </select>
+                <span class="text-danger err_profile_currency"><!-- --></span>
             </div> 
             <div class="form-group col-md-6 col-lg-6">
                 <label>Giveaway Language:<span class="text-danger">*</span></label>
                 <select name="profile_lang" class="form-select form-select-lg">
-                    <option value="en">English</option>
-                    <option value="id">Bahasa</option>
+                @if(count($helper::lang()) > 0)
+                    @foreach($helper::lang() as $key=>$val)
+                        <option value="{{ $key }}">{{ $val }}</option>
+                    @endforeach
+                @endif
                 </select>
+                <span class="text-danger err_profile_lang"><!-- --></span>
             </div>
         </div>
 

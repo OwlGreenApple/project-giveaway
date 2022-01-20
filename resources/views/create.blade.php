@@ -83,31 +83,12 @@
                         <div class="form-group mb-3">
                             <label>Timezone</label>
                             <select class="form-select" name="timezone" id="timezone" required="">
-                                <option value="Pacific/Auckland">(UTC -11) Auckland</option>
-                                <option value="Pacific/Tahiti">(UTC -10) Papeete</option>
-                                <option value="America/Anchorage">(UTC -9) Anchorage </option>
-                                <option value="America/Los_Angeles">(UTC -8) San Francisco</option>
-                                <option value="America/Denver">(UTC -7) Salt Lake City</option>
-                                <option value="America/Chicago">(UTC -6) Dallas</option>
-                                <option value="America/New_York" selected="">(UTC -5) New York</option>
-                                <option value="America/Guyana">(UTC -4) Georgetown</option>
-                                <option value="America/Sao_Paulo">(UTC -3) Rio De Janeiro</option>
-                                <option value="Atlantic/South_Georgia">(UTC -2) King Edward Point</option>
-                                <option value="Atlantic/Cape_Verde">(UTC -1) Praia</option>
-                                <option value="Europe/Dublin">(UTC +0) Dublin</option>
-                                <option value="Europe/Paris">(UTC +1) Paris</option>
-                                <option value="Europe/Helsinki">(UTC +2) Helsinki</option>
-                                <option value="Europe/Moscow">(UTC +3) Moscow</option>
-                                <option value="Asia/Dubai">(UTC +4) Abu Dhabi</option>
-                                <option value="Asia/Karachi">(UTC +5) Islamabad</option>
-                                <option value="Asia/Dhaka">(UTC +6) Dhaka</option>
-                                <option value="Asia/Bangkok">(UTC +7) Bangkok</option>
-                                <option value="Asia/Hong_Kong">(UTC +8) Hong Kong</option>
-                                <option value="Asia/Tokyo">(UTC +9) Tokyo</option>
-                                <option value="Australia/Brisbane">(UTC +10) Cairns</option>
-                                <option value="Pacific/Efate">(UTC +11) Port Vila</option>
-                                <option value="Asia/Anadyr">(UTC +12) Anadyr</option>
-                        </select>
+                                @if(count($helper::timezone()) > 0)
+                                    @foreach($helper::timezone() as $key=>$val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div> 
                         <!-- new line -->
                         <div class="border-bottom info">Who's Running This Giveaway?</div>
@@ -142,7 +123,6 @@
                         <div class="form-check form-switch mb-2">
                             <input @if(isset($event) && $event->media == 1) value="on" checked @endif name="media_option" class="form-check-input" type="checkbox" id="media_option">
                             <label class="form-check-label" for="media_option">Youtube Video</label>
-                            <span class="text-danger">*</span>
                         </div>
 
                         <div class="upload_banner form-group d-none">
@@ -230,6 +210,8 @@
                         <!-- end logic bonus entry -->
 
                         <!-- display bonus entry column -->
+                        <div id="error_bonus_entry" class="mb-2"><!-- error here --></div>
+
                         <div id="bonus_entry"><!-- --></div>
                         
                         <div class="col-lg-6 mt-4">
@@ -300,6 +282,8 @@ $(function() {
     delete_bonus_entry();
     select_timezone();
 });
+
+var err_bonus = '';
 
 function select_timezone()
 {
@@ -543,6 +527,45 @@ function save_data()
                     $('.div-loading').removeClass('background-load');
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
                 }
+                else if(result.success == 'err')
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    
+                    $(".err_"+result[0][1]).html(result[0][0]);
+                    $(".err_"+result[1][1]).html(result[1][0]);
+                    $(".err_"+result[2][1]).html(result[2][0]);
+                    $(".err_"+result[3][1]).html(result[3][0]);
+                    $(".err_"+result[4][1]).html(result[4][0]);
+                    $(".err_"+result[5][1]).html(result[5][0]);
+                    $(".err_"+result[6][1]).html(result[6][0]);
+                    $(".err_"+result[7][1]).html(result[7][0]);
+                    $(".err_"+result[8][1]).html(result[8][0]);
+                    $(".err_"+result[9][1]).html(result[9][0]);
+                    $(".err_"+result[10][1]).html(result[10][0]);
+                    $(".err_"+result[11][1]).html(result[11][0]);
+
+                    err_bonus =''; //to clear error message
+
+                    // new bonus entry validation
+                    (result.err_fb !== undefined)?display_bonus_error(result.err_fb):false;
+                    (result.err_ig !== undefined)?display_bonus_error(result.err_ig):false;
+                    (result.err_tw !== undefined)?display_bonus_error(result.err_tw):false;
+                    (result.err_yt !== undefined)?display_bonus_error(result.err_yt):false;
+                    (result.err_pt !== undefined)?display_bonus_error(result.err_pt):false;
+                    (result.err_de !== undefined)?display_bonus_error(result.err_de):false;
+                    (result.err_cl !== undefined)?display_bonus_error(result.err_cl):false;
+                    (result.err_wyt !== undefined)?display_bonus_error(result.err_wyt):false;
+                   
+                    // edit bonus entry validation
+                    (result.err_edit_fb !== undefined)?display_bonus_error(result.err_edit_fb):false;
+                    (result.err_edit_ig !== undefined)?display_bonus_error(result.err_edit_ig):false;
+                    (result.err_edit_tw !== undefined)?display_bonus_error(result.err_edit_tw):false;
+                    (result.err_edit_yt !== undefined)?display_bonus_error(result.err_edit_yt):false;
+                    (result.err_edit_pt !== undefined)?display_bonus_error(result.err_edit_pt):false;
+                    (result.err_edit_cl !== undefined)?display_bonus_error(result.err_edit_cl):false;
+                    (result.err_edit_wyt !== undefined)?display_bonus_error(result.err_edit_wyt):false;
+                }
                 else
                 {
                     $('#loader').hide();
@@ -557,6 +580,18 @@ function save_data()
             }
         });
     });
+}
+
+function display_bonus_error(results)
+{
+    var len = results.length;
+    for(x=0;x<len;x++){
+        if(err_bonus.length !==  len)
+        {
+            err_bonus += '<li class="list-group-item border-0 text-danger">'+results[x]+'</li>';
+        }
+    }
+    $("#error_bonus_entry").html(err_bonus);
 }
 
 function count_logic()

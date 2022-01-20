@@ -59,6 +59,7 @@
 $(function(){
     data_tabs();
     set_lang_cur();
+    update_profile();
 });
 
     function data_tabs()
@@ -84,6 +85,61 @@ $(function(){
         $("select[name='profile_currency'] option[value='"+currency+"']").prop('selected',true);
         $("select[name='profile_lang'] option[value='"+lang+"']").prop('selected',true);
     }
+
+    function update_profile()
+    {
+        $("#profile").submit(function(e){
+            e.preventDefault();
+            var data = $(this).serialize();
+            save_profile(data);
+        });
+    }
+
+    function save_profile(data)
+    {
+        $.ajax({
+            headers : {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method : 'POST',
+            url : '{{ url("update-profile") }}',
+            data : data,
+            dataType : "json",
+            beforeSend: function()
+            {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success :function(result)
+            {
+                if(result.success == 1)
+                {
+                    $("#msg").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
+                }
+                else if(result.success == 'err')
+                {
+                    $(".err_"+result[0][1]).html(result[0][0]);
+                    $(".err_"+result[1][1]).html(result[1][0]);
+                    $(".err_"+result[2][1]).html(result[2][0]);
+                    $(".err_"+result[3][1]).html(result[3][0]);
+                }
+                else
+                {
+                    $("#msg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                }
+
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            },
+            error : function(xhr)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
+    }
+
+    //END PROFILE
 
 </script>
 @endsection

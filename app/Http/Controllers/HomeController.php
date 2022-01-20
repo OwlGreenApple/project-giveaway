@@ -11,6 +11,7 @@ use App\Models\Banners;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Models\Events;
+use App\Helpers\Custom;
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\QueryException;
 
@@ -42,7 +43,9 @@ class HomeController extends Controller
     {
         $banners = $bonuses = array();
         $preloaded = null;
-        return view('create',['data'=>$banners,'preloaded'=>$preloaded, 'bonus'=>$bonuses]);
+        $helper = new Custom;
+        $data = ['data'=>$banners,'preloaded'=>$preloaded, 'bonus'=>$bonuses, 'helper'=>$helper];
+        return view('create',$data);
     }
 
     // Adding bonus entries title
@@ -109,6 +112,7 @@ class HomeController extends Controller
             return view('error404');
         }
         
+        $helper = new Custom;
         $data = $preloaded = null;
         $banners = Banners::where('event_id',$id)->get();
 
@@ -134,14 +138,9 @@ class HomeController extends Controller
             'event'=>$event,
             'timezone'=>$timezone,
             'editor'=>$desc,
+            'helper'=>$helper
         ];
         return view('create',$arr);
-    }
-
-    public static function convert_amount($amount)
-    {
-        $amount = str_replace(",","",$amount);
-        return (int)$amount;
     }
 
     public function save_events(Request $request)
@@ -149,6 +148,7 @@ class HomeController extends Controller
         // dd($request->all());
         $req = $request->all();
         $edit = false;
+        $helper = new Custom;
         $title = strip_tags($request->title);
         $start = strip_tags($request->start);
         $end = strip_tags($request->end);
@@ -158,7 +158,7 @@ class HomeController extends Controller
         $owner_name = strip_tags($request->owner_name);
         $owner_url = strip_tags($request->owner_url);
         $prize_name = strip_tags($request->prize_name);
-        $prize_amount = strip_tags(self::convert_amount($request->prize_amount));
+        $prize_amount = strip_tags($helper::convert_amount($request->prize_amount));
         $youtube_url = strip_tags($request->youtube_url);
         $desc = $request->desc;
         $images = $request->file('images');
@@ -474,13 +474,27 @@ class HomeController extends Controller
 
     private function delete_bonuses($compare,$entries)
     {
+        
         $dels = array_diff($entries,$compare);
+
+        // $test = Bonus::whereIn('bonuses.id',$dels)
+        //         ->leftJoin('events','events.id','=','bonuses.event_id')
+        //         ->leftJoin('users','users.id','=','events.user_id')
+        //         ->where('users.id',Auth::id())
+        //         ->select('users.id','bonuses.id')
+        //         ->get()->toArray();
+
+        // dd($test);
        
         if(count($dels) > 0)
         {
             try
             {
-                Bonus::whereIn('id',$dels)->delete();
+                Bonus::whereIn('bonuses.id',$dels)
+                ->leftJoin('events','events.id','=','bonuses.event_id')
+                ->leftJoin('users','users.id','=','events.user_id')
+                ->where('users.id',Auth::id())
+                ->delete();
             }
             catch(QueryException $e)
             {
@@ -489,13 +503,42 @@ class HomeController extends Controller
         }
     }
 
+    // ACCOUNTS
     public function accounts()
     {
         // PROFILE
+        $helper = new Custom;
         $user = User::find(Auth::id());
 
-        $data = ['user'=>$user];
+        $data = ['user'=>$user,'helper'=>$helper];
         return view('account',$data);
+    }
+
+    public function update_profile(Request $request)
+    {
+        $name = strip_tags($request->profile_name);
+        $email = strip_tags($request->profile_email);
+        $currency = strip_tags($request->profile_currency);
+        $lang = strip_tags($request->profile_lang);
+
+        $update = [
+            'name'=>$name,
+            'email'=>$email,
+            'currency'=>$currency,
+            'lang'=>$lang,
+        ];
+
+        try{
+            User::where('id',Auth::id())->update($update);
+            $res['success'] = 1;
+        }
+        catch(QueryException $e)
+        {
+            //$e->getMessage()
+            $res['success'] = 0;
+        }
+
+        return response()->json($res);
     }
 
     public function contact()
