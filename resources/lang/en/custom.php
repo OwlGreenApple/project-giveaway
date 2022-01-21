@@ -15,6 +15,7 @@ return [
     'ig' => 'Instagram Follow',
     'ig.col' => 'Instagram Username',
     'no_data'=>'No Data',
+    'profile_password'=>'Leave empty unless you want to change password',
     'pt'=>'Podcast Subscribe',
     'pt.col'=>'Podcast URL',
     'success'=>'Your data has been saved successfully.',
@@ -22,6 +23,7 @@ return [
     'tw.col'=>'Twitter Username',
     'wyt'=>'Watch a YouTube Video',
     'wyt.col'=>'YouTube Video URL',
+    'youtube_banner'=>'Please use youtube url like ',
     'yt'=>'YouTube Subscribe',
     'yt.col'=>'YouTube Channel URL',
 ];

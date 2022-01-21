@@ -78,57 +78,81 @@ class CheckEvents
         if(isset($req['new_text_fb']))
         {
            $err_fb = $this->filter_validator($req,'fb','new');
-           $errors['success'] = 'err';
-           $errors['err_fb'] = $err_fb;
+           if(count($err_fb) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_fb'] = $err_fb;
+           }
         }
 
         if(isset($req['new_text_ig']))
         {
            $err_ig = $this->filter_validator($req,'ig','new');
-           $errors['success'] = 'err';
-           $errors['err_ig'] = $err_ig;
+           if(count($err_ig) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_ig'] = $err_ig;
+           }
         }
 
         if(isset($req['new_text_tw']))
         {
            $err_tw = $this->filter_validator($req,'tw','new');
-           $errors['success'] = 'err';
-           $errors['err_tw'] = $err_tw;
+           if(count($err_tw) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_tw'] = $err_tw;
+           }
         }
 
         if(isset($req['new_text_yt']))
         {
            $err_yt = $this->filter_validator($req,'yt','new');
-           $errors['success'] = 'err';
-           $errors['err_yt'] = $err_yt;
+           if(count($err_yt) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_yt'] = $err_yt;
+           }
         }
         
         if(isset($req['new_text_pt']))
         {
            $err_pt = $this->filter_validator($req,'pt','new');
-           $errors['success'] = 'err';
-           $errors['err_pt'] = $err_pt;
+           if(count($err_pt) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_pt'] = $err_pt;
+           }
         }
 
         if(isset($req['new_text_de']))
         {
            $err_de = $this->filter_validator($req,'de','new');
-           $errors['success'] = 'err';
-           $errors['err_de'] = $err_de;
+           if(count($err_de) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_de'] = $err_de;
+           }
         }
 
         if(isset($req['new_text_cl']))
         {
            $err_cl = $this->filter_validator($req,'cl','new');
-           $errors['success'] = 'err';
-           $errors['err_cl'] = $err_cl;
+           if(count($err_cl) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_cl'] = $err_cl;
+           }
         }
 
         if(isset($req['new_text_wyt']))
         {
            $err_wyt = $this->filter_validator($req,'wyt','new');
-           $errors['success'] = 'err';
-           $errors['err_cl'] = $err_wyt;
+           if(count($err_wyt) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_cl'] = $err_wyt;
+           }
         }
 
         //EDIT
@@ -156,43 +180,61 @@ class CheckEvents
         if(isset($req['edit_text_tw']))
         {
            $err_tw = $this->filter_validator($req,'tw','edit');
-           $errors['success'] = 'err';
-           $errors['err_edit_tw'] = $err_tw;
+           if(count($err_tw) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_edit_tw'] = $err_tw;
+           }
         }
 
         if(isset($req['edit_text_yt']))
         {
            $err_yt = $this->filter_validator($req,'yt','edit');
-           $errors['success'] = 'err';
-           $errors['err_edit_yt'] = $err_yt;
+           if(count($err_yt) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_edit_yt'] = $err_yt;
+           }
         }
         
         if(isset($req['edit_text_pt']))
         {
            $err_pt = $this->filter_validator($req,'pt','edit');
-           $errors['success'] = 'err';
-           $errors['err_edit_pt'] = $err_pt;
+           if(count($err_pt) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_edit_pt'] = $err_pt;
+           }
         }
 
         if(isset($req['new_text_de']))
         {
            $err_de = $this->filter_validator($req,'de','edit');
-           $errors['success'] = 'err';
-           $errors['err_edit_de'] = $err_de;
+           if(count($err_de) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_edit_de'] = $err_de;
+           }
         }
 
         if(isset($req['edit_text_cl']))
         {
            $err_cl = $this->filter_validator($req,'cl','edit');
-           $errors['success'] = 'err';
-           $errors['err_edit_cl'] = $err_cl;
+           if(count($err_cl) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_edit_cl'] = $err_cl;
+           }
         }
 
         if(isset($req['new_text_wyt']))
         {
            $err_wyt = $this->filter_validator($req,'wyt','edit');
-           $errors['success'] = 'err';
-           $errors['err_edit_cl'] = $err_wyt;
+           if(count($err_wyt) > 0)
+           {
+               $errors['success'] = 'err';
+               $errors['err_edit_cl'] = $err_wyt;
+           }
         }
 
         //END BONUS ENTRIES

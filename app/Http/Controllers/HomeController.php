@@ -11,9 +11,11 @@ use App\Models\Banners;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Models\Events;
+use App\Models\Contestants;
 use App\Helpers\Custom;
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -37,6 +39,20 @@ class HomeController extends Controller
         $events = Events::where('events.user_id',Auth::id())->get();
         $data = ['data'=>$events];
         return view('home',$data);
+    }
+
+    public function get_contestant($ev_id)
+    {
+        $events = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
+
+        if(is_null($events))
+        {
+            return view('error404');
+        }
+
+        $ct = Contestants::where('event_id',$ev_id)->get();
+        $data = ['ct'=>$ct];
+        return view('dashboard.contestant',$data);
     }
 
     public function create_giveaway()
@@ -121,9 +137,18 @@ class HomeController extends Controller
     
         if($banners->count() > 0)
         {
+            if(env('APP_ENV') == 'local')
+            {
+                $target = asset('storage/app');
+            }
+            // else
+            // {
+            //     //s3
+            // }
+
             foreach($banners as $row)
             {
-                $data[$row->id] = asset('storage/app/'.$row->url);
+                $data[$row->id] = $target.'/'.$row->url;
             }
             $preloaded = 'preloaded'; //keyname of jquery image-upload
         }
@@ -338,7 +363,15 @@ class HomeController extends Controller
         
         foreach($images as $index=>$file):
             $newfile = 'banner/'.Date('Y-m-d-h-i-s-').$index.".jpg";
-            Storage::disk('local')->put($newfile,file_get_contents($file));
+            if(env('APP_ENV') == 'local')
+            {
+                Storage::disk('local')->put($newfile,file_get_contents($file));
+            }
+            // else
+            // {
+            //     //s3
+            // }
+
             $banners = new Banners;
             $banners->event_id = $event_id;
             $banners->url = $newfile;
@@ -461,7 +494,11 @@ class HomeController extends Controller
 
             try
             {
-                Banners::whereIn('id',$count_delete)->delete();
+                Banners::whereIn('banners.id',$count_delete)
+                        ->join('events','events.id','=','banners.event_id')
+                        ->join('users','users.id','=','events.user_id')
+                        ->where('users.id','=',Auth::id())
+                        ->delete();
             }
             catch(QueryException $e)
             {
@@ -477,15 +514,6 @@ class HomeController extends Controller
         
         $dels = array_diff($entries,$compare);
 
-        // $test = Bonus::whereIn('bonuses.id',$dels)
-        //         ->leftJoin('events','events.id','=','bonuses.event_id')
-        //         ->leftJoin('users','users.id','=','events.user_id')
-        //         ->where('users.id',Auth::id())
-        //         ->select('users.id','bonuses.id')
-        //         ->get()->toArray();
-
-        // dd($test);
-       
         if(count($dels) > 0)
         {
             try
@@ -517,16 +545,20 @@ class HomeController extends Controller
     public function update_profile(Request $request)
     {
         $name = strip_tags($request->profile_name);
-        $email = strip_tags($request->profile_email);
+        $password = strip_tags($request->password);
         $currency = strip_tags($request->profile_currency);
         $lang = strip_tags($request->profile_lang);
 
         $update = [
             'name'=>$name,
-            'email'=>$email,
             'currency'=>$currency,
             'lang'=>$lang,
         ];
+
+        if($password !== null)
+        {
+            $update['password'] = Hash::make($password);
+        }
 
         try{
             User::where('id',Auth::id())->update($update);
@@ -565,7 +597,7 @@ class HomeController extends Controller
         }
     }
 
-    private static function generate_random()
+    public static function generate_random()
     {
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         return substr(str_shuffle($permitted_chars), 0, 9);

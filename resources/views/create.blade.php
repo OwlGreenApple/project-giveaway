@@ -20,6 +20,7 @@
                         <div class="form-group mb-3">
                             <label>Title:<span class="text-danger">*</span></label>
                             <input type="text" @if(isset($event)) value="{{ $event->title }}" @endif class="form-control form-control-lg" name="title" />
+                            <span class="text-danger err_title"><!-- --></span>
                         </div> 
                         <div class="form-group mb-3">
                             <label>Description:<span class="text-danger">*</span></label>
@@ -53,25 +54,30 @@
                                 <!-- textarea editor -->
                                 <div id='editor' contenteditable></div>
                             </div>
+                            <span class="text-danger err_desc"><!-- --></span>
                         </div> 
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Start At:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->start }}" @endif type="text" class="form-control form-control-lg datetimepicker_1" name="start" />
+                                <span class="text-danger err_start"><!-- --></span>
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>End At:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->end }}" @endif type="text" class="form-control form-control-lg datetimepicker_2" name="end" />
+                                <span class="text-danger err_end"><!-- --></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Awarded At:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->award }}" @endif type="text" class="form-control form-control-lg datetimepicker_3" name="award" />
+                                <span class="text-danger err_award"><!-- --></span>
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Number Of Winners:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" class="form-control form-control-lg w-25" name="winner" />
+                                <span class="text-danger err_winner"><!-- --></span>
                             </div>
                         </div>
                         <div class="form-check mb-3">
@@ -89,17 +95,20 @@
                                     @endforeach
                                 @endif
                             </select>
+                            <span class="text-danger err_timezone"><!-- --></span>
                         </div> 
                         <!-- new line -->
                         <div class="border-bottom info">Who's Running This Giveaway?</div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Name:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->owner }}" @endif type="text" class="form-control form-control-lg" name="owner_name" />
+                                <input name="owner_name" @if(isset($event)) value="{{ $event->owner }}" @endif type="text" class="form-control form-control-lg" />
+                                <span class="text-danger err_owner_name"><!-- --></span>
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>URL:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->owner_url }}" @endif placeholder="http://" type="text" class="form-control form-control-lg" name="owner_url" />
+                                <input name="owner_url" @if(isset($event)) value="{{ $event->owner_url }}" @endif placeholder="http://" type="text" class="form-control form-control-lg" />
+                                <span class="text-danger err_owner_url"><!-- --></span>
                             </div>
                         </div>
                         <!-- new line -->
@@ -107,13 +116,15 @@
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Name:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->prize_name }}" @endif type="text" class="form-control form-control-lg" name="prize_name" />
+                                <input name="prize_name" @if(isset($event)) value="{{ $event->prize_name }}" @endif type="text" class="form-control form-control-lg" />
+                                <span class="text-danger err_prize_name"><!-- --></span>
                             </div> 
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Value:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text" id="inputGroup-sizing-lg">Rp</span>
-                                    <input @if(isset($event)) value="{{ $event->prize_value }}" @endif name="prize_amount" id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    <input name="prize_amount" @if(isset($event)) value="{{ $event->prize_value }}" @endif id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                    <span class="text-danger err_prize_amount"><!-- --></span>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +138,9 @@
 
                         <div class="upload_banner form-group d-none">
                             <label>Youtube URL:</label>
-                            <input @if(isset($event) && $event->media == 1) value="on" checked @endif type="text" class="form-control form-control-lg" name="youtube_url" />
+                            <input name="youtube_url" value="@if(isset($event) && $event->media == 1) {{ $event->youtube_banner }} @endif" type="text" class="form-control form-control-lg" />
+                            <small>{{Lang::get('custom.youtube_banner')}} : <span class="main-color">https://www.youtube.com/embed/xxxx</span></small>
+                            <span class="text-danger err_youtube_url"><!-- --></span>
                         </div>
 
                         <div class="input-images"><!-- display preview here --></div>
@@ -137,7 +150,7 @@
                                 <input type="hidden" value="{{ $id }}" name="list[]" />
                             @endforeach
                         @endif
-                       
+                        <span class="text-danger err_images"><!-- --></span>
                         <!-- end form -->
                     </div>
                 </div>
@@ -432,27 +445,36 @@ function setup_sharing()
 // DISPLAY VIDEO OR BANNER
 function display_media()
 {
+    var val = $("#media_option").val();
+    detect_video_or_banner(val);
+
     $("#media_option").click(function(){
-        var val = $(this).val();
-        if(val == 'on')
-        {
-            $(this).val('off');
-        }
-        else
-        {
-            $(this).val('on');
-        }
-        
-        if(val == 'on'){
-            $(".upload_banner").removeClass('d-none');
-            $(".input-images").addClass('d-none');
-        }
-        else
-        {
-            $(".upload_banner").addClass('d-none');
-            $(".input-images").removeClass('d-none');
-        }
+        var value = $(this).val();
+        detect_video_or_banner(value);
     });
+}
+
+function detect_video_or_banner(val)
+{
+    var target = $("#media_option");
+    if(val == 'on')
+    {
+        target.val('off');
+    }
+    else
+    {
+        target.val('on');
+    }
+    
+    if(val == 'on'){
+        $(".upload_banner").removeClass('d-none');
+        $(".input-images").addClass('d-none');
+    }
+    else
+    {
+        $(".upload_banner").addClass('d-none');
+        $(".input-images").removeClass('d-none');
+    }
 }
 
 function image_uploader()
@@ -544,6 +566,7 @@ function save_data()
                     $(".err_"+result[9][1]).html(result[9][0]);
                     $(".err_"+result[10][1]).html(result[10][0]);
                     $(".err_"+result[11][1]).html(result[11][0]);
+                    $(".err_"+result[12][1]).html(result[12][0]);
 
                     err_bonus =''; //to clear error message
 

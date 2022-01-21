@@ -19,6 +19,12 @@ class Custom
         return (int)$amount;
     }
 
+    public static function format($val)
+    {
+        $val= number_format($val);
+        return $val;
+    }
+
     public static function timezone()
     {
         $timezone = [

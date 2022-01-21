@@ -9,14 +9,14 @@
             <span class="text-danger err_profile_name"><!-- --></span>
         </div> 
         <div class="form-group mb-4">
-            <label>Password:<span class="text-danger">*</span></label>
-            <input name="profile_pass" type="password" class="form-control form-control-lg"/>
-            <span class="text-danger err_profile_pass"><!-- --></span>
+            <label>Password: <span class="text-info">{{ Lang::get('custom.profile_password') }}</span></label>
+            <input name="password" type="password" class="form-control form-control-lg"/>
+            <span class="text-danger err_password"><!-- --></span>
         </div> 
         <div class="form-group mb-4">
-            <label>ReType Password:<span class="text-danger">*</span></label>
-            <input name="r_profile_pass" type="password" class="form-control form-control-lg"/>
-            <span class="text-danger err_r_profile_pass"><!-- --></span>
+            <label>ReType Password: <span class="text-info">{{ Lang::get('custom.profile_password') }}</span></label>
+            <input name="password_confirmation" type="password" class="form-control form-control-lg"/>
+            <span class="text-danger err_password_confirmation"><!-- --></span>
         </div> 
         <div class="row mb-4">
             <div class="form-group col-md-6 col-lg-6">

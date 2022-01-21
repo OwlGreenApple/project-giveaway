@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check_user_profile' => \App\Http\Middleware\CheckUserProfile::class,
         'check_events' => \App\Http\Middleware\CheckEvents::class,
+        'check_contestants' => \App\Http\Middleware\CheckContestant::class,
     ];
 }
