@@ -41,6 +41,7 @@ class HomeController extends Controller
         return view('home',$data);
     }
 
+    //  get contestant from events
     public function get_contestant($ev_id)
     {
         $events = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
@@ -51,7 +52,7 @@ class HomeController extends Controller
         }
 
         $ct = Contestants::where('event_id',$ev_id)->get();
-        $data = ['ct'=>$ct];
+        $data = ['data'=>$ct,'ev'=>$events];
         return view('dashboard.contestant',$data);
     }
 

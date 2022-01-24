@@ -15,8 +15,11 @@ class CreateEntriesTable extends Migration
     {
         Schema::create('entries', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('bonus_id');
+            $table->bigInteger('event_id');
+            $table->bigInteger('bonus_id')->default(0);
             $table->bigInteger('contestant_id');
+            $table->integer('type');
+            $table->integer('prize');
             $table->timestamps();
         });
     }

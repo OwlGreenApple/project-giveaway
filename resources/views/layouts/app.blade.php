@@ -38,6 +38,13 @@
     <link href="{{ asset('assets/image-uploader/dist/image-uploader.min.css') }}" rel="stylesheet" />
     <script type="text/javascript" src="{{ asset('assets/image-uploader/dist/image-uploader.min.js') }}"></script> 
 
+    <!-- Data Table -->
+    <link href="{{ asset('assets/DataTables/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/DataTables/Responsive/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+
+    <script defer type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('assets/DataTables/Responsive/js/dataTables.responsive.min.js') }}"></script>
+
 </head>
 <body>
     <!--Loading Bar-->

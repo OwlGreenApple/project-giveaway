@@ -160,6 +160,7 @@ class ContestController extends Controller
         
         $data = [
             'ev'=>$ev,
+            'ct_id'=>$id,
             'bonus'=>$bonus
         ];
 
@@ -169,7 +170,114 @@ class ContestController extends Controller
     // save entry and add user's entry after user doing task
     public function save_entry(Request $request)
     {
-        $et = new Entries;
+        // dd($request->all());
+        $contestant_id = strip_tags($request->ct_id);
+        $event_id = strip_tags($request->evid);
+        $bonus_id = strip_tags($request->bid);
+        $type = strip_tags($request->type);
+        $bonus = null;
+        $ret['success'] = 0;
+
+        $etr = Entries::where([['event_id',$event_id],['contestant_id',$contestant_id],['type',$type],['bonus_id',$bonus_id]])
+                        ->first();
+
+        if($bonus_id == 0)
+        {
+            $prize = 3;
+        }
+        else
+        {
+            $bonus = Bonus::where([['event_id',$event_id],['id',$bonus_id]])->first();
+        
+            if(is_null($bonus))
+            {
+                return response()->json($ret);
+            }
+
+            $prize = $bonus->prize;
+            $bonus_id = $bonus->id;
+        }
+
+        if(is_null($etr))
+        {
+            $et = new Entries;
+            $et->event_id = $event_id;
+            $et->contestant_id = $contestant_id;
+            $et->bonus_id = $bonus_id;
+            $et->type = $type;
+            $et->prize = $prize;
+
+            try{
+                $et->save();
+                $ret['success'] = 1;
+            }
+            catch(QueryException $e)
+            {
+                // echo $e->getMessage();
+                $ret['success'] = 'err';
+            }
+        }
+
+        // SHARE REDIRECT
+
+        $ev = Events::find($event_id);
+        $ev_link = $ev->url_link;
+
+        $ct = Contestants::find($contestant_id);
+        $ref_code = $ct->ref_code;
+
+        if(env('APP_ENV') == 'local')
+        {
+            $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
+        }
+        // else
+        // {
+        //     // $share_url = 
+        // }
+
+        if($type == 0 || $type == 3 || $type == 4 || $type == 5 || $type == 6)
+        {
+            // facebook like // youtube subscribe // podcast subscribe 
+            // daily entries // click a link 
+            $ret['url'] = $bonus->url;
+        }
+        if($type == 1)
+        {
+            // ig follow
+            $ret['url'] = 'https://instagram.com/'.$bonus->url;
+        }
+        if($type == 2)
+        {
+            // twitter follow
+            $ret['url'] = 'https://twitter.com/'.$bonus->url;
+        }
+        if($type == 8)
+        {
+            // twitter
+            $ret['url'] = "https://twitter.com/share?url=".$share_url."&hashtags=winner,giveaway";
+        }
+        elseif($type == 9)
+        {
+            // facebook share
+            $ret['url'] = "https://www.facebook.com/sharer/sharer.php?u=".$share_url."";
+        }
+        elseif($type == 10)
+        {
+            // web whatsapp
+            $ret['url'] = "whatsapp://send?text=".$share_url."";
+        }
+        elseif($type == 11)
+        {
+            // linkedin
+            $ret['url'] = "https://www.linkedin.com/sharing/share-offsite/?url=".$share_url."";
+        }
+        elseif($type == 12)
+        {
+            // mail to
+            $ret['url'] = "mailto:?subject=".$ev->title."&amp;body=".$share_url."";
+        }
+
+        return response()->json($ret);
     }
 
     public static function generate_ref_link()

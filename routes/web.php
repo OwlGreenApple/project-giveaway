@@ -22,11 +22,13 @@ Route::get('/', function () {
 // App::setLocale('en');
 Route::get('/c/{event_link}/{referal?}', [App\Http\Controllers\ContestController::class, 'contest']);
 Route::get('/contest', [App\Http\Controllers\ContestController::class, 'task']);
+Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 

@@ -6,39 +6,31 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header clearfix bg-white px-3 py-3">
-                    <h3 class="float-start align-middle mb-0 info title">Your Giveaways</h3>
-                    <div class="float-end align-middle "><a href="{{ url('create') }}" class="btn btn-default bg-custom text-white">New Giveaway</a></div>
+                    <h3 class="float-start align-middle mb-0 info title">Event : <span class="main-color">{{ $ev->title }}</span></h3>
                 </div>
 
                 <div class="card-body">
-                    <table class="table">
+                    <table id="contestant" class="cell-border" border="0">
                         <thead>
-                            <th>Titles</th>
-                            <th>Contestants</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>WA Number</th>
                             <th>Entries</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Referrals</th>
+                            <th>Date Enter</th>
+                            <th>IP Address</th>
                         </thead>
                         <tbody>
                             @if($data->count() > 0)
                                 @foreach($data as $row)
                                 <tr>
-                                    <td class="align-middle"><span class="main-color">{{ $row->title }}</span><br/>{{ $row->award }}</td>
-                                    <td class="align-middle">5</td>
-                                    <td class="align-middle">14</td>
-                                    <td class="align-middle"><span class="badge rounded-pill bg-custom">Running</span></td>
-                                    <td class="align-middle"><div class="dropdown">
-                                        <a class="btn btn-default btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Dropdown link
-                                        </a>
-
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <li><a class="dropdown-item" href="#">Action</a></li>
-                                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                        </ul>
-                                        </div>
-                                    </td>
+                                    <td class="align-middle"><span class="main-color">{{ $row->c_name }}</span><br/>{{ $row->award }}</td>
+                                    <td class="align-middle">{{ $row->c_email }}</td>
+                                    <td class="align-middle">{{ $row->wa_number }}</td>
+                                    <td class="align-middle">{{ $row->entries }}</td>
+                                    <td class="align-middle">{{ $row->referrals }}</td>
+                                    <td class="align-middle">{{ $row->date_enter }}</td>
+                                    <td class="align-middle">{{ $row->ip }}</td>
                                 </tr>
                                 @endforeach
                             @else
@@ -51,4 +43,15 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        data_table();
+    });
+
+    function data_table()
+    {
+        $("#contestant").DataTable();
+    }
+</script>
 @endsection
