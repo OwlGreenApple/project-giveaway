@@ -91,6 +91,9 @@
                                 <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ url('create-broadcast') }}">Broadcast</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ url('account') }}">Accounts</a>
                             </li>
                             <li class="nav-item">
