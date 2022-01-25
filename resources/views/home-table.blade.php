@@ -21,7 +21,7 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a></li>
                             <li><a class="dropdown-item">Duplicate</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger">Delete</a></li>

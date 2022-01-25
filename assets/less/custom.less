@@ -169,12 +169,6 @@ body {
     margin-right: auto;
 }
 
-.carousel-inner {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    max-height : 405px;
-}
-
 /* Upload */
 .image-upload > input
 {
@@ -220,17 +214,32 @@ body {
 /* Contest */
 
 .contest-title {
-    font-size : 48px;
+    font-size : 42px;
     text-align: center;
+    font-weight : bold;
 }
 
 .time-contest {
     text-align: center;
     text-transform: uppercase;
+    display : flex;
+    width : 100%;
 }
 
-.time-contest::before, .time-contest::after {
-    content: " --------------------------- ";
+.time-contest .text
+{
+    width : 220px;
+    padding-left : 5px;
+    padding-right : 5px;
+}
+
+.bg-dot {
+    background-image: url('../img/polkadot.png');
+    background-repeat: repeat;
+    width : 100%;
+    height: 10px;
+    margin-top : auto;
+    margin-bottom : auto;
 }
 
 #countdown ul li {
@@ -262,6 +271,34 @@ body {
     color: gold;
 }
 
+.carousel-inner {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    max-height : 405px;
+}
+
+.form_title {
+    background-color: #dfdfdf;
+    padding : 5px;
+    border-radius: 10px;;
+}
+
+.ct_color {
+    color : #d5d5d5;
+}
+
+.contest-form {
+    margin-left : auto;
+    margin-right : auto;
+    max-width : 360px;
+}
+
+.desc
+{
+    font-size : 14px;
+    text-align: center;
+}
+
 /* wysiwyg EDITOR */
 
 #editor {
@@ -279,7 +316,7 @@ body {
 /* ITL INPUT */
 
 .iti {
-    max-width: 230px;
+    width : 100%;
 }
 
 .iti_custom {
@@ -298,10 +335,8 @@ body {
 }
 
 .iti-wrapper {
-    margin-top: 32px;
     margin-left: auto;
     margin-right: auto;
-    max-width : 320px;
 }
 
 /* Loading BaR */

@@ -45,7 +45,10 @@
 
             <div class="col-lg-9 mx-auto">
                 <div class="contest-title mt-3">{{ $event->title }}</div>
-                <div class="time-contest">Time Left</div>
+                <div class="time-contest">
+                    <div class="bg-dot"></div>
+                    <div class="text">Time Left</div>
+                    <div class="bg-dot"></div></div>
                 <div class="container">
                     <div id="countdown" class="text-center mt-3">
                         <ul>
@@ -60,43 +63,44 @@
                     </div>
                     <!-- end timer -->
                 </div>
-                <h4 class="text-center mb-3">
+                <h5 class="text-center mb-3">
                     <span class="me-2">
                         <i class="fas fa-gift main-color"></i> Prize : <span class="text-uppercase">{{ $user->currency }}</span> {{ $helpers::format($event->prize_value) }}
                     </span>
                     <span class="ms-2">
                         <i class="fas fa-trophy trophy"></i> Total Winner : {{ $event->winners }}
                     </span>
-                </h4>
-                <div class="text-center mt-4"><h2>Enter your WhatsApp <i class="fab fa-whatsapp"></i> Number</h2></div>
+                </h5>
+                <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
                 <!-- contestant enter -->
-                <form id="save_contestant">
-                    <div class="form-group">
-                        <label>Your Name</label>
+                <form class="contest-form" id="save_contestant">
+                    <div class="form-group mb-3">
+                        <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
                         <input name="contestant" required type="text" class="form-control form-control-lg" />
                         <span class="text-danger err_contestant"><!-- --></span>
                     </div>
-                    <div class="form-group">
-                        <label>Your Email</label>
+                    <div class="form-group mb-3">
+                        <label>{{Lang::get('custom.email')}} <i class="fas fa-at ct_color"></i></label>
                         <input name="email" required type="email" class="form-control form-control-lg" />
                         <span class="text-danger err_email"><!-- --></span>
                     </div>
-                    <div class="iti-wrapper">
-                        <div class="input-group">
-                            <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
-                            <button type="submit" class="btn bg-custom btn-lg text-white">Enter</button>
-                        </div>
+                    <div class="iti-wrapper mb-3">
+                        <label>{{Lang::get('custom.number')}} <b><i class="fab fa-whatsapp ct_color"></i></b></label>
+                        <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
                         <span class="text-danger err_phone"><!-- --></span>
                     </div>
+                    <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
                 </form>
-                
+
                 <!-- description -->
                 <div class="terms mt-4">{!! $event->desc !!}</div>
-                <div class="row px-3 py-3">
-                    <div class="col-lg-6 text-end">Giveaway timezone : {{ $event->timezone }}</div>
-                    <div class="col-lg-6 text-start">Offered By : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a></div>
-                </div>
+                
                 <!-- end container -->
+            </div>
+            <!-- footer -->
+            <div class="row px-3 py-3">
+                <div class="col-lg-6 desc">{{ Lang::get('custom.giveaway_timezone') }} : {{ $event->timezone }}</div>
+                <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a></div>
             </div>
         <!-- end col -->
     </div>
