@@ -10,45 +10,43 @@
                     <div class="float-end align-middle "><a href="{{ url('create') }}" class="btn btn-default bg-custom text-white">New Giveaway</a></div>
                 </div>
 
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <th>Titles</th>
-                            <th>Contestants</th>
-                            <th>Entries</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </thead>
-                        <tbody>
-                            @if($data->count() > 0)
-                                @foreach($data as $row)
-                                <tr>
-                                    <td class="align-middle"><span class="main-color">{{ $row->title }}</span><br/>{{ $row->award }}</td>
-                                    <td class="align-middle">5</td>
-                                    <td class="align-middle">14</td>
-                                    <td class="align-middle"><span class="badge rounded-pill bg-custom">Running</span></td>
-                                    <td class="align-middle"><div class="dropdown">
-                                        <a class="btn btn-default btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Dropdown link
-                                        </a>
-
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <li><a class="dropdown-item" href="#">Action</a></li>
-                                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                        </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            @else
-                                <tr><td colspan="4" class="text-center"><div class="alert alert-info">{{ Lang::get('custom.no_data') }}</div></tr> 
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                <div id="dashboard" class="card-body"><!-- display dashboard here --></div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        display_dashboard();
+    });
+
+    function display_dashboard()
+    {
+        $.ajax({
+            method:'GET',
+            url:'{{ url("dashboard") }}',
+            dataType:'html',
+            success: function(result)
+            {
+                $("#dashboard").html(result);
+            },
+            error:function(xhr)
+            {
+                $("#dashboard").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+            },
+            complete : function(xhr)
+            {
+                datatable();
+            }
+        });
+    }
+
+    function datatable()
+    {
+        $("#dashboard_table").DataTable();
+    }
+
+</script>
+
 @endsection

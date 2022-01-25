@@ -30,8 +30,6 @@
                                 <div class="yt-box mt-1">
                                     <div class="embed-responsive embed-responsive-16by9">
                                         <div class="embed-responsive-item yt-iframe" id="yt_ifr_{{ $row->id }}"></div>
-                                        <!-- <iframe frameborder="0"
-        style="border: solid 4px #37474F" id="yt_ifr_{{ $row->id }}" class="embed-responsive-item yt-iframe"  src="{{ $row->url }}?enablejsapi=1" allowfullscreen></iframe> -->
                                     </div>
                                 </div>
                             </div>    
@@ -45,8 +43,6 @@
         </div>
         <!-- end col -->
     </div>
-    <div id="player"></div>
-    <div id="player_2"></div>
     <!-- end container -->
 </div>
 
@@ -115,38 +111,28 @@ var tag = document.createElement('script');
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     function onYouTubePlayerAPIReady() {
-        var player = new YT.Player('yt_ifr_3', {
-            videoId: 'gURWZyzQDZQ',
-            playerVars: { 'autoplay': 0, 'controls': 1 },
-            events: {
-                // 'onReady': onPlayerReady,
-                'onStateChange': function(status)
-                {
-                    if(status.data == 0)
+        @foreach($bonus as $row)
+            @if($row->type == 7)
+            var player = new YT.Player('yt_ifr_{{ $row->id }}', {
+                videoId: '{{ $row->url }}',
+                playerVars: { 'autoplay': 1, 'controls': 0 },
+                events: {
+                    // 'onReady': onPlayerReady,
+                    'onStateChange': function(status)
                     {
-                        alert('aaa');
-                        // var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : 7, 'bid': data_id};
-                        // task_run(data)
-                    }
-                },
-                // 'onError': onPlayerError
-            }
-        });
-        var player2 = new YT.Player('yt_ifr_8', {
-            videoId: 'gURWZyzQDZQ',
-            playerVars: { 'autoplay': 0, 'controls': 1 },
-            events: {
-                'onStateChange': function(status)
-                {
-                    if(status.data == 0)
-                    {
-                        alert('vvvv');
-                        // var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : 7, 'bid': data_id};
-                        // task_run(data)
-                    }
-                },
-            }
-        });
+                        if(status.data == 0)
+                        {
+                            // alert('aaa');
+                            var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : 7, 'bid': "{{ $row->id }}"};
+                            task_run(data)
+                        }
+                    },
+                    // 'onError': onPlayerError
+                }
+            });
+            @endif
+        @endforeach
+        
     }
 
 </script>

@@ -151,7 +151,9 @@ class CheckEvents
            if(count($err_wyt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_cl'] = $err_wyt;
+               $replace = ['new_text_wyt','new_url_wyt','new_entries_wyt'];
+               $target = ['action text watch youtube video line : ','url watch youtube video : ','entries youtube video : '];
+               $errors['err_cl'] = str_replace($replace,$target,$err_wyt);
            }
         }
 
@@ -255,9 +257,14 @@ class CheckEvents
             $protocol.'_entries_'.$init.'.*'=>['required','min:1','max:100'],
         ];
 
-        if($init !== 'de')
+        if($init !== 'de' || $init !== 'wyt')
         {
             $rules[$protocol.'_url_'.$init.'.*'] = ['required','url'];
+        }
+
+        if($init == 'wyt')
+        {
+            $rules[$protocol.'_url_'.$init.'.*'] = ['required','max:30'];
         }
 
         if($init == 'ig' || $init == 'tw')

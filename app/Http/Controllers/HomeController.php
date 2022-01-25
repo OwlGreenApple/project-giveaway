@@ -16,6 +16,7 @@ use App\Helpers\Custom;
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -36,9 +37,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $events = Events::where('events.user_id',Auth::id())->get();
+        return view('home');
+    }
+
+    public function dashboard()
+    {
+        $events = Events::where('events.user_id',Auth::id())
+                ->leftJoin('contestants','contestants.event_id','=','events.id')
+                ->select(DB::raw('COUNT(contestants.id) AS total_contestant, SUM(contestants.entries) AS total_entries, events.*'))
+                ->groupBy('events.id')
+                ->get();
+
         $data = ['data'=>$events];
-        return view('home',$data);
+        return view('home-table',$data);
     }
 
     //  get contestant from events
@@ -201,6 +212,8 @@ class HomeController extends Controller
         if($request->edit == null)
         {
             $ev = new Events;
+            $ev->user_id = Auth::id();
+            $ev->url_link = self::generate_event_link();
         }
         else
         {
@@ -215,8 +228,6 @@ class HomeController extends Controller
             }
         }
         
-        $ev->user_id = Auth::id();
-        $ev->url_link = self::generate_event_link();
         $ev->title = $title;
         $ev->desc = $desc;
         $ev->start = $start;
@@ -438,6 +449,7 @@ class HomeController extends Controller
         foreach($merge as $key=>$row):
             $row['event_id'] = $event_id;
             $row['type'] = $type;
+
             if($type == 5)
             {
                 $row['url'] = null;

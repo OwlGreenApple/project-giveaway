@@ -191,7 +191,7 @@
                                     @if($row['type'] !== '5')
                                     <div class="form-group col-md-6 col-lg-6 mb-2">
                                         <label>{{ $row['col_name'] }}<span class="text-danger">*</span></label>
-                                        <input value="{{ $row['url'] }}" type="text" class="form-control form-control-lg" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                        <input @if($row['type'] == '7') placeholder="https://www.youtube.com/watch?v=xxxxxx" @endif value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
                                     </div>
                                     @endif
                                 
@@ -294,6 +294,7 @@ $(function() {
     add_bonus_entry();
     delete_bonus_entry();
     select_timezone();
+    pastePreview();
 });
 
 var err_bonus = '';
@@ -309,6 +310,33 @@ function select_timezone()
 
     $("#timezone option[value='"+timezone+"']").prop('selected',true);
 }
+
+// GET ONLY YOUTUBE CODE URL WHEN USER PASTE YOUTUBE URL ON BONUS ENTRY
+function pastePreview()
+  {
+    $("body").on("paste",".emb",function(e){
+      var cl = $(this).attr('class');
+      cl = cl.split(' ');
+      var counter = cl[0].split('_');
+      var id;
+
+      if(counter[1] == "new")
+      {
+          id = counter[1]+"_"+counter[2];
+      }
+      else
+      {
+          id = counter[1];
+      }
+
+      var pastedData = e.originalEvent.clipboardData.getData('text');
+      pastedData = pastedData.split("=");
+
+      setTimeout(function(){
+        $(".em_"+id).val(pastedData[1]);
+      },100);      
+    })
+  }
 
 // ADDING COLUMN BONUS ENTRY
 function add_bonus_entry()
@@ -398,7 +426,16 @@ function column_entry(val)
     {
         $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
         $column += '<label>'+col_2+'<span class="text-danger">*</span></label>';
-        $column += '<input type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+
+        if(val == 'wyt')
+        {
+            $column += '<input placeholder="https://www.youtube.com/watch?v=xxxxxx" type="text" class="em_new_'+len+' form-control form-control-lg emb" name="new_url_'+val+'[]" />';
+            
+        }
+        else
+        {
+            $column += '<input type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+        }
         $column += '</div>';
         $column += '<div class="form-group col-md-12 col-lg-12">';
     }

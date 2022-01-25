@@ -28,6 +28,7 @@ Route::post('save-contestant', [App\Http\Controllers\ContestController::class, '
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
 Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
