@@ -19,7 +19,7 @@
                         <!-- begin form -->
                         <div class="form-group mb-3">
                             <label>Title:<span class="text-danger">*</span></label>
-                            <input type="text" @if(isset($event)) value="{{ $event->title }}" @endif class="form-control form-control-lg" name="title" />
+                            <input type="text" class="form-control form-control-lg" name="title" />
                             <span class="text-danger err_title"><!-- --></span>
                         </div> 
                         <div class="form-group mb-3">
@@ -58,33 +58,10 @@
                         </div> 
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Start At:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->start }}" @endif type="text" class="form-control form-control-lg datetimepicker_1" name="start" />
-                                <span class="text-danger err_start"><!-- --></span>
+                                <label>Date send:<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="date_send" />
+                                <span class="text-danger err_date_send"><!-- --></span>
                             </div> 
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label>End At:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->end }}" @endif type="text" class="form-control form-control-lg datetimepicker_2" name="end" />
-                                <span class="text-danger err_end"><!-- --></span>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label>Awarded At:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->award }}" @endif type="text" class="form-control form-control-lg datetimepicker_3" name="award" />
-                                <span class="text-danger err_award"><!-- --></span>
-                            </div> 
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label>Number Of Winners:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" class="form-control form-control-lg w-25" name="winner" />
-                                <span class="text-danger err_winner"><!-- --></span>
-                            </div>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input @if(isset($event) && $event->unlimited == 1) checked value="on" @endif class="form-check-input" type="checkbox" name="unl_cam" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                            Unlimited Campaign
-                            </label>
                         </div>
                         <div class="form-group mb-3">
                             <label>Timezone</label>
@@ -103,7 +80,7 @@
 
                 <div class="mt-5 text-center">
                     <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
-                    <button type="submit" class="btn bg-custom btn-lg text-white">Save</button>
+                    <button type="submit" class="btn bg-custom btn-lg text-white">Submit</button>
                 </div>
 
             </form>
@@ -117,13 +94,70 @@
 
 <script>
 $(function() {
+    datetimepicker();
+    editor();
     save_data();
 });
+
+function editor()
+{
+    @if(isset($event))
+        var editor = '{!! $editor !!}';
+        $("#editor").html(editor);
+    @endif
+
+    $('#editControls a').click(function(e) {
+        switch($(this).data('role')) {
+        default:
+            document.execCommand($(this).data('role'), false, null);
+            break;
+        }
+    });
+    $('#editControls .fontsize').change(function(e) {
+        console.log($(this).val());
+        switch($(this).val()) {
+            case 'h3':
+                document.execCommand("fontSize", false, "1");
+            break;
+            case 'h2':
+                document.execCommand("fontSize", false, "5");
+                break;
+            case 'h1':
+                document.execCommand("fontSize", false, "7");
+                break;
+            case 'normal':
+                document.execCommand("removeFormat", false);
+                break;
+            default:
+                document.execCommand("fontSize", false, null);
+                break;
+        }
+    });
+}
+
+function datetimepicker()
+{
+    var date, tdate;
+    var ndate = new Date();
+    var date_1 = $('.datetimepicker_1').val();
+
+    (date_1.length == 0)?date = ndate : date = moment(date_1);
+    
+
+    var format_date = 'YYYY-MM-DD HH:mm';
+
+    $('.datetimepicker_1').datetimepicker({
+        format : format_date,
+        minDate : date
+    });
+    
+}
 
 function save_data()
 {
     $("#create_broadcast").submit(function(e){
         e.preventDefault();
+        var desc = $("#editor").html();
         var form = $("#create_broadcast")[0];
         var data = new FormData(form);
         data.append('desc',desc);
@@ -151,7 +185,9 @@ function save_data()
             {
                 if(result.success == 1)
                 {
-                    location.href="{{ url('edit-event') }}/"+result.id;
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#msg").html('<div class="alert alert-success">Data submitted</div>')
                 }
                 else if(result.success == 2)
                 {
