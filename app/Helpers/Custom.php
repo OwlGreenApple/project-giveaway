@@ -1,5 +1,6 @@
 <?php
 namespace App\Helpers;
+use App\Models\Entries;
 
 class Custom
 {
@@ -46,7 +47,7 @@ class Custom
             "Asia/Dubai"=>"(UTC +4) Abu Dhabi",
             "Asia/Karachi"=>"(UTC +5) Islamabad",
             "Asia/Dhaka"=>"(UTC +6) Dhaka",
-            "Asia/Bangkok"=>"(UTC +7) Bangkok",
+            "Asia/Jakarta"=>"(UTC +7) Jakarta/Bangkok",
             "Asia/Hong_Kong"=>"(UTC +8) Hong Kong",
             "Asia/Tokyo"=>"(UTC +9) Tokyo",
             "Australia/Brisbane"=>"(UTC +10) Cairns",
@@ -55,6 +56,44 @@ class Custom
         ];
         return $timezone;
     } 
+
+    //TO GIVE CIRCLE MARK IF CONTESTANT HAD DONE WITH BONUS ENTRIES
+    public static function get_marks($bonus_id,$event_id,$type,$contestant_id)
+    {
+        $logic = [
+            ['bonus_id',$bonus_id],
+            ['event_id',$event_id],
+            ['type',$type],
+            ['contestant_id',$contestant_id],
+        ];
+
+        $et = Entries::where($logic)->first();
+
+        if(is_null($et))
+        {
+            $icon = '<i class="far fa-circle"></i>';
+        }
+        else
+        {
+            $icon = '<i class="fas fa-check-circle main-color"></i>';
+        }
+
+        return $icon;
+    }
+
+    public function share_prize($show)
+    {
+        if($show == null)
+        {
+            $prize = "+3";
+        }
+        else
+        {
+            $prize = 3;
+        }
+            
+        return $prize;
+    }
 
 /* end of class */
 }

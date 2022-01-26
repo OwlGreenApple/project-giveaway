@@ -157,14 +157,47 @@ class ContestController extends Controller
 
         $ev = Events::find($ev_id)->first();
         $bonus = Bonus::where('event_id',$ev_id)->get();
+
+        if(env('APP_ENV') == 'local')
+        {
+            $url = asset('storage/app');
+        }
+
+        $banners = Banners::where('event_id',$ev->id)->select('url')->first()->toArray();
+        if(!is_null($banners))
+        {
+            $banners['url'] = $url."/".$banners['url'];
+        }
+
+        $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();
         
         $data = [
             'ev'=>$ev,
             'ct_id'=>$id,
-            'bonus'=>$bonus
+            'bonus'=>$bonus,
+            'banners'=>$banners,
+            'ct'=>$contestants,
         ];
 
         return view('task',$data);
+    }
+
+    // LOADING ALL TASK DATA
+    public function taskdata(Request $request)
+    {
+        $id = strip_tags($request->ct_id);
+        $ev_id = strip_tags($request->ev_id);
+
+        $ev = Events::find($ev_id)->first();
+        $bonus = Bonus::where('event_id',$ev_id)->get();
+
+        $data = [
+            'ev'=>$ev,
+            'ct_id'=>$id,
+            'bonus'=>$bonus,
+            'helper'=>new Custom,
+        ];
+        return view('taskdata',$data);
     }
 
     // save entry and add user's entry after user doing task
@@ -250,6 +283,11 @@ class ContestController extends Controller
         {
             // twitter follow
             $ret['url'] = 'https://twitter.com/'.$bonus->url;
+        }
+        if($type == 7)
+        {
+            // watching youtube
+            $ret['url'] = null;
         }
         if($type == 8)
         {

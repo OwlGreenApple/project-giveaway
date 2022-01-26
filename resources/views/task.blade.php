@@ -2,64 +2,130 @@
 
 @section('content')
 <div class="container">
-    <div class="col-md-9 px-0 wrapper">
+    <div class="col-md-9 pt-0 pb-3 wrapper">
+        <!-- youtube or banner carousel -->
+            
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @if($ev->media == 0)
+                    @if(count($banners) > 0)
+                        <div class="carousel-item active">
+                            <img src="{{ $banners['url'] }}" class="d-block w-100" />
+                        </div>
+                    @endif
+                @else
+                    <div class="carousel-item active">
+                        <div class="yt-box">
+                            <iframe class="yt-iframe" src="{{ $ev->youtube_banner }}" ></iframe>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+        <!-- end carousel -->
+
+        <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
+        <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
+
         <div class="col-lg-9 mx-auto">
-            <ul class="list-group">
-                @if($ev->tw == 1)
-                    <li data-type="8" class="task list-group-item">Twitter Share <span class="ms-auto">+3</span></li>
-                @endif
-                @if($ev->fb == 1)
-                    <li data-type="9" class="task list-group-item clearfix">Facebook Share <div class="float-end">+3</div></li>
-                @endif
-                @if($ev->wa == 1)
-                    <li data-type="10" class="task list-group-item clearfix">Share Whatsapp <div class="float-end">+3</div></li>
-                @endif
-                @if($ev->ln == 1)
-                    <li data-type="11" class="task list-group-item">Share Linkedin</li>
-                @endif
-                @if($ev->mail == 1)
-                    <li data-type="12" class="task list-group-item">Share Email</li>
-                @endif
-                @if($bonus->count() > 0)
-                    @foreach($bonus as $row)
-                        @if($row->type == 5)
-                            <li class="list-group-item clearfix"><a data-type="{{ $row->type }}" class="task" data-id="{{ $row->id }}">{{ $row->title }}</a> <div class="float-end">+{{ $row->prize }}</div></li>
-                        @elseif($row->type == 7)
-                            <li class="list-group-item clearfix"><a data-type="{{ $row->type }}" data-id="{{ $row->id }}" data-bs-toggle="collapse" href="#collapse_{{ $row->id }}">{{ $row->title }}</a> <div class="float-end">+{{ $row->prize }}</div></li>
-                            <div id="collapse_{{ $row->id }}" class="collapse">
-                                <div class="yt-box mt-1">
-                                    <div class="embed-responsive embed-responsive-16by9">
-                                        <div class="embed-responsive-item yt-iframe" id="yt_ifr_{{ $row->id }}"></div>
-                                    </div>
-                                </div>
-                            </div>    
-                        @else
-                            <li class="list-group-item clearfix"><a data-type="{{ $row->type }}" data-id="{{ $row->id }}" class="task" >{{ $row->title }}</a> <div class="float-end">+{{ $row->prize }}</div></li>
-                        @endif
-                    @endforeach
-                @endif
-            </ul>
+            <div id="taskdata"><!-- display task here --></div>
         <!-- end col -->
         </div>
         <!-- end col -->
+
+        <!-- footer -->
+        <div class="footer-task">
+            <div class="bg-task">
+                <div class="desc px-0">{{ Lang::get('custom.giveaway_timezone') }} : {{ $ev->timezone }}</div>
+                <div class="desc px-0 ms-auto">{{ Lang::get('custom.offered') }} : <a href="{{ $ev->owner_url }}" class="main-color">{{ $ev->owner }}</a></div>
+            </div>
+        </div>
     </div>
     <!-- end container -->
 </div>
 
+<!-- fixed timer -->
+
+<div class="col-lg-12 row text-center bg-white task_entries container">
+        <div class="col-lg-6 text-end">Your Entries : <span class="main-color">{{$ct->entries}}</span></div>
+        
+        <div class="col-lg-6 clearfix">
+            <div class="float-start">Time Left :</div>
+            <!-- timer -->
+            <div id="countdown" class="text-center mt-3 float-start">
+                <ul>
+                    <li><div class="count" id="days"></div><small>d</small></li>
+                    <li class="count-space"><span class="count">:</span></li>
+                    <li><div class="count" id="hours"></div><small>h</small></li>
+                    <li class="count-space"><span class="count">:</span></li>
+                    <li><div class="count" id="minutes"></div><div class="count-label">Minutes</div></li>
+                    <li class="count-space"><span class="count">:</span></li>
+                    <li><div class="count" id="seconds"></div><div class="count-label">Seconds</div></li>
+                </ul>
+            </div>
+            <!-- end timer -->
+        </div>
+        <!-- end mx -->
+    </div>
+</div>
+
 <script>
+    var global_date = "{{ $ev->end }}"; //set target event date
+
     $(function(){
         task();
+        loadtask();
+        hover_plus();
     });
+
+    function hover_plus()
+    {
+        $("body").on("mouseenter",".task",function(){
+            var data_type = $(this).attr('data-type');
+            var data_id = $(this).attr('data-id');
+
+            if(data_id == undefined)
+            {
+                $(".bg_share_"+data_type).addClass('bg-custom');
+            }
+            else
+            {
+                $(".bg_bonus_"+data_id).addClass('bg-custom');
+            }
+            
+        });
+
+        $("body").on("mouseleave",".task",function(){
+            var data_type = $(this).attr('data-type');
+            var data_id = $(this).attr('data-id');
+        
+            if(data_id == undefined)
+            {
+                $(".bg_share_"+data_type).removeClass('bg-custom');
+            }
+            else
+            {
+                $(".bg_bonus_"+data_id).removeClass('bg-custom');
+            }
+            
+        });
+    }
 
     function task()
     {
-        $(".task").click(function(){
+        $("body").on("click",".task",function(){
             var data_id = $(this).attr('data-id');
             var data_type = $(this).attr('data-type');
+            var data_url = $(this).attr('data-url');
 
             if(data_id == undefined)
             {
                 data_id = 0;
+            }
+
+            if(data_type == 7)
+            {
+                return playYoutube(data_id,data_url);
             }
 
             var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : data_type, 'bid': data_id};
@@ -87,19 +153,43 @@
 
                 if(result.success == 1)
                 {
-                    // code to styling after user's task done
+                    // code to styling after contestant doing task
+                    if(result.url !== null)
+                    {
+                        window.open(result.url, "_blank");
+                    }
                 }
-
-                window.open(result.url, "_blank");
             },
             error : function(xhr)
             {
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
+            },
+            complete: function()
+            {
+                loadtask();
             }
         });
     }
 
+    function loadtask()
+    {
+        $.ajax({
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            method : 'POST',
+            url : '{{ url("taskdata") }}',
+            data : {'ct_id':'{{ $ct_id }}', 'ev_id': '{{ $ev->id }}'},
+            dataType : "html",
+            success : function(result)
+            {
+                $("#taskdata").html(result);
+            },
+            error : function()
+            {
+                $("#taskdata").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+            }
+        });
+    }
 </script>
 
 <script type="text/javascript">
@@ -110,30 +200,26 @@ var tag = document.createElement('script');
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    function onYouTubePlayerAPIReady() {
-        @foreach($bonus as $row)
-            @if($row->type == 7)
-            var player = new YT.Player('yt_ifr_{{ $row->id }}', {
-                videoId: '{{ $row->url }}',
-                playerVars: { 'autoplay': 1, 'controls': 0 },
-                events: {
-                    // 'onReady': onPlayerReady,
-                    'onStateChange': function(status)
+    // function onYouTubePlayerAPIReady() {
+    function playYoutube(id,url) {
+        var player = new YT.Player('yt_ifr_'+id, {
+            videoId: url,
+            playerVars: { 'autoplay': 0, 'controls': 0 },
+            events: {
+                // 'onReady': onPlayerReady,
+                'onStateChange': function(status)
+                {
+                    if(status.data == 0)
                     {
-                        if(status.data == 0)
-                        {
-                            // alert('aaa');
-                            var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : 7, 'bid': "{{ $row->id }}"};
-                            task_run(data)
-                        }
-                    },
-                    // 'onError': onPlayerError
-                }
-            });
-            @endif
-        @endforeach
-        
+                        // alert('aaa');
+                        var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : 7, 'bid': id};
+                        task_run(data)
+                    }
+                },
+                // 'onError': onPlayerError
+            }
+        });
     }
-
 </script>
+<script src="{{ asset('assets/js/countdowntimer.js') }}"></script>
 @endsection

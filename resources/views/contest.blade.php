@@ -50,6 +50,7 @@
                     <div class="text">Time Left</div>
                     <div class="bg-dot"></div></div>
                 <div class="container">
+                    <!-- timer -->
                     <div id="countdown" class="text-center mt-3">
                         <ul>
                             <li><div class="count" id="days"></div><div class="count-label">Days</div></li>
@@ -65,10 +66,10 @@
                 </div>
                 <h5 class="text-center mb-3">
                     <span class="me-2">
-                        <i class="fas fa-gift main-color"></i> Prize : <span class="text-uppercase">{{ $user->currency }}</span> {{ $helpers::format($event->prize_value) }}
+                        <i class="fas fa-gift"></i> {{ Lang::get('custom.prize') }} : <b class="main-color"><span class="text-uppercase">{{ $user->currency }}</span> {{ $helpers::format($event->prize_value) }}</b>
                     </span>
                     <span class="ms-2">
-                        <i class="fas fa-trophy trophy"></i> Total Winner : {{ $event->winners }}
+                        <i class="fas fa-trophy"></i> {{ Lang::get('custom.winner') }} : <b class="trophy">{{ $event->winners }}</b>
                     </span>
                 </h5>
                 <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>

@@ -6,7 +6,7 @@ body {
     font-size : 16px;
 }
 
-.main-color, .footer a, .login-foot a, .box-color {
+.main-color, .footer a, .login-foot a, .box-color, #taskdata li a:hover {
     color : #00c0ff !important;
     text-decoration: none;
 }
@@ -284,7 +284,7 @@ body {
 }
 
 .ct_color {
-    color : #d5d5d5;
+    color : #cbcbcb;
 }
 
 .contest-form {
@@ -297,6 +297,86 @@ body {
 {
     font-size : 14px;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bg-task {
+    background-color: #f1f1f1;
+    display : flex;
+    padding : 25px 30px;
+    margin-top : 1.5rem;
+    border-top: 1px solid #d1d1d1;
+    border-bottom: 1px solid #d1d1d1;
+}
+
+/* TASK */
+
+#taskdata .list-group li {
+    border-left : 0;
+    border-right : 0;
+    border-top :0;
+    color : #888;
+}
+
+#taskdata .list-group:first-child{
+    border-top : 1px solid rgba(0, 0, 0, 0.125);
+}
+
+#taskdata .task {
+    text-decoration: none;
+    cursor : pointer;
+    color : #888;
+    font-size : 20px;
+}
+
+#taskdata i {
+    width : 30px;
+    height : 30px;
+    text-align: center;
+    font-size : 24px;
+    margin-right: 5px;
+}
+
+#taskdata .prize {
+    font-size : 14px;
+    color : #fff;
+    background-color: #aaa;
+    padding : 8px;
+    font-weight : bold;
+    line-height: 16px;
+    background-image: url('../img/arrow.png');
+    background-repeat: no-repeat;
+    background-position-y: center;
+}
+
+.task_entries {
+    border-top : 1px solid #bbb;
+    border-bottom : 1px solid #bbb;
+    padding : 1.5rem;
+    display:flex;
+}
+
+.task_entries .main-color{
+    font-size : 24px;
+}
+
+.footer-task {
+    padding: 0 3rem;
+    margin-bottom : 1rem;
+}
+
+h1.congrats {
+    font-size: 3.25em;
+    text-align: center;
+    padding : 15px 0;
+    margin-bottom : 0 !important;
+}
+
+h2.congrats {
+    text-align: center;
+    padding : 0 90px 15px 90px;
+    margin-bottom : 0 !important;
 }
 
 /* wysiwyg EDITOR */
