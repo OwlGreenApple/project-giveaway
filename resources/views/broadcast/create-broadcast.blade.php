@@ -56,6 +56,16 @@
                             </div>
                             <span class="text-danger err_desc"><!-- --></span>
                         </div> 
+                        <div class="form-group mb-3">
+                            <label>Event</label>
+                            <select class="form-select" name="event" id="event" required="">
+                                <option value="0">All</option>
+                                @foreach($events as $event)
+                                    <option value="{{ $event->id }}">{{ $event->title }}</option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger err_timezone"><!-- --></span>
+                        </div> 
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Date send:<span class="text-danger">*</span></label>

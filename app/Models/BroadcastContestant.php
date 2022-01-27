@@ -5,18 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Broadcast extends Model
+class BroadcastContestant extends Model
 {
     use HasFactory;
 
-    protected $table = "broadcasts";
+    protected $table = "broadcast_contestants";
 
     /*
-        event_id :
-        0 -> all
-        
         status :
         0 -> pending
-        1 -> executed
+        1 -> sent
     */ 
 }

@@ -11,6 +11,7 @@ use App\Models\Events;
 use App\Models\Banners;
 use App\Models\User;
 use App\Models\Contestants;
+use App\Models\BroadcastContestant;
 use App\Models\Entries;
 use App\Models\Bonus;
 use App\Models\Broadcast;
@@ -32,9 +33,13 @@ class BroadcastController extends Controller
 
     public function create_broadcast()
     {
+        $user = Auth::user();
         $helper = new Custom;
+        $events = Events::where('user_id',$user->id)
+                    ->get();
         return view('broadcast.create-broadcast',[
-            'helper'=>$helper
+            'helper'=>$helper,
+            'events'=>$events,
         ]);
     }
 
@@ -45,18 +50,52 @@ class BroadcastController extends Controller
         $title = strip_tags($request->title);
         $desc = strip_tags($request->desc);
         $timezone = strip_tags($request->timezone);
+        $event_id = strip_tags($request->event);
         //validator
 
-        //save to database
+        //save to broadcast
         $broadcast = new Broadcast;
         $broadcast->user_id = $user->id;
-        $broadcast->event_id = 0;
+        $broadcast->event_id = $event_id;
         $broadcast->title = $title;
         //$broadcast->url = $request->url;
         $broadcast->message = $desc;
         $broadcast->date_send = Carbon::createFromFormat('Y-m-d H:i',$date_send);
         $broadcast->timezone = $timezone;
         $broadcast->save();
+
+        // save to broadcast_contestant
+        // klo $event_id = 0  -> all list(digroup by dengan no wa)
+        if ($event_id==0) {
+            $events = Events::where('user_id',$user->id)
+            ->get();
+            //https://stackoverflow.com/questions/30418452/trying-to-union-the-statements-using-loop-in-laravel/37324709
+            $i=0;
+            foreach($events as $event) {
+                $q = DB::table('contestants')->where('event_id', '=', $event->id);
+                if($i < 1){
+                    $subcontestants = $q;
+                }else{
+                    $subcontestants->union($q);
+                }
+                $i++;
+            }
+            $contestants = $subcontestants
+            ->select('wa_number', 'id', 'created_at')
+            ->groupBy('wa_number')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        }
+        else {
+            $contestants = Contestants::where('event_id',$event_id)->get();
+        }
+        foreach($contestants as $contestant) {
+            $broadcastContestant = new BroadcastContestant;
+            $broadcastContestant->event_id = $event_id;
+            $broadcastContestant->contestant_id = $contestant->id;
+            $broadcastContestant->save();
+        }
 
         return response()->json([
             "success"=>1,
