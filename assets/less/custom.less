@@ -354,11 +354,49 @@ body {
     border-top : 1px solid #bbb;
     border-bottom : 1px solid #bbb;
     padding : 1.5rem;
+    padding-top : 2rem;
     display:flex;
+    line-height: 22px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
 }
 
 .task_entries .main-color{
-    font-size : 24px;
+    font-size : 28px;
+    line-height : 24px;
+}
+
+.task_entries #countdown .count
+{
+    line-height : 20px;
+    font-size : 28px;
+    color :#00c0ff;
+}
+
+.task_entries #countdown ul li{
+    list-style-type: none;
+    display: inline-block;
+    margin-right: 0;
+    font-size: 16px;
+    text-align: center;
+}
+
+.task_entries #countdown ul{
+   padding-left : 10px;
+   margin-bottom : 0;
+}
+
+.task_entries #countdown .count-space
+{
+    line-height: 0;
+    vertical-align: unset;
+}
+
+.task_entries #countdown .count-space .count {
+    font-size : 16px;
+    vertical-align : super;
+    color :#747474;
 }
 
 .footer-task {

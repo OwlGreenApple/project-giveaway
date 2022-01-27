@@ -1,13 +1,37 @@
 <?php
 
 return [
+    'act_cl'=>'Action text click link on forms ',
+    'act_de'=>'Action text daily entry on forms ',
+    'act_fb'=>'Action text facebook like on forms ',
+    'act_ig'=>'Action text instagram follow on forms ',
+    'act_tw'=>'Action text twitter follow on forms ',
+    'act_pt'=>'Action text watch podcast on forms ',
+    'act_wyt'=>'Action text watch youtube video on forms ',
+    'act_yt'=>'Action text youtube subscribe on forms ',
     'cur'=>'Invalid Currency!',
     'desc'=>'Please do not put script inside description',
+    'ent_cl'=>'Entries click link on forms ',
+    'ent_de'=>'Entries daily entry on forms ',
+    'ent_fb'=>'Entries facebook like on forms ',
+    'ent_ig'=>'Entries instagram follow on forms ',
+    'ent_tw'=>'Entries twitter follow on forms ',
+    'ent_pt'=>'Entries watch podcast on forms ',
+    'ent_wyt'=>'Entries youtube video on forms ',
+    'ent_yt'=>'Entries youtube subscribe on forms ',
     'img'=>'You should upload at least 1 image',
     'lang'=>'Invalid Language',
     'phone'=>'Invalid phone number',
     'prize'=>'Maximum prize value is 1.000.000',
     'time.award'=>'Time award cannot be less than time end.',
     'time.end'=>'Time end cannot be less than time start.',
-    'time.zone'=>'Invalid timezone'
+    'time.zone'=>'Invalid timezone',
+    'url_cl'=>'URL click link on forms ',
+    'url_de'=>'URL daily entry on forms ',
+    'url_fb'=>'URL facebook like on forms ',
+    'url_ig'=>'URL instagram follow on forms ',
+    'url_tw'=>'URL twitter follow on forms ',
+    'url_pt'=>'URL watch podcast on forms ',
+    'url_wyt'=>'URL watch youtube video on forms ',
+    'url_yt'=>'URL youtube subscribe on forms '
 ];

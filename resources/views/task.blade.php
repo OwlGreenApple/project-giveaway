@@ -26,6 +26,7 @@
 
         <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
         <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
+        <h4 class="text-center text-uppercase">{{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helper::format($ev->prize_value) }}</b></h4>
 
         <div class="col-lg-9 mx-auto">
             <div id="taskdata"><!-- display task here --></div>
@@ -46,26 +47,33 @@
 
 <!-- fixed timer -->
 
-<div class="col-lg-12 row text-center bg-white task_entries container">
-        <div class="col-lg-6 text-end">Your Entries : <span class="main-color">{{$ct->entries}}</span></div>
-        
+<div class="col-lg-12 text-center bg-white task_entries">
+    <div class="container row">
         <div class="col-lg-6 clearfix">
-            <div class="float-start">Time Left :</div>
+            <div class="float-end d-flex">
+                <div class="me-1 text-uppercase">Your Entries :</div> 
+                <div class="main-color">{{$ct->entries}}</div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 d-flex">
+            <div class="text-uppercase">Time Left :</div>
             <!-- timer -->
-            <div id="countdown" class="text-center mt-3 float-start">
+            <div id="countdown" class="text-center">
                 <ul>
-                    <li><div class="count" id="days"></div><small>d</small></li>
-                    <li class="count-space"><span class="count">:</span></li>
-                    <li><div class="count" id="hours"></div><small>h</small></li>
-                    <li class="count-space"><span class="count">:</span></li>
-                    <li><div class="count" id="minutes"></div><div class="count-label">Minutes</div></li>
-                    <li class="count-space"><span class="count">:</span></li>
-                    <li><div class="count" id="seconds"></div><div class="count-label">Seconds</div></li>
+                    <li><div class="count" id="days"></div></li>
+                    <li class="count-space"><span class="count"><span class="me-1">d</span>:</span></li>
+                    <li><div class="count" id="hours"></div></li>
+                    <li class="count-space"><span class="count"><span class="me-1">h</span>:</span></li>
+                    <li><div class="count" id="minutes"></div></li>
+                    <li class="count-space"><span class="count"><span class="me-1">m</span>:</span></li>
+                    <li><div class="count" id="seconds"></div></li>
+                    <li class="count-space"><span class="count"><span class="me-1">s</span></span></li>
                 </ul>
             </div>
             <!-- end timer -->
         </div>
-        <!-- end mx -->
+        <!-- end container -->
     </div>
 </div>
 

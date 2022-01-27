@@ -122,7 +122,7 @@
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Value:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
-                                    <span class="input-group-text" id="inputGroup-sizing-lg">Rp</span>
+                                    <span class="input-group-text text-uppercase" id="inputGroup-sizing-lg">{{ $user->currency }}</span>
                                     <input name="prize_amount" @if(isset($event)) value="{{ $event->prize_value }}" @endif id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                                     <span class="text-danger err_prize_amount"><!-- --></span>
                                 </div>
@@ -504,13 +504,13 @@ function detect_video_or_banner(val)
     }
     
     if(val == 'on'){
-        $(".upload_banner").removeClass('d-none');
-        $(".input-images").addClass('d-none');
+        $(".upload_banner").addClass('d-none');
+        $(".input-images").removeClass('d-none');
     }
     else
     {
-        $(".upload_banner").addClass('d-none');
-        $(".input-images").removeClass('d-none');
+        $(".upload_banner").removeClass('d-none');
+        $(".input-images").addClass('d-none');
     }
 }
 

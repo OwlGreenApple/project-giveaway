@@ -53,7 +53,13 @@
     </div> 
 
     <div id="app">
-        @php $x = false; if(Request::segment(1) == 'login' || Request::segment(1) == 'register') $x = true; @endphp
+        @php 
+            $x = false; 
+            if(Request::segment(1) == 'login' || Request::segment(1) == 'register' || Request::segment(1) == 'c'|| Request::segment(1) == 'contest') 
+            {
+                $x = true; 
+            }
+        @endphp
        
         @if($x == false)
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">

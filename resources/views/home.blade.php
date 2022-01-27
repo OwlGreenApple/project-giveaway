@@ -19,6 +19,7 @@
 <script type="text/javascript">
     $(function(){
         display_dashboard();
+        duplicate_or_del_ev();
     });
 
     function display_dashboard()
@@ -38,6 +39,66 @@
             complete : function(xhr)
             {
                 datatable();
+            }
+        });
+    }
+
+    function duplicate_or_del_ev()
+    {
+        // update events
+        $("body").on("click",".duplicate",function(){
+            var id = $(this).attr('id');
+            var conf = confirm('{{ Lang::get("custom.duplicate") }}');
+
+            if(conf == true)
+            {
+                duplicate_or_del_events(id,'{{ url("duplicate-events") }}');
+            }
+            else
+            {
+                return false;
+            }
+        });
+
+        // delete events
+        $("body").on("click",".del_ev",function(){
+            var id = $(this).attr('id');
+            var conf = confirm('{{ Lang::get("custom.delete") }}');
+
+            if(conf == true)
+            {
+                duplicate_or_del_events(id,'{{ url("delete-events") }}');
+            }
+            else
+            {
+                return false;
+            }
+        });
+    }
+
+    function duplicate_or_del_events(id,target)
+    {
+        $.ajax({
+            method:'GET',
+            url: target,
+            data : {'id':id},
+            dataType:'html',
+            beforeSend : function()
+            {
+                $("#loader").show();
+                $('.div-loading').addClass('background-load');
+            },
+            success: function(result)
+            {
+                display_dashboard();
+            },
+            error:function(xhr)
+            {
+                $("#dashboard").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+            },
+            complete : function(xhr){
+                $("#loader").hide();
+                $('.div-loading').removeClass('background-load');
             }
         });
     }

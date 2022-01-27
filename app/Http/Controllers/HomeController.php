@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Banners;
 use App\Models\Bonus;
@@ -13,10 +12,12 @@ use App\Models\User;
 use App\Models\Events;
 use App\Models\Contestants;
 use App\Helpers\Custom;
-use Illuminate\Console\Scheduling\Event;
+use App\Models\Entries;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Aws\S3\Exception\S3Exception;
 
 class HomeController extends Controller
 {
@@ -52,6 +53,109 @@ class HomeController extends Controller
         return view('home-table',$data);
     }
 
+    // DUPLICATE EVENT
+    public function duplicate_events(Request $request)
+    {
+        $ev_id = strip_tags($request->id);
+        $ev = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
+        
+        //check event
+        if(is_null($ev))
+        {
+            return response()->json(['success'=>'err']);
+        }
+
+        //duplicate events
+        $req = [
+            'title'=>$ev->title,
+            'start'=>$ev->start,
+            'end'=>$ev->end,
+            'award'=>$ev->award,
+            'winner'=>$ev->winners,
+            'timezone'=>$ev->timezone,
+            'owner_name'=>$ev->owner,
+            'owner_url'=>$ev->owner_url,
+            'prize_name'=>$ev->prize_name,
+            'prize_amount'=>$ev->prize_value,
+            'youtube_url'=>$ev->youtube_banner,
+            'desc'=>$ev->desc,
+            'media_option'=>$ev->media,
+            'unl_cam'=>$ev->unlimited,
+            'tw'=>$ev->tw,
+            'fb'=>$ev->fb,
+            'wa'=>$ev->wa,
+            'ln'=>$ev->ln,
+            'mail'=>$ev->mail,
+            'duplicate'=>1
+        ];
+
+        $reqt = new Request($req);
+        $new_ev_id = $this->save_events($reqt);
+
+        // duplicate banners
+        $this->duplicate_banner($ev->id,$new_ev_id);
+
+        //duplicate bonus 
+        $bonuses = Bonus::where('event_id',$ev->id)->get();
+        if($bonuses->count() > 0)
+        {
+            foreach($bonuses as $row):
+                $bn = [
+                    'event_id'=>$new_ev_id,
+                    'title'=>$row->title,
+                    'prize'=>$row->prize,
+                    'type'=>$row->type,
+                    'url'=>$row->url
+                ];
+                self::db_bonus($bn,"new");
+            endforeach;
+        }
+    }
+
+    private function duplicate_banner($ev_id,$new_event_id)
+    {
+        $duplicate = array();
+        $banners = Banners::where('event_id',$ev_id)->select('url')->get();
+        
+        if($banners->count() > 0)
+        {
+            foreach($banners as $row):
+                $duplicate[] = Storage::disk('s3')->url($row->url);
+            endforeach;
+        }
+
+        $this->save_banner_image(null,$new_event_id,$duplicate);
+    }
+
+    public function del_event(Request $request)
+    {
+        $ev_id = strip_tags($request->id);
+        $ev_check = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
+
+        if(is_null($ev_check))
+        {
+            return response()->json(['success'=>'err']);
+        }
+
+        try
+        {
+            $banners = Banners::where('event_id',$ev_id)->select('id')->get()->toArray();
+            self::delete_banner(null,null,$banners);
+
+            Bonus::where('event_id',$ev_id)->delete();
+            Contestants::where('event_id',$ev_id)->delete();
+            Entries::where('event_id',$ev_id)->delete();
+            Events::find($ev_id)->delete();
+            $res['success'] = 1;
+        }
+        catch(QueryException $e)
+        {
+            $res['success'] = 0;
+        }
+
+        return response()->json($res);
+    }
+
     //  get contestant from events
     public function get_contestant($ev_id)
     {
@@ -72,7 +176,8 @@ class HomeController extends Controller
         $banners = $bonuses = array();
         $preloaded = null;
         $helper = new Custom;
-        $data = ['data'=>$banners,'preloaded'=>$preloaded, 'bonus'=>$bonuses, 'helper'=>$helper];
+        $user = Auth::user();
+        $data = ['data'=>$banners,'preloaded'=>$preloaded, 'bonus'=>$bonuses, 'helper'=>$helper,'user'=>$user];
         return view('create',$data);
     }
 
@@ -133,7 +238,7 @@ class HomeController extends Controller
 
     public function edit_event($id)
     {
-        $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.id')->first();
+        $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.user_id')->first();
         
         if(is_null($event))
         {
@@ -149,18 +254,9 @@ class HomeController extends Controller
     
         if($banners->count() > 0)
         {
-            if(env('APP_ENV') == 'local')
-            {
-                $target = asset('storage/app');
-            }
-            // else
-            // {
-            //     //s3
-            // }
-
             foreach($banners as $row)
             {
-                $data[$row->id] = $target.'/'.$row->url;
+                $data[$row->id] = Storage::disk('s3')->url($row->url);
             }
             $preloaded = 'preloaded'; //keyname of jquery image-upload
         }
@@ -175,7 +271,8 @@ class HomeController extends Controller
             'event'=>$event,
             'timezone'=>$timezone,
             'editor'=>$desc,
-            'helper'=>$helper
+            'helper'=>$helper,
+            'user'=>Auth::user()
         ];
         return view('create',$arr);
     }
@@ -199,15 +296,14 @@ class HomeController extends Controller
         $youtube_url = strip_tags($request->youtube_url);
         $desc = $request->desc;
         $images = $request->file('images');
-        $mo = $unl = $tw = $fb = $wa = $ln = $mail = 0;
-
-        (isset($request->media_option))? $mo = 1 : false;
-        (isset($request->unl_cam))? $unl = 1 : false;
-        (isset($request->tw))? $tw = $request->tw : false;
-        (isset($request->fb))? $fb = $request->fb : false;
-        (isset($request->wa))? $wa = $request->wa : false;
-        (isset($request->ln))? $ln = $request->ln : false;
-        (isset($request->mail))? $mail = $request->mail : false;
+      
+        $mo = self::determine_share($request->media_option);
+        $unl = self::determine_share($request->unl_cam);
+        $tw = self::determine_share($request->tw);
+        $fb = self::determine_share($request->fb);
+        $wa = self::determine_share($request->wa);
+        $ln = self::determine_share($request->ln);
+        $mail = self::determine_share($request->mail);
 
         if($request->edit == null)
         {
@@ -265,20 +361,28 @@ class HomeController extends Controller
             return response()->json(['success'=>0]);
         }
 
+        if($request->duplicate == 1)
+        {
+            return $event_id;
+        }
+
         /** BANNER IMAGES **/ 
 
         // DELETE BANNER
         $preload = $request->preloaded;
-        $lists = $request->list;
 
-        $t_preload = count($preload);
-        $t_lists = count($lists);
-
-        if($t_preload !== $t_lists)
+        if($preload !== null)
         {
-            self::delete_banner($lists,$preload);
-        }
+            $lists = $request->list;
+            $t_preload = count($preload);
+            $t_lists = count($lists);
 
+            if($t_preload !== $t_lists)
+            {
+                self::delete_banner($lists,$preload);
+            }
+        }
+        
         // SAVE BANNER
         if(isset($images)): 
             $this->save_banner_image($request,$event_id);
@@ -287,12 +391,15 @@ class HomeController extends Controller
         /*** BONUS ENTRY ***/
 
         //DELETE BONUSES
-        $t_entries = count($req['entries']);
-        $t_compare = count($req['compare']);
-
-        if($t_entries !== $t_compare)
+        if(isset($req['entries']))
         {
-            $this->delete_bonuses($req['entries'],$req['compare']);            
+            $t_entries = count($req['entries']);
+            $t_compare = count($req['compare']);
+
+            if($t_entries !== $t_compare)
+            {
+                $this->delete_bonuses($req['entries'],$req['compare']);            
+            }
         }
 
         // FACEBOOK LIKE
@@ -360,38 +467,51 @@ class HomeController extends Controller
         }
 
         return response()->json(['success'=>1,'id'=>$event_id]);
+    }
 
+    private static function determine_share($obj)
+    {
+        if($obj == null)
+        {
+            return 0;
+        }
+        
+        if($obj > 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     // SAVE IMAGE BANNER ON EVENTS
-    private function save_banner_image($request,$event_id)
+    private function save_banner_image($request,$event_id,$duplicate = null)
     {
         /*
             Banner doesn't use edit because to change image, 
             user should delete and then reupload
         */
 
-        $images = $request->file('images');
+        if($duplicate == null)
+        {
+            $images = $request->file('images');
+        }
+        else
+        {
+            $images = $duplicate;
+        }
         
         foreach($images as $index=>$file):
-            $newfile = 'banner/'.Date('Y-m-d-h-i-s-').$index.".jpg";
-            if(env('APP_ENV') == 'local')
-            {
-                Storage::disk('local')->put($newfile,file_get_contents($file));
-            }
-            // else
-            // {
-            //     //s3
-            // }
+            $newfile = env('FOLDER_PATH').'/banner/'.Date('Y-m-d-h-i-s-').$index.".jpg";
+            Storage::disk('s3')->put($newfile,file_get_contents($file), 'public');
 
             $banners = new Banners;
             $banners->event_id = $event_id;
             $banners->url = $newfile;
             $banners->save();
         endforeach;
-        
-        //Storage::disk('s3')->delete($filename);
-        //Storage::disk('s3')->put($dir."/".$filename,$imageUpload, 'public');
     }
 
     // PASSING DATA FROM BONUS ENTRIES
@@ -485,7 +605,7 @@ class HomeController extends Controller
         }
     }
 
-    public static function delete_banner($lists,$preloaded)
+    public static function delete_banner($lists,$preloaded,$db = null)
     {
         $del = array();
 
@@ -495,12 +615,19 @@ class HomeController extends Controller
             $preloaded = array();
         }
 
-        $count_delete = array_diff($lists,$preloaded);
+        if($db == null)
+        {
+            $count_delete = array_diff($lists,$preloaded);
+        }
+        else
+        {
+            $count_delete = $db;
+        }
 
         if(count($count_delete) > 0)
         {
             foreach($count_delete as $banner_id):
-                $banners = Banners::find($banner_id);
+                $banners = Banners::find($banner_id)->first();
                 $url_image = $banners->url;
                 $del[] = $url_image;
             endforeach;
@@ -518,7 +645,13 @@ class HomeController extends Controller
                 // print($e->getMessage());
             }
 
-            Storage::disk('local')->delete($del);
+            try{
+                Storage::disk('s3')->delete($del);
+            }
+            catch(S3Exception $e)
+            {
+                // $e->getMessage();
+            }
         }
     }
 

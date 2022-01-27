@@ -9,6 +9,8 @@ return [
     'clue'=>'How many entries this action is worth',
     'congrats'=>'Congratulations',
     'de'=>'Daily Entries',
+    'delete'=>'Are you sure to delete this entry?',
+    'duplicate'=>'Do you want to duplicate this entry?',
     'enter'=>'Please fill form below to enter the contest',
     'entry'=>'Number Of Entries',
     'email'=>'Your Email',

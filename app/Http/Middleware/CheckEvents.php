@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Lang;
 use App\Rules\CheckDate;
 use App\Rules\CheckNumber;
 use App\Rules\CheckDescription;
@@ -81,7 +82,7 @@ class CheckEvents
            if(count($err_fb) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_fb'] = $err_fb;
+               $errors['err_fb'] = self::fix_lang('new','fb',$err_fb);
            }
         }
 
@@ -91,7 +92,7 @@ class CheckEvents
            if(count($err_ig) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_ig'] = $err_ig;
+               $errors['err_ig'] = self::fix_lang('new','ig',$err_ig);
            }
         }
 
@@ -101,7 +102,7 @@ class CheckEvents
            if(count($err_tw) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_tw'] = $err_tw;
+               $errors['err_tw'] = self::fix_lang('new','tw',$err_tw);
            }
         }
 
@@ -111,7 +112,7 @@ class CheckEvents
            if(count($err_yt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_yt'] = $err_yt;
+               $errors['err_yt'] = self::fix_lang('new','yt',$err_yt);
            }
         }
         
@@ -121,7 +122,7 @@ class CheckEvents
            if(count($err_pt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_pt'] = $err_pt;
+               $errors['err_pt'] = self::fix_lang('new','pt',$err_pt);
            }
         }
 
@@ -131,7 +132,7 @@ class CheckEvents
            if(count($err_de) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_de'] = $err_de;
+               $errors['err_de'] = self::fix_lang('new','de',$err_de);
            }
         }
 
@@ -141,7 +142,7 @@ class CheckEvents
            if(count($err_cl) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_cl'] = $err_cl;
+               $errors['err_cl'] = self::fix_lang('new','cl',$err_cl);
            }
         }
 
@@ -151,9 +152,7 @@ class CheckEvents
            if(count($err_wyt) > 0)
            {
                $errors['success'] = 'err';
-               $replace = ['new_text_wyt','new_url_wyt','new_entries_wyt'];
-               $target = ['action text watch youtube video line : ','url watch youtube video : ','entries youtube video : '];
-               $errors['err_cl'] = str_replace($replace,$target,$err_wyt);
+               $errors['err_cl'] = self::fix_lang('new','wyt',$err_wyt);
            }
         }
 
@@ -165,7 +164,7 @@ class CheckEvents
            if(count($err_fb) > 0)
            {
                 $errors['success'] = 'err';
-                $errors['err_edit_fb'] = $err_fb;
+                $errors['err_edit_fb'] = self::fix_lang('edit','fb',$err_fb);
            }
         }
 
@@ -175,7 +174,7 @@ class CheckEvents
            if(count($err_ig) > 0)
            {
                 $errors['success'] = 'err';
-                $errors['err_edit_ig'] = $err_ig;
+                $errors['err_edit_ig'] = self::fix_lang('edit','ig',$err_ig);
            }
         }
 
@@ -185,7 +184,7 @@ class CheckEvents
            if(count($err_tw) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_tw'] = $err_tw;
+               $errors['err_edit_tw'] = self::fix_lang('edit','tw',$err_tw);
            }
         }
 
@@ -195,7 +194,7 @@ class CheckEvents
            if(count($err_yt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_yt'] = $err_yt;
+               $errors['err_edit_yt'] = self::fix_lang('edit','yt',$err_yt);
            }
         }
         
@@ -205,7 +204,7 @@ class CheckEvents
            if(count($err_pt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_pt'] = $err_pt;
+               $errors['err_edit_pt'] = self::fix_lang('edit','pt',$err_pt);
            }
         }
 
@@ -215,7 +214,7 @@ class CheckEvents
            if(count($err_de) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_de'] = $err_de;
+               $errors['err_edit_de'] = self::fix_lang('edit','de',$err_de);
            }
         }
 
@@ -225,7 +224,7 @@ class CheckEvents
            if(count($err_cl) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_cl'] = $err_cl;
+               $errors['err_edit_cl'] = self::fix_lang('edit','cl',$err_cl);
            }
         }
 
@@ -235,7 +234,7 @@ class CheckEvents
            if(count($err_wyt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_cl'] = $err_wyt;
+               $errors['err_edit_cl'] = self::fix_lang('edit','wyt',$err_wyt);
            }
         }
 
@@ -282,6 +281,14 @@ class CheckEvents
         {
             return array();
         }
-
     }
+    
+    private static function fix_lang($type,$ent,$err_wyt)
+    {
+        $replace = [$type.'_text_'.$ent,$type.'_url_'.$ent,$type.'_entries_'.$ent,"."];
+        $target = [Lang::get('cvalidation.act_'.$ent),Lang::get('cvalidation.url_'.$ent),Lang::get('cvalidation.ent_'.$ent)," : "];
+        return str_replace($replace,$target,$err_wyt);
+    }
+
+/**/ 
 }

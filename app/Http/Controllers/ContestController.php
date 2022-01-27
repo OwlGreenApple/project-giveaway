@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\QueryException;
 use App\Models\Events;
 use App\Models\Banners;
@@ -26,21 +27,15 @@ class ContestController extends Controller
             return view('error404');
         }
 
-        if(env('APP_ENV') == 'local')
-        {
-            $url = asset('storage/app');
-        }
-
         $images = array();
-        $banners = Banners::where('event_id',$event->id)->select('url')->get()->toArray();
+        $banners = Banners::where('event_id',$event->id)->select('url')->get();
         if(count($banners) > 0)
         {
             foreach($banners as $row):
-                $row['url'] = $url.'/'.$row['url'];
-                $images[] = $row['url']; 
+                $images[] = Storage::disk('s3')->url($row->url); 
             endforeach;
         }
-
+        
         $user = User::find($event->user_id);
 
         // dd($images);
@@ -155,18 +150,17 @@ class ContestController extends Controller
             return view('error404');
         }
 
-        $ev = Events::find($ev_id)->first();
+        $ev = Events::where('events.id',$ev_id)
+                ->join('users','users.id','=','events.user_id')
+                ->select("events.*","users.currency")
+                ->first();
+
         $bonus = Bonus::where('event_id',$ev_id)->get();
-
-        if(env('APP_ENV') == 'local')
-        {
-            $url = asset('storage/app');
-        }
-
         $banners = Banners::where('event_id',$ev->id)->select('url')->first()->toArray();
+        
         if(!is_null($banners))
         {
-            $banners['url'] = $url."/".$banners['url'];
+            $banners['url'] = Storage::disk('s3')->url($banners['url']);
         }
 
         $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();
@@ -177,6 +171,7 @@ class ContestController extends Controller
             'bonus'=>$bonus,
             'banners'=>$banners,
             'ct'=>$contestants,
+            'helper'=>new Custom,
         ];
 
         return view('task',$data);

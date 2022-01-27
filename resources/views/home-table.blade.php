@@ -22,9 +22,9 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a></li>
-                            <li><a class="dropdown-item">Duplicate</a></li>
+                            <li><a id="{{ $row->id }}" class="dropdown-item duplicate">Duplicate</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger">Delete</a></li>
+                            <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev">Delete</a></li>
                         </ul>
                     </div>
                 </td>
