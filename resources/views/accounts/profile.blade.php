@@ -1,7 +1,6 @@
 <div class="row">
     <h3 class="mb-4 account-title"><b><i class="far fa-user main-color"></i>&nbsp;Profile</b></h3>
 
-    <span id="msg"><!-- message --></span>
     <form id="profile">
         <div class="form-group mb-4">
             <label>Name:<span class="text-danger">*</span></label>

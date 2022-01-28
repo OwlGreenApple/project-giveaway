@@ -248,16 +248,22 @@
                 </div>
 
                 <!-- form 4 -->
+                @if($apicheck == true)
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">Integration</h3>
-                        <div class="border-bottom info">Activrespon</div>
-                        <select class="form-select">
-                            <option>List 1</option>
-                            <option>List 2</option>
-                        </select>
+                        
+                        @if(count($act) > 0)
+                            <div class="border-bottom info">Activrespon</div>
+                            <select id="act_api_id" name="act_api_id" class="form-select">
+                                @foreach($act as $row)
+                                    <option value="{{ $row['id'] }}" @if(isset($event) && $event->act_api_id == $row['id']) selected @endif>{{ $row['label'] }}</option>
+                                @endforeach
+                            </select>
+                        @endif
                     </div>
                 </div>
+                @endif
 
                 <!-- form 5 -->
                 <div class="card px-4 py-4 mb-3">

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Aws\S3\Exception\S3Exception;
+use App\Http\Controllers\ApiController as API;
 
 class HomeController extends Controller
 {
@@ -174,11 +175,45 @@ class HomeController extends Controller
     public function create_giveaway()
     {
         $banners = $bonuses = array();
+        $apicheck = false;
         $preloaded = null;
         $helper = new Custom;
         $user = Auth::user();
-        $data = ['data'=>$banners,'preloaded'=>$preloaded, 'bonus'=>$bonuses, 'helper'=>$helper,'user'=>$user];
+
+        $apicheck = self::check_api($user);
+        $act = self::display_api('act');
+
+        // dd($act);
+
+        $data = [
+            'data'=>$banners,
+            'preloaded'=>$preloaded, 
+            'bonus'=>$bonuses, 
+            'helper'=>$helper,
+            'user'=>$user,
+            'apicheck'=>$apicheck,
+            'act'=>$act,
+        ];
         return view('create',$data);
+    }
+
+    public static function check_api($user)
+    {
+        if($user->activrespon_api !== null || !empty($user->activrespon_api) || $user->mailchimp_api !== null || !empty($user->mailchimp_api))
+        {
+            return true;
+        }
+    }
+
+    public static function display_api($cond)
+    {
+        $api = new API;
+
+        if($cond == 'act')
+        {
+            return $api->get_activrespon_lists();
+        }
+
     }
 
     // Adding bonus entries title
@@ -262,6 +297,10 @@ class HomeController extends Controller
         }
 
         //dd($data);
+        $user = Auth::user();
+        $apicheck = self::check_api($user);
+        $act = self::display_api('act');
+
         $timezone = $event->timezone;
         $desc = $event->desc;
         $arr = [
@@ -272,7 +311,9 @@ class HomeController extends Controller
             'timezone'=>$timezone,
             'editor'=>$desc,
             'helper'=>$helper,
-            'user'=>Auth::user()
+            'user'=>$user,
+            'apicheck'=>$apicheck,
+            'act'=>$act,
         ];
         return view('create',$arr);
     }
@@ -296,6 +337,10 @@ class HomeController extends Controller
         $youtube_url = strip_tags($request->youtube_url);
         $desc = $request->desc;
         $images = $request->file('images');
+        $act_api_id = strip_tags($request->act_api_id);
+        $mlc_api_id = strip_tags($request->mlc_api_id);
+        ($act_api_id == null? $act_api_id = 0:false);
+        ($mlc_api_id == null? $mlc_api_id = 0:false);
       
         $mo = self::determine_share($request->media_option);
         $unl = self::determine_share($request->unl_cam);
@@ -343,6 +388,8 @@ class HomeController extends Controller
         $ev->ln = $ln;
         $ev->mail = $mail;
         $ev->timezone = $timezone;
+        $ev->act_api_id = $act_api_id;
+        $ev->mlc_api_id = $mlc_api_id;
 
         try{
             $ev->save();
@@ -657,9 +704,7 @@ class HomeController extends Controller
 
     private function delete_bonuses($compare,$entries)
     {
-        
         $dels = array_diff($entries,$compare);
-
         if(count($dels) > 0)
         {
             try
@@ -714,6 +759,35 @@ class HomeController extends Controller
         {
             //$e->getMessage()
             $res['success'] = 0;
+        }
+
+        return response()->json($res);
+    }
+
+    public function save_api(Request $request)
+    {
+        $activrespon = strip_tags($request->act_api);
+        $mailchimp = strip_tags($request->mail_api);
+
+        $user = User::find(Auth::id());
+
+        if($activrespon== null && $mailchimp == null)
+        {
+            return response()->json([]);
+        }
+
+        $user->activrespon_api = $activrespon;
+        $user->mailchimp_api = $mailchimp;
+
+        try
+        {
+            $user->save();
+            $res['success'] = true;
+        }
+        catch(QueryException $e)
+        {
+            //$e->getMessage();
+            $res['success'] = false;
         }
 
         return response()->json($res);

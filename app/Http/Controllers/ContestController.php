@@ -16,6 +16,7 @@ use App\Models\Bonus;
 use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
+use App\Http\Controllers\ApiController as API;
 
 class ContestController extends Controller
 {
@@ -77,6 +78,10 @@ class ContestController extends Controller
                         ->orWhere([['c_email',$email],['event_id',$ev->id]])
                         ->first();
 
+        //API
+        $api = new API;
+        $act_list_id = $ev->act_api_id; //activrespon
+
         if($ref !== null)
         {
             $check = Contestants::where('ref_code',$ref)->first();
@@ -104,6 +109,19 @@ class ContestController extends Controller
             $ct->referrals = 0;
             $ct->ip = $_SERVER['REMOTE_ADDR'];
             $ct->date_enter = Carbon::now($ev->timezone);
+
+            // save contestant data to api activrespon
+            if($act_list_id > 0)
+            {
+                $dt = [
+                    'api_name'=>$name,
+                    'api_email'=>$email,
+                    'api_phone'=>$phone,
+                    'list_id'=>$act_list_id,
+                ];
+    
+                $api->save_to_activrespon_lists($dt);
+            }
         }
         else
         {

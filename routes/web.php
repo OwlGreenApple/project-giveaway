@@ -37,6 +37,7 @@ Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 /* ACOUNTS */
 Route::get('/account', [App\Http\Controllers\HomeController::class, 'accounts']);
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_user_profile');
+Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api']);
 
 /* EVENTS */
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);

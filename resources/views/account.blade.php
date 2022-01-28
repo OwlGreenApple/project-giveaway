@@ -20,6 +20,7 @@
 
         <!-- RIGHT TAB -->
         <div class="col-md-9 px-3">
+            <span id="msg"><!-- message --></span>
             <!-- PROFILE -->
             <div id="settings_target_1" class="card target_hide">
                 <div class="card-body px-5 py-5">
@@ -93,6 +94,13 @@ $(function(){
             var data = $(this).serialize();
             save_profile(data);
         });
+
+        // save api
+        $("#api").submit(function(e){
+            e.preventDefault();
+            var data = $(this).serialize();
+            save_api(data);
+        });
     }
 
     function save_profile(data)
@@ -132,6 +140,45 @@ $(function(){
                 $('.div-loading').removeClass('background-load');
             },
             error : function(xhr)
+            {
+                $("#msg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
+    }
+
+    function save_api(data)
+    {
+        $.ajax({
+            headers : {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method : 'POST',
+            url : '{{ url("save-api") }}',
+            data : data,
+            dataType : "json",
+            beforeSend: function()
+            {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success :function(result)
+            {
+                if(result.success == true)
+                {
+                    $("#msg").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
+                }
+                else
+                {
+                    $("#msg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                }
+            },
+            error:function()
+            {
+                $("#msg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+            },
+            complete:function()
             {
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
