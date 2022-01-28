@@ -48,5 +48,5 @@ Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_e
 
 /* Broadcast */
 Route::get('/create-broadcast', [App\Http\Controllers\BroadcastController::class, 'create_broadcast']);
-Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast']);
+Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast_index']);
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
