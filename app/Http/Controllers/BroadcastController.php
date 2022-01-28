@@ -102,5 +102,17 @@ class BroadcastController extends Controller
             "message"=>"success",
         ]);
     }
+
+    public function list_broadcast_index()
+    {
+        $user = Auth::user();
+        $broadcasts = Broadcast::where('user_id',$user->id)
+                    ->get();
+        return view('broadcast.list-broadcast',[
+            'broadcasts'=>$broadcasts,
+        ]);
+    }
+
+
 /* end class */
 }
