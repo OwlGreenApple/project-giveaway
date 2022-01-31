@@ -13,10 +13,12 @@ use App\Models\Events;
 use App\Models\Contestants;
 use App\Helpers\Custom;
 use App\Models\Entries;
+use App\Mail\ContactEmail;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 use Aws\S3\Exception\S3Exception;
 use App\Http\Controllers\ApiController as API;
 
@@ -172,6 +174,7 @@ class HomeController extends Controller
         return view('dashboard.contestant',$data);
     }
 
+    // CREATE GIVE AWAY 
     public function create_giveaway()
     {
         $banners = $bonuses = array();
@@ -182,8 +185,7 @@ class HomeController extends Controller
 
         $apicheck = self::check_api($user);
         $act = self::display_api('act');
-
-        // dd($act);
+        $mlc = self::display_api('mlc');
 
         $data = [
             'data'=>$banners,
@@ -193,6 +195,7 @@ class HomeController extends Controller
             'user'=>$user,
             'apicheck'=>$apicheck,
             'act'=>$act,
+            'mlc'=>$mlc,
         ];
         return view('create',$data);
     }
@@ -209,11 +212,26 @@ class HomeController extends Controller
     {
         $api = new API;
 
+        // ACTIVRESPON
         if($cond == 'act')
         {
+            if($api->get_activrespon_lists() == null)
+            {
+                return array();
+            }
+
             return $api->get_activrespon_lists();
         }
 
+        // MAILCHIMP
+        if($cond == 'mlc')
+        {
+            if($api->display_mailchimp_lists() == null)
+            {
+                return array();
+            }
+            return $api->display_mailchimp_lists();
+        }
     }
 
     // Adding bonus entries title
@@ -296,10 +314,12 @@ class HomeController extends Controller
             $preloaded = 'preloaded'; //keyname of jquery image-upload
         }
 
-        //dd($data);
         $user = Auth::user();
         $apicheck = self::check_api($user);
         $act = self::display_api('act');
+        $mlc = self::display_api('mlc');
+
+        // dd($act);
 
         $timezone = $event->timezone;
         $desc = $event->desc;
@@ -314,6 +334,7 @@ class HomeController extends Controller
             'user'=>$user,
             'apicheck'=>$apicheck,
             'act'=>$act,
+            'mlc'=>$mlc,
         ];
         return view('create',$arr);
     }
@@ -400,7 +421,10 @@ class HomeController extends Controller
             else
             {
                 $event_id = $request->edit;
-            }  
+            }
+
+            $url_link = env('APP_URL')."/c/".$ev->url_link;
+            Cookie::queue(Cookie::make('url',$url_link, 1*1));  
         }
         catch(QueryException $e)
         {
@@ -796,6 +820,15 @@ class HomeController extends Controller
     public function contact()
     {
         return view('contact');
+    }
+
+    public function save_contact(Request $request)
+    {
+        $user_email = Auth::user()->email;
+        $message = strip_tags($request->message);
+
+        Mail::to(env('ADMIN_EMAIL'))->send(new ContactEmail($user_email,$message));
+        return response()->json(['err'=>0]);
     }
 
     public function connect_wa()

@@ -81,6 +81,7 @@ class ContestController extends Controller
         //API
         $api = new API;
         $act_list_id = $ev->act_api_id; //activrespon
+        $mlc_list_id = $ev->mlc_api_id; //mailchimp
 
         if($ref !== null)
         {
@@ -121,6 +122,18 @@ class ContestController extends Controller
                 ];
     
                 $api->save_to_activrespon_lists($dt);
+            }
+
+            // save contestant data to mailchimp
+            if($mlc_list_id !== '0')
+            {
+                $dta = [
+                    'name'=>$name,
+                    'email'=>$email,
+                    'list_id'=>$mlc_list_id
+                ];
+    
+                $api->add_mailchimp($dta);
             }
         }
         else

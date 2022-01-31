@@ -8,7 +8,7 @@
         </div>
 
         <div class="col-md-8">
-            <div id="msg"><!-- --></div>
+            <div id="msg">@if(Cookie::get('url') !== null) <div class="alert alert-info text-center">{{ Lang::get('custom.link') }} : <a class="main-color" href="{!! Cookie::get('url') !!}">{{ Lang::get('custom.click') }}</a></div> @endif</div>
             <form id="create_event">
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
@@ -256,8 +256,19 @@
                         @if(count($act) > 0)
                             <div class="border-bottom info">Activrespon</div>
                             <select id="act_api_id" name="act_api_id" class="form-select">
+                            <option value="0">Choose</option>
                                 @foreach($act as $row)
                                     <option value="{{ $row['id'] }}" @if(isset($event) && $event->act_api_id == $row['id']) selected @endif>{{ $row['label'] }}</option>
+                                @endforeach
+                            </select>
+                        @endif
+
+                        @if(count($mlc) > 0)
+                            <div class="border-bottom info">Mailchimp</div>
+                            <select id="mlc_api_id" name="mlc_api_id" class="form-select">
+                            <option value="0">Choose</option>
+                                @foreach($mlc as $row)
+                                    <option value="{{ $row->id }}" @if(isset($event) && $event->mlc_api_id == $row->id) selected @endif>{{ $row->name }}</option>
                                 @endforeach
                             </select>
                         @endif
@@ -307,7 +318,7 @@ var err_bonus = '';
 
 function select_timezone()
 {
-    var timezone
+    var timezone;
     @if(isset($timezone))
         timezone = '{{ $timezone }}';
     @else

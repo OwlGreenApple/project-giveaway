@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Events;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use MailchimpMarketing as MC;
+use GuzzleHttp;
 
 class ApiController extends Controller
 {
@@ -46,8 +49,8 @@ class ApiController extends Controller
 
   public function save_to_activrespon_lists(array $data)
   {
-    $url = "https://192.168.0.114/activrespons/save_customer";
-    // $url = "https://activrespon.com/dashboard/save_customer";
+    // $url = "https://192.168.0.114/activrespons/save_customer";
+    $url = "https://activrespon.com/dashboard/save_customer";
     $user = Auth::user();
    
     $data = array(
@@ -77,6 +80,76 @@ class ApiController extends Controller
 
     // dd($res);
     return $res;
+  }
+
+  //MAILCHIMP
+  private static function mailchimp()
+  {
+    $api_key = Auth::user()->mailchimp_api;
+    $exp = explode("-",$api_key);
+    $server = $exp[1];
+    $mailchimp = new MC\ApiClient();
+
+    $mailchimp->setConfig([
+      'apiKey' => $api_key,
+      'server' => $server
+    ]);
+
+    return $mailchimp;
+  }
+  
+
+  public function mailchimp_valid_api()
+  //$api_key,$server_mailchimp,$audience_id
+  {
+    $mailchimp = self::mailchimp();
+    try
+    {
+        $mailchimp->ping->get();
+        return true;
+    }
+    catch(GuzzleHttp\Exception\ConnectException $e)
+    {
+        return false;
+    }
+    catch(GuzzleHttp\Exception\ClientException $e)
+    {
+        return false;
+    }
+    // $response = $mailchimp->lists->getAllLists();
+  }
+
+  public function display_mailchimp_lists()
+  {
+    $mailchimp = self::mailchimp();
+    return $mailchimp->lists->getAllLists()->lists;
+  }
+
+  //TO ADD CONTACTS / SUBSCRIBER INTO AUDIENCE/LIST ON MAILCHIMP 
+  public function add_mailchimp(array $data)
+  {
+    $mailchimp = self::mailchimp();
+
+    $list_id = strip_tags($data['list_id']);
+    $email = strip_tags($data['email']);
+    $fname = strip_tags($data['name']);
+
+    try {
+        $mailchimp->lists->addListMember($list_id, [
+          "email_address" => $email,
+          "status" => "subscribed",
+          "merge_fields" => [
+            "FNAME" => $fname,
+          ]
+      ]);
+
+      $err['success'] = 1;
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+      $error = $e->getResponse()->getBody()->getContents();
+      $err = json_decode($error,true); //$err['detail']
+      $err['success'] = 0;
+    }
+    return $err['success'];
   }
 
 

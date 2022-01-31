@@ -32,7 +32,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
 Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
+Route::post('/contact-admin', [App\Http\Controllers\HomeController::class, 'save_contact']);
 Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
+
+// Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);
 
 /* ACOUNTS */
 Route::get('/account', [App\Http\Controllers\HomeController::class, 'accounts']);
