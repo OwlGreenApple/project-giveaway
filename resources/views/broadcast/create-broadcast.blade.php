@@ -10,6 +10,8 @@
         <div class="col-md-8">
             <div id="msg"><!-- --></div>
             <form id="create_broadcast">
+                <!-- mode=0 insert, mode<>0 -> edit (id broadcastnya) -->
+                <input type="hidden" name="mode" id="mode" value="0">
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
@@ -19,7 +21,7 @@
                         <!-- begin form -->
                         <div class="form-group mb-3">
                             <label>Title:<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" name="title" />
+                            <input type="text" class="form-control form-control-lg" name="title" @if(isset($broadcast)) value="{{ $broadcast->title }}" @endif />
                             <span class="text-danger err_title"><!-- --></span>
                         </div> 
                         <div class="form-group mb-3">
@@ -69,7 +71,7 @@
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Date send:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="date_send" />
+                                <input type="text" class="form-control form-control-lg datetimepicker_1" name="date_send" @if(isset($broadcast)) value="{{ $broadcast->date_send }}" @endif/>
                                 <span class="text-danger err_date_send"><!-- --></span>
                             </div> 
                         </div>
@@ -107,12 +109,25 @@ $(function() {
     datetimepicker();
     editor();
     save_data();
+    editForm();
 });
+
+function editForm()
+{
+    @if(isset($broadcast))
+    //edit timezone
+        $("#timezone").val("<?php echo $broadcast->timezone; ?>");
+    //edit id -> klo 0 save, klo <> 0 edit
+        $("#mode").val("<?php echo $broadcast->id; ?>");
+    //edit event
+        $("#event").val("<?php echo $broadcast->event_id; ?>");
+    @endif
+}
 
 function editor()
 {
-    @if(isset($event))
-        var editor = '{!! $editor !!}';
+    @if(isset($broadcast))
+        var editor = '{!! $broadcast->message !!}';
         $("#editor").html(editor);
     @endif
 

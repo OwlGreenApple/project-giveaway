@@ -18,6 +18,7 @@ use App\Models\Broadcast;
 use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
+use DB;
 
 class BroadcastController extends Controller
 {
@@ -47,6 +48,9 @@ class BroadcastController extends Controller
     {
         $user = Auth::user();
         $broadcast = Broadcast::find($id);
+        if (is_null($broadcast)){
+            return "Not found";
+        }
         if ($broadcast->user_id <> $user->id) {
             return "not allowed";
         }
@@ -54,11 +58,16 @@ class BroadcastController extends Controller
         $helper = new Custom;
         $events = Events::where('user_id',$user->id)
                     ->get();
-        return view('broadcast.create-broadcast',[
-            'helper'=>$helper,
-            'events'=>$events,
-            'broadcast'=>$broadcast,
-        ]);
+        if (!is_null($broadcast)){
+            return view('broadcast.create-broadcast',[
+                'helper'=>$helper,
+                'events'=>$events,
+                'broadcast'=>$broadcast,
+            ]);
+        }
+        else {
+            return "Not found";
+        }
     }
 
     public function save_broadcast(Request $request)
@@ -72,7 +81,13 @@ class BroadcastController extends Controller
         //validator
 
         //save to broadcast
-        $broadcast = new Broadcast;
+        if ($request->mode==0) {
+            $broadcast = new Broadcast;
+        }
+        else {
+            $broadcast = Broadcast::find($request->mode);
+            $broadcastContestant = BroadcastContestant::where('broadcast_id',$request->mode)->delete();
+        }
         $broadcast->user_id = $user->id;
         $broadcast->event_id = $event_id;
         $broadcast->title = $title;
@@ -98,19 +113,21 @@ class BroadcastController extends Controller
                 }
                 $i++;
             }
-            $contestants = $subcontestants
-            ->select('wa_number', 'id', 'created_at')
-            ->groupBy('wa_number')
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
+            $contestants = [];
+            if ($i>0) {
+                $contestants = $subcontestants
+                ->select('wa_number', 'id', 'created_at')
+                ->groupBy('wa_number')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+            }
         }
         else {
             $contestants = Contestants::where('event_id',$event_id)->get();
         }
         foreach($contestants as $contestant) {
             $broadcastContestant = new BroadcastContestant;
-            $broadcastContestant->event_id = $event_id;
+            $broadcastContestant->broadcast_id = $broadcast->id;
             $broadcastContestant->contestant_id = $contestant->id;
             $broadcastContestant->save();
         }
