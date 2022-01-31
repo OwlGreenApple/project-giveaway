@@ -27,8 +27,8 @@
                         <td>{{ $broadcast->date_send }}</td>
                         <td>{{ $broadcast->status }}</td>
                         <td>
-                            <button type="button" class="btn btn-warning btn-lg text-white">Edit</button>
-                            <button type="button" class="btn btn-danger btn-lg text-white">Delete</button>
+                            <button type="button" class="btn btn-warning btn-lg text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
+                            <button type="button" class="btn btn-danger btn-lg text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
                         </td>
                     </tr>
                     @endforeach
@@ -43,7 +43,8 @@
 
 <script>
 $(function() {
-    datetimepicker();
+    //datetimepicker();
+    deleteBroadcast();
 });
 
 
@@ -63,6 +64,55 @@ function datetimepicker()
         minDate : date
     });
     
+}
+
+function editBroadcast(){
+    $(document).on('click','.btn-edit',function(e) {
+        window.location.href = "<?php echo url(''); ?>";
+    });
+}
+
+function deleteBroadcast(){
+    $(document).on('click','.btn-delete',function(e) {
+        id = $(this).attr('data-id');
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            method:'POST',
+            url : "{{ url('delete-broadcast') }}",
+            data : {
+                'id':id
+            },
+            dataType : 'json',
+            beforeSend: function()
+            {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+                // $(".error").hide();
+            },
+            success : function(result)
+            {
+                if(result.success == 1)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#msg").html('<div class="alert alert-success">Data deleted</div>')
+                }
+                else
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>')
+                }
+            },
+            error : function(xhr)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
+    });
 }
 
 </script>

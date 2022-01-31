@@ -53,3 +53,5 @@ Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_e
 Route::get('/create-broadcast', [App\Http\Controllers\BroadcastController::class, 'create_broadcast']);
 Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast_index']);
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
+Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
+Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'edit_broadcast']);

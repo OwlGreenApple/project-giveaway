@@ -43,6 +43,24 @@ class BroadcastController extends Controller
         ]);
     }
 
+    public function edit_broadcast($id)
+    {
+        $user = Auth::user();
+        $broadcast = Broadcast::find($id);
+        if ($broadcast->user_id <> $user->id) {
+            return "not allowed";
+        }
+
+        $helper = new Custom;
+        $events = Events::where('user_id',$user->id)
+                    ->get();
+        return view('broadcast.create-broadcast',[
+            'helper'=>$helper,
+            'events'=>$events,
+            'broadcast'=>$broadcast,
+        ]);
+    }
+
     public function save_broadcast(Request $request)
     {
         $user = Auth::user();
@@ -113,6 +131,23 @@ class BroadcastController extends Controller
         ]);
     }
 
+    public function delete_broadcast(Request $request)
+    {
+        $user = Auth::user();
+        $broadcast = Broadcast::find($request->id);
+        if ($broadcast->user_id <> $user->id) {
+            return response()->json([
+                "success"=>0,
+                "message"=>"not allowed",
+            ]);
+        }
+        
+        $broadcast->delete();
+        return response()->json([
+            "success"=>1,
+            "message"=>"Broadcast deleted",
+        ]);
+}
 
 /* end class */
 }
