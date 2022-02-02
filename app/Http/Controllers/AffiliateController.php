@@ -39,6 +39,24 @@ class AffiliateController extends Controller
         ]);
     }
 
+    public function save_affiliate()
+    {
+        $user = Auth::user();
+        $check_user = true;
+        while (!is_null($check_user)) {
+          $referral_code = substr(md5(microtime()),rand(0,26),8);
+          $referral_code = str_replace("0","o",$referral_code);
+          $referral_code = strtoupper($referral_code);
+          $check_user = User::where("referral_code",$referral_code)->first();
+        }
+        $user->referral_code = $referral_code;
+        $user->save();
 
+        return response()->json([
+            "success"=>1,
+            "message"=>"success",
+            "referral_code"=>$referral_code,
+        ]);
+    }
 /* end class */
 }
