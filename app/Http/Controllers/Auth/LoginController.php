@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\Request;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -37,4 +42,122 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function authenticated(Request $request,$user)
+    {
+        self::check_banned($request);
+        if($request->remember == 1)
+        {
+            $this->setCookie($request->email,$request->password);
+        }
+        else 
+        {
+            $this->delCookie($request->email,$request->password);
+        }
+    }
+
+    // CHECK BANNED USER
+    private static function check_banned(Request $request)
+    {
+        if(Auth::check() == true && (Auth::user()->status == 0))
+        {
+            $status = Auth::user()->status;
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            if($request->ajax() == false && $status == 0)
+            {
+                return redirect()->route('login')->with('error', Lang::get('auth.banned'));
+            }
+        }
+    }
+
+    public function loginAjax(Request $request)
+    {
+        // dd($request->all());
+        $email = strip_tags($request->email);
+        $password = strip_tags($request->password);
+
+        // check email / password valid / tidak
+        if(Auth::guard('web')->attempt(['email' => $email, 'password' => $password])) 
+        {
+            $user = User::where('email',$email)->first();
+            if($user->status == 0)
+            {
+                self::check_banned($request);
+                $ret = [
+                    'success' => false,
+                    'message' => Lang::get('auth.banned'),
+                ];
+            }
+            else
+            {
+                $ret = [
+                    'success' => 1,
+                    'email' => $email,
+                ];
+            }
+            return response()->json($ret);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => Lang::get('auth.failed')
+            ]);
+        }
+    }
+
+    public function redirectTo() {
+      if(Auth::check() == true)
+      {
+         $role = Auth::user()->is_admin; 
+          switch ($role) {
+            case 0:
+              return '/home';
+              break;
+            case 1:
+              return '/list-user';
+              break; 
+
+            default:
+              return '/home'; 
+            break;
+          }
+      }
+      else
+      {
+         return '/login'; 
+      }
+     
+    }
+
+    private function setCookie($email,$password)
+    {
+        if(!empty($email) && !empty($password))
+        {
+            Cookie::queue(Cookie::make('email', $email, 1440*7));
+            Cookie::queue(Cookie::make('password', $password, 1440*7));
+        } else {
+            return redirect()->route('login');
+        }
+    }
+
+    private function delCookie($cookie_email,$cookie_pass)
+    {
+        if(!empty($cookie_email) && !empty($cookie_pass))
+        {
+            Cookie::queue(Cookie::forget('email'));
+            Cookie::queue(Cookie::forget('password'));
+        } else {
+            return redirect()->route('login');
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect('checkout');
+    }
+
+/* end class */    
 }

@@ -42,6 +42,7 @@ return [
     'tw'=>'Twitter Follow',
     'tw.col'=>'Twitter Username',
     'tw.share'=>'Twitter Share',
+    'valid'=>'invalid',
     'wa.share'=>'Whatsapp Share',
     'winner'=>'Total Winner',
     'wyt'=>'Watch a YouTube Video',

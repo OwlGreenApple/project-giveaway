@@ -26,6 +26,11 @@ Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdat
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
 
+//ORDER
+Route::get('checkout/{id?}', [App\Http\Controllers\OrderController::class, 'index']);
+Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])->middleware('check_order');
+Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -55,3 +60,6 @@ Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
 Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
 Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'edit_broadcast']);
+
+/* Admin */
+Route::get('list-user',[App\Http\Controllers\AdminController::class, 'index']);

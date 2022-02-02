@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Aws\S3\Exception\S3Exception;
 use App\Http\Controllers\ApiController as API;
 
@@ -826,6 +827,21 @@ class HomeController extends Controller
     {
         $user_email = Auth::user()->email;
         $message = strip_tags($request->message);
+
+        $rule['message'] = ['required','max:255'];
+
+        $validator = Validator::make($request->all(),$rule);
+        if($validator->fails() == true)
+        {
+            $err = $validator->errors();
+
+            $errs = [
+                'err'=>1,
+                'message'=>$err->first('message')
+            ];
+
+            return response()->json($errs);
+        }
 
         Mail::to(env('ADMIN_EMAIL'))->send(new ContactEmail($user_email,$message));
         return response()->json(['err'=>0]);

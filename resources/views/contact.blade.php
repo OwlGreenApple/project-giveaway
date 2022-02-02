@@ -15,6 +15,7 @@
                 <div class="form-group mb-3">
                     <label>Your Message:<span class="text-danger">*</span></label>
                     <textarea class="form-control form-control-lg" name="message"></textarea>
+                    <span class="text-danger err_message"><!-- --></span>
                 </div> 
 
                 <button type="submit" class="btn bg-custom btn-lg text-white">Send</button>
@@ -50,6 +51,10 @@
                     if(result.err == 0)
                     {
                         $("#msg").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
+                    }
+                    else
+                    {
+                        $(".err_message").html(result.message);
                     }
                 },
                 error : function()

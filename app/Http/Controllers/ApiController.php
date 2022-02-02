@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Events;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use MailchimpMarketing as MC;
 use GuzzleHttp;

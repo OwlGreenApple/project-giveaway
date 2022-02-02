@@ -4,6 +4,39 @@ use App\Models\Entries;
 
 class Custom
 {
+    public function get_price()
+    {
+        $price = [
+            ['package'=>'free','price'=>0,'max_sell'=>30000,'max_trans'=>10000,'fee'=>15,'sell'=>1,'profit'=>0],
+            ['package'=>'starter','price'=>100000,'max_sell'=>500000,'max_trans'=>50000,'fee'=>10,'sell'=>2,'profit'=>0.5],
+            ['package'=>'doubler','price'=>200000,'max_sell'=>2000000,'max_trans'=>100000,'fee'=>10,'sell'=>3,'profit'=>0.5],
+            ['package'=>'tripler','price'=>350000,'max_sell'=>3500000,'max_trans'=>150000,'fee'=>10,'sell'=>4,'profit'=>1],
+            ['package'=>'quadrupler','price'=>500000,'max_sell'=>5000000,'max_trans'=>200000,'fee'=>10,'sell'=>5,'profit'=>1.5]
+        ];
+
+        return $price;
+    }
+
+    public function check_type($package)
+    {
+        $pack = [
+            $this->get_price()[0]['package'] => $this->get_price()[0],
+            $this->get_price()[1]['package'] => $this->get_price()[1],
+            $this->get_price()[2]['package'] => $this->get_price()[2],
+            $this->get_price()[3]['package'] => $this->get_price()[3],
+            $this->get_price()[4]['package'] => $this->get_price()[4]
+        ];
+
+        if(isset($pack[$package]))
+        {
+            return $pack[$package];
+        }
+        else
+        {
+            return false;
+        } 
+    }
+
     public static function currency()
     {
         return ['usd'=>'USD','idr'=>'IDR'];
