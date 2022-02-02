@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\User;
 use App\Models\Events;
 use App\Models\Broadcast;
 use App\Models\BroadcastContestant;
@@ -44,10 +45,20 @@ class SendBroadcast extends Command
     {
         $broadcasts = Broadcast::where('status',0)->get();
         foreach($broadcasts as $broadcast) {
-
+            $user = User::find($broadcast->user_id);
+            if (is_null($user)) {
+                continue;
+            }
             $broadcastContestants = BroadcastContestant::where("broadcast_id",$broadcast->id)->get();
             foreach($broadcastContestants as $broadcastContestant){
                 //send wa
+
+                $user->counter_send_message_daily -= 1;
+                $user->save();
+                if ($user->counter_send_message_daily <= 0) {
+                    break;
+                    continue;
+                }
             }
             $broadcast->status=1;
             $broadcast->save();

@@ -25,7 +25,14 @@
                         <td>{{ $broadcast->title }}</td>
                         <td>{{ $broadcast->message }}</td>
                         <td>{{ $broadcast->date_send }}</td>
-                        <td>{{ $broadcast->status }}</td>
+                        <td><?php 
+                            if ($broadcast->status ==0) {
+                                echo "Pending";
+                            }
+                            if ($broadcast->status ==1) {
+                                echo "Sent";
+                            }
+                        ?></td>
                         <td>
                             <button type="button" class="btn btn-warning btn-lg text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
                             <button type="button" class="btn btn-danger btn-lg text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
@@ -45,6 +52,7 @@
 $(function() {
     //datetimepicker();
     deleteBroadcast();
+    editBroadcast();
 });
 
 
@@ -68,7 +76,8 @@ function datetimepicker()
 
 function editBroadcast(){
     $(document).on('click','.btn-edit',function(e) {
-        window.location.href = "<?php echo url(''); ?>";
+        id = $(this).attr('data-id');
+        window.location.href = "<?php echo url('edit-broadcast').'/'; ?>"+id;
     });
 }
 
