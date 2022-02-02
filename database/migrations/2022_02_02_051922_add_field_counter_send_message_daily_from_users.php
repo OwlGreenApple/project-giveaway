@@ -15,6 +15,8 @@ class AddFieldCounterSendMessageDailyFromUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('counter_send_message_daily')->nullable()->default(50);
+            $table->bigInteger('myreferral');
+            $table->string('referral_code')->nullable();
         });
     }
 
