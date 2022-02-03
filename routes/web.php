@@ -72,6 +72,9 @@ Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::cl
 
 /* Admin */
 Route::get('list-user',[App\Http\Controllers\AdminController::class, 'index']);
+Route::get('list-order',[App\Http\Controllers\AdminController::class, 'order_list']);
+Route::get('order-load',[App\Http\Controllers\AdminController::class,'order']);
+Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm_order']);
 
 /* Affiliate */
 Route::get('/create-affiliate', [App\Http\Controllers\AffiliateController::class, 'create_affiliate']);

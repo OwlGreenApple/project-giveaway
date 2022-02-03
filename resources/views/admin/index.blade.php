@@ -28,7 +28,7 @@
                                     <td class="align-middle">{{ $row->email }}</td>
                                     <td class="align-middle">{{ $row->membership }}</td>
                                     <td class="align-middle">{{ $row->end_membership }}</td>
-                                    <td class="align-middle">@if($row->status == 1) <button type="button" class="btn btn-danger">Ban</button> @else <span class="text-danger">Banned</span> @endif</td>
+                                    <td class="align-middle">@if($row->status > 0) <button type="button" class="btn btn-danger">Ban</button> @else <span class="text-danger">Banned</span> @endif</td>
                                 </tr>
                                 @endforeach
                             @else
