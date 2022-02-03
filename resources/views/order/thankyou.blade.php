@@ -6,6 +6,11 @@
     <div class="offset-sm-2 col-sm-8">
       <div class="card h-80 card-payment" style="margin-bottom: 50px">
         <div class="card-body">
+          <span class="icon-thankyou" style="font-size: 60px;color: #106BC8">
+            <i class="fas fa-check-circle"></i>
+          </span>
+          <h1>Terima Kasih<br> Atas Order Anda</h1>
+          <hr class="orn" style="color: #106BC8">
           <p class="card-text">
             Silahkan melakukan Transfer Bank ke
           </p> 
@@ -18,7 +23,7 @@
             Admin kami akan membantu anda max 1x24 jam
           </p>
           <p class="card-text">
-            <a class="btn btn-success btn-confirm-thankyou" href="{{url('account')}}/1">
+            <a class="btn btn-success btn-confirm-thankyou" href="{{url('account')}}/payment">
               KONFIRMASI TRANSFER BANK
              </a>
           </p>
@@ -57,7 +62,7 @@
     </div>
   </div>
 
-  <div class="container konten">
+  <!-- <div class="container konten">
     <div class="offset-sm-2 col-sm-8">
       <div class="card h-80 card-payment" style="margin-bottom: 50px
       ">
@@ -70,6 +75,6 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
 @endsection

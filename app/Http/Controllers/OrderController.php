@@ -14,11 +14,16 @@ use App\Helpers\Custom;
 use App\Helpers\Api;
 use App\Models\Orders;
 use App\Models\Notification;
-use App\Mail\MemebershipEmail;
+use App\Mail\MembershipEmail;
 use Carbon\Carbon;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => ['confirm_payment_order']]);
+    }
+
     public function index()
     {
     	// REMOVE SESSION IF AVAILABLE
@@ -122,10 +127,10 @@ class OrderController extends Controller
                 $rt['status'] = 2; //redirect to thankyou page
 
                 // SEND WA MESSAGE IF ORDER SUCCESSFUL  
-                $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
+                // $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
 
                 // SEND EMAIL IF ORDER SUCCESSFUL
-                Mail::to(Auth::user()->email)->send(new MemebershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
+                Mail::to(Auth::user()->email)->send(new MembershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
             }
 
             if(session('order') !== null)
@@ -176,7 +181,7 @@ class OrderController extends Controller
     // SEND MESSAGE TO USER'S WA
     public function send_message($package,$price,$total,$order_number,$phone_number,$after = null)
     {
-        $pc = new Price;
+        $pc = new Custom;
         $api = new Api;
         $notif = Notification::all()->first();
         $admin_id = $notif->admin_id;
@@ -225,184 +230,17 @@ class OrderController extends Controller
     }
 
    // ORDER PAGE
-    public function order()
-    {
-        return view('order.index',['lang'=>$this->lang]);
-    }
-
-    public function order_list(Request $request)
-    {
-      $start = $request->start;
-      $length = $request->length;
-      $search = $request->search;
-      $src = $search['value'];
-      $data['data'] = array();
-
-      if($src == null)
-      {
-         $orders = Orders::where([['user_id',Auth::user()->id]])->orderBy('created_at','desc')->skip($start)->limit($length)->get();                
-      }
-      else
-      {
-        if(preg_match("/^https\:\/\/(www)\.(youtube)\.(com)\/watch\?v\=.+/i", $src))
-        {
-           $order = Orders::where('link','=',$src);
-        }
-        elseif(preg_match("/@/i", $src))
-        {
-           $order = Orders::where('link','LIKE','%'.$src.'%');
-        }
-        elseif(preg_match("/^[a-zA-Z ]*$/i",$src) == 1)
-        {
-           $order = Orders::where('package','LIKE','%'.$src.'%');
-        }
-        elseif(preg_match("/[\-]/i",$src))
-        {
-          $order = Orders::where('created_at','LIKE','%'.$src.'%');
-        }
-        elseif(preg_match("/^[0-9]*$/i",$src))
-        {
-          $order = Orders::where('purchased_views','=',$src);
-        }
-        else
-        {
-          $order = Orders::where('no_order','LIKE',"%".$src."%");
-        }
-
-        $orders = $order->where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
-      }
-
-      // dd($orders);
-
-      $total = Orders::where('user_id',Auth::user()->id)->count(); 
-      $data['draw'] = $request->draw;
-      $data['recordsTotal']=$total;
-      $data['recordsFiltered']=$total;
-      $api = new Api;
-
-      if($orders->count())
-      {
-        $no = 1;
-        $extract = new CheckYtLink;
-
-        foreach($orders as $order)
-        {
-          
-          if($order->status == 3)
-          {
-            $date_complete = Carbon::parse($order->updated_at)->toDateTimeString();
-          }
-          else
-          {
-            $date_complete = '-';
-          }
-
-          if(($order->proof !== null && $order->status > 1) || ($order->proof == null && $order->status > 1))
-          {
-            $proof = '-';
-          }
-          elseif($order->proof == null)
-          {
-            $proof = '<button type="button" class="btn btn-primary btn-confirm" data-toggle="modal" data-target="#confirm-payment" data-id="'.$order->id.'" data-no-order="'.$order->no_order.'" data-package="'.$order->package.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" data-purchased-view="'.$order->purchased_views.'" style="font-size: 13px; padding: 5px 8px;">'.Lang::get('order.confirm').'
-              </button>';
-          }
-          else
-          {
-            $proof = '<a class="popup-newWindow" href="'.Storage::disk('s3')->url($order->proof).'">View</a>';
-          }
-
-          if($order->status==1)
-          {
-            $status = '<span style="color: blue"><b>'.Lang::get('order.process').'</b></span>';
-          }
-          elseif($order->status==2)
-          {
-            $status = '<span style="color: orange"><b>'.Lang::get('order.partial').'</b></span>';
-          }
-          elseif($order->status==3)
-          {
-            $progress = new CheckYtLinkProgress;
-            $progress = $progress->get_complete_date($order->updated_at);
-            $repromote = '';
-
-            if($progress == true)
-            {
-                $repromote = '<div class="mt-1"><a class="text-primary repromote" id="'.$order->id.'" data-id="'.$order->id.'" data-package="'.$order->package.'" data-price="'.$order->price.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" data-purchased-view="'.$order->purchased_views.'" data-text="'.Lang::get("order.re-promote").'">Re-Promote</a></div>';
-            }
-            else
-            {
-                // refill
-                $repromote = '<div class="mt-1"><a class="text-primary refill" id="'.$order->id.'">Refill</a></div>';
-            }
-
-            $status = '<div><span class="badge badge-success px-2 py-2">'.Lang::get('order.complete').'</span></div>'.$repromote.'';
-          }
-          elseif($order->status==4)
-          {
-                $status = '<div class="mt-1"><button type="button" class="btn btn-primary btn-sm repromote" id="'.$order->id.'" data-package="'.$order->package.'" data-price="'.$order->price.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" data-purchased-view="'.$order->purchased_views.'" data-text="'.Lang::get("order.re-promote").'">Re-Promote</button></div>';
-          }
-          elseif($order->status==6)
-          {
-            $status = '<span style="color: red"><b>'.Lang::get('order.cancel').'</b></span>';
-          }
-          elseif($order->status==7)
-          {
-            $status = '<div><span class="badge badge-success px-2 py-2">'.Lang::get('order.complete').'</span></div>';
-          }
-          else
-          {
-            $status = '<b>'.Lang::get('order.waiting').'</b>';
-          }
-
-          // THUMBNAIL
-          if($order->package_type==1)
-          {
-            $thumbnail = '<img width="80" height="45" src="https://img.youtube.com/vi/'.$extract->extract_youtube_value($order->link).'/0.jpg" />';
-          }
-          else
-          {
-            $thumbnail = '<div align="center">-</div>';
-          }
-          
-          $data['data'][] = [
-            0=>$order->no_order,
-            1=>$order->package,
-            2=>$thumbnail,
-            3=>'<div style="word-break: break-all">'.$order->link.'</div>',
-            4=>Lang::get('custom.currency')." ".$api->pricing_format($order->price),
-            5=>Lang::get('custom.currency')." ".$api->pricing_format($order->total_price),
-            6=>$api->pricing_format($order->purchased_views),
-            7=>$api->pricing_format($order->start_view),
-            8=>$api->pricing_format($order->views),
-            9=>Carbon::parse($order->created_at)->toDateTimeString(),
-            10=>$date_complete,
-            11=>$proof,
-            12=>$status
-          ];
-        }
-      }
-     
-      echo json_encode($data);
-                
-    }
 
     //upload bukti TT 
       public function confirm_payment_order(Request $request){
         $user = Auth::user();
         //konfirmasi pembayaran user
         $order = Orders::find($request->id_confirm);
-        $folder = $user->email.'/buktibayar';
-        $celeb = null;
         $pathUrl = str_replace(url('/'), '', url()->previous());
 
         if(strlen($request->keterangan) > 300)
         {
             return redirect($pathUrl)->with("error", $this->lang::get('order.max_notes'));
-        }
-
-        if(env('APP_ENV') == 'local')
-        {
-            $celeb = 'celebfans';
         }
 
         if($order->status==0)
@@ -412,23 +250,23 @@ class OrderController extends Controller
           if($request->hasFile('buktibayar'))
           {
             // $path = Storage::putFile('bukti',$request->file('buktibayar'));
-            $dir = $celeb.'/bukti_bayar/'.explode(' ',trim($user->name))[0].'-'.$user->id;
+            $dir = env('FOLDER_PATH').'/bukti_bayar/'.explode(' ',trim($user->name))[0].'-'.$user->id;
             $filename = $order->no_order.'.jpg';
             Storage::disk('s3')->put($dir."/".$filename, file_get_contents($request->file('buktibayar')), 'public');
             $order->proof = $dir."/".$filename;
             
           } else {
-            return redirect($pathUrl)->with("error", $this->lang::get('order.upload_first'));
+            return redirect($pathUrl)->with("error", Lang::get('order.upload_first'));
           }  
           $order->notes = $request->keterangan;
           $order->save();
         } 
         else 
         {
-            return redirect($pathUrl)->with("error", $this->lang::get('order.reject'));
+            return redirect($pathUrl)->with("error", Lang::get('order.reject'));
         }
 
-        return view('order.thankyou-confirm-payment',['lang'=>$this->lang]);
+        return view('order.thankyou-confirm-payment',['lang'=>new Lang]);
       }
 
 /*end class*/

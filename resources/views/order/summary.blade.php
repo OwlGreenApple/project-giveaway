@@ -64,13 +64,13 @@
                                   <div class="form-group">
                                     <label>{{ $lang::get('order.name') }}*</label>
                                     <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
-                                    <span class="error username" role="alert"></span>                             
+                                    <span class="text-danger error username" role="alert"></span>                             
                                   </div>
 
                                   <div class="form-group">
                                     <label>Email*</label>
                                      <input id="email" type="email" class="form-control" name="email" required autocomplete="email" placeholder="Input Your Email">
-                                     <span class="error email"></span>
+                                     <span class="text-danger error email"></span>
                                   </div>
 
                                   <!-- phone -->
@@ -113,7 +113,7 @@
 
                                   <div class="form-group">
                                       <label class="custom-checkbox">
-                                          <input type="checkbox" name="agreement" required id="check-terms"/>
+                                          <input value="0" type="checkbox" name="agreement" id="check-terms" required/>
                                           <span class="checkmark-check"></span>
                                       </label>
                                       <label class="checkbox-left" for="check-terms"><sb>{{ $lang::get('order.agreement') }}<a href="{{ env('APP_URL') }}terms-of-services/" target="_blank" style="text-decoration: underline;">{{ $lang::get('order.terms') }}</a></sb></label>
@@ -345,7 +345,7 @@
     </div>
   </section>
 
-<script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
+<!-- <script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script> -->
 <script type="text/javascript">
   function getUpgrade()
   {
@@ -402,6 +402,19 @@
       }
 
     });
+
+    // agreement
+    $("input[name=agreement]").click(function(){
+      var val = $(this).val();
+
+      if(val == 0){
+        $(this).val(1);
+      }
+      else {
+        $(this).val(0);
+      }
+
+    });
   }
 
 	function loginAjax(){
@@ -449,7 +462,7 @@
     $("#btn-register").click(function(){
       var val= $("input[name=agreement]").val();
 
-      if(val == 'on'){
+      if(val == 0){
         alert('{{ $lang::get("order.check") }}');
 				return false;
       }
@@ -541,6 +554,6 @@
 </script>
 
 @if(!$is_login)
-  <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
+  <!-- <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script> -->
 @endif
 @endsection

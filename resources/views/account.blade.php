@@ -14,6 +14,7 @@
                     <a class="settings text-black-50 mn_2" data_target="2"><i class="fas fa-exchange-alt"></i>&nbsp;Subscription</a>
                     <a class="settings text-black-50 mn_3" data_target="3"><i class="fab fa-sketch"></i>&nbsp;Branding</a>
                     <a class="settings text-black-50 mn_4" data_target="4"><i class="fas fa-plug"></i>&nbsp;Integrate API</a>
+                    <a class="settings text-black-50 mn_5" data_target="5"><i class="fas fa-shopping-basket"></i>&nbsp;Orders</a>
                 </div>
             </div>
         </div>
@@ -49,6 +50,13 @@
                 </div>
             </div>
 
+            <!-- UPLOAD PAYMENT PROOF -->
+            <div id="settings_target_5" class="card target_hide d-none">
+                <div class="card-body px-5 py-5">
+                    @include('accounts.order')
+                </div>
+            </div>
+
             <!-- end col -->
 
     <!--  -->
@@ -56,24 +64,98 @@
 </div>
 
 <script>
+var segment = "{{ $conf }}";
 
 $(function(){
     data_tabs();
     set_lang_cur();
     update_profile();
+    popup_payment();
+    display_detail_payment();
+    payment_detail();
 });
+
+    function display_detail_payment()
+    {
+        $("body").on("click",".b_payment",function()
+        {
+            var name = $(this).attr('data-name');
+            var no = $(this).attr('data-no');
+            var owner = $(this).attr('data-owner');
+            var method = $(this).attr('data-value');
+
+            $("input[name='bank_name']").val(name);
+            $("input[name='bank_no']").val(no);
+            $("input[name='bank_customer']").val(owner);
+            $("#save-bank").attr('method',method);
+            $("#bank-del").attr('data-value',method).show();
+            $("#bank-payment").show();
+        });
+    }
+
+    function load_page()
+      {
+        $("#data_order").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
+            "ajax": "{{ url('orders') }}",
+            "destroy": true
+        });
+
+        $('.dataTables_filter input')
+         .off()
+         .on('keyup', delay(function() {
+            $('#data_order').DataTable().search(this.value.trim(), false, false).draw();
+         },1000));    
+    }
+
+    function delay(callback, ms) {
+      var timer = 0;
+      return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          callback.apply(context, args);
+        }, ms || 0);
+      };
+    }
+
+    function popup_payment()
+    {
+      $( "body" ).on( "click", ".popup-newWindow", function()
+      {
+        event.preventDefault();
+        window.open($(this).attr("href"), "popupWindow", "width=600,height=600,scrollbars=yes");
+      });
+    }
 
     function data_tabs()
     {
+        if(segment == 'payment')
+        {
+            target_tabs(5);
+        }
+        
         $(".settings").click(function(){
             var target = $(this).attr('data_target');
-            $(".settings").removeClass('active');
-            $(".target_hide").addClass('d-none');
-            $("#settings_target_"+target).removeClass('d-none');
-           
-            $(".mn").removeClass('active');
-            $(".mn_"+target).addClass('active');
+            target_tabs(target)
         });
+    }
+
+    function target_tabs(target)
+    {
+        $(".settings").removeClass('active');
+        $(".target_hide").addClass('d-none');
+        $("#settings_target_"+target).removeClass('d-none');
+        
+        $(".mn").removeClass('active');
+        $(".mn_"+target).addClass('active');
+
+        if(target == 5)
+        {
+            load_page();
+        }
     }
 
     //PROFILE
@@ -82,7 +164,7 @@ $(function(){
         var currency = '{{ $user->currency }}';
         var lang = '{{ $user->lang }}';
 
-        console.log(lang);
+        // console.log(lang);
         $("select[name='profile_currency'] option[value='"+currency+"']").prop('selected',true);
         $("select[name='profile_lang'] option[value='"+lang+"']").prop('selected',true);
     }
@@ -187,6 +269,56 @@ $(function(){
     }
 
     //END PROFILE
+
+    function payment_detail()
+    {
+        $( "body" ).on( "click", ".btn-confirm", function() {
+            $('#id_confirm').val($(this).attr('data-id'));
+            $('#mod-no_order').html($(this).attr('data-no-order'));
+            $('#mod-package').html($(this).attr('data-package'));
+
+            var total = parseInt($(this).attr('data-total'));
+            $('#mod-total').html('Rp. ' + total.toLocaleString());
+            $('#mod-purchased_view').html(parseInt($(this).attr('data-purchased-view')).toLocaleString()); 
+        
+            $('#mod-date').html($(this).attr('data-date'));
+
+            var keterangan = '-';
+            // console.log($(this).attr('data-keterangan'));
+            if($(this).attr('data-keterangan')!='' || $(this).attr('data-keterangan')!=null){
+            keterangan = $(this).attr('data-keterangan');
+            }
+
+            $('#mod-keterangan').html(keterangan);
+            $("#transfer-information").modal();
+        });
+    }
+
+    function view_details()
+    {
+        $( "body" ).on( "click", ".view-details", function() {
+            var id = $(this).attr('data-id');
+            $('.details-'+id).toggleClass('d-none');
+        });
+    }
+    
+  
+  $( "body" ).on( "click", ".btn-search", function() {
+    currentPage = '';
+    refresh_page();
+  });
+
+  $( "body" ).on( "click", ".btn-delete", function() {
+    $('#id_delete').val($(this).attr('data-id'));
+  });
+
+  $( "body" ).on( "click", "#btn-delete-ok", function() {
+    delete_order();
+  });
+
+  $(document).on('click', '.checkAll', function (e) {
+    $('input:checkbox').not(this).prop('checked', this.checked);
+  });
 
 </script>
 @endsection

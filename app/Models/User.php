@@ -22,7 +22,11 @@ class User extends Authenticatable
         'email',
         'password',
         'currency',
-        'lang'
+        'lang',
+        'membership',
+        'end_membership',
+        'myreferral',
+        'referral_code'
     ];
 
     /**

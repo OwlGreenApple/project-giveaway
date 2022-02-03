@@ -26,10 +26,16 @@ Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdat
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
 
+//AUTH
+Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
+Route::post('pass_reset', [App\Http\Controllers\Auth\RegisterController::class, 'reset'])->name('pass-reset');
+
 //ORDER
+Route::get('thankyou', [App\Http\Controllers\OrderController::class, 'thankyou']);
 Route::get('checkout/{id?}', [App\Http\Controllers\OrderController::class, 'index']);
 Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])->middleware('check_order');
 Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
+Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'loginAjax']);// user 
 
 Auth::routes();
 
@@ -43,7 +49,9 @@ Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 // Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);
 
 /* ACOUNTS */
-Route::get('/account', [App\Http\Controllers\HomeController::class, 'accounts']);
+Route::get('/account/{id?}', [App\Http\Controllers\HomeController::class, 'accounts']);
+Route::get('/orders', [App\Http\Controllers\HomeController::class, 'order_list']);
+Route::post('order-confirm-payment',[App\Http\Controllers\OrderController::class, 'confirm_payment_order']);
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_user_profile');
 Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api']);
 

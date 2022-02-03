@@ -32,5 +32,8 @@ return [
         'VIEW_COMPILED_PATH',
         realpath(storage_path('framework/views'))
     ),
-
+    'bank_name'=>env('BANK_NAME'),
+    'bank_owner'=>'Sugiarto Lasjim',
+    'email_admin'=>env('ADMIN_EMAIL'),
+    'no_rek'=>env('NO_REK'),
 ];

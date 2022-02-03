@@ -13,6 +13,7 @@ use App\Models\Events;
 use App\Models\Contestants;
 use App\Helpers\Custom;
 use App\Models\Entries;
+use App\Models\Orders;
 use App\Mail\ContactEmail;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Aws\S3\Exception\S3Exception;
 use App\Http\Controllers\ApiController as API;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -748,13 +750,14 @@ class HomeController extends Controller
     }
 
     // ACCOUNTS
-    public function accounts()
+    public function accounts(Request $request)
     {
         // PROFILE
         $helper = new Custom;
         $user = User::find(Auth::id());
+        $conf = $request->segment(2);
 
-        $data = ['user'=>$user,'helper'=>$helper];
+        $data = ['user'=>$user,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf];
         return view('account',$data);
     }
 
@@ -789,6 +792,7 @@ class HomeController extends Controller
         return response()->json($res);
     }
 
+    // save user integration api
     public function save_api(Request $request)
     {
         $activrespon = strip_tags($request->act_api);
@@ -818,6 +822,7 @@ class HomeController extends Controller
         return response()->json($res);
     }
 
+    //CONTACT
     public function contact()
     {
         return view('contact');
@@ -845,6 +850,109 @@ class HomeController extends Controller
 
         Mail::to(env('ADMIN_EMAIL'))->send(new ContactEmail($user_email,$message));
         return response()->json(['err'=>0]);
+    }
+
+    //USER ORDER'S LIST
+    public function order_list(Request $request)
+    {
+      $start = $request->start;
+      $length = $request->length;
+      $search = $request->search;
+      $src = $search['value'];
+      $data['data'] = array();
+
+      if($src == null)
+      {
+         $orders = Orders::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->skip($start)->limit($length)->get();                
+         $total = Orders::count();
+      }
+      else
+      {
+        if(preg_match("/^[a-zA-Z ]*$/i",$src) == 1)
+        {
+           $order = Orders::where('package','LIKE','%'.$src.'%');
+        }
+        elseif(preg_match("/[\-]/i",$src))
+        {
+          $order = Orders::where('created_at','LIKE','%'.$src.'%');
+        }
+        else
+        {
+          $order = Orders::where('no_order','LIKE',"%".$src."%");
+        }
+
+        $orders = $order->where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
+        $total = Orders::where('user_id',Auth::user()->id)->count(); 
+    }
+
+      // dd($orders);
+      
+      $data['draw'] = $request->draw;
+      $data['recordsTotal']=$total;
+      $data['recordsFiltered']=$total;
+      $prc = new Custom;
+
+      if($orders->count())
+      {
+        $no = 1;
+        foreach($orders as $order)
+        {
+          if(($order->proof !== null && $order->status > 1) || ($order->proof == null && $order->status > 1))
+          {
+            $proof = '-';
+          }
+          elseif($order->proof == null || $order->status == 0)
+          {
+            $proof = '<button type="button" class="btn btn-primary btn-confirm" data-bs-toggle="modal" data-bs-target="#confirm-payment" data-id="'.$order->id.'" data-no-order="'.$order->no_order.'" data-package="'.$order->package.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" style="font-size: 13px; padding: 5px 8px;">'.Lang::get('order.confirm').'
+              </button>';
+          }
+          else
+          {
+            $proof = '<a class="popup-newWindow" href="'.Storage::disk('s3')->url($order->proof).'">View</a>';
+          }
+
+          // STATUS ORDER
+          if($order->status==1)
+          {
+            $status = '<span style="text-success"><b>'.Lang::get('order.process').'</b></span>';
+          }
+          elseif($order->status==2)
+          {
+            $status = '<span class="text-primary"><b>'.Lang::get('order.complete').'</b></span>';
+          }
+          elseif($order->status==3)
+          {
+            $status = '<span class="text-danger"><b>'.Lang::get('order.cancel').'</b></span>';
+          }
+          else
+          {
+            $status = '<span><b>'.Lang::get('order.waiting').'</b></span>';
+          }
+
+          if($order->date_confirm == null)
+          {
+            $date_confirm = '-';
+          }
+          else
+          {
+            $date_confirm = Carbon::parse($order->date_confirm)->toDateTimeString();
+          }
+          
+          $data['data'][] = [
+            0=>$order->no_order,
+            1=>$order->package,
+            2=>$order->currency.".".$prc->format($order->price),
+            3=>$order->currency.".".$prc->format($order->total_price),
+            4=>Carbon::parse($order->created_at)->toDateTimeString(),
+            5=>$date_confirm,
+            6=>$order->desc,
+            7=>$proof,
+            8=>$status
+          ];
+        }
+      }
+     
+      echo json_encode($data);
     }
 
     public function connect_wa()
