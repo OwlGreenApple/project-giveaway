@@ -33,7 +33,7 @@ class AffiliateController extends Controller
         $helper = new Custom;
         $events = Events::where('user_id',$user->id)
                     ->get();
-        return view('broadcast.create-broadcast',[
+        return view('affiliate.create-affiliate',[
             'helper'=>$helper,
             'events'=>$events,
         ]);
@@ -58,5 +58,23 @@ class AffiliateController extends Controller
             "referral_code"=>$referral_code,
         ]);
     }
+
+    public function list_affiliate_index()
+    {
+        $user = Auth::user();
+        $helper = new Custom;
+        $events = Events::where('user_id',$user->id)
+                    ->get();
+        return view('affiliate.list-affiliate',[
+            'helper'=>$helper,
+            'events'=>$events,
+        ]);
+    }
+
+    public function list_affiliate_data()
+    {
+    }
+
+    
 /* end class */
 }
