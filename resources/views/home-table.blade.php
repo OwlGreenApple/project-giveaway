@@ -11,7 +11,7 @@
             @foreach($data as $row)
             <tr>
                 <td class="align-middle"><span class="main-color">{{ $row->title }}</span><br/>{{ $row->award }}</td>
-                <td class="align-middle">{{ $row->total_contestant }}</td>
+                <td class="align-middle"><a target="_blank" href="{{ url('list-contestants') }}/{{ $row->id }}">{{ $row->total_contestant }}</a></td>
                 <td class="align-middle">{{ $row->total_entries }}</td>
                 <td class="align-middle">@if($row->status == 1) <span class="badge rounded-pill bg-custom">Running</span> @elseif($row->status == 2) <button type="button" class="btn btn-success award">Award</button> @else <span class="badge rounded-pill bg-secondary">Done</span> @endif</td>
                 <td class="align-middle">
@@ -23,6 +23,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a></li>
                             <li><a id="{{ $row->id }}" class="dropdown-item duplicate">Duplicate</a></li>
+                            <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item">View</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev">Delete</a></li>
                         </ul>

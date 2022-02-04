@@ -59,14 +59,55 @@ class HomeController extends Controller
         return view('home-table',$data);
     }
 
+    //DISPLAY CONTESTANTS
+    public function contestants($evid)
+    {
+        $ev_id = strip_tags($evid);
+        $ev = self::check_security_event($ev_id);
+
+        if($ev == false)
+        {
+            return view('error404');
+        }
+
+        $ct = Contestants::where('event_id',$ev_id)->orderBy('entries','desc')->get();
+        return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1]);
+    }
+
+    // DELETE CONTESTANTS
+    public function del_contestant(Request $request)
+    {
+        $id = strip_tags($request->id);
+        $ct = Contestants::where('contestants.id',$id)
+            ->join('events','events.id','=','contestants.event_id')
+            ->join('users','users.id','=','events.user_id')
+            ->first();
+
+        if(is_null($ct))
+        {
+            return response()->json(['err'=>1]);
+        }
+
+        try{
+            Contestants::find($id)->delete();
+            $res['err'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            $res['err'] = 2;
+        }
+
+        return response()->json($res);
+    }
+
     // DUPLICATE EVENT
     public function duplicate_events(Request $request)
     {
         $ev_id = strip_tags($request->id);
-        $ev = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
+        $ev = self::check_security_event($ev_id);
         
         //check event
-        if(is_null($ev))
+        if($ev == false)
         {
             return response()->json(['success'=>'err']);
         }
@@ -978,6 +1019,21 @@ class HomeController extends Controller
     {
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         return substr(str_shuffle($permitted_chars), 0, 9);
+    }
+
+    public static function check_security_event($ev_id)
+    {
+        $ev = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
+        
+        //check event
+        if(is_null($ev))
+        {
+            return false;
+        }
+        else
+        {
+            return $ev;
+        }
     }
 
 /* end of class */
