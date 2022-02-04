@@ -82,4 +82,6 @@ Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_use
 
 /* Affiliate */
 Route::get('/create-affiliate', [App\Http\Controllers\AffiliateController::class, 'create_affiliate']);
+Route::get('/list-affiliate-index', [App\Http\Controllers\AffiliateController::class, 'list_affiliate_index']);
+Route::get('/list-affiliate-data', [App\Http\Controllers\AffiliateController::class, 'list_affiliate_data']);
 Route::post('/save-affiliate', [App\Http\Controllers\BroadcastController::class, 'save_affiliate']);
