@@ -25,6 +25,7 @@ Route::get('/contest', [App\Http\Controllers\ContestController::class, 'task']);
 Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdata']);
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
+Route::get('/test-contestant', [App\Http\Controllers\ContestController::class, 'test_contestant']);
 
 //AUTH
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
@@ -70,7 +71,6 @@ Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
 Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
 Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'edit_broadcast']);
-Route::get('/test-broadcast', [App\Http\Controllers\BroadcastController::class, 'test_broadcast']);
 
 
 /* Admin */

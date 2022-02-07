@@ -32,15 +32,6 @@ class BroadcastController extends Controller
         return view('broadcast.list-broadcast');
     }
 
-    public function test_broadcast()
-    {
-        $user = Auth::user();
-        $contestants = Contestants::take(3)->shuffle()->get();
-
-        dd($contestants);
-
-    }
-
     public function create_broadcast()
     {
         $user = Auth::user();
