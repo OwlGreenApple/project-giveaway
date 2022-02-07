@@ -41,14 +41,16 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
+Route::get('/list-contestants/{event_id}', [App\Http\Controllers\HomeController::class, 'contestants']);
 Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
+Route::get('/del-contestant', [App\Http\Controllers\HomeController::class, 'del_contestant']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::post('/contact-admin', [App\Http\Controllers\HomeController::class, 'save_contact']);
-Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 
 // Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);
 
 /* ACOUNTS */
+Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 Route::get('/account/{id?}', [App\Http\Controllers\HomeController::class, 'accounts']);
 Route::get('/orders', [App\Http\Controllers\HomeController::class, 'order_list']);
 Route::post('order-confirm-payment',[App\Http\Controllers\OrderController::class, 'confirm_payment_order']);
@@ -76,6 +78,8 @@ Route::get('list-user',[App\Http\Controllers\AdminController::class, 'index']);
 Route::get('list-order',[App\Http\Controllers\AdminController::class, 'order_list']);
 Route::get('order-load',[App\Http\Controllers\AdminController::class,'order']);
 Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm_order']);
+Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
+Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
 
 /* Affiliate */
 Route::get('/create-affiliate', [App\Http\Controllers\AffiliateController::class, 'create_affiliate']);

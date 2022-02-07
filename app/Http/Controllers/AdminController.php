@@ -24,8 +24,14 @@ class AdminController extends Controller
 
     public function index()
     {
+        return view('admin.index');
+    }
+
+    //load and display user from ajax
+    public function display_users()
+    {
         $users = User::all()->where('is_admin',0);
-        return view('admin.index',['users'=>$users,'no'=>1]);
+        return view('admin.users',['users'=>$users,'no'=>1]);
     }
 
     public function ban_user(Request $request)
