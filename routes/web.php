@@ -68,6 +68,7 @@ Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
 Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
 Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'edit_broadcast']);
+Route::get('/test-broadcast', [App\Http\Controllers\BroadcastController::class, 'test_broadcast']);
 
 
 /* Admin */
