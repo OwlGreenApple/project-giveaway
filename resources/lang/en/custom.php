@@ -37,6 +37,7 @@ return [
     'profile_password'=>'Leave empty unless you want to change password',
     'pt'=>'Podcast Subscribe',
     'pt.col'=>'Podcast URL',
+    'redraw'=>'Are you sure to redraw this winner?',
     'submit'=>'Submit',
     'success'=>'Your data has been saved successfully.',
     'tw'=>'Twitter Follow',

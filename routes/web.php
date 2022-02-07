@@ -41,13 +41,18 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
-Route::get('/list-contestants/{event_id}', [App\Http\Controllers\HomeController::class, 'contestants']);
-Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
-Route::get('/del-contestant', [App\Http\Controllers\HomeController::class, 'del_contestant']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::post('/contact-admin', [App\Http\Controllers\HomeController::class, 'save_contact']);
 
 // Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);
+
+/* CONTESTANTS */
+Route::get('/list-contestants/{event_id}', [App\Http\Controllers\HomeController::class, 'contestants']);
+Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
+Route::get('/export-contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'export_contestants']);
+Route::get('/del-contestant', [App\Http\Controllers\HomeController::class, 'del_contestant']);
+Route::get('/draw-contestant-contestant', [App\Http\Controllers\HomeController::class, 'draw_contestant']);
+Route::get('/contestant-winner/{event_id}', [App\Http\Controllers\HomeController::class, 'winner']);
 
 /* ACOUNTS */
 Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);

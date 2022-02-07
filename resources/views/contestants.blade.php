@@ -6,12 +6,15 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header clearfix bg-white px-3 py-3">
-                    <h3 class="float-start align-middle mb-0 info title">Contestants {{ $ev->title }}</h3>
+                    <h3 class="float-start align-middle mb-0 info title">@if(!isset($winner)) Contestants @endif {{ $ev->title }} @if(isset($winner)) Winners @endif</h3>
+                    @if(Auth::user()->membership !== 'free' && !isset($winner))
+                        <h3 class="float-end"><a href="{{ url('export-contestant') }}/{{ $ev->id }}" class="btn btn-success">Export XLS</a></h3>
+                    @endif
                 </div>
 
                 <div class="card-body">
                 <span id="msg"><!-- message --></span>
-                <table id="dashboard_table" class="table">
+                <table id="dashboard_table" class="table stripe">
                     <thead>
                         <th>{{ Lang::get('table.no') }}</th>
                         <th>{{ Lang::get('table.name') }}</th>
@@ -37,16 +40,18 @@
                                 <td class="align-middle">{{ $row->date_enter }}</td>
                                 <td class="align-middle">
                                     <div class="input-group">
-                                        <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>
-                                        <!-- <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span class="visually-hidden">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a></li>
-                                            <li><a id="{{ $row->id }}" class="dropdown-item duplicate">Duplicate</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev">Delete</a></li>
-                                        </ul> -->
+                                        @if(isset($winner))
+                                            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="visually-hidden">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li class="text-center"><a class="btn btn-warning draw" id="{{ $row->id }}">{{ Lang::get('table.draw') }}</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li class="text-center"><a id="{{ $row->id }}" class="btn btn-danger del">{{ Lang::get('table.remove') }}</a></li>
+                                            </ul>
+                                        @else
+                                            <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -66,7 +71,7 @@
 <script type="text/javascript">
     $(function(){
         // display_dashboard();
-        delete_contestanst();
+        action_table();
         datatable();
     });
 
@@ -91,22 +96,22 @@
         });
     }
 
-    function delete_contestanst()
+    function action_table()
     {
-        // // update events
-        // $("body").on("click",".duplicate",function(){
-        //     var id = $(this).attr('id');
-        //     var conf = confirm('{{ Lang::get("custom.duplicate") }}');
+        // redraw contestants
+        $("body").on("click",".draw",function(){
+            var id = $(this).attr('id');
+            var conf = confirm('{{ Lang::get("custom.redraw") }}');
 
-        //     if(conf == true)
-        //     {
-        //         duplicate_or_del_events(id,'{{ url("duplicate-events") }}');
-        //     }
-        //     else
-        //     {
-        //         return false;
-        //     }
-        // });
+            if(conf == true)
+            {
+                redraw_or_delete(id,'{{ url("draw-contestant") }}');
+            }
+            else
+            {
+                return false;
+            }
+        });
 
         // delete contestants
         $("body").on("click",".del",function(){
@@ -115,7 +120,7 @@
 
             if(conf == true)
             {
-                duplicate_or_del_events(id,'{{ url("del-contestant") }}');
+                redraw_or_delete(id,'{{ url("del-contestant") }}');
             }
             else
             {
@@ -124,7 +129,7 @@
         });
     }
 
-    function duplicate_or_del_events(id,target)
+    function redraw_or_delete(id,target)
     {
         $.ajax({
             method:'GET',

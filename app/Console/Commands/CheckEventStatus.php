@@ -40,12 +40,15 @@ class CheckEventStatus extends Command
      */
     public function handle()
     {
-        $ev = Events::where([['status',1],['unlimited',1]])->get();
+        $ev = Events::where('status',1)->get();
         $data = array();
 
         if($ev->count() > 0)
         {
             foreach($ev as $row):
+                // if($row->unlimited == 1):
+
+                // endif;
                 if(Carbon::now($row->timezone)->gte(Carbon::parse($row->end)->toDateTimeString()))
                 {
                     $data[] = $row->id;

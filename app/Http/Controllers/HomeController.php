@@ -15,6 +15,7 @@ use App\Helpers\Custom;
 use App\Models\Entries;
 use App\Models\Orders;
 use App\Mail\ContactEmail;
+use App\Exports\ContestantExport;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -70,14 +71,29 @@ class HomeController extends Controller
             return view('error404');
         }
 
-        $ct = Contestants::where('event_id',$ev_id)->orderBy('entries','desc')->get();
+        $ct = Contestants::where('event_id',$ev_id)->get();
         return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1]);
+    }
+
+    // EXPORT CONTESTANTS
+    public function export_contestants($ev_id)
+    {
+        $ev = self::check_security_event($ev_id);
+
+        if($ev == false)
+        {
+            return view('error404');
+        }
+
+        return (new ContestantExport($ev->id))->download('contestant.xlsx');
     }
 
     // DELETE CONTESTANTS
     public function del_contestant(Request $request)
     {
         $id = strip_tags($request->id);
+        $draw = strip_tags($request->draw);
+
         $ct = Contestants::where('contestants.id',$id)
             ->join('events','events.id','=','contestants.event_id')
             ->join('users','users.id','=','events.user_id')
@@ -87,6 +103,11 @@ class HomeController extends Controller
         {
             return response()->json(['err'=>1]);
         }
+
+        // if($draw !== null)
+        // {
+        //     return 
+        // }
 
         try{
             Contestants::find($id)->delete();
@@ -98,6 +119,22 @@ class HomeController extends Controller
         }
 
         return response()->json($res);
+    }
+
+    // DISPLAY WINNERS
+    public function winner($ev_id)
+    {
+        $ev = self::check_security_event($ev_id);
+        
+        //check event
+        if($ev == false)
+        {
+            return view('error404');
+        }
+
+        $winners = $ev->winners;
+        $ct = Contestants::where('event_id',$ev_id)->orderBy('entries','desc')->orderBy('date_enter', 'asc')->skip(0)->take($winners)->get();
+        return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1,'winner'=>true]);
     }
 
     // DUPLICATE EVENT

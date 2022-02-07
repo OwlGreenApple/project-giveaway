@@ -17,6 +17,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('check:running_events')->daily();
+        $schedule->command('check:membership')->hourly();
+        $schedule->command('check:membership_terms')->everyFifteenMinutes();
         $schedule->command('send:broadcast')->everyMinute();
         $schedule->command('reset:counter_send_message')->daily();
     }

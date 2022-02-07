@@ -9,6 +9,9 @@
             </div>
             <div class="card logo px-2 py-4">LOGO</div>
             <div class="card px-2 py-2 fix-card">
+                @if(session('error'))
+                    <span class="text-danger text-center"><strong>{{ session('error') }}</strong></span>
+                @endif
                 <div class="card-body">
                     <h1 class="text-center mb-4 title">Login</h1>
 
