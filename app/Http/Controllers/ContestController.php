@@ -20,6 +20,19 @@ use App\Http\Controllers\ApiController as API;
 
 class ContestController extends Controller
 {
+    public function test_contestant()
+    {
+        $contestants = Contestants::take(3)->get()->shuffle();
+
+        foreach($contestants as $contestant){
+            echo $contestant->id."<br>";
+        }
+
+        //dd($contestants);
+
+    }
+
+
     public function contest($link,$ref = null)
     {
         $event = Events::where('url_link',$link)->first();

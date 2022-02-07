@@ -25,6 +25,7 @@ Route::get('/contest', [App\Http\Controllers\ContestController::class, 'task']);
 Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdata']);
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
+Route::get('/test-contestant', [App\Http\Controllers\ContestController::class, 'test_contestant']);
 
 //AUTH
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
