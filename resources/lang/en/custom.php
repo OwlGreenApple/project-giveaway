@@ -9,6 +9,7 @@ return [
     'click'=>'Click here',
     'clue'=>'How many entries this action is worth',
     'congrats'=>'Congratulations',
+    'currency'=>'Rp.',
     'de'=>'Daily Entries',
     'delete'=>'Are you sure to delete this entry?',
     'duplicate'=>'Do you want to duplicate this entry?',

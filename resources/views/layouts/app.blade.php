@@ -20,6 +20,7 @@
     <!-- Styles -->
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet">
 
      <!-- Font Awesome 5 -->
      <link href="{{ asset('assets/font-awesome-5/all.css') }}" rel="stylesheet">

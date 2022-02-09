@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//AUTH
+Route::get('/',[App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
+Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
+Route::post('pass_reset', [App\Http\Controllers\Auth\RegisterController::class, 'reset'])->name('pass-reset');
 
 // App::setLocale('en');
 Route::get('/c/{event_link}/{referal?}', [App\Http\Controllers\ContestController::class, 'contest']);
@@ -26,10 +27,6 @@ Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdat
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
 Route::get('/test-contestant', [App\Http\Controllers\ContestController::class, 'test_contestant']);
-
-//AUTH
-Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
-Route::post('pass_reset', [App\Http\Controllers\Auth\RegisterController::class, 'reset'])->name('pass-reset');
 
 //ORDER
 Route::get('thankyou', [App\Http\Controllers\OrderController::class, 'thankyou']);
