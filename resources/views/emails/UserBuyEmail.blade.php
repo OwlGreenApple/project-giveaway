@@ -13,15 +13,15 @@ Nama : <b>{{$case}}</b>
 <br>
 Status Order : <b>Confirmed</b>
 <br>
-Anda telah memesan paket <b>{{ $order->package }}</b> <b>Rp.{{ $pc::format($order->total_price) }}</b>
+Anda telah memesan paket : <b>{{ $order->package }}</b> <b>Rp.{{ $pc::format($order->total_price) }}</b>
 <br>
 <br>
-Aktivasi telah sukses dilakukan. Anda sudah bisa menggunakan layanan Watchermarket. Segera hubungi kami jika masih ada ditanyakan di <a href="https://omli.club/watchermarket">https://omli.club/watchermarket</a>
+Aktivasi telah sukses dilakukan. Anda sudah bisa menggunakan layanan {{ env('APP_NAME') }}. Segera hubungi kami jika masih ada ditanyakan di <a href="https://omli.club/">https://omli.club/</a>
 <br>
 <br>
 Salam hangat,
 <br>
-Watchermarket
+{{ env('APP_NAME') }}
 
 @else
 

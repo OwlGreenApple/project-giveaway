@@ -84,6 +84,12 @@ class ApiController extends Controller
   private static function mailchimp()
   {
     $api_key = Auth::user()->mailchimp_api;
+
+    if($api_key == null)
+    {
+      return false;
+    }
+
     $exp = explode("-",$api_key);
     $server = $exp[1];
     $mailchimp = new MC\ApiClient();
@@ -120,6 +126,11 @@ class ApiController extends Controller
   public function display_mailchimp_lists()
   {
     $mailchimp = self::mailchimp();
+
+    if($mailchimp == false)
+    {
+      return array();
+    }
     return $mailchimp->lists->getAllLists()->lists;
   }
 

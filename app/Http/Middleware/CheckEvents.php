@@ -6,9 +6,11 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 use App\Rules\CheckDate;
 use App\Rules\CheckNumber;
 use App\Rules\CheckDescription;
+use App\Models\Events;
 
 class CheckEvents
 {
@@ -22,6 +24,20 @@ class CheckEvents
 
     public function handle(Request $request, Closure $next)
     {
+        if(Auth::user()->membership == 'free')
+        {
+            $ev = Events::where([['user_id',Auth::id()],['status',1]])->get()->count();
+
+            if($ev > 0)
+            {
+                $err = [
+                    'success'=>'err_package',
+                    'package'=>Lang::get('custom.membership')
+                ];
+                return response()->json($err);
+            }
+        }
+
         $rules = [
             'title'=>['required','max:45'],
             'start'=>['required'],

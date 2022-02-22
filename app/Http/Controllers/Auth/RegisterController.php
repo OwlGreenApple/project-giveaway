@@ -61,7 +61,7 @@ class RegisterController extends Controller
         $end_membership = null;
 
         $col = [
-          'name' => strip_tags($data['name']),
+          'name' => strip_tags($data['username']),
           'email' => strip_tags($data['email']),
           'password' => Hash::make($generated_password),
           'membership'=>$membership,

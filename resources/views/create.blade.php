@@ -132,11 +132,11 @@
                         <div class="border-bottom info">Prize Images / Youtube Video.</div>
                         <div class="text-justify title mb-3">Tip: use images with a 2x1 ratio (minimum of 680px width)</div>
                         <div class="form-check form-switch mb-2">
-                            <input @if(isset($event) && $event->media == 1) value="on" checked @endif name="media_option" class="form-check-input" type="checkbox" id="media_option">
+                            <input @if(isset($event) && $event->media == 1) value="on" checked @else value="off" @endif name="media_option" class="form-check-input" type="checkbox" id="media_option">
                             <label class="form-check-label" for="media_option">Youtube Video</label>
                         </div>
 
-                        <div class="upload_banner form-group d-none">
+                        <div class="upload_banner form-group">
                             <label>Youtube URL:</label>
                             <input name="youtube_url" value="@if(isset($event) && $event->media == 1) {{ $event->youtube_banner }} @endif" type="text" class="form-control form-control-lg" />
                             <small>{{Lang::get('custom.youtube_banner')}} : <span class="main-color">https://www.youtube.com/embed/xxxx</span></small>
@@ -286,6 +286,7 @@
                 </div>
 
                 <div class="mt-5 text-center">
+                    <span class="err_package"><!-- --></span>
                     <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
                     <button type="submit" class="btn bg-custom btn-lg text-white">Save</button>
                 </div>
@@ -511,6 +512,7 @@ function display_media()
 function detect_video_or_banner(val)
 {
     var target = $("#media_option");
+
     if(val == 'on')
     {
         target.val('off');
@@ -519,15 +521,15 @@ function detect_video_or_banner(val)
     {
         target.val('on');
     }
-    
+
     if(val == 'on'){
-        $(".upload_banner").addClass('d-none');
-        $(".input-images").removeClass('d-none');
+        $(".upload_banner").removeClass('d-none');
+        $(".input-images").addClass('d-none');
     }
     else
     {
-        $(".upload_banner").removeClass('d-none');
-        $(".input-images").addClass('d-none');
+        $(".upload_banner").addClass('d-none');
+        $(".input-images").removeClass('d-none');
     }
 }
 
@@ -547,7 +549,7 @@ function image_uploader()
 
     $("body").on("click",".delete-image",function(){
         var val = $("input[name='preloaded]").val();
-        console.log(val);
+        // console.log(val);
     });
 }
 
@@ -602,6 +604,12 @@ function save_data()
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
+                }
+                else if(result.success == 'err_package')
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $(".err_package").html('<div class="text-danger">'+result.package+'</div>');
                 }
                 else if(result.success == 'err')
                 {
@@ -687,7 +695,7 @@ function count_logic()
 
 function datetimepicker()
 {
-    var date, tdate;
+    var date, tdate, adate;
     var ndate = new Date();
     var date_1 = $('.datetimepicker_1').val();
     var date_2 = $('.datetimepicker_2').val();
@@ -695,14 +703,14 @@ function datetimepicker()
 
     (date_1.length == 0)?date = ndate : date = moment(date_1);
     (date_2.length == 0)?tdate = ndate.setDate(date.getDate() + 2) : tdate = moment(date_2);
-    (date_3.length == 0)?adate = ndate.setDate(date.getDate() + 2) : adate = moment(date_3);
+    (date_3.length == 0)?adate = ndate : adate = moment(date_3);
     
 
     var format_date = 'YYYY-MM-DD HH:mm';
 
     $('.datetimepicker_1').datetimepicker({
         format : format_date,
-        minDate : date
+        minDate : new Date()
     });
     
     $('.datetimepicker_2').on('focusin', function(e){ 

@@ -29,6 +29,7 @@ return [
     'in' => 'You\'re in',
     'link'=>'Your contest link',
     'ln.share'=>'Linkedin Share',
+    'membership'=>'Your event reach maximum of events according on your package',
     'name'=>'Your Name',
     'no_data'=>'No Data',
     'number'=>'Your Phone Number',

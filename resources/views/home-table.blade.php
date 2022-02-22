@@ -31,8 +31,6 @@
                 </td>
             </tr>
             @endforeach
-        @else
-            <tr><td colspan="4" class="text-center"><div class="alert alert-info">{{ Lang::get('custom.no_data') }}</div></tr> 
         @endif
     </tbody>
 </table>

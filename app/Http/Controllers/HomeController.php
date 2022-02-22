@@ -380,7 +380,8 @@ class HomeController extends Controller
         }
         
         $helper = new Custom;
-        $data = $preloaded = null;
+        $preloaded = null;
+        $data = array();
         $banners = Banners::where('event_id',$id)->get();
 
         $bonuses = Bonus::where('event_id',$id)->get()->toArray();

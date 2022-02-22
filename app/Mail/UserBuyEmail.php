@@ -36,7 +36,7 @@ class UserBuyEmail extends Mailable
     {
         return $this
         ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-        ->subject('[Watchermarket] Konfirmasi Order')
+        ->subject('['.env("MAIL_FROM_NAME").'] Konfirmasi Order')
         ->view('emails.UserBuyEmail')
         ->with([
           'order' => $this->order,

@@ -49,7 +49,6 @@ class OrderController extends Controller
         $price = new Custom;
         $pack = $price->check_type($package);
 
-
         // in case if checkout from summary
         if(session('order') !== null)
         {
@@ -85,6 +84,7 @@ class OrderController extends Controller
         }
         else
         {
+          $order['email'] = Auth::user()->email;
           return $this->submit_order($order,$is_ajax);
         }
     }
@@ -130,13 +130,12 @@ class OrderController extends Controller
                 // $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
 
                 // SEND EMAIL IF ORDER SUCCESSFUL
-                Mail::to(Auth::user()->email)->send(new MembershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
+                Mail::to($data['email'])->send(new MembershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
             }
 
             if(session('order') !== null)
             {
                 Session::forget('order');
-                
             }
         }
         catch(QueryException $e)
