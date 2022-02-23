@@ -15,6 +15,7 @@
                     <a class="settings text-black-50 mn_3" data_target="3"><i class="fab fa-sketch"></i>&nbsp;Branding</a>
                     <a class="settings text-black-50 mn_4" data_target="4"><i class="fas fa-plug"></i>&nbsp;Integrate API</a>
                     <a class="settings text-black-50 mn_5" data_target="5"><i class="fas fa-shopping-basket"></i>&nbsp;Orders</a>
+                    <a class="settings text-black-50 mn_6" data_target="6"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;Upgrade Package</a>
                 </div>
             </div>
         </div>
@@ -57,6 +58,14 @@
                 </div>
             </div>
 
+             <!-- UPGRADE PACKAGE -->
+             <div id="settings_target_6" class="card target_hide d-none">
+                <div class="card-body px-5 py-5 row">
+                    @include('package-list')
+                </div>
+            </div>
+
+
             <!-- end col -->
 
     <!--  -->
@@ -73,7 +82,52 @@ $(function(){
     popup_payment();
     display_detail_payment();
     payment_detail();
+    upload_branding();
 });
+
+    function upload_branding()
+    {
+        $("#upload_branding").submit(function(e){
+            e.preventDefault();
+            var data = new FormData($(this)[0]);
+
+            $.ajax({
+                headers : {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method : 'POST',
+                url : '{{ url("upload-branding") }}',
+                cache : false,
+                processData : false,
+                data : data,
+                contentType: false,
+                dataType : 'json',
+                beforeSend: function()
+                {
+                    $('#loader').show();
+                    $('.div-loading').addClass('background-load');
+                },
+                success: function(result)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    if(result.err == 0)
+                    {
+                        $("#brd").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
+                    }
+                    else
+                    {
+                        $("#brd").html("<div class='alert alert-danger'>{{ Lang::get('custom.failed') }}</div>");
+                    }
+                },
+                error: function(xhr){
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+    }
 
     function display_detail_payment()
     {

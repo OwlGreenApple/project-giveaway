@@ -74,6 +74,8 @@
                 </h5>
                 <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
                 <!-- contestant enter -->
+
+                @if($check_contestants == true)
                 <form class="contest-form" id="save_contestant">
                     <div class="form-group mb-3">
                         <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
@@ -92,6 +94,9 @@
                     </div>
                     <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
                 </form>
+                @else
+                    <div class="form_title text-center">{{ Lang::get('custom.fcontestants') }}</div>
+                @endif
 
                 <!-- description -->
                 <div class="terms mt-4">{!! $event->desc !!}</div>
@@ -103,9 +108,19 @@
                 <div class="col-lg-6 desc">{{ Lang::get('custom.giveaway_timezone') }} : {{ $event->timezone }}</div>
                 <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a></div>
             </div>
+
+            <div class="mt-2 pb-3 text-center">
+                @if($branding !== null)
+                    <img src="{!! Storage::disk('s3')->url($branding) !!}" width="100" />
+                @endif
+            </div>
         <!-- end col -->
     </div>
 </div>
+
+@if($check_contestants == true)
+    <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
+@endif
 
 <script>
     var global_date = "{{ $event->end }}"; //set target event date

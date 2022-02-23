@@ -615,6 +615,7 @@ function save_data()
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
+                    $(".err_package").hide();
                     
                     $(".err_"+result[0][1]).html(result[0][0]);
                     $(".err_"+result[1][1]).html(result[1][0]);

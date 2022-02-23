@@ -32,7 +32,6 @@ class ContestController extends Controller
 
     }
 
-
     public function contest($link,$ref = null)
     {
         $event = Events::where('url_link',$link)->first();
@@ -51,8 +50,10 @@ class ContestController extends Controller
         }
         
         $user = User::find($event->user_id);
+        $total_contestant = Contestants::where([['contestants.event_id',$event->id],['events.user_id',$user->id]])
+                            ->join('events','events.id','=','contestants.event_id')->get()->count();
 
-        // dd($images);
+        // dd($total_contestant);
 
         $data = [
             'event'=>$event,
@@ -60,10 +61,24 @@ class ContestController extends Controller
             'helpers'=>new Custom,
             'user'=>$user,
             'link'=>$link,
-            'ref'=>$ref
+            'ref'=>$ref,
+            'branding'=>$user->branding,
+            'check_contestants'=>self::check_contestants_membership($user,$total_contestant)
         ];
 
         return view('contest',$data);
+    }
+
+    private static function check_contestants_membership($user,$total_contestant)
+    {
+        $ct = new Custom;
+        $max_contestants = $ct->check_type($user->membership)['contestants'];
+        if($total_contestant >= $max_contestants)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     // save contestant
@@ -200,11 +215,16 @@ class ContestController extends Controller
                 ->first();
 
         $bonus = Bonus::where('event_id',$ev_id)->get();
-        $banners = Banners::where('event_id',$ev->id)->select('url')->first()->toArray();
+        $banners = Banners::where('event_id',$ev->id)->select('url')->first();
         
         if(!is_null($banners))
         {
+            $banners = $banners->toArray();
             $banners['url'] = Storage::disk('s3')->url($banners['url']);
+        }
+        else
+        {
+            $banners = array();
         }
 
         $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();

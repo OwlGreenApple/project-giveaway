@@ -154,11 +154,7 @@ class RegisterController extends Controller
 
     public function price_page()
     {
-      // if(session::get('reg') !== null)
-      // {
-      //   session::reflash();
-      // }
-      return view('package',['pc'=> new Custom,'cond'=>true]);
+      return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
     }
 
      // SEND PASSWORD TO FORGOT EMAIL

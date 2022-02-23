@@ -182,43 +182,46 @@ class AdminController extends Controller
     public function confirm_order(Request $request)
     {
     	$order = Orders::find($request->id);
+      $ct = new Custom;
 
     	if(!is_null($order))
     	{
-            $today = Carbon::now();
-            $user = User::find($order->user_id);
+        $today = Carbon::now();
+        $user = User::find($order->user_id);
+    
+        $order->date_confirm = $today;
+        $order->status = 2;
+        $order->save();
+
+        $user = User::find($order->user_id);
+        $check_active_membership = $this->check_term_membership($user);
+        $total_month = $ct->check_type($order->package)['terms'];
+
+        // dd($user->id);
         
-            $order->date_confirm = $today;
-            $order->status = 2;
-            $order->save();
-
-            $user = User::find($order->user_id);
-            $check_active_membership = $this->check_term_membership($user);
-
-            // dd($user->id);
-            
-            if($check_active_membership == 'active')
-            {
+        if($check_active_membership == 'active')
+        {
             $data = [
                 'user_id'=>$user->id,
                 'order_id'=>$order->id,
-                'order_package'=>$order->package
+                'order_package'=>$order->package,
+                'terms'=>$total_month
             ];
-                // send mail to user order later
-                Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
-                return $this->orderLater($data);
-            }
-            else
-            {
+            // send mail to user order later
+            Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
+            return $this->orderLater($data);
+        }
+        else
+        {
             $user->membership = $order->package;
-            $user->end_membership = $today->addMonths(1);
+            $user->end_membership = $today->addMonths($total_month);
             $user->status = 2;
             $user->save();
-            }
+        }
 
-            // send mail to user
-            Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
-    		$data['success'] = 1; 
+        // send mail to user
+        Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
+        $data['success'] = 1; 
     	}
     	else
     	{
@@ -230,7 +233,7 @@ class AdminController extends Controller
     }
 
     /*
-      TO CHECK WHETTHER MEMBERSHIP STILL ACTIVE OR HAS END,
+      TO CHECK WHETHER MEMBERSHIP STILL ACTIVE OR HAS END,
       IF ACTIVE, ORDER / PURCHASED ORDER WILL DELIVER TO TABLE MEMBERSHIP
     */
     private function check_term_membership($user)
@@ -271,7 +274,7 @@ class AdminController extends Controller
       {
         //if available data
         $previous_end_day = Carbon::parse($check_membership->end)->setTime(0, 0, 0);
-        $next_end_day = Carbon::parse($previous_end_day)->addMonths(1);
+        $next_end_day = Carbon::parse($previous_end_day)->addMonths($data['terms']);
         
         $membership->start = $previous_end_day;
         $membership->end = $next_end_day;

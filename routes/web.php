@@ -59,6 +59,7 @@ Route::get('/orders', [App\Http\Controllers\HomeController::class, 'order_list']
 Route::post('order-confirm-payment',[App\Http\Controllers\OrderController::class, 'confirm_payment_order']);
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_user_profile');
 Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api']);
+Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'save_branding']);
 
 /* EVENTS */
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);

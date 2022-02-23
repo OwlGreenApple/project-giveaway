@@ -836,7 +836,7 @@ class HomeController extends Controller
         $user = User::find(Auth::id());
         $conf = $request->segment(2);
 
-        $data = ['user'=>$user,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf];
+        $data = ['user'=>$user,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf,'pc'=> new Custom,'cond'=>true,'account'=>1];
         return view('account',$data);
     }
 
@@ -1032,6 +1032,27 @@ class HomeController extends Controller
       }
      
       echo json_encode($data);
+    }
+
+    //SAVE BRANDING ON USERS FIELD
+    public function save_branding(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $dir = env('FOLDER_PATH').'/branding/'.explode(' ',trim($user->name))[0].'-'.$user->id;
+        $filename = Carbon::now()->toDateTimeString()."-".$user->id.'.jpg';
+        Storage::disk('s3')->put($dir."/".$filename, file_get_contents($request->file('logo_branding')), 'public');
+        $user->branding = $dir."/".$filename;
+
+        try{
+            $user->save();
+            $data['err'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            $data['err'] = 1;
+        }
+        
+        return response()->json($data);
     }
 
     public function connect_wa()

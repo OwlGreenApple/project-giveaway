@@ -11,6 +11,7 @@ use App\Rules\CheckDate;
 use App\Rules\CheckNumber;
 use App\Rules\CheckDescription;
 use App\Models\Events;
+use App\Helpers\Custom;
 
 class CheckEvents
 {
@@ -22,20 +23,50 @@ class CheckEvents
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
 
+    private static function total_events($membership)
+    {
+        $package = new Custom;
+        $cond = [['user_id',Auth::id()],['status',1]];
+
+        if($membership == 'starter' || $membership == 'starter-yearly')
+        {
+            $limit = $package->get_price()[1]['campaign'];
+        }
+        elseif($membership == 'gold' || $membership == 'gold-yearly')
+        {
+            $limit = $package->get_price()[3]['campaign'];
+        }
+        elseif($membership == 'platinum' || $membership == 'platinum-yearly')
+        {
+            $limit = $package->get_price()[5]['campaign'];
+        }
+        else
+        {
+            $cond = [['user_id',Auth::id()]];
+            $limit = $package->get_price()[0]['campaign'];
+        }
+
+        $ev = Events::where($cond)->get()->count();
+
+        if($ev >= $limit)
+        {
+            $err = [
+                'success'=>'err_package',
+                'package'=>Lang::get('custom.membership')
+            ];
+            return $err;
+        }
+
+        return array();
+    }
+
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->membership == 'free')
-        {
-            $ev = Events::where([['user_id',Auth::id()],['status',1]])->get()->count();
+        $ev = self::total_events(Auth::user()->membership);
 
-            if($ev > 0)
-            {
-                $err = [
-                    'success'=>'err_package',
-                    'package'=>Lang::get('custom.membership')
-                ];
-                return response()->json($err);
-            }
+        if(count($ev) > 0)
+        {
+            return response()->json($ev);
         }
 
         $rules = [
