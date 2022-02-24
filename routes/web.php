@@ -53,13 +53,16 @@ Route::get('/draw-contestant-contestant', [App\Http\Controllers\HomeController::
 Route::get('/contestant-winner/{event_id}', [App\Http\Controllers\HomeController::class, 'winner']);
 
 /* ACOUNTS */
-Route::get('/scan', [App\Http\Controllers\HomeController::class, 'connect_wa']);
 Route::get('/account/{id?}', [App\Http\Controllers\HomeController::class, 'accounts']);
 Route::get('/orders', [App\Http\Controllers\HomeController::class, 'order_list']);
 Route::post('order-confirm-payment',[App\Http\Controllers\OrderController::class, 'confirm_payment_order']);
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_user_profile');
 Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api']);
 Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'save_branding']);
+
+/* DEVICES */
+Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
+Route::get('/reg-device', [App\Http\Controllers\DeviceController::class, 'register_device']);
 
 /* EVENTS */
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);

@@ -1055,11 +1055,6 @@ class HomeController extends Controller
         return response()->json($data);
     }
 
-    public function connect_wa()
-    {
-        return view('connect');
-    }
-
     public static function generate_event_link()
     {
         $link = self::generate_random();

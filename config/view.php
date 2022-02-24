@@ -36,4 +36,6 @@ return [
     'bank_owner'=>'Sugiarto Lasjim',
     'email_admin'=>env('ADMIN_EMAIL'),
     'no_rek'=>env('NO_REK'),
+    'WAMATE_EMAIL'=>'local',
+    'WAMATE_URL'=>'localhost:3333'   
 ];

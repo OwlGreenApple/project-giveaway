@@ -26,7 +26,10 @@ class User extends Authenticatable
         'membership',
         'end_membership',
         'myreferral',
-        'referral_code'
+        'referral_code',
+        'email_wamate',
+        'token',
+        'refresh_token'
     ];
 
     /**
