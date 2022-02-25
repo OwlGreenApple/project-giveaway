@@ -7,13 +7,13 @@ class Custom
     public function get_price()
     {
         $price = [
-            ['package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0],
+            ['package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>0],
             ['package'=>'starter','price'=>100000,'terms'=>1,'contestants'=>1000,'campaign'=>2,'wa'=>100],
-            ['package'=>'starter-yearly','price'=>1200000,'terms'=>12,'contestants'=>1000,'campaign'=>2,'discount'=>100000],
+            ['package'=>'starter-yearly','price'=>1200000,'terms'=>12,'contestants'=>1000,'campaign'=>2,'wa'=>100,'discount'=>100000],
             ['package'=>'gold','price'=>250000,'terms'=>1,'contestants'=>2500,'campaign'=>3,'wa'=>200],
-            ['package'=>'gold-yearly','price'=>2400000,'terms'=>12,'contestants'=>2500,'campaign'=>3,'discount'=>200000],
+            ['package'=>'gold-yearly','price'=>2400000,'terms'=>12,'contestants'=>2500,'campaign'=>3,'wa'=>200,'discount'=>200000],
             ['package'=>'platinum','price'=>350000,'terms'=>1,'contestants'=>5000,'campaign'=>5,'wa'=>300],
-            ['package'=>'platinum-yearly','price'=>3600000,'terms'=>12,'contestants'=>5000,'campaign'=>5,'discount'=>300000]
+            ['package'=>'platinum-yearly','price'=>3600000,'terms'=>12,'contestants'=>5000,'campaign'=>5,'wa'=>300,'discount'=>300000]
         ];
 
         return $price;

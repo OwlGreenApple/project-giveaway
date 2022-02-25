@@ -15,8 +15,10 @@ class AddEmailWamateTokenRefreshToken extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('email_wamate')->nullable()->after('mailchimp_api');
-            $table->string('token')->nullable()->after('email_wamate');
+            $table->BigInteger('wamate_id')->default(0)->after('email_wamate');
+            $table->string('token')->nullable()->after('wamate_id');
             $table->string('refresh_token')->nullable()->after('token');
+            $table->Integer('counter')->default(0)->after('refresh_token');
         });
     }
 

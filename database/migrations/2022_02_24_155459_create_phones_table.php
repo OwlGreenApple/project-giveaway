@@ -17,10 +17,9 @@ class CreatePhonesTable extends Migration
             $table->id();
             $table->BigInteger('user_id');
             $table->String('number');
-            $table->Integer('counter')->default(0);
             $table->string('ip_server');
             $table->string('device_key');
-            $table->BigInteger('wamate_id');
+            $table->BigInteger('device_id');
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

@@ -28,8 +28,10 @@ class User extends Authenticatable
         'myreferral',
         'referral_code',
         'email_wamate',
+        'wamate_id',
         'token',
-        'refresh_token'
+        'refresh_token',
+        'counter'
     ];
 
     /**

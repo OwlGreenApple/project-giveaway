@@ -62,7 +62,8 @@ Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'sa
 
 /* DEVICES */
 Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
-Route::get('/reg-device', [App\Http\Controllers\DeviceController::class, 'register_device']);
+Route::post('/connect', [App\Http\Controllers\DeviceController::class, 'connect']);
+Route::get('/device', [App\Http\Controllers\DeviceController::class, 'login_device']);
 
 /* EVENTS */
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);
