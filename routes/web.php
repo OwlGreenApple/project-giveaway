@@ -63,7 +63,10 @@ Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'sa
 /* DEVICES */
 Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
 Route::post('/connect', [App\Http\Controllers\DeviceController::class, 'connect']);
-Route::get('/device', [App\Http\Controllers\DeviceController::class, 'login_device']);
+Route::get('/pair', [App\Http\Controllers\DeviceController::class, 'scan_device']);
+Route::get('/device', [App\Http\Controllers\DeviceController::class, 'get_phone_status']);
+Route::post('/message', [App\Http\Controllers\DeviceController::class, 'send_message']);
+Route::post('/media', [App\Http\Controllers\DeviceController::class, 'send_media']);
 
 /* EVENTS */
 Route::get('/create', [App\Http\Controllers\HomeController::class, 'create_giveaway']);

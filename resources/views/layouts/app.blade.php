@@ -154,8 +154,8 @@
         </div>
     </div>
 
-    @if(Request::segment(1) == 'scan')
+    <!-- if(Request::segment(1) == 'scan')
         <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
-    @endif
+    endif -->
     </body>
 </html>

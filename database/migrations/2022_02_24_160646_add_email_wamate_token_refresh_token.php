@@ -19,6 +19,7 @@ class AddEmailWamateTokenRefreshToken extends Migration
             $table->string('token')->nullable()->after('wamate_id');
             $table->string('refresh_token')->nullable()->after('token');
             $table->Integer('counter')->default(0)->after('refresh_token');
+            $table->string('date_counter')->nullable()->after('counter');
         });
     }
 
