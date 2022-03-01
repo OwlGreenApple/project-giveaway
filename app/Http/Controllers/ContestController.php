@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Contestants;
 use App\Models\Entries;
 use App\Models\Bonus;
+use App\Models\Messages;
 use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
@@ -163,6 +164,14 @@ class ContestController extends Controller
     
                 $api->add_mailchimp($dta);
             }
+
+            // SET AUTO REPLY WA MESSAGE
+            // $ph = Phone::where('user_id',$ev->user_id)->first();
+
+            // $wa_msg = new Messages;
+            // $wa_msg->user_id = $ev->user_id;
+            // $wa_msg->sender = $ph->number;
+            // $wa_msg->receiver = $phone;
         }
         else
         {
@@ -196,6 +205,20 @@ class ContestController extends Controller
         }
 
         return response()->json($res);
+    }
+
+    public function confirmation($cid)
+    {
+        $contestant = Contestants::find($cid);
+
+        if(is_null($contestant))
+        {
+            return view('error404');
+        }
+        
+        $contestant->confirmed = 1;
+        $contestant->save();
+        return view('confirmation');
     }
 
     public function task()

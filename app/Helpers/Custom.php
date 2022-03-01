@@ -7,7 +7,7 @@ class Custom
     public function get_price()
     {
         $price = [
-            ['package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>0],
+            ['package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>50],
             ['package'=>'starter','price'=>100000,'terms'=>1,'contestants'=>1000,'campaign'=>2,'wa'=>100],
             ['package'=>'starter-yearly','price'=>1200000,'terms'=>12,'contestants'=>1000,'campaign'=>2,'wa'=>100,'discount'=>100000],
             ['package'=>'gold','price'=>250000,'terms'=>1,'contestants'=>2500,'campaign'=>3,'wa'=>200],

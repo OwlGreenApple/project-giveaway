@@ -24,7 +24,7 @@ class DeviceController extends Controller
     public function connect_wa()
     {
         $phone = Phone::where('user_id',Auth::id())->first();
-        return view('connect',['phone'=>$phone]);
+        return view('connect',['phone'=>$phone,'ct'=>new Custom]);
     }
 
     // SEND TEXT MESSAGE
@@ -38,7 +38,9 @@ class DeviceController extends Controller
 
         $phone = Phone::where('user_id',Auth::id())->first();
         $data_api = json_encode($data);
-        $url = $phone->ip_server."/messages/send-text";
+        $user = User::find($req->user_id);
+        $url = $user->ip_server."/messages/send-text";
+        
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -61,18 +63,15 @@ class DeviceController extends Controller
         }
 
         curl_close($ch);
-
-        $res = json_decode($result,true);
-        return $res;
+        return $result;
     }
 
     // SEND MEDIA IMAGE
     public function send_media(Request $req)
     {
+        // 'https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png'
         $data = [
             "to"=> $req->number,
-            // "message"=> 'image message',
-            // "media_url"=> 'https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png',
             "message"=> $req->message,
             "media_url"=> $req->media,
             "type"=> 'image',
@@ -81,7 +80,8 @@ class DeviceController extends Controller
 
         $phone = Phone::where('user_id',Auth::id())->first();
         $data_api = json_encode($data);
-        $url = $phone->ip_server."/messages/send-media";
+        $user = User::find($req->user_id);
+        $url = $user->ip_server."/messages/send-media";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -104,9 +104,7 @@ class DeviceController extends Controller
         }
 
         curl_close($ch);
-
-        $res = json_decode($result,true);
-        return $res;
+        return $result;
     }
 
     //CONNECT DEVICE
@@ -134,11 +132,12 @@ class DeviceController extends Controller
         $user->token = $login['token'];
         $user->refresh_token = $login['refreshToken'];
 
-        if($user->counter < 1)
+        //TO PROTECT REFILL COUNTER DAILY MESSAGE IF USER LOGOUT THEN LOGIN
+        if($user->counter_send_message_daily < 1)
         {
             if(Carbon::parse($user->date_counter)->lt(Carbon::now()->toDateString()) || $user->date_counter == null)
             {
-                $user->counter = $ct->check_type($user->membership)['wa'];
+                $user->counter_send_message_daily = $ct->check_type($user->membership)['wa'];
                 $user->date_counter = Carbon::now()->toDateString();
             }
         }
@@ -170,7 +169,7 @@ class DeviceController extends Controller
 
         $token = Auth::user()->token;
         $data_api = json_encode($data);
-        $url = Config::get('view.WAMATE_URL')."/devices";
+        $url =  Auth::user()->ip_server."/devices";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -200,7 +199,6 @@ class DeviceController extends Controller
         $device = new Phone;
         $device->user_id = Auth::id();
         $device->number = "0";
-        $device->ip_server = Config::get('view.WAMATE_URL');
         $device->device_key = $res['device_key'];
         $device->device_id = $res['id'];
 
@@ -222,7 +220,7 @@ class DeviceController extends Controller
         $phone = Phone::where('user_id',Auth::id())->first();
         $token = Auth::user()->token;
         $device_id = $phone->device_id;
-        $url = $phone->ip_server."/devices/".$device_id."/pair";
+        $url = Auth::user()->ip_server."/devices/".$device_id."/pair";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -252,10 +250,21 @@ class DeviceController extends Controller
     // CHECK AND CHANGE PHONE STATUS AND ALSO CAN DELETE DEVICE
     public function get_phone_status(Request $req)
     {
-        $token = Auth::user()->token;
-        $phone = Phone::where('user_id',Auth::id())->first();
+        if($req->cron == null)
+        {
+            $token = Auth::user()->token;
+            $user_id = Auth::id();
+        }
+        else
+        {
+            $token = User::find($req->user_id)->token;
+            $user_id = $req->user_id;
+        }
+
+        $phone = Phone::where('user_id',$user_id)->first();
         $device_id = $phone->device_id;
-        $url = $phone->ip_server."/devices/".$device_id;
+        $user = User::find($user_id);
+        $url = $user->ip_server."/devices/".$device_id;
 
         if($req->del == null)
         {
@@ -324,7 +333,7 @@ class DeviceController extends Controller
         ];
 
         $data_api = json_encode($data);
-        $url = Config::get('view.WAMATE_URL')."/auth/login";
+        $url =  Auth::user()->ip_server."/auth/login";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -384,6 +393,18 @@ class DeviceController extends Controller
         curl_close($ch);
 
         $response = json_decode($result,true);
+
+        try{
+            $user = User::find(Auth::id());
+            $user->ip_server = Config::get('view.WAMATE_URL');
+            $user->save();
+        }
+        catch(QueryException $e)
+        {
+            // echo $e->getMessage();
+            return 'err_reg_db';
+        }
+
         return $response;
     }
 

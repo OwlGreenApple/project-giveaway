@@ -9,6 +9,7 @@ use App\Models\Broadcast;
 use App\Models\BroadcastContestant;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
+use App\Helpers\Custom;
 
 class ResetCounterSendMessage extends Command
 {
@@ -44,9 +45,14 @@ class ResetCounterSendMessage extends Command
     public function handle()
     {
         $users = User::all();
-        foreach($users as $user) {
-            $user->counter_send_message_daily = 500;
-            $user->save();
-        }
+        $ct = new Custom;
+
+        if($users->count() > 0):
+            foreach($users as $user) 
+            {
+                $user->counter_send_message_daily = $ct->check_type($user->membership)['wa'];
+                $user->save();
+            }
+        endif;
     }
 }

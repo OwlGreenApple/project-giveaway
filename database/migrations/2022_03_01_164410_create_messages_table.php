@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePhonesTable extends Migration
+class CreateMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreatePhonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('phones', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->BigInteger('user_id');
-            $table->String('number');
-            $table->string('device_key');
-            $table->BigInteger('device_id');
+            $table->string('sender',50);
+            $table->string('receiver',50);
+            $table->text('message');
+            $table->string('img_url')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
@@ -31,6 +32,6 @@ class CreatePhonesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('phones');
+        Schema::dropIfExists('messages');
     }
 }

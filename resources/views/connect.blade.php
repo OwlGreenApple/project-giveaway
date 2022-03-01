@@ -41,17 +41,67 @@
                     </div>
                 </div>
             </form>
+
+            @if(!is_null($phone))
+            <!-- TEST SEND MESSAGE -->
+            <div class="container mt-4 card p-3">
+                <form id="test_message">
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label>Number:<span class="text-danger">*</span></label>
+                            <input name="number" type="text" class="form-control form-control-lg" />
+                            <span class="text-danger err_prize_name"><!-- --></span>
+                        </div> 
+                        <div class="form-group">
+                            <label>Message:<span class="text-danger">*</span></label>
+                            <div class="input-group input-group-lg">
+                                <textarea name="message" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Image:</label>
+                            <div class="input-group input-group-lg">
+                                <input value="off" type="checkbox" class="form-check" name="media" />
+                            </div>
+                        </div>
+                        <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
+                    </div>
+                    <button type="submit" class="btn btn-info text-white">TEST</button>
+                </form>
+            </div>
+            <!-- END TEST SEND -->
+            @endif
+
         <!-- end col -->
         </div>
     </div>
 </div>
+
+
 
 <script type="text/javascript">
     $(document).ready(function(){
         connect();
         scan();
         delete_device();
+        test_message();
+        checkbox();
     });
+
+    function checkbox(){
+        $("input[name='media']").click(function(){
+            var val = $(this).val();
+
+            if(val == 'off')
+            {
+                $(this).val('https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png');
+            }
+            else
+            {
+                $(this).val('off');
+            }
+        });
+    }
 
     var tm;
     function waitingTime()
@@ -204,8 +254,6 @@
         }
 
         $.ajax({
-            // headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            // method : 'POST',
             method : 'GET',
             url : '{{ url("device") }}',
             data : {'del':data},
@@ -231,6 +279,52 @@
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
             }
+        });
+    }
+
+    function test_message()
+    {
+        $("#test_message").submit(function(e){
+            e.preventDefault();
+            var data = $(this).serialize();
+            var ipt = $("input[name='media']").val();
+            var url;
+
+            if(ipt == 'off')
+            {
+                url = '{{ url("message") }}';
+            }
+            else
+            {
+                url = '{{ url("media") }}';
+            }
+
+            $.ajax({
+                headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method : 'POST',
+                url : url,
+                data : data,
+                dataType : 'json',
+                beforeSend : function()
+                {
+                    $('#loader').show();
+                    $('.div-loading').addClass('background-load');
+                },
+                success : function(result)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    if(result.status == 'PENDING')
+                    {
+                        alert('Message sent!');
+                    }
+                },
+                error: function(xhr){
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
         });
     }
 </script>

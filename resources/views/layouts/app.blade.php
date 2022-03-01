@@ -56,7 +56,7 @@
     <div id="app">
         @php 
             $x = false; 
-            if(Request::segment(1) == 'login' || Request::segment(1) == 'register' || Request::segment(1) == 'c'|| Request::segment(1) == 'contest' || Request::segment(1) == 'summary' || Request::segment(1) == 'checkout') 
+            if(Request::segment(1) == 'login' || Request::segment(1) == 'register' || Request::segment(1) == 'c'|| Request::segment(1) == 'contest' || Request::segment(1) == 'summary' || Request::segment(1) == 'checkout' || Request::segment(1) == 'confirmation') 
             {
                 $x = true; 
             }
