@@ -38,6 +38,7 @@ return [
     'no_data'=>'No Data',
     'number'=>'Your Phone Number',
     'offered'=>'Offered By',
+    'pck'=>'Package',
     'per'=>'Per referral',
     'prize'=>'Prize',
     'profile_password'=>'Leave empty unless you want to change password',

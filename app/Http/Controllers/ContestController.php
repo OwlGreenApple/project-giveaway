@@ -14,6 +14,7 @@ use App\Models\Contestants;
 use App\Models\Entries;
 use App\Models\Bonus;
 use App\Models\Messages;
+use App\Models\Phone;
 use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
@@ -166,12 +167,18 @@ class ContestController extends Controller
             }
 
             // SET AUTO REPLY WA MESSAGE
-            // $ph = Phone::where('user_id',$ev->user_id)->first();
+            $ph = Phone::where('user_id',$ev->user_id)->first();
 
-            // $wa_msg = new Messages;
-            // $wa_msg->user_id = $ev->user_id;
-            // $wa_msg->sender = $ph->number;
-            // $wa_msg->receiver = $phone;
+            if(!is_null($ph))
+            {
+                $wa_msg = new Messages;
+                $wa_msg->user_id = $ev->user_id;
+                $wa_msg->sender = $ph->number;
+                $wa_msg->receiver = $phone;
+                $wa_msg->message = $ev->user_id;
+                $wa_msg->img_url = $ev->img_url;
+                $wa_msg->save();
+            }
         }
         else
         {
@@ -209,6 +216,7 @@ class ContestController extends Controller
 
     public function confirmation($cid)
     {
+        $cid = hex2bin($cid);
         $contestant = Contestants::find($cid);
 
         if(is_null($contestant))
@@ -270,7 +278,7 @@ class ContestController extends Controller
         $id = strip_tags($request->ct_id);
         $ev_id = strip_tags($request->ev_id);
 
-        $ev = Events::find($ev_id)->first();
+        $ev = Events::find($ev_id);
         $bonus = Bonus::where('event_id',$ev_id)->get();
 
         $data = [

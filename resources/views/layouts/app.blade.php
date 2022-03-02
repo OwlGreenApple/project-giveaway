@@ -46,6 +46,15 @@
     <script defer type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('assets/DataTables/Responsive/js/dataTables.responsive.min.js') }}"></script>
 
+    <!-- Emoji -->
+    <link href="{{ asset('/assets/emoji/css/emojionearea.min.css') }}" rel="stylesheet"> 
+    <script type="text/javascript" src="{{ asset('/assets/emoji/js/prettify.js') }}"></script>
+    @if (env('APP_ENV')=='local')
+    <script type="text/javascript" src="{{ asset('/assets/emoji/js/emojionearea.js') }}"></script>
+    @else
+    <script type="text/javascript" src="{{ asset('/assets/emoji/js/emojionearea-production.js') }}"></script>
+    @endif
+
 </head>
 <body>
     <!--Loading Bar-->

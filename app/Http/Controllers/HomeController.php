@@ -224,8 +224,20 @@ class HomeController extends Controller
         try
         {
             $banners = Banners::where('event_id',$ev_id)->select('id')->get()->toArray();
-            self::delete_banner(null,null,$banners);
 
+             // DELETE ENTIRE BANNER
+            if(count($banners) > 0)
+            {
+                self::delete_banner(null,null,$banners);
+            }
+
+            // DELETE WA MESSAGE
+            if($ev_check->img_url !== null)
+            {
+                Storage::disk('s3')->delete($ev_check->img_url);
+            }
+           
+             // DELETE CORRELATED DATA
             Bonus::where('event_id',$ev_id)->delete();
             Contestants::where('event_id',$ev_id)->delete();
             Entries::where('event_id',$ev_id)->delete();
@@ -372,7 +384,8 @@ class HomeController extends Controller
 
     public function edit_event($id)
     {
-        $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.user_id')->first();
+        $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.user_id')
+                ->select('events.*','users.id AS user_id')->first();
         
         if(is_null($event))
         {
@@ -440,12 +453,14 @@ class HomeController extends Controller
         $youtube_url = strip_tags($request->youtube_url);
         $desc = $request->desc;
         $images = $request->file('images');
+        $message = strip_tags($request->message);
+
         $act_api_id = strip_tags($request->act_api_id);
         $mlc_api_id = strip_tags($request->mlc_api_id);
         ($act_api_id == null? $act_api_id = 0:false);
         ($mlc_api_id == null? $mlc_api_id = 0:false);
       
-        $mo = self::determine_share($request->media_option);
+        ($request->media_option == 'off')?$mo = 1:$mo = 0;
         $unl = self::determine_share($request->unl_cam);
         $tw = self::determine_share($request->tw);
         $fb = self::determine_share($request->fb);
@@ -462,8 +477,7 @@ class HomeController extends Controller
         else
         {
             $edit = true;
-            $ev = Events::where([['events.id',$request->edit],['users.id',Auth::id()]])
-                ->join('users','users.id','=','events.user_id')->first();
+            $ev = Events::where([['id',$request->edit],['user_id',Auth::id()]])->first();
 
             if(is_null($ev))
             {
@@ -491,6 +505,7 @@ class HomeController extends Controller
         $ev->ln = $ln;
         $ev->mail = $mail;
         $ev->timezone = $timezone;
+        $ev->message = $message;
         $ev->act_api_id = $act_api_id;
         $ev->mlc_api_id = $mlc_api_id;
 
@@ -517,6 +532,12 @@ class HomeController extends Controller
         if($request->duplicate == 1)
         {
             return $event_id;
+        }
+
+        /* IMAGE WA */
+        if($request->hasFile('media'))
+        {
+            self::save_wa_image($request,$event_id);
         }
 
         /** BANNER IMAGES **/ 
@@ -637,6 +658,23 @@ class HomeController extends Controller
         {
             return 0;
         }
+    }
+
+    // SAVE WA IMAGE MESSAGE
+    private static function save_wa_image($request,$event_id)
+    {
+        $newfile = env('FOLDER_PATH').'/wa/'.Date('Y-m-d-h-i-s-').".jpg";
+        Storage::disk('s3')->put($newfile,file_get_contents($request->file('media')), 'public');
+
+        $ev = Events::find($event_id);
+
+        if($ev->img_url !== null)
+        {
+            Storage::disk('s3')->delete($ev->img_url);
+        }
+
+        $ev->img_url = $newfile;
+        $ev->save();
     }
 
     // SAVE IMAGE BANNER ON EVENTS

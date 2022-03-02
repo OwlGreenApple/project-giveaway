@@ -40,7 +40,7 @@ class DeviceController extends Controller
         $data_api = json_encode($data);
         $user = User::find($req->user_id);
         $url = $user->ip_server."/messages/send-text";
-        
+
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -57,7 +57,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }
@@ -98,7 +98,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }
@@ -112,7 +112,7 @@ class DeviceController extends Controller
     {
         $user = User::find(Auth::id());
         $ct = new Custom;
-       
+
         // REGISTER DEVICE
         if($user->email_wamate == null)
         {
@@ -126,7 +126,7 @@ class DeviceController extends Controller
             $wamate_email = $user->email_wamate;
             $newreg = false;
         }
-        
+
         // LOGIN DEVICE
         $login = $this->login_device($wamate_email);
         $user->token = $login['token'];
@@ -186,7 +186,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }
@@ -236,7 +236,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }
@@ -289,7 +289,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }
@@ -349,7 +349,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }
@@ -385,7 +385,7 @@ class DeviceController extends Controller
         ));
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) 
+        if (curl_errno($ch) != 0 && empty($result))
         {
             return false;
         }

@@ -138,7 +138,7 @@
 
                         <div class="upload_banner form-group">
                             <label>Youtube URL:</label>
-                            <input name="youtube_url" value="@if(isset($event) && $event->media == 1) {{ $event->youtube_banner }} @endif" type="text" class="form-control form-control-lg" />
+                            <input name="youtube_url" value="@if(isset($event)) {{ $event->youtube_banner }} @endif" type="text" class="form-control form-control-lg" />
                             <small>{{Lang::get('custom.youtube_banner')}} : <span class="main-color">https://www.youtube.com/embed/xxxx</span></small>
                             <span class="text-danger err_youtube_url"><!-- --></span>
                         </div>
@@ -279,6 +279,25 @@
                 <!-- form 5 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
+                        <h3 class="main-color main-theme">WA Message</h3>
+                        <div class="mb-3">
+                            <div class="form-group mb-3">
+                                <label>Message:<span class="text-danger">*</span></label>
+                                <textarea name="message" id="divInput-description-post" class="form-control"></textarea>
+                                <span class="text-danger err_message"><!-- --></span>
+                            </div> 
+                            <div class="form-group">
+                                <label>Image Message</label>
+                                <input type="file" class="form-control form-control-lg" name="media" />
+                                <span class="text-danger err_media"><!-- --></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- form 6 -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
                         <h3 class="main-theme title">EU GDPR consent checkbox</h3>
                         <p class="fcs italic title">Are you planning to send your entrants marketing messages after the giveaway? Are any of your contestants located in the EU? If yes, or you’re not sure, enable the checkbox option below so your contestants can give clear consent as required by EU GDPR.</p>
                         <input type="checkbox" class="form-checkbox me-1" />&nbsp;<span class="title">GDPR Consent</span>
@@ -303,6 +322,7 @@
 <script>
 $(function() {
     editor();
+    emoji();
     datetimepicker();
     count_logic();
     save_data();
@@ -316,6 +336,16 @@ $(function() {
 });
 
 var err_bonus = '';
+
+function emoji()
+{
+    $("#divInput-description-post").emojioneArea({
+        pickerPosition: "right",
+        mainPathFolder : "{{url('')}}",
+    });
+
+    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('@if(isset($event)){{ $event->message }}@endif');
+}
 
 function select_timezone()
 {
@@ -630,6 +660,8 @@ function save_data()
                     $(".err_"+result[10][1]).html(result[10][0]);
                     $(".err_"+result[11][1]).html(result[11][0]);
                     $(".err_"+result[12][1]).html(result[12][0]);
+                    $(".err_"+result[13][1]).html(result[13][0]);
+                    $(".err_"+result[14][1]).html(result[14][0]);
 
                     err_bonus =''; //to clear error message
 
@@ -702,7 +734,7 @@ function datetimepicker()
     var date_2 = $('.datetimepicker_2').val();
     var date_3 = $('.datetimepicker_3').val();
 
-    (date_1.length == 0)?date = ndate : date = moment(date_1);
+    (date_1.length == 0)?date =  ndate : date = moment(date_1);
     (date_2.length == 0)?tdate = ndate.setDate(date.getDate() + 2) : tdate = moment(date_2);
     (date_3.length == 0)?adate = ndate : adate = moment(date_3);
     
@@ -711,7 +743,7 @@ function datetimepicker()
 
     $('.datetimepicker_1').datetimepicker({
         format : format_date,
-        minDate : new Date()
+        minDate : date
     });
     
     $('.datetimepicker_2').on('focusin', function(e){ 

@@ -64,7 +64,7 @@ class CheckEvents
     {
         $ev = self::total_events(Auth::user()->membership);
 
-        if(count($ev) > 0)
+        if(count($ev) > 0 && $request->edit == null)
         {
             return response()->json($ev);
         }
@@ -81,6 +81,8 @@ class CheckEvents
             'prize_name'=>['required','max:100'],
             'prize_amount'=>['required',new CheckNumber(null)],
             'desc'=>[new CheckDescription],
+            'message'=>['required','max:65000'],
+            'media'=>['mimes:jpeg,jpg,png|required|max:5000'],
         ];
 
         if($request->media_option !== null)
@@ -114,6 +116,8 @@ class CheckEvents
                 10=>[$err->first('images'),'images'],
                 11=>[$err->first('youtube_url'),'youtube_url'],
                 12=>[$err->first('desc'),'desc'],
+                13=>[$err->first('message'),'message'],
+                14=>[$err->first('media'),'media'],
             ];
 
             // return response()->json($errors);

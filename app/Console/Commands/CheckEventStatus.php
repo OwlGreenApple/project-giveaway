@@ -46,9 +46,10 @@ class CheckEventStatus extends Command
         if($ev->count() > 0)
         {
             foreach($ev as $row):
-                // if($row->unlimited == 1):
+                if($row->unlimited == 1):
+                    continue;
+                endif;
 
-                // endif;
                 if(Carbon::now($row->timezone)->gte(Carbon::parse($row->end)->toDateTimeString()))
                 {
                     $data[] = $row->id;
