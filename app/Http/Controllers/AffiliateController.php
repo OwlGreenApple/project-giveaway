@@ -30,12 +30,9 @@ class AffiliateController extends Controller
     public function create_affiliate()
     {
         $user = Auth::user();
-        $helper = new Custom;
-        $events = Events::where('user_id',$user->id)
-                    ->get();
+
         return view('affiliate.create-affiliate',[
-            'helper'=>$helper,
-            'events'=>$events,
+            'referral_code'=>$user->referral_code,
         ]);
     }
 
@@ -55,7 +52,7 @@ class AffiliateController extends Controller
         return response()->json([
             "success"=>1,
             "message"=>"success",
-            "referral_code"=>$referral_code,
+            "referral_link"=>url('').'/'.$referral_code,
         ]);
     }
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -66,7 +67,7 @@ class RegisterController extends Controller
           'password' => Hash::make($generated_password),
           'membership'=>$membership,
           'end_membership'=>$end_membership,
-          'myreferral'=>0
+          'myreferral'=>strip_tags($data['myreferral']),
         ];
 
         // PREMIUM MEMBERSHIP
@@ -125,6 +126,14 @@ class RegisterController extends Controller
     public function register(Request $request)
     {   
         $req = $request->all();
+
+        //read cookie referral code 
+        $referral_code = $request->cookie('referral_code');
+        $user_referral = User::where('referral_code',$referral_code)->first();
+        if (!is_null($user_referral)) {
+          $req['myreferral'] = $user_referral->id;
+        }
+
         if($request->ajax() == true)
         {
           return $this->ajax_validator($req,$request);
@@ -152,10 +161,15 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function price_page()
+    public function price_page($referral_code=null)
     {
+      $minutes = 60*24*7; // 7 days
+      $response = new Response('Set Cookie');
+      $response->withCookie(cookie('referral_code', $referral_code, $minutes));
+      // return $response;
       return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
     }
+
 
      // SEND PASSWORD TO FORGOT EMAIL
     public function reset(Request $request)
