@@ -34,13 +34,14 @@ Route::get('thankyou', [App\Http\Controllers\OrderController::class, 'thankyou']
 Route::get('checkout/{id?}', [App\Http\Controllers\OrderController::class, 'index']);
 Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])->middleware('check_order');
 Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
-Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'loginAjax']);// user 
+Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'loginAjax']);// user
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
+Route::get('/packages', [App\Http\Controllers\HomeController::class, 'upgrade_package']);
 Route::post('/contact-admin', [App\Http\Controllers\HomeController::class, 'save_contact']);
 
 // Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);

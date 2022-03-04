@@ -27,17 +27,17 @@
 
     <!-- Intl Dialing Code -->
     <link href="{{ asset('assets/intl-tel-input/css/intlTelInput.min.css') }}" rel="stylesheet" />
-    <script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/intlTelInput.js') }}"></script>
 
     <!-- Datetimepicker -->
     <link href="{{ asset('/assets/datetimepicker/jquery.datetimepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
     <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/moment.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('/assets/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
 
     <!-- Image Uploader -->
     <link href="{{ asset('assets/image-uploader/dist/image-uploader.min.css') }}" rel="stylesheet" />
-    <script type="text/javascript" src="{{ asset('assets/image-uploader/dist/image-uploader.min.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('assets/image-uploader/dist/image-uploader.min.js') }}"></script>
 
     <!-- Data Table -->
     <link href="{{ asset('assets/DataTables/datatables.min.css') }}" rel="stylesheet">
@@ -47,7 +47,7 @@
     <script defer type="text/javascript" src="{{ asset('assets/DataTables/Responsive/js/dataTables.responsive.min.js') }}"></script>
 
     <!-- Emoji -->
-    <link href="{{ asset('/assets/emoji/css/emojionearea.min.css') }}" rel="stylesheet"> 
+    <link href="{{ asset('/assets/emoji/css/emojionearea.min.css') }}" rel="stylesheet">
     <script type="text/javascript" src="{{ asset('/assets/emoji/js/prettify.js') }}"></script>
     @if (env('APP_ENV')=='local')
     <script type="text/javascript" src="{{ asset('/assets/emoji/js/emojionearea.js') }}"></script>
@@ -59,18 +59,18 @@
 <body>
     <!--Loading Bar-->
     <div class="div-loading">
-      <div id="loader" style="display: none;"></div>  
-    </div> 
+      <div id="loader" style="display: none;"></div>
+    </div>
 
     <div id="app">
-        @php 
-            $x = false; 
-            if(Request::segment(1) == 'login' || Request::segment(1) == 'register' || Request::segment(1) == 'c'|| Request::segment(1) == 'contest' || Request::segment(1) == 'summary' || Request::segment(1) == 'checkout' || Request::segment(1) == 'confirmation') 
+        @php
+            $x = false;
+            if(Request::segment(1) == 'login' || Request::segment(1) == 'register' || Request::segment(1) == 'c'|| Request::segment(1) == 'contest' || Request::segment(1) == 'summary' || Request::segment(1) == 'checkout' || Request::segment(1) == 'confirmation')
             {
-                $x = true; 
+                $x = true;
             }
         @endphp
-       
+
         @if($x == false)
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -128,6 +128,9 @@
                                         <a class="dropdown-item" href="{{ url('list-user') }}">List User</a>
                                         <a class="dropdown-item" href="{{ url('list-order') }}">List Order</a>
                                     @endif
+                                    <a class="dropdown-item" href="{{ url('packages') }}">
+                                        {{ __('Upgrade Package') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

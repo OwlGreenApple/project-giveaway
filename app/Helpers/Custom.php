@@ -38,13 +38,13 @@ class Custom
         else
         {
             return false;
-        } 
+        }
     }
 
     public static function currency()
     {
         return ['usd'=>'USD','idr'=>'IDR'];
-    } 
+    }
 
     public static function lang()
     {
@@ -92,7 +92,7 @@ class Custom
             "Asia/Anadyr"=>"(UTC +12) Anadyr"
         ];
         return $timezone;
-    } 
+    }
 
     //TO GIVE CIRCLE MARK IF CONTESTANT HAD DONE WITH BONUS ENTRIES
     public static function get_marks($bonus_id,$event_id,$type,$contestant_id)
@@ -128,8 +128,24 @@ class Custom
         {
             $prize = 3;
         }
-            
+
         return $prize;
+    }
+
+    public static function sponsor($html = null)
+    {
+        $msg = '';
+
+        if($html == null)
+        {
+            $msg .= "\n\n".'Powered by loyaleads.com';
+        }
+        else
+        {
+            $msg .= 'Powered by <a href="https://loyaleads.com">loyaleads.com</a>';
+        }
+
+        return $msg;
     }
 
 /* end of class */

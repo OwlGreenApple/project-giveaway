@@ -41,19 +41,24 @@ class CheckDeviceStatus extends Command
     public function handle()
     {
         $ph = Phone::all();
-        $device = new Device;
 
         if($ph->count() > 0)
         {
             foreach($ph as $row):
-                $data = [
-                    'cron'=>true,
-                    'user_id'=>$row->user_id
-                ];
-
-                $req = new Request($data);
-                $device->get_phone_status($req);
+                $this->check_device($row);
             endforeach;
         }
+    }
+
+    public function check_device($row)
+    {
+        $device = new Device;
+        $data = [
+            'cron'=>true,
+            'user_id'=>$row->user_id
+        ];
+
+        $req = new Request($data);
+        $device->get_phone_status($req);
     }
 }

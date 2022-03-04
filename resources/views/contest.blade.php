@@ -4,7 +4,7 @@
 <div class="container">
     <div class="col-md-9 px-0 wrapper">
             <!-- youtube or banner carousel -->
-            
+
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                 @if($event->media == 0)
                 <div class="carousel-indicators">
@@ -100,7 +100,7 @@
 
                 <!-- description -->
                 <div class="terms mt-4">{!! $event->desc !!}</div>
-                
+
                 <!-- end container -->
             </div>
             <!-- footer -->
@@ -112,6 +112,10 @@
             <div class="mt-2 pb-3 text-center">
                 @if($branding !== null)
                     <img src="{!! Storage::disk('s3')->url($branding) !!}" width="100" />
+                @endif
+
+                @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
+                    <div class="text-center mt-2">{!! $helpers::sponsor(1) !!}</div>
                 @endif
             </div>
         <!-- end col -->
@@ -139,7 +143,7 @@
             data.push({name : 'link', value : '{{ $link }}'});
             data.push({name : 'ref', value : '{{ $ref }}'});
             save_contestant(data);
-        });   
+        });
     }
 
     function save_contestant(data)
@@ -161,7 +165,7 @@
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
-                    
+
                     $(".err_"+result[0][1]).html(result[0][0]);
                     $(".err_"+result[1][1]).html(result[1][0]);
                     $(".err_"+result[2][1]).html(result[2][0]);

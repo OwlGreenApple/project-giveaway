@@ -106,7 +106,7 @@ class HomeController extends Controller
 
         // if($draw !== null)
         // {
-        //     return 
+        //     return
         // }
 
         try{
@@ -125,7 +125,7 @@ class HomeController extends Controller
     public function winner($ev_id)
     {
         $ev = self::check_security_event($ev_id);
-        
+
         //check event
         if($ev == false)
         {
@@ -142,7 +142,7 @@ class HomeController extends Controller
     {
         $ev_id = strip_tags($request->id);
         $ev = self::check_security_event($ev_id);
-        
+
         //check event
         if($ev == false)
         {
@@ -179,7 +179,7 @@ class HomeController extends Controller
         // duplicate banners
         $this->duplicate_banner($ev->id,$new_ev_id);
 
-        //duplicate bonus 
+        //duplicate bonus
         $bonuses = Bonus::where('event_id',$ev->id)->get();
         if($bonuses->count() > 0)
         {
@@ -200,7 +200,7 @@ class HomeController extends Controller
     {
         $duplicate = array();
         $banners = Banners::where('event_id',$ev_id)->select('url')->get();
-        
+
         if($banners->count() > 0)
         {
             foreach($banners as $row):
@@ -236,7 +236,7 @@ class HomeController extends Controller
             {
                 Storage::disk('s3')->delete($ev_check->img_url);
             }
-           
+
              // DELETE CORRELATED DATA
             Bonus::where('event_id',$ev_id)->delete();
             Contestants::where('event_id',$ev_id)->delete();
@@ -267,7 +267,7 @@ class HomeController extends Controller
         return view('dashboard.contestant',$data);
     }
 
-    // CREATE GIVE AWAY 
+    // CREATE GIVE AWAY
     public function create_giveaway()
     {
         $banners = $bonuses = array();
@@ -282,8 +282,8 @@ class HomeController extends Controller
 
         $data = [
             'data'=>$banners,
-            'preloaded'=>$preloaded, 
-            'bonus'=>$bonuses, 
+            'preloaded'=>$preloaded,
+            'bonus'=>$bonuses,
             'helper'=>$helper,
             'user'=>$user,
             'apicheck'=>$apicheck,
@@ -386,12 +386,12 @@ class HomeController extends Controller
     {
         $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.user_id')
                 ->select('events.*','users.id AS user_id')->first();
-        
+
         if(is_null($event))
         {
             return view('error404');
         }
-        
+
         $helper = new Custom;
         $preloaded = null;
         $data = array();
@@ -399,7 +399,7 @@ class HomeController extends Controller
 
         $bonuses = Bonus::where('event_id',$id)->get()->toArray();
         $bonuses = array_map(array($this,'fix_array'),$bonuses);
-    
+
         if($banners->count() > 0)
         {
             foreach($banners as $row)
@@ -420,8 +420,8 @@ class HomeController extends Controller
         $desc = $event->desc;
         $arr = [
             'data'=>$data,
-            'preloaded'=>$preloaded, 
-            'bonus'=>$bonuses, 
+            'preloaded'=>$preloaded,
+            'bonus'=>$bonuses,
             'event'=>$event,
             'timezone'=>$timezone,
             'editor'=>$desc,
@@ -459,7 +459,7 @@ class HomeController extends Controller
         $mlc_api_id = strip_tags($request->mlc_api_id);
         ($act_api_id == null? $act_api_id = 0:false);
         ($mlc_api_id == null? $mlc_api_id = 0:false);
-      
+
         ($request->media_option == 'off')?$mo = 1:$mo = 0;
         $unl = self::determine_share($request->unl_cam);
         $tw = self::determine_share($request->tw);
@@ -485,7 +485,7 @@ class HomeController extends Controller
                 return response()->json($response);
             }
         }
-        
+
         $ev->title = $title;
         $ev->desc = $desc;
         $ev->start = $start;
@@ -521,7 +521,7 @@ class HomeController extends Controller
             }
 
             $url_link = env('APP_URL')."/c/".$ev->url_link;
-            Cookie::queue(Cookie::make('url',$url_link, 1*1));  
+            Cookie::queue(Cookie::make('url',$url_link, 1*1));
         }
         catch(QueryException $e)
         {
@@ -540,7 +540,7 @@ class HomeController extends Controller
             self::save_wa_image($request,$event_id);
         }
 
-        /** BANNER IMAGES **/ 
+        /** BANNER IMAGES **/
 
         // DELETE BANNER
         $preload = $request->preloaded;
@@ -556,9 +556,9 @@ class HomeController extends Controller
                 self::delete_banner($lists,$preload);
             }
         }
-        
+
         // SAVE BANNER
-        if(isset($images)): 
+        if(isset($images)):
             $this->save_banner_image($request,$event_id);
         endif;
 
@@ -572,7 +572,7 @@ class HomeController extends Controller
 
             if($t_entries !== $t_compare)
             {
-                $this->delete_bonuses($req['entries'],$req['compare']);            
+                $this->delete_bonuses($req['entries'],$req['compare']);
             }
         }
 
@@ -591,7 +591,7 @@ class HomeController extends Controller
             $type= 1;
             $this->call_bonus_entry($mod,$event_id,$type,$req);
         }
-        
+
         // TWITTER FOLLOW
         if(isset($req['new_text_tw']) || isset($req['edit_text_tw']))
         {
@@ -649,7 +649,7 @@ class HomeController extends Controller
         {
             return 0;
         }
-        
+
         if($obj > 0)
         {
             return 1;
@@ -681,7 +681,7 @@ class HomeController extends Controller
     private function save_banner_image($request,$event_id,$duplicate = null)
     {
         /*
-            Banner doesn't use edit because to change image, 
+            Banner doesn't use edit because to change image,
             user should delete and then reupload
         */
 
@@ -693,7 +693,7 @@ class HomeController extends Controller
         {
             $images = $duplicate;
         }
-        
+
         foreach($images as $index=>$file):
             $newfile = env('FOLDER_PATH').'/banner/'.Date('Y-m-d-h-i-s-').$index.".jpg";
             Storage::disk('s3')->put($newfile,file_get_contents($file), 'public');
@@ -716,7 +716,7 @@ class HomeController extends Controller
             $entries = $req['new_entries_'.$mod];
 
             ($type == 5)?$url = array(): $url = $req['new_url_'.$mod];
-           
+
             $this->save_bonus_entry($text,$url,$entries,$event_id,$type,"new");
         }
 
@@ -747,7 +747,7 @@ class HomeController extends Controller
                 'id'=>$index
             ];
         }
-       
+
         return $data;
     }
 
@@ -756,7 +756,7 @@ class HomeController extends Controller
     {
         $merge = array_map(array($this,'mapping_data'),$title, $url, $entries, array_keys($title));
         // dd($merge);
-        
+
         foreach($merge as $key=>$row):
             $row['event_id'] = $event_id;
             $row['type'] = $type;
@@ -781,7 +781,7 @@ class HomeController extends Controller
         {
             $bonus = Bonus::find($data['id']);
         }
-        
+
         $bonus->title = strip_tags($data['title']);
         $bonus->url = strip_tags($data['url']);
         $bonus->type = strip_tags($data['type']);
@@ -980,7 +980,7 @@ class HomeController extends Controller
 
       if($src == null)
       {
-         $orders = Orders::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->skip($start)->limit($length)->get();                
+         $orders = Orders::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->skip($start)->limit($length)->get();
          $total = Orders::count();
       }
       else
@@ -999,11 +999,11 @@ class HomeController extends Controller
         }
 
         $orders = $order->where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
-        $total = Orders::where('user_id',Auth::user()->id)->count(); 
+        $total = Orders::where('user_id',Auth::user()->id)->count();
     }
 
       // dd($orders);
-      
+
       $data['draw'] = $request->draw;
       $data['recordsTotal']=$total;
       $data['recordsFiltered']=$total;
@@ -1054,7 +1054,7 @@ class HomeController extends Controller
           {
             $date_confirm = Carbon::parse($order->date_confirm)->toDateTimeString();
           }
-          
+
           $data['data'][] = [
             0=>$order->no_order,
             1=>$order->package,
@@ -1068,7 +1068,7 @@ class HomeController extends Controller
           ];
         }
       }
-     
+
       echo json_encode($data);
     }
 
@@ -1089,8 +1089,14 @@ class HomeController extends Controller
         {
             $data['err'] = 1;
         }
-        
+
         return response()->json($data);
+    }
+
+    // UPGRADE PACKAGE
+    public function upgrade_package()
+    {
+        return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
     }
 
     public static function generate_event_link()
@@ -1116,7 +1122,7 @@ class HomeController extends Controller
     public static function check_security_event($ev_id)
     {
         $ev = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
-        
+
         //check event
         if(is_null($ev))
         {

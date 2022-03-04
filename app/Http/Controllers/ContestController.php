@@ -47,10 +47,10 @@ class ContestController extends Controller
         if(count($banners) > 0)
         {
             foreach($banners as $row):
-                $images[] = Storage::disk('s3')->url($row->url); 
+                $images[] = Storage::disk('s3')->url($row->url);
             endforeach;
         }
-        
+
         $user = User::find($event->user_id);
         $total_contestant = Contestants::where([['contestants.event_id',$event->id],['events.user_id',$user->id]])
                             ->join('events','events.id','=','contestants.event_id')->get()->count();
@@ -101,7 +101,7 @@ class ContestController extends Controller
             $res['err'] = 2;
             return response()->json($res);
         }
- 
+
         $ref_id = 0;
          // TO PREVENT IF USER ENTER WITH SAME EMAIL OR PHONE
          $check_identity = Contestants::where([['event_id',$ev->id],['wa_number',$phone]])
@@ -150,7 +150,7 @@ class ContestController extends Controller
                     'api_phone'=>$phone,
                     'list_id'=>$act_list_id,
                 ];
-    
+
                 $api->save_to_activrespon_lists($dt);
             }
 
@@ -162,12 +162,13 @@ class ContestController extends Controller
                     'email'=>$email,
                     'list_id'=>$mlc_list_id
                 ];
-    
+
                 $api->add_mailchimp($dta);
             }
 
             // SET AUTO REPLY WA MESSAGE
             $ph = Phone::where('user_id',$ev->user_id)->first();
+            $phone = substr($phone,1); // remove + sign
 
             if(!is_null($ph))
             {
@@ -175,7 +176,7 @@ class ContestController extends Controller
                 $wa_msg->user_id = $ev->user_id;
                 $wa_msg->sender = $ph->number;
                 $wa_msg->receiver = $phone;
-                $wa_msg->message = $ev->user_id;
+                $wa_msg->message = $ev->message;
                 $wa_msg->img_url = $ev->img_url;
                 $wa_msg->save();
             }
@@ -187,7 +188,7 @@ class ContestController extends Controller
             $ct->c_email = $email;
             $ct->wa_number = $phone;
         }
-       
+
         try{
             $ct->save();
             if(is_null($check_identity))
@@ -223,7 +224,7 @@ class ContestController extends Controller
         {
             return view('error404');
         }
-        
+
         $contestant->confirmed = 1;
         $contestant->save();
         return view('confirmation');
@@ -247,7 +248,7 @@ class ContestController extends Controller
 
         $bonus = Bonus::where('event_id',$ev_id)->get();
         $banners = Banners::where('event_id',$ev->id)->select('url')->first();
-        
+
         if(!is_null($banners))
         {
             $banners = $banners->toArray();
@@ -259,14 +260,16 @@ class ContestController extends Controller
         }
 
         $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();
-        
+        $user = User::find($ev->user_id);
+
         $data = [
             'ev'=>$ev,
             'ct_id'=>$id,
             'bonus'=>$bonus,
             'banners'=>$banners,
             'ct'=>$contestants,
-            'helper'=>new Custom,
+            'user'=>$user,
+            'helpers'=>new Custom,
         ];
 
         return view('task',$data);
@@ -311,7 +314,7 @@ class ContestController extends Controller
         else
         {
             $bonus = Bonus::where([['event_id',$event_id],['id',$bonus_id]])->first();
-        
+
             if(is_null($bonus))
             {
                 return response()->json($ret);
@@ -355,13 +358,13 @@ class ContestController extends Controller
         }
         // else
         // {
-        //     // $share_url = 
+        //     // $share_url =
         // }
 
         if($type == 0 || $type == 3 || $type == 4 || $type == 5 || $type == 6)
         {
-            // facebook like // youtube subscribe // podcast subscribe 
-            // daily entries // click a link 
+            // facebook like // youtube subscribe // podcast subscribe
+            // daily entries // click a link
             $ret['url'] = $bonus->url;
         }
         if($type == 1)

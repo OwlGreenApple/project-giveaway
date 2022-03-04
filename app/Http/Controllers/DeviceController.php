@@ -11,6 +11,7 @@ use Illuminate\Database\QueryException;
 use App\Helpers\Custom;
 use App\Models\Phone;
 use App\Models\User;
+use App\Models\Messages;
 use Carbon\Carbon;
 
 class DeviceController extends Controller
@@ -36,11 +37,10 @@ class DeviceController extends Controller
             "reply_for"=> 0
         ];
 
-        $phone = Phone::where('user_id',Auth::id())->first();
+        $phone = Phone::where('user_id',$req->user_id)->first();
         $data_api = json_encode($data);
         $user = User::find($req->user_id);
         $url = $user->ip_server."/messages/send-text";
-
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -63,7 +63,14 @@ class DeviceController extends Controller
         }
 
         curl_close($ch);
-        return $result;
+        $result = json_decode($result,true);
+
+        if($req->msg_id !== null)
+        {
+            $msg = Messages::find($req->msg_id);
+            $msg->msg_id = $result['id'];
+            $msg->save();
+        }
     }
 
     // SEND MEDIA IMAGE
@@ -73,12 +80,12 @@ class DeviceController extends Controller
         $data = [
             "to"=> $req->number,
             "message"=> $req->message,
-            "media_url"=> $req->media,
+            "media_url"=> Storage::disk('s3')->url($req->media),
             "type"=> 'image',
             "reply_for"=> 0
         ];
 
-        $phone = Phone::where('user_id',Auth::id())->first();
+        $phone = Phone::where('user_id',$req->user_id)->first();
         $data_api = json_encode($data);
         $user = User::find($req->user_id);
         $url = $user->ip_server."/messages/send-media";
@@ -104,7 +111,14 @@ class DeviceController extends Controller
         }
 
         curl_close($ch);
-        return $result;
+        $result = json_decode($result,true);
+
+        if($req->msg_id !== null)
+        {
+            $msg = Messages::find($req->msg_id);
+            $msg->msg_id = $result['id'];
+            $msg->save();
+        }
     }
 
     //CONNECT DEVICE

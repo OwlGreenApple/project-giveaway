@@ -4,7 +4,7 @@
 <div class="container">
     <div class="col-md-9 pt-0 pb-3 wrapper">
         <!-- youtube or banner carousel -->
-            
+
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 @if($ev->media == 0)
@@ -26,7 +26,7 @@
 
         <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
         <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
-        <h4 class="text-center text-uppercase">{{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helper::format($ev->prize_value) }}</b></h4>
+        <h4 class="text-center text-uppercase">{{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helpers::format($ev->prize_value) }}</b></h4>
 
         <div class="col-lg-9 mx-auto">
             <div id="taskdata"><!-- display task here --></div>
@@ -40,6 +40,10 @@
                 <div class="desc px-0">{{ Lang::get('custom.giveaway_timezone') }} : {{ $ev->timezone }}</div>
                 <div class="desc px-0 ms-auto">{{ Lang::get('custom.offered') }} : <a href="{{ $ev->owner_url }}" class="main-color">{{ $ev->owner }}</a></div>
             </div>
+
+            @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
+                <div class="text-center mt-2">{!! $helpers::sponsor(1) !!}</div>
+            @endif
         </div>
     </div>
     <!-- end container -->
@@ -51,7 +55,7 @@
     <div class="container row">
         <div class="col-lg-6 clearfix">
             <div class="float-end d-flex">
-                <div class="me-1 text-uppercase">Your Entries :</div> 
+                <div class="me-1 text-uppercase">Your Entries :</div>
                 <div class="main-color">{{$ct->entries}}</div>
             </div>
         </div>
@@ -100,13 +104,13 @@
             {
                 $(".bg_bonus_"+data_id).addClass('bg-custom');
             }
-            
+
         });
 
         $("body").on("mouseleave",".task",function(){
             var data_type = $(this).attr('data-type');
             var data_id = $(this).attr('data-id');
-        
+
             if(data_id == undefined)
             {
                 $(".bg_share_"+data_type).removeClass('bg-custom');
@@ -115,7 +119,7 @@
             {
                 $(".bg_bonus_"+data_id).removeClass('bg-custom');
             }
-            
+
         });
     }
 
@@ -138,9 +142,9 @@
 
             var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : data_type, 'bid': data_id};
             task_run(data);
-        });   
+        });
     }
-    
+
     function task_run(data)
     {
         $.ajax({
