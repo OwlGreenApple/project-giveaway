@@ -93,7 +93,10 @@ Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
 Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
 
 /* Affiliate */
-Route::get('/create-affiliate', [App\Http\Controllers\AffiliateController::class, 'create_affiliate']);
+Route::get('/affiliate', [App\Http\Controllers\AffiliateController::class, 'create_affiliate']);
 Route::get('/list-affiliate-index', [App\Http\Controllers\AffiliateController::class, 'list_affiliate_index']);
 Route::get('/list-affiliate-data', [App\Http\Controllers\AffiliateController::class, 'list_affiliate_data']);
-Route::post('/save-affiliate', [App\Http\Controllers\BroadcastController::class, 'save_affiliate']);
+Route::post('/save-affiliate', [App\Http\Controllers\AffiliateController::class, 'save_affiliate']);
+
+
+Route::get('/{referral_code}',[App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
