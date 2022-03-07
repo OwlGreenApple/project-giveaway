@@ -21,37 +21,37 @@
                                 <span id="secs"></span>
                             </div>
                         </div>
-                        <div class="iti-wrapper">
-                        @if(is_null($phone))
-                            <div class="input-group">
-                                <!-- <input type="text" id="phone" name="phone" class="form-control form-control-lg" required/>
-                                <span class="error phone"></span> -->
+
+                        {{-- button --}}
+                        <div class="input-group">
+                            @if(is_null($phone))
                                 <button type="button" id="con" class="btn bg-custom btn-lg text-white">Connect</button>
-                            </div>
-                        @else
-                            <button type="button" id="pair" class="btn bg-info btn-lg text-white">Scan</button>
-                            <!-- <button type="button" id="status" class="btn bg-warning btn-lg text-white">Refresh</button> -->
-                        @endif
+                            @else
+                                <button type="button" id="pair" class="btn bg-info btn-lg text-white">Scan</button>
+                            @endif
+                            <button type="button" id="refresh" class="btn bg-warning btn-lg ms-2">Refresh</button>
                         </div>
 
+                        {{-- qr-code --}}
                         <div class="text-center"><span id="scan"><!-- display scan --></span></div>
 
+                        {{-- table --}}
                         <div id="device">@include('connect-table')</div>
                     <!--  -->
                     </div>
                 </div>
             </form>
 
-            @if(!is_null($phone))
+            @if(!is_null($phone) && $phone->status == 1)
             <!-- TEST SEND MESSAGE -->
             <div class="container mt-4 card p-3">
                 <form id="test_message">
                     <div class="mb-3">
-                        <div class="form-group">
+                        <div class="form-group iti-wrapper">
                             <label>Number:<span class="text-danger">*</span></label>
-                            <input name="number" type="text" class="form-control form-control-lg" />
-                            <span class="text-danger err_prize_name"><!-- --></span>
-                        </div> 
+                            <input type="text" id="phone" name="number" class="form-control form-control-lg" required/>
+                            <span class="error phone"></span>
+                        </div>
                         <div class="form-group">
                             <label>Message:<span class="text-danger">*</span></label>
                             <div class="input-group input-group-lg">
@@ -77,7 +77,9 @@
     </div>
 </div>
 
-
+@if(!is_null($phone) && $phone->status == 1)
+    <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
+@endif
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -111,7 +113,7 @@
         var min = 0;
 
         $("#waiting").removeClass('d-none');
-        
+
         tm = setInterval(function(){
             $("#secs").html(sc);
             $("#min").html('0'+min);
@@ -131,6 +133,11 @@
             if(sc == 3 || sc == 10 || sc == 15 ||sc == 30 || sc == 59)
             {
                 pairing();
+            }
+
+            if(sc % 6 == 0)
+            {
+                check_connect();
             }
 
             if(min == 1)
@@ -175,7 +182,7 @@
                     }
                     else
                     {
-                        $("#msg").html('div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                        $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
                     }
                 },
                 error: function(xhr){
@@ -190,6 +197,45 @@
     {
         $("#pair").click(function(){
             waitingTime();
+            $("#pair").hide();
+        });
+
+        // REFRESH TOKEN
+        $("#refresh").click(function(){
+            refresh();
+        });
+    }
+
+    function refresh()
+    {
+        $.ajax({
+            method : 'GET',
+            url : '{{ url("refresh") }}',
+            dataType : 'json',
+            beforeSend : function()
+            {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success : function(result)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+
+                if(result.err == 0)
+                {
+                    $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>');
+                }
+                else
+                {
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                }
+            },
+            error: function(xhr){
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+               console.log(xhr.responseText);
+            }
         });
     }
 
@@ -209,14 +255,23 @@
                 // $('#loader').hide();
                 // $('.div-loading').removeClass('background-load');
 
-                if(result.qr_code !== null)
+                if(result.status == 'IDLE')
                 {
-                    $("#scan").html('<img src="'+result.qr_code+'" />');
+                    $("#scan").html('Loading...');
                 }
-
-                if(result.status == 'PAIRED')
+                else if(result.status == 'PAIRING')
+                {
+                    $("#scan").html(result.qr_code);
+                }
+                else if(result.status == 'PAIRED')
                 {
                     check_connect();
+                }
+                else
+                {
+                    // error scan usually because of expired token
+                    $("#scan").html('<div class="alert alert-warning mt-2">{{ Lang::get("custom.scan") }}</div>');
+                    clearInterval(tm);
                 }
             },
             error: function(xhr){
@@ -232,7 +287,7 @@
         });
 
         $(".del").click(function(){
-            var conf = confirm('{{ Lang::get("custom.del") }}'); 
+            var conf = confirm('{{ Lang::get("custom.del") }}');
 
             if(conf == true)
             {
@@ -247,7 +302,7 @@
     }
 
     function check_connect(data)
-    {   
+    {
         if(data !== 1)
         {
             data = null;
@@ -286,7 +341,9 @@
     {
         $("#test_message").submit(function(e){
             e.preventDefault();
-            var data = $(this).serialize();
+            var data = $(this).serializeArray();
+            data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') });
+
             var ipt = $("input[name='media']").val();
             var url;
 
@@ -319,6 +376,7 @@
                     {
                         alert('Message sent!');
                     }
+                    $(".counter").html(result.counter);
                 },
                 error: function(xhr){
                     $('#loader').hide();

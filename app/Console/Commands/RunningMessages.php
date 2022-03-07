@@ -44,7 +44,6 @@ class RunningMessages extends Command
      */
     public function handle()
     {
-        $ct = new Custom;
         $device = new Device;
         $msg = Messages::where('status',0)->orderBy('id','asc')->get();
         $arr = array(6,8,9,10,14,12);
@@ -76,12 +75,6 @@ class RunningMessages extends Command
 
                 $message = $row->message;
 
-                // SPONSOR MESSAGE
-                if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
-                {
-                    $message.= $ct::sponsor();
-                }
-
                 if($row->img_url == null)
                 {
                     //SEND MESSAGE
@@ -107,15 +100,6 @@ class RunningMessages extends Command
                     $req = new Request($data);
                     $send = $device->send_media($req);
                 }
-
-                // UPDATE MESSAGE STATUS
-                $msge = Messages::find($row->id);
-                $msge->status = 1;
-                $msge->save();
-
-                //CUT QUOTA
-                $user->counter_send_message_daily--;
-                $user->save();
             endforeach;
         }
     }

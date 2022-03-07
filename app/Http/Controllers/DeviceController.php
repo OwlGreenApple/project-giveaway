@@ -31,15 +31,37 @@ class DeviceController extends Controller
     // SEND TEXT MESSAGE
     public function send_message(Request $req)
     {
+        $to = $req->number;
+
+        // CASE IF USER USE TO TEST NUMBER
+        if($req->code !== null)
+        {
+            if($to == null)
+            {
+                return response()->json(['err'=>1]);
+            }
+
+            $to = substr($req->code,1).$to;
+        }
+
+        $user = User::find($req->user_id);
+        $message = $req->message;
+
+        // SPONSOR MESSAGE
+        $ct = new Custom;
+        if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
+        {
+            $message.= $ct::sponsor();
+        }
+
         $data = [
-            "to"=> $req->number,
-            "message"=> $req->message,
+            "to"=> $to,
+            "message"=> $message,
             "reply_for"=> 0
         ];
 
         $phone = Phone::where('user_id',$req->user_id)->first();
         $data_api = json_encode($data);
-        $user = User::find($req->user_id);
         $url = $user->ip_server."/messages/send-text";
 
         $ch = curl_init($url);
@@ -65,11 +87,21 @@ class DeviceController extends Controller
         curl_close($ch);
         $result = json_decode($result,true);
 
+        //CUT QUOTA
+        $user->counter_send_message_daily--;
+        $user->save();
+
+        //IN CASE IF THIS CODE CALL FROM AUTO REPLY CRON NOT USER TEST SEND MESSAGE
         if($req->msg_id !== null)
         {
             $msg = Messages::find($req->msg_id);
             $msg->msg_id = $result['id'];
+            $msg->status = 1;
             $msg->save();
+        }
+        else
+        {
+            return response()->json(['counter'=>$user->counter_send_message_daily]);
         }
     }
 
@@ -77,9 +109,20 @@ class DeviceController extends Controller
     public function send_media(Request $req)
     {
         // 'https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png'
+
+        $user = User::find($req->user_id);
+        $message = $req->message;
+
+        // SPONSOR MESSAGE
+        $ct = new Custom;
+        if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
+        {
+            $message.= $ct::sponsor();
+        }
+
         $data = [
             "to"=> $req->number,
-            "message"=> $req->message,
+            "message"=> $message,
             "media_url"=> Storage::disk('s3')->url($req->media),
             "type"=> 'image',
             "reply_for"=> 0
@@ -87,7 +130,6 @@ class DeviceController extends Controller
 
         $phone = Phone::where('user_id',$req->user_id)->first();
         $data_api = json_encode($data);
-        $user = User::find($req->user_id);
         $url = $user->ip_server."/messages/send-media";
 
         $ch = curl_init($url);
@@ -113,11 +155,21 @@ class DeviceController extends Controller
         curl_close($ch);
         $result = json_decode($result,true);
 
+        //CUT QUOTA
+        $user->counter_send_message_daily--;
+        $user->save();
+
+        //IN CASE IF THIS CODE CALL FROM AUTO REPLY CRON NOT USER TEST SEND MESSAGE
         if($req->msg_id !== null)
         {
             $msg = Messages::find($req->msg_id);
             $msg->msg_id = $result['id'];
+            $msg->status = 1;
             $msg->save();
+        }
+        else
+        {
+            return response()->json(['counter'=>$user->counter_send_message_daily]);
         }
     }
 
@@ -258,7 +310,13 @@ class DeviceController extends Controller
         curl_close($ch);
         // return qr-code html
         $result = json_decode($result,true);
-        return $result;
+
+        if($result['status'] == 'PAIRING')
+        {
+            return response()->json(['status'=>$result['status'],'qr_code'=>'<img src="'.$result['qr_code'].'" />']);
+        }
+
+        return response()->json(['status'=>$result['status'],'qr_code'=>0]);
     }
 
     // CHECK AND CHANGE PHONE STATUS AND ALSO CAN DELETE DEVICE
@@ -337,7 +395,64 @@ class DeviceController extends Controller
         return response()->json($res);
     }
 
-    //LOGIN DEVICE TO OBTAIN NEW TOKEN
+    // REFRESH TOKEN
+    public function refresh()
+    {
+        $auth = Auth::user();
+
+        if($auth->refresh_token == null)
+        {
+            return response()->json(['err'=>'rtoken']);
+        }
+
+        $data = [
+            'refresh_token'=>$auth->refresh_token
+        ];
+
+        $data_api = json_encode($data);
+        $url = $auth->ip_server."/auth/refresh";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json'
+        ));
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch) != 0 && empty($result))
+        {
+            return false;
+        }
+
+        curl_close($ch);
+
+        $response = json_decode($result,true);
+
+        // IF INVALID TOKEN OR EXPIRED -- solution : login wamate
+        if(isset($response['status']) == 401)
+        {
+            return response()->json(['err'=>'itoken']);
+        }
+
+        if(isset($response['token']))
+        {
+            $user = User::find($auth->id);
+            $user->token = $response['token'];
+            $user->refresh_token = $response['refreshToken'];
+            $user->save();
+        }
+
+        return response()->json(['err'=>0]);
+    }
+
+    //LOGIN DEVICE TO OBTAIN NEW TOKEN AND REFRESH TOKEN
     public function login_device($email)
     {
         // $email = 'local-2@loyalleads.com';

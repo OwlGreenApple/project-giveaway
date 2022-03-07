@@ -14,6 +14,7 @@ use App\Models\Contestants;
 use App\Helpers\Custom;
 use App\Models\Entries;
 use App\Models\Orders;
+use App\Models\Messages;
 use App\Mail\ContactEmail;
 use App\Exports\ContestantExport;
 use Illuminate\Database\QueryException;
@@ -86,6 +87,37 @@ class HomeController extends Controller
         }
 
         return (new ContestantExport($ev->id))->download('contestant.xlsx');
+    }
+
+    public function message_list($ev_id)
+    {
+        $messages = Messages::where([['ev_id',$ev_id],['user_id',Auth::id()]])->get();
+
+        if($messages->count() > 0)
+        {
+            foreach($messages->toArray() as $index=>$row):
+                if($row['img_url'] !== null)
+                {
+                    $messages[$index]['img_url'] = $this->check_s3_image($row['img_url']);
+                }
+            endforeach;
+        }
+
+        // dd($messages);
+        return view('message-list',['data'=>$messages]);
+    }
+
+    public function check_s3_image($img_url)
+    {
+        $check_url = get_headers(Storage::disk('s3')->url($img_url), 1);
+        if($check_url[0] == 'HTTP/1.1 200 OK')
+        {
+            return Storage::disk('s3')->url($img_url);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // DELETE CONTESTANTS

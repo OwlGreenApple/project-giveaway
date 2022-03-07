@@ -148,5 +148,20 @@ class Custom
         return $msg;
     }
 
+    public static function forgot($password,$name)
+    {
+      $msg ='';
+      $msg .='Halo '.$name.','."\n\n";
+      $msg .='Anda telah me-reset password anda, password anda yang baru adalah :'."\n";
+      $msg .='*'.$password.'*'."\n\n";
+      $msg .='Jika anda memerlukan bantuan'."\n";
+      $msg .='*Silahkan kontak customer kami*'."\n";
+      $msg .='Telegram : @activomni_cs'."\n\n";
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Loyaleads';
+
+      return $msg;
+    }
+
 /* end of class */
 }

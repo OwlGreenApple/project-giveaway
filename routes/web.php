@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 //AUTH
 Route::get('/',[App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
-Route::post('pass_reset', [App\Http\Controllers\Auth\RegisterController::class, 'reset'])->name('pass-reset');
+Route::post('pass_reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'reset'])->name('pass-reset');
 
 // App::setLocale('en');
 Route::get('/c/{event_link}/{referal?}', [App\Http\Controllers\ContestController::class, 'contest']);
@@ -42,6 +42,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::get('/packages', [App\Http\Controllers\HomeController::class, 'upgrade_package']);
+Route::get('/message-list/{ev_id}', [App\Http\Controllers\HomeController::class, 'message_list']);
 Route::post('/contact-admin', [App\Http\Controllers\HomeController::class, 'save_contact']);
 
 // Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);
@@ -63,6 +64,7 @@ Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api'
 Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'save_branding']);
 
 /* DEVICES */
+Route::get('/refresh', [App\Http\Controllers\DeviceController::class, 'refresh']);
 Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
 Route::post('/connect', [App\Http\Controllers\DeviceController::class, 'connect']);
 Route::get('/pair', [App\Http\Controllers\DeviceController::class, 'scan_device']);

@@ -14,8 +14,10 @@ return [
     */
 
     'banned' => 'Sorry, your account has terminated.',
+    'email' => 'Your Email',
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
+    'success'=>'Your password has been reset, please check your email',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

@@ -5,12 +5,12 @@
 	<br>
 	Selamat datang di Watchermarket
 	<br>
-	<strong>Password anda adalah : </strong>: {{ $password }} 
+	<strong>Password anda adalah : </strong>: {{ $password }}
 	<br>
 	<br>
 	<strong>Link login:</strong>
 	<br>
-	{{ url('/') }}/login 
+	{{ url('/') }}/login
 	<br>
 	<br>
 	Jika anda memerlukan bantuan
@@ -20,10 +20,10 @@
 	Telegram</strong>: @activomni_cs
 	<br>
 	<br>
-	<br> Terima kasih, 
+	<br> Terima kasih,
 	<br>
-	Team Watchermarket<br>
-	<span style="font-style: italic;">*Watchermarket adalah bagian dari Activomni.com</span>
+	Team Loyaleads<br>
+	<span style="font-style: italic;">*Loyaleads adalah bagian dari Activomni.com</span>
 	<br>
 	<br>
 	Jika ada yang ingin ditanyakan,<br>
@@ -37,7 +37,7 @@
 	Halo {{$name}},
 	<br>
 	<br>
-	Anda telah me-reset password anda, password anda yang baru adalah : 
+	Anda telah me-reset password anda, password anda yang baru adalah :
 	<br>
 	<strong>{{ $password }} </strong><br>
 	<br>
@@ -48,10 +48,10 @@
 	<br>
 	Telegram</strong>: @activomni_cs
 	<br>
-	<br> 
-	Terima kasih, 
 	<br>
-	Team Watchermarket
+	Terima kasih,
+	<br>
+	Team Loyaleads
 @endif
 
 

@@ -24,6 +24,7 @@
                             <li><a class="dropdown-item" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a></li>
                             <li><a id="{{ $row->id }}" class="dropdown-item duplicate">Duplicate</a></li>
                             <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item">View</a></li>
+                            <li><a href="{{ url('message-list') }}/{{ $row->id }}" target="_blank" class="dropdown-item">Messages</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev">Delete</a></li>
                         </ul>

@@ -54,7 +54,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-   
+
     protected function create(array $data)
     {
         $generated_password = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),0,10);
@@ -124,10 +124,10 @@ class RegisterController extends Controller
     }
 
     public function register(Request $request)
-    {   
+    {
         $req = $request->all();
 
-        //read cookie referral code 
+        //read cookie referral code
         $referral_code = $request->cookie('referral_code');
         $user_referral = User::where('referral_code',$referral_code)->first();
         if (!is_null($user_referral)) {
@@ -138,7 +138,7 @@ class RegisterController extends Controller
         {
           return $this->ajax_validator($req,$request);
         }
-        else 
+        else
         {
             $signup = $this->create($req);
             $order = null;
@@ -170,54 +170,5 @@ class RegisterController extends Controller
       return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
     }
 
-
-     // SEND PASSWORD TO FORGOT EMAIL
-    public function reset(Request $request)
-    {
-      $email = strip_tags($request->email);
-
-      $validator = Validator::make($request->all(), [
-        'email' => 'required|email|max:60', 
-      ]);
-
-      if($validator->fails() == true)
-      {
-        return redirect()->back()->withErrors($validator)->withInput();
-      }
-
-      $user = User::where('email',$email)->first();
-
-      if(is_null($user))
-      {
-        return redirect('password/reset')->with('error_email',Lang::get('auth.failed'));
-      }
-
-      $banned_user = User::where([['email',$email],['status','>',0]])->first();
-
-      if(is_null($banned_user))
-      {
-        return redirect('password/reset')->with('error_email',Lang::get('auth.banned'));
-      }
-
-      $generated_password = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),0,10);
-
-      $u_user = User::find($user->id);
-      $u_user->password = Hash::make($generated_password);
-
-    //   try
-    //   {
-    //     $u_user->save();
-    //     $msg = new Messages;
-    //     $msg = $msg::forgot($generated_password,$user->username);
-
-    //     self::send_notify($user->id,$msg,new RegisteredEmail($generated_password,$user->username,'forgot'));
-    //     return redirect('password/reset')->with('status',Lang::get('auth.success'));
-    //   }
-    //   catch(QueryException $e)
-    //   {
-    //     return redirect('password/reset')->with('error_email',Lang::get('custom.failed'));
-    //   }
-    }
-
-/* end controller */     
+/* end controller */
 }

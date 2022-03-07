@@ -45,6 +45,7 @@ return [
     'pt'=>'Podcast Subscribe',
     'pt.col'=>'Podcast URL',
     'redraw'=>'Are you sure to redraw this winner?',
+    'scan'=>'Please delete your phone, and try to connect again.',
     'submit'=>'Submit',
     'success'=>'Your data has been saved successfully.',
     'thx'=>'Thank you',

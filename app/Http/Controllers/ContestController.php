@@ -165,21 +165,6 @@ class ContestController extends Controller
 
                 $api->add_mailchimp($dta);
             }
-
-            // SET AUTO REPLY WA MESSAGE
-            $ph = Phone::where('user_id',$ev->user_id)->first();
-            $phone = substr($phone,1); // remove + sign
-
-            if(!is_null($ph))
-            {
-                $wa_msg = new Messages;
-                $wa_msg->user_id = $ev->user_id;
-                $wa_msg->sender = $ph->number;
-                $wa_msg->receiver = $phone;
-                $wa_msg->message = $ev->message;
-                $wa_msg->img_url = $ev->img_url;
-                $wa_msg->save();
-            }
         }
         else
         {
@@ -194,6 +179,25 @@ class ContestController extends Controller
             if(is_null($check_identity))
             {
                 $contestant_id = $ct->id;
+
+                // SET AUTO REPLY WA MESSAGE
+                $ph = Phone::where('user_id',$ev->user_id)->first();
+                $phone = substr($phone,1); // remove + sign
+
+                if(!is_null($ph))
+                {
+                    $msg = $ev->message;
+                    $msg .= "\n\n".'Please click to confirm : '.url('confirmation').'/'.bin2hex($contestant_id);
+
+                    $wa_msg = new Messages;
+                    $wa_msg->user_id = $ev->user_id;
+                    $wa_msg->ev_id = $ev->id;
+                    $wa_msg->sender = $ph->number;
+                    $wa_msg->receiver = $phone;
+                    $wa_msg->message = $msg;
+                    $wa_msg->img_url = $ev->img_url;
+                    $wa_msg->save();
+                }
             }
             else
             {
