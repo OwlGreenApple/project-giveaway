@@ -180,6 +180,10 @@
                         $("#con").remove();
                         waitingTime();
                     }
+                    else if(result.status == 'etoken')
+                    {
+                        $("#msg").html('<div class="alert alert-warning mt-2">{{ Lang::get("custom.scan") }}</div>');
+                    }
                     else
                     {
                         $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');

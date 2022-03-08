@@ -64,8 +64,10 @@ class ForgotPasswordController extends Controller
        try
        {
          $u_user->save();
-         $msg = new Custom;
-         $msg = $msg::forgot($generated_password,$user->username);
+        //  WA CASE
+        //  $msg = new Custom;
+        //  $msg = $msg::forgot($generated_password,$user->username);
+         $msg = null;
 
          self::send_notify($user->id,$msg,new RegisteredEmail($generated_password,$user->username,'forgot'));
          return redirect('password/reset')->with('status',Lang::get('auth.success'));
@@ -80,8 +82,8 @@ class ForgotPasswordController extends Controller
     {
       $user = User::find($user_id);
       $data = [
-        'message'=>$msg,
-        'phone_number'=>$user->phone_number,
+        // 'message'=>$msg,
+        // 'phone_number'=>$user->phone_number,
         'email'=>$user->email,
         'obj'=>$email,
       ];

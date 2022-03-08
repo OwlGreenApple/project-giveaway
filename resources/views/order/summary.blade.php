@@ -13,7 +13,7 @@
 </script>
 @endif
 
-<?php 
+<?php
 	$is_login = false;
 	if (Auth::check()) {
 		$is_login = true;
@@ -21,7 +21,7 @@
 ?>
 <section>
     <div class="container">
-      
+
       @if (session('status'))
           <div class="alert alert-danger">
               {{ session('status') }}
@@ -64,7 +64,7 @@
                                   <div class="form-group">
                                     <label>{{ $lang::get('order.name') }}*</label>
                                     <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
-                                    <span class="text-danger error username" role="alert"></span>                             
+                                    <span class="text-danger error username" role="alert"></span>
                                   </div>
 
                                   <div class="form-group">
@@ -76,7 +76,7 @@
                                   <!-- phone -->
                                   <!-- <div class="form-group">
                                     <label> $lang::get('custom.phone') * <span class="tooltipstered" title="<div class='panel-content'>
-                                           $lang::get('custom.intl') 
+                                           $lang::get('custom.intl')
                                         </div>">
                                         <i class="fa fa-question-circle "></i>
                                       </span>
@@ -85,7 +85,7 @@
                                     <span class="error phone"></span>
 
                                     <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
-                                   <input name="data_country" type="hidden" /> 
+                                   <input name="data_country" type="hidden" />
                                   </div> -->
 
                                   <!-- <div class="form-group">
@@ -108,7 +108,7 @@
                                       </div>
 
                                     </div>
-                                    
+
                                   </div> -->
 
                                   <div class="form-group">
@@ -146,7 +146,7 @@
               											<div class="form-group">
               												<label>Password *</label>
               												 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="{{ Cookie::get('password') }}" placeholder="Input Your Password">
-              												
+
               												 @error('password')
               															<span class="invalid-feedback" role="alert">
               																	<strong>{{ $message }}</strong>
@@ -201,21 +201,21 @@
               <!-- Table -->
               <table class="table sumo-purchases-table">
                 <tbody>
-                  
+
                     <tr>
                       <td class="sumo-td-name">
                         <div class="sumo-title">
                           <b>{!! session('order')['package'] !!}</b>
-                          
+
                         </div>
                       </td>
-              				
+
                       <td class="sumo-td-price text-right sumo-checkout-item cart-item">
               					Rp. <?php echo number_format(session('order')['price'], 0, '', '.'); ?>
                       </td>
-              				
+
                     </tr>
-                  
+
                 </tbody>
               </table>
               <!-- End Table -->
@@ -231,7 +231,7 @@
             </div>
             <!-- Checkout Button Container -->
             <div class="checkout-button-container mt-30 step-2" id="checkout-buttons-2" <?php if (!$is_login) { ?> style="display:none;"<?php } ?>>
-							
+
               <div class="sumo-product-note light mt-20">
                 {{ $lang::get('order.accept') }}<a href="{{ env('APP_URL') }}terms-of-services/" target="_blank">{{ $lang::get('order.terms') }}</a>, {{ $lang::get('order.and') }} <a href="{{ env('APP_URL') }}privacy-policy/" target="_blank" style="text-decoration: underline;">{{ $lang::get('order.policy') }}</a>.
               </div>
@@ -240,7 +240,7 @@
             <hr class="my-30">
             <h4 class="mb-10"><b>{{ $lang::get('order.need_help') }}</b></h4>
             <p>{{ $lang::get('order.support_team') }}</p>
-              
+
             <a href="whatsapp://send/?phone=+62817318368" target="_blank" class="btn btn-more full-width-mobile waves-effect waves-light">{{ $lang::get('order.find_help') }}</a>
           </div>
           <!-- End Card Data Entry -->
@@ -251,7 +251,7 @@
   </div>
 </div>
 
-        
+
         <!-- Right Column -->
         <div class="col-md-6 sumo-col-right pb-50">
           <div class="mt-md-50 mb-50 ml-lg-50 pl-md-30">
@@ -274,7 +274,7 @@
   <!-- Table -->
   <table class="table sumo-purchases-table">
     <tbody>
-      
+
         <tr>
           <td class="sumo-td-name">
             <div class="sumo-title">
@@ -284,10 +284,10 @@
         </tr>
         <!-- <tr>
           <td class="sumo-td-price sumo-checkout-item" data-item-id="2101">
-           
+
           </td>
         </tr> -->
-      
+
     </tbody>
   </table>
   <!-- End Table -->
@@ -303,9 +303,9 @@
       </div>
     </div>
 </div>
-  
+
 </div>
-									
+
 										{{ csrf_field() }}
                     <div class="checkout-button-container mt-30 step-2" id="checkout-buttons-1" <?php if (!$is_login) { ?> style="display:none;"<?php } ?>>
 
@@ -323,7 +323,7 @@
             <div class="sumo-cart-supplement mt-30">
               <p class="sumo-cart-supplement-header">Hustle with Confidence</p>
               <ul class="list-inline mt-20">
-                
+
                 <li class="d-flex">
                   <img class="sumo-icon" width="auto" height="20px" src="https://appsumo2.b-cdn.net/static/images/svg/calendar.svg">
                   <span style="font-style: italic;">Award winning developer, use our applications with ease in mind. We spent countless hours working hard to develop the best software & we committed to make it better each day.</span>
@@ -359,7 +359,7 @@
           'status_upgrade':val,
         },
         dataType: 'json',
-        beforeSend: function() 
+        beforeSend: function()
         {
           $('#loader').show();
           $('.div-loading').addClass('background-load');
@@ -420,7 +420,7 @@
 	function loginAjax(){
     $(".upgrade").hide();
     $("body").on("click", "#button-login", function() {
-     
+
 			$.ajax({
 				type: 'POST',
 				url: "{{ url('loginajax') }}",
@@ -442,8 +442,8 @@
             $(".bsub").show();
 						$("#step-1").html('<p>{{ $lang::get("order.conf_order") }}</p><span class="sumo-psuedo-link">'+data.email+'</span>');
             $(".credential").html('');
-					} 
-					else 
+					}
+					else
           {
 						$(".credential").html('<div class="alert alert-danger">'+data.message+'</div>');
 					}
@@ -459,58 +459,57 @@
 	}
 
 	function registerAjax(){
-    $("#btn-register").click(function(){
-      var val= $("input[name=agreement]").val();
+        $("#btn-register").click(function(){
+        var val= $("input[name=agreement]").val();
 
-      if(val == 0){
-        alert('{{ $lang::get("order.check") }}');
-				return false;
-      }
-
-			$.ajax({
-				type: 'POST',
-				url: "{{url('register')}}",
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				data: $("#form-register").serializeArray(),
-				dataType: 'text',
-				beforeSend: function() {
-					$('#loader').show();
-					$('.div-loading').addClass('background-load');
-				},
-				success: function(result) {
-					$('#loader').hide();
-					$('.div-loading').removeClass('background-load');
-
-					var data = jQuery.parseJSON(result);
-
-					if (data.success == 1) 
-          {
-            $(".error").hide();
-						$(".step-2").show();
-						$("#step-1").html('<p>{{ $lang::get("order.conf_order") }}</p><span class="sumo-psuedo-link">'+data.email+'</span>');
-					} 
-					else {
-						 $(".error").show();
-             $(".username").html(data.username);
-             $(".email").html(data.email);
-             $(".code_country").html(data.code_country);
-             $(".phone").html(data.phone);
-					}
-				},
-        error: function(xhr,attr,throwable)
-        {
-          $('#loader').hide();
-          $('.div-loading').removeClass('background-load');
-          console.log(xhr.responseText);
+        if(val == 0){
+            alert('{{ $lang::get("order.check") }}');
+                    return false;
         }
-			});
-			
-			
-    });
-	}
-	
+
+        $.ajax({
+            type: 'POST',
+            url: "{{url('register')}}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: $("#form-register").serializeArray(),
+            dataType: 'text',
+            beforeSend: function() {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success: function(result) {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+
+                var data = jQuery.parseJSON(result);
+
+                if (data.success == 1)
+                {
+                    $(".error").hide();
+                    $(".step-2").show();
+                    $("#step-1").html('<p>{{ $lang::get("order.conf_order") }}</p><span class="sumo-psuedo-link">'+data.email+'</span>');
+                }
+                else
+                {
+                    $(".error").show();
+                    $(".username").html(data.username);
+                    $(".email").html(data.email);
+                    $(".code_country").html(data.code_country);
+                    $(".phone").html(data.phone);
+                }
+            },
+            error: function(xhr,attr,throwable)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+                console.log(xhr.responseText);
+            }
+        });
+        });
+    }
+
 	function initButton(){
     $("body").on("click", "#link-to-login", function(e) {
 			e.preventDefault();
@@ -527,7 +526,7 @@
 			$('html, body').animate({scrollTop: '0px'}, 300);
     });
 	}
-	
+
 	function checkField(){
 		if ($("#email").val()!="" && $("#phone").val()!="" && $("#username").val()!="" && $("#check-terms").val()==1) {
 			$("#btn-register").addClass("register-active");
@@ -542,7 +541,7 @@
 
   $(document).ready(function() {
 		rememberMe();
-		
+
 		loginAjax();
 		registerAjax();
     // getUpgrade();
@@ -550,7 +549,7 @@
 		initButton();
 		onChangeRegister();
   });
-    
+
 </script>
 
 @if(!$is_login)

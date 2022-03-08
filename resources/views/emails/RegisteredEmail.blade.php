@@ -3,7 +3,7 @@
 	Halo {{$name}},
 	<br>
 	<br>
-	Selamat datang di Watchermarket
+	Selamat datang di Loyaleads
 	<br>
 	<strong>Password anda adalah : </strong>: {{ $password }}
 	<br>

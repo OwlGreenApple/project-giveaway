@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'add_entry'=>'Add Entry Action',
     'act'=>'Action Text',
+    'add_entry'=>'Add Entry Action',
+    'agreement'=>'I\'ve read, understand and accept the terms of service',
     'by'=>'by completing these actions',
+    'check'=>'Please check our agreement',
     'cl'=>'Click a Link',
     'cl.col'=>'Action URL',
     'click'=>'Click here',

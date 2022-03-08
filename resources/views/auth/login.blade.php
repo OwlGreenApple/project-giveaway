@@ -55,7 +55,7 @@
 
                     <div class="clearfix login-foot">
                         <div class="float-start"><a href="{{ route('password.request') }}" class="main-color">Forgot Password</a></div>
-                        <div class="float-end"><a class="main-color">Register</a></div>
+                        <div class="float-end"><a href="{{ route('register') }}" class="main-color">Register</a></div>
                     </div>
 
                 </div>

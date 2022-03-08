@@ -48,8 +48,9 @@ class ResetCounterSendMessage extends Command
         $ct = new Custom;
 
         if($users->count() > 0):
-            foreach($users as $user) 
+            foreach($users as $user)
             {
+                $user->date_counter = Carbon::now()->toDateString();
                 $user->counter_send_message_daily = $ct->check_type($user->membership)['wa'];
                 $user->save();
             }

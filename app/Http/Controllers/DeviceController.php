@@ -261,6 +261,12 @@ class DeviceController extends Controller
 
         $res = json_decode($result,true);
 
+        //EXPIRED TOKEN / INVALID TOKEN
+        if(!isset($res['device_key']))
+        {
+            return response()->json(['status'=>'etoken']);
+        }
+
         //INSERT NEW PHONE
         $device = new Phone;
         $device->user_id = Auth::id();

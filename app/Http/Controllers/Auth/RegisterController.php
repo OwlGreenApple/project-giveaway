@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Auth\ForgotPasswordController AS FG;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Helpers\Custom;
+use App\Mail\RegisteredEmail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -76,19 +79,22 @@ class RegisterController extends Controller
             $col['membership'] = strip_tags($data['membership']);
         }
 
-        // $msg = new Messages;
+        // CASE WA
+        // $msg = new Custom;
         // $msg = $msg::registered($generated_password,strip_tags($data['username']));
+        $msg = null;
 
-        // $data = [
+        $data = [
         //   'message'=>$msg,
         //   'phone_number'=>$phone_number,
-        //   'email'=>$data['email'],
-        //   'obj'=>new RegisteredEmail($generated_password,strip_tags($data['username'])),
-        // ];
+          'email'=>$data['email'],
+          'obj'=>new RegisteredEmail($generated_password,strip_tags($data['username'])),
+        ];
 
-        // $adm = new adm;
-        // $adm->notify_user($data);
+        $adm = new FG;
+        $adm->notify_user($data);
 
+        Cookie::queue(Cookie::forget('referral_code'));
         return User::create($col);
     }
 
@@ -117,11 +123,11 @@ class RegisterController extends Controller
         return $this->register_ajax($data);
     }
 
-    public function register_redirect()
-    {
-      $request = new Request(Session::get('reg'));
-      return $this->register($request);
-    }
+    // public function register_redirect()
+    // {
+    //   $request = new Request(Session::get('reg'));
+    //   return $this->register($request);
+    // }
 
     public function register(Request $request)
     {
@@ -129,23 +135,29 @@ class RegisterController extends Controller
 
         //read cookie referral code
         $referral_code = $request->cookie('referral_code');
-        $user_referral = User::where('referral_code',$referral_code)->first();
-        if (!is_null($user_referral)) {
-          $req['myreferral'] = $user_referral->id;
+        $req['myreferral'] = 0;
+
+        if($referral_code !== null)
+        {
+            $user_referral = User::where('referral_code',$referral_code)->first();
+            if (!is_null($user_referral))
+            {
+                $req['myreferral'] = $user_referral->id;
+            }
         }
 
         if($request->ajax() == true)
         {
           return $this->ajax_validator($req,$request);
         }
-        else
-        {
-            $signup = $this->create($req);
-            $order = null;
-            Auth::loginUsingId($signup->id);
+        // else
+        // {
+        //     $signup = $this->create($req);
+        //     $order = null;
+        //     Auth::loginUsingId($signup->id);
 
-            return redirect('home');
-        }
+        //     return redirect('home');
+        // }
     }
 
     //REGISTER VIA AJAX
@@ -164,9 +176,13 @@ class RegisterController extends Controller
     public function price_page($referral_code=null)
     {
       $minutes = 60*24*7; // 7 days
-      $response = new Response('Set Cookie');
-      $response->withCookie(cookie('referral_code', $referral_code, $minutes));
-      // return $response;
+
+      // set cookie for referal
+      if($referral_code !== null)
+      {
+        Cookie::queue(Cookie::make('referral_code',$referral_code, $minutes));
+      }
+
       return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
     }
 
