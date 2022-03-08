@@ -95,6 +95,12 @@ Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm
 Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
 Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
 
+/* Admin Redeem */ 
+Route::get('affiliate-admin',[App\Http\Controllers\AdminController::class, 'index']);
+Route::get('affiliate-admin-data',[App\Http\Controllers\AdminController::class,'affiliate_admin_data']);
+Route::post('upload-payment-2-redeem',[App\Http\Controllers\AdminController::class,'upload_payment_2']);
+
+
 /* Affiliate */
 Route::get('/affiliate', [App\Http\Controllers\AffiliateController::class, 'create_affiliate']);
 Route::get('/list-affiliate-index', [App\Http\Controllers\AffiliateController::class, 'list_affiliate_index']);

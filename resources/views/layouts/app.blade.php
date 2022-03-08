@@ -127,6 +127,7 @@
                                     @if(Auth::user()->is_admin == 1)
                                         <a class="dropdown-item" href="{{ url('list-user') }}">List User</a>
                                         <a class="dropdown-item" href="{{ url('list-order') }}">List Order</a>
+                                        <a class="dropdown-item" href="{{ url('affiliate-admin') }}">Redeem</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ url('packages') }}">
                                         {{ __('Upgrade Package') }}
