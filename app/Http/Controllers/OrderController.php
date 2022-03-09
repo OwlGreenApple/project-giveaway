@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -10,11 +11,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\QueryException;
+use App\Http\Controllers\Auth\ForgotPasswordController AS FG;
 use App\Helpers\Custom;
 use App\Helpers\Api;
 use App\Models\Orders;
 use App\Models\Notification;
 use App\Mail\MembershipEmail;
+use App\Mail\UserBuyEmail;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -106,7 +109,7 @@ class OrderController extends Controller
     {
         $dt = Carbon::now();
         $str = 'ACT'.$dt->format('ymd').'-'.$dt->format('Hi');
-        
+
         $order = new Orders;
         $order_number = self::autoGenerateID($order, 'no_order', $str, 3, '0');
         $order->user_id = Auth::id();
@@ -126,7 +129,7 @@ class OrderController extends Controller
             {
                 $rt['status'] = 2; //redirect to thankyou page
 
-                // SEND WA MESSAGE IF ORDER SUCCESSFUL  
+                // SEND WA MESSAGE IF ORDER SUCCESSFUL
                 // $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
 
                 // SEND EMAIL IF ORDER SUCCESSFUL
@@ -167,7 +170,7 @@ class OrderController extends Controller
     public static function autoGenerateID($model, $field, $search, $pad_length, $pad_string = '0')
     {
         $tb = $model->select(DB::raw("substr(".$field.", ".strval(strlen($search)+1).") as lastnum"))->whereRaw("substr(".$field.", 1, ".strlen($search).") = '".$search."'")->orderBy('id', 'DESC')->first();
-                                        
+
         if ($tb == null){
             $ctr = 1;
         }
@@ -194,7 +197,7 @@ class OrderController extends Controller
         {
             $txt = $notif->notif_after;
         }
-       
+
         $message = $this->replace_string_order($package,$pc->pricing_format($price),$pc->pricing_format($total),$order_number,$txt);
 
         $api->send_wa_message($admin_id,$message,$phone_number);
@@ -230,7 +233,7 @@ class OrderController extends Controller
 
    // ORDER PAGE
 
-    //upload bukti TT 
+    //upload bukti TT
       public function confirm_payment_order(Request $request){
         $user = Auth::user();
         //konfirmasi pembayaran user
@@ -253,14 +256,23 @@ class OrderController extends Controller
             $filename = $order->no_order.'.jpg';
             Storage::disk('s3')->put($dir."/".$filename, file_get_contents($request->file('buktibayar')), 'public');
             $order->proof = $dir."/".$filename;
-            
+
           } else {
             return redirect($pathUrl)->with("error", Lang::get('order.upload_first'));
-          }  
+          }
           $order->notes = $request->keterangan;
           $order->save();
-        } 
-        else 
+
+          $data = [
+            'email'=>Config::get('view.email_admin'),
+            'obj'=>new UserBuyEmail($order,null)
+          ];
+
+        //  SEND EMAIL TO ADMIN IF USER HAS UPLOAD PAYMENT PROOF
+          $fg = new FG;
+          $fg::notify_user($data);
+        }
+        else
         {
             return redirect($pathUrl)->with("error", Lang::get('order.reject'));
         }

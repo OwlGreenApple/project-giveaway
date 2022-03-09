@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 use App\Models\Banners;
 use App\Models\Bonus;
 use App\Models\User;
@@ -238,9 +239,9 @@ class HomeController extends Controller
             foreach($banners as $row):
                 $duplicate[] = Storage::disk('s3')->url($row->url);
             endforeach;
-        }
 
-        $this->save_banner_image(null,$new_event_id,$duplicate);
+            $this->save_banner_image(null,$new_event_id,$duplicate);
+        }
     }
 
     public function del_event(Request $request)
@@ -997,7 +998,7 @@ class HomeController extends Controller
             return response()->json($errs);
         }
 
-        Mail::to(env('ADMIN_EMAIL'))->send(new ContactEmail($user_email,$message));
+        Mail::to(Config::get('view.email_admin'))->send(new ContactEmail($user_email,$message));
         return response()->json(['err'=>0]);
     }
 
@@ -1030,8 +1031,8 @@ class HomeController extends Controller
           $order = Orders::where('no_order','LIKE',"%".$src."%");
         }
 
-        $orders = $order->where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
-        $total = Orders::where('user_id',Auth::user()->id)->count();
+        $orders = $order->where('user_id',Auth::user()->id)->orderBy('created_at','desc')->skip($start)->limit($length)->get();
+        $total = $orders->count();
     }
 
       // dd($orders);
@@ -1052,7 +1053,7 @@ class HomeController extends Controller
           }
           elseif($order->proof == null || $order->status == 0)
           {
-            $proof = '<button type="button" class="btn btn-primary btn-confirm" data-bs-toggle="modal" data-bs-target="#confirm-payment" data-id="'.$order->id.'" data-no-order="'.$order->no_order.'" data-package="'.$order->package.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" style="font-size: 13px; padding: 5px 8px;">'.Lang::get('order.confirm').'
+            $proof = '<button type="button" class="btn btn-info text-white btn-confirm" data-bs-toggle="modal" data-bs-target="#confirm-payment" data-id="'.$order->id.'" data-no-order="'.$order->no_order.'" data-package="'.$order->package.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" style="font-size: 13px; padding: 5px 8px;">'.Lang::get('order.confirm').'
               </button>';
           }
           else
@@ -1088,14 +1089,14 @@ class HomeController extends Controller
           }
 
           $data['data'][] = [
-            0=>$order->no_order,
-            1=>$order->package,
-            2=>$order->currency.".".$prc->format($order->price),
-            3=>$order->currency.".".$prc->format($order->total_price),
-            4=>Carbon::parse($order->created_at)->toDateTimeString(),
-            5=>$date_confirm,
-            6=>$order->desc,
-            7=>$proof,
+            0=>'<div class="text-center">'.$proof.'</div>',
+            1=>$order->no_order,
+            2=>$order->package,
+            3=>$order->currency.".".$prc->format($order->price),
+            4=>$order->currency.".".$prc->format($order->total_price),
+            5=>Carbon::parse($order->created_at)->toDateTimeString(),
+            6=>$date_confirm,
+            7=>$order->desc,
             8=>$status
           ];
         }

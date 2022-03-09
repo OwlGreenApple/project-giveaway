@@ -82,7 +82,7 @@ class CheckEvents
             'prize_amount'=>['required',new CheckNumber(null)],
             'desc'=>[new CheckDescription],
             'message'=>['required','max:65000'],
-            'media'=>['mimes:jpeg,jpg,png|required|max:5000'],
+            'media'=>['bail','required','mimes:jpeg,jpg,png','max:5000'],
         ];
 
         if($request->media_option !== null)
@@ -166,7 +166,7 @@ class CheckEvents
                $errors['err_yt'] = self::fix_lang('new','yt',$err_yt);
            }
         }
-        
+
         if(isset($req['new_text_pt']))
         {
            $err_pt = $this->filter_validator($req,'pt','new');
@@ -248,7 +248,7 @@ class CheckEvents
                $errors['err_edit_yt'] = self::fix_lang('edit','yt',$err_yt);
            }
         }
-        
+
         if(isset($req['edit_text_pt']))
         {
            $err_pt = $this->filter_validator($req,'pt','edit');
@@ -323,7 +323,7 @@ class CheckEvents
         }
 
         $validator = Validator::make($req,$rules);
-       
+
         if($validator->fails() == true)
         {
             return $validator->messages()->all();
@@ -333,7 +333,7 @@ class CheckEvents
             return array();
         }
     }
-    
+
     private static function fix_lang($type,$ent,$err_wyt)
     {
         $replace = [$type.'_text_'.$ent,$type.'_url_'.$ent,$type.'_entries_'.$ent,"."];
@@ -341,5 +341,5 @@ class CheckEvents
         return str_replace($replace,$target,$err_wyt);
     }
 
-/**/ 
+/**/
 }

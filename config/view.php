@@ -32,10 +32,10 @@ return [
         'VIEW_COMPILED_PATH',
         realpath(storage_path('framework/views'))
     ),
-    'bank_name'=>env('BANK_NAME'),
+    'bank_name'=>'BCA',
     'bank_owner'=>'Sugiarto Lasjim',
-    'email_admin'=>env('ADMIN_EMAIL'),
-    'no_rek'=>env('NO_REK'),
+    'email_admin'=>'info@activomni.com',
+    'no_rek'=>'8290-336-261',
     'WAMATE_EMAIL'=>'local',
-    'WAMATE_URL'=>'localhost:3333'   
+    'WAMATE_URL'=>'localhost:3333'
 ];

@@ -16,9 +16,9 @@ class ApiController extends Controller
     //DISPLAY ACTIVRESPON LIST
   public function get_activrespon_lists()
   {
-    // $url = "https://192.168.0.114/activrespons/display_api_list";
+    // $url = "https://192.168.100.80/activrespon/display_api_list";
     $url = "https://activrespon.com/dashboard/display_api_list";
-    
+
     $user = Auth::user();
     $data = array(
       "service" => '$2y$10$JMoAeSl6aV0JCHmTNNafTOuNlMg/S7Yo8a6LUauEZe4Rcy.YdU37S',
@@ -38,7 +38,7 @@ class ApiController extends Controller
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Content-Type: application/json'
     ));
-    
+
     $res=curl_exec($ch);
 
     // dd($res);
@@ -50,7 +50,7 @@ class ApiController extends Controller
     // $url = "https://192.168.0.114/activrespons/save_customer";
     $url = "https://activrespon.com/dashboard/save_customer";
     $user = Auth::user();
-   
+
     $data = array(
       "service" => '$2y$10$JMoAeSl6aV0JCHmTNNafTOuNlMg/S7Yo8a6LUauEZe4Rcy.YdU37S',
       "api_key_list" => $user->activrespon_api,
@@ -73,7 +73,7 @@ class ApiController extends Controller
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Content-Type: application/json'
     ));
-    
+
     $res=curl_exec($ch);
 
     // dd($res);
@@ -101,7 +101,7 @@ class ApiController extends Controller
 
     return $mailchimp;
   }
-  
+
 
   public function mailchimp_valid_api()
   //$api_key,$server_mailchimp,$audience_id
@@ -134,7 +134,7 @@ class ApiController extends Controller
     return $mailchimp->lists->getAllLists()->lists;
   }
 
-  //TO ADD CONTACTS / SUBSCRIBER INTO AUDIENCE/LIST ON MAILCHIMP 
+  //TO ADD CONTACTS / SUBSCRIBER INTO AUDIENCE/LIST ON MAILCHIMP
   public function add_mailchimp(array $data)
   {
     $mailchimp = self::mailchimp();

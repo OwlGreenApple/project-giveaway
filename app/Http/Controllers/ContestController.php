@@ -328,6 +328,9 @@ class ContestController extends Controller
             $bonus_id = $bonus->id;
         }
 
+        //UPDATE ENTRIES AFTER USER DOING TASK
+        $ct = Contestants::find($contestant_id);
+
         if(is_null($etr))
         {
             $et = new Entries;
@@ -339,6 +342,8 @@ class ContestController extends Controller
 
             try{
                 $et->save();
+                $ct->entries += $prize;
+                $ct->save();
                 $ret['success'] = 1;
             }
             catch(QueryException $e)
@@ -349,11 +354,8 @@ class ContestController extends Controller
         }
 
         // SHARE REDIRECT
-
         $ev = Events::find($event_id);
         $ev_link = $ev->url_link;
-
-        $ct = Contestants::find($contestant_id);
         $ref_code = $ct->ref_code;
 
         if(env('APP_ENV') == 'local')
@@ -388,28 +390,33 @@ class ContestController extends Controller
         }
         if($type == 8)
         {
-            // twitter
+            // twitter share
             $ret['url'] = "https://twitter.com/share?url=".$share_url."&hashtags=winner,giveaway";
+            $ret['success'] = 1;
         }
         elseif($type == 9)
         {
             // facebook share
             $ret['url'] = "https://www.facebook.com/sharer/sharer.php?u=".$share_url."";
+            $ret['success'] = 1;
         }
         elseif($type == 10)
         {
             // web whatsapp
-            $ret['url'] = "whatsapp://send?text=".$share_url."";
+            $ret['url'] = "https://api.whatsapp.com/send?text=".$share_url."";
+            $ret['success'] = 1;
         }
         elseif($type == 11)
         {
             // linkedin
             $ret['url'] = "https://www.linkedin.com/sharing/share-offsite/?url=".$share_url."";
+            $ret['success'] = 1;
         }
         elseif($type == 12)
         {
             // mail to
             $ret['url'] = "mailto:?subject=".$ev->title."&amp;body=".$share_url."";
+            $ret['success'] = 1;
         }
 
         return response()->json($ret);
@@ -429,7 +436,6 @@ class ContestController extends Controller
             return self::generate_ref_link();
         }
     }
-
 
 /* end class */
 }
