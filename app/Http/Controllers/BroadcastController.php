@@ -44,6 +44,22 @@ class BroadcastController extends Controller
         ]);
     }
 
+    // DISPLAY CONTESTANTS LIST
+    public function display_contestants(Request $request)
+    {
+        $src = $request->contestant;
+
+        if($src == null)
+        {
+            return;
+        }
+
+        $ct = Contestants::where([['events.user_id',Auth::id()],['contestants.c_name','LIKE','%'.$src.'%']])
+             ->join('events','events.id','=','contestants.event_id')->select('contestants.id','contestants.c_name','contestants.wa_number')
+             ->groupBy('contestants.id')->orderBy('contestants.c_name','ASC')->get();
+        return view('broadcast.display-contestants',['data'=>$ct]);
+    }
+
     public function edit_broadcast($id)
     {
         $user = Auth::user();
@@ -158,7 +174,7 @@ class BroadcastController extends Controller
                 "message"=>"not allowed",
             ]);
         }
-        
+
         $broadcast->delete();
         return response()->json([
             "success"=>1,

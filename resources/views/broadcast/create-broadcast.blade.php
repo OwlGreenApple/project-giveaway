@@ -17,75 +17,42 @@
                     <div class="card-body">
                         <!--<h3 class="main-color main-theme">Giveaway Information</h3>
                         <div class="border-bottom info">Competition Information</div>-->
-                        
+
                         <!-- begin form -->
                         <div class="form-group mb-3">
                             <label>Title:<span class="text-danger">*</span></label>
                             <input type="text" class="form-control form-control-lg" name="title" @if(isset($broadcast)) value="{{ $broadcast->title }}" @endif />
                             <span class="text-danger err_title"><!-- --></span>
-                        </div> 
+                        </div>
                         <div class="form-group mb-3">
-                            <label>Description:<span class="text-danger">*</span></label>
-                            <div id="editparent">
-                                <div id='editControls' class="py-2">
-                                    <div class='btn-group'>
-                                        <select class="fontsize form-select form-select-sm">
-                                            <option value='normal'>Normal</option>
-                                            <option value='h1'>Large</option>
-                                            <option value='h2'>Medium</option>
-                                            <option value='h3'>Small</option>
-                                        </select>
-                                    </div>
-                                    <div class='btn-group'>
-                                    <a class='btn' data-role='bold'><b>Bold</b></a>
-                                    <a class='btn' data-role='italic'><em>Italic</em></a>
-                                    <a class='btn' data-role='underline'><u><b>U</b></u></a>
-                                    <a class='btn' data-role='strikeThrough'><strike>abc</strike></a>
-                                    </div>
-                                    <div class='btn-group'>
-                                    <a class='btn' data-role='justifyLeft'><i class="fas fa-align-left"></i></a>
-                                    <a class='btn' data-role='justifyCenter'><i class="fas fa-align-center fa-flip-vertical"></i></a>
-                                    <a class='btn' data-role='justifyRight'><i class="fas fa-align-right"></i></a>
-                                    <a class='btn' data-role='justifyFull'><i class="fas fa-align-justify"></i></a>
-                                    </div>
-                                    <div class='btn-group'>
-                                    <a class='btn' data-role='indent'><i class="fas fa-indent"></i></a>
-                                    <a class='btn' data-role='outdent'><i class="fas fa-indent fa-flip-horizontal"></i></a>
-                                    </div>
-                                </div>
-                                <!-- textarea editor -->
-                                <div id='editor' contenteditable></div>
-                            </div>
+                            <label>Message:<span class="text-danger">*</span></label>
+                            <textarea name="message" id="divInput-description-post" class="form-control"></textarea>
                             <span class="text-danger err_desc"><!-- --></span>
-                        </div> 
+                        </div>
                         <div class="form-group mb-3">
-                            <label>Event</label>
-                            <select class="form-select" name="event" id="event" required="">
-                                <option value="0">All</option>
-                                @foreach($events as $event)
-                                    <option value="{{ $event->id }}">{{ $event->title }}</option>
-                                @endforeach
-                            </select>
-                            <span class="text-danger err_timezone"><!-- --></span>
-                        </div> 
+                            <label>Contestants</label>
+                            <input id="contestant" autocomplete="off" type="text" class="form-control form-control-lg" name="contestant" />
+                            <span class="contestants_list"><!-- --></span>
+                            <span class="contestants_choosed"><!-- --></span>
+                        </div>
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Date send:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg datetimepicker_1" name="date_send" @if(isset($broadcast)) value="{{ $broadcast->date_send }}" @endif/>
                                 <span class="text-danger err_date_send"><!-- --></span>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                             <label>Timezone</label>
                             <select class="form-select" name="timezone" id="timezone" required="">
                                 @if(count($helper::timezone()) > 0)
                                     @foreach($helper::timezone() as $key=>$val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
+                                        <option value="{{ $key }}">{{ $val }}</option>
                                     @endforeach
                                 @endif
                             </select>
                             <span class="text-danger err_timezone"><!-- --></span>
-                        </div> 
+                        </div>
                         <!-- end form -->
                     </div>
                 </div>
@@ -102,15 +69,88 @@
     </div>
 </div>
 
-
-
+<script src="{{ asset('assets/js/counting.js') }}" type="text/javascript"></script>
 <script>
 $(function() {
+    emoji();
+    display_contestant();
+    add_contestants();
+    del_contestants();
     datetimepicker();
-    editor();
     save_data();
     editForm();
 });
+
+function add_contestants()
+{
+    $("body").on("click",".contestant_data",function(){
+        var btn = '';
+        var name = $(this).attr('data_name');
+        var id = $(this).attr('data_id');
+        var phone = $(this).attr('data_phone');
+        var len = $(".btct").length;
+        var check = $('.bt_'+id+'').length;
+
+        if(len >= 10 || check >= 1)
+        {
+            return false;
+        }
+
+        btn += '<span class="btct badge bg-info text-light p-2 mt-1 me-2 bt_'+id+'">';
+        btn += '<span data-id="'+id+'" class="cid">'+name+' -- '+phone+'</span>';
+        btn += '<span data-id="'+id+'" role="button" class="delc text-dark badge bg-light text-decoration-none ms-1">X</span></span>';
+        $(".contestants_choosed").append(btn);
+    });
+}
+
+function del_contestants()
+{
+    $("body").on("click",".delc",function(){
+        var id = $(this).attr('data-id');
+        var btn = $(".bt_"+id+"").remove();
+    });
+}
+
+function display_contestant()
+{
+    $("#contestant").keyup(delay(function(e){
+        var text = $(this).val();
+
+        $.ajax({
+            "type":"GET",
+            "url":"{{ url('display-contestants') }}",
+            "data": {"contestant" : text},
+            "dataType":"html",
+            beforeSend: function()
+            {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success : function(result)
+            {
+                $(".contestants_list").html(result);
+            },
+            complete : function(xhr)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
+
+    },300)
+    );
+}
+
+function emoji()
+{
+    $("#divInput-description-post").emojioneArea({
+        pickerPosition: "right",
+        mainPathFolder : "{{url('')}}",
+    });
+
+    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('@if(isset($event)){{ $event->message }}@endif');
+}
+
 
 function editForm()
 {
@@ -124,42 +164,6 @@ function editForm()
     @endif
 }
 
-function editor()
-{
-    @if(isset($broadcast))
-        var editor = '{!! $broadcast->message !!}';
-        $("#editor").html(editor);
-    @endif
-
-    $('#editControls a').click(function(e) {
-        switch($(this).data('role')) {
-        default:
-            document.execCommand($(this).data('role'), false, null);
-            break;
-        }
-    });
-    $('#editControls .fontsize').change(function(e) {
-        console.log($(this).val());
-        switch($(this).val()) {
-            case 'h3':
-                document.execCommand("fontSize", false, "1");
-            break;
-            case 'h2':
-                document.execCommand("fontSize", false, "5");
-                break;
-            case 'h1':
-                document.execCommand("fontSize", false, "7");
-                break;
-            case 'normal':
-                document.execCommand("removeFormat", false);
-                break;
-            default:
-                document.execCommand("fontSize", false, null);
-                break;
-        }
-    });
-}
-
 function datetimepicker()
 {
     var date, tdate;
@@ -167,7 +171,7 @@ function datetimepicker()
     var date_1 = $('.datetimepicker_1').val();
 
     (date_1.length == 0)?date = ndate : date = moment(date_1);
-    
+
 
     var format_date = 'YYYY-MM-DD HH:mm';
 
@@ -175,7 +179,6 @@ function datetimepicker()
         format : format_date,
         minDate : date
     });
-    
 }
 
 function save_data()
@@ -240,9 +243,5 @@ function save_data()
 }
 
 
-
-
-
 </script>
-<script src="{{ asset('assets/js/counting.js') }}" type="text/javascript"></script>
 @endsection

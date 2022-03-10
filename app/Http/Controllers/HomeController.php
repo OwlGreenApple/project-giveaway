@@ -93,18 +93,6 @@ class HomeController extends Controller
     public function message_list($ev_id)
     {
         $messages = Messages::where([['ev_id',$ev_id],['user_id',Auth::id()]])->get();
-
-        if($messages->count() > 0)
-        {
-            foreach($messages->toArray() as $index=>$row):
-                if($row['img_url'] !== null)
-                {
-                    $messages[$index]['img_url'] = $this->check_s3_image($row['img_url']);
-                }
-            endforeach;
-        }
-
-        // dd($messages);
         return view('message-list',['data'=>$messages]);
     }
 
@@ -117,7 +105,7 @@ class HomeController extends Controller
         }
         else
         {
-            return false;
+            return null;
         }
     }
 
@@ -463,6 +451,7 @@ class HomeController extends Controller
             'apicheck'=>$apicheck,
             'act'=>$act,
             'mlc'=>$mlc,
+            'obj'=> new Homecontroller
         ];
         return view('create',$arr);
     }

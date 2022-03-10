@@ -81,6 +81,7 @@ Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_e
 
 /* Broadcast */
 Route::get('/create-broadcast', [App\Http\Controllers\BroadcastController::class, 'create_broadcast']);
+Route::get('/display-contestants', [App\Http\Controllers\BroadcastController::class, 'display_contestants']);
 Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast_index']);
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
 Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
@@ -94,7 +95,7 @@ Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm
 Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
 Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
 
-/* Admin Redeem */ 
+/* Admin Redeem */
 Route::get('affiliate-admin',[App\Http\Controllers\AdminController::class, 'index']);
 Route::get('affiliate-admin-data',[App\Http\Controllers\AdminController::class,'affiliate_admin_data']);
 Route::post('upload-payment-2-redeem',[App\Http\Controllers\AdminController::class,'upload_payment_2']);

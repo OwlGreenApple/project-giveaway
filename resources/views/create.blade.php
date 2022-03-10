@@ -290,6 +290,15 @@
                             </div>
                             <div class="form-group">
                                 <label>Image Message</label>
+                                <div class="mb-2">
+                                    @if(isset($event) && $event->img_url == null)
+                                        -
+                                    @else
+                                        @if(isset($event) && $obj->check_s3_image($event->img_url) !== null)
+                                            <img src="{{$obj->check_s3_image($event->img_url)}}" width="100" />
+                                        @endif
+                                    @endif
+                                </div>
                                 <input type="file" class="form-control form-control-lg" name="media" />
                                 <span class="text-danger err_media"><!-- --></span>
                             </div>

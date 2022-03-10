@@ -45,6 +45,7 @@
             @if(!is_null($phone) && $phone->status == 1)
             <!-- TEST SEND MESSAGE -->
             <div class="container mt-4 card p-3">
+                <span id="msg_test"><!-- --></span>
                 <form id="test_message">
                     <div class="mb-3">
                         <div class="form-group iti-wrapper">
@@ -345,8 +346,9 @@
     {
         $("#test_message").submit(function(e){
             e.preventDefault();
+
             var data = $(this).serializeArray();
-            data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') });
+            data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1});
 
             var ipt = $("input[name='media']").val();
             var url;
@@ -376,11 +378,19 @@
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
 
-                    if(result.status == 'PENDING')
+                    if(result.err == 1)
                     {
-                        alert('Message sent!');
+                        $("#msg_test").html('<div class="alert alert-danger">{{ Lang::get("custom.test") }}</div>');
                     }
-                    $(".counter").html(result.counter);
+                    else if(result.err == 2)
+                    {
+                        $("#msg_test").html('<div class="alert alert-danger">{{ Lang::get("custom.test.invalid") }}</div>');
+                    }
+                    else
+                    {
+                        $("#msg_test").html('<div class="alert alert-success">{{ Lang::get("custom.test.success") }}</div>');
+                        $(".counter").html(result.counter);
+                    }
                 },
                 error: function(xhr){
                     $('#loader').hide();

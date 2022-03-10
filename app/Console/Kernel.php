@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('check:membership_terms')->everyFifteenMinutes();
         $schedule->command('check:device')->everyThirtyMinutes();
         $schedule->command('check:message')->everyTenMinutes();
-        $schedule->command('send:broadcast')->everyMinute();
+        $schedule->command('running:message')->everyMinute();
         $schedule->command('reset:counter_send_message')->daily();
     }
 

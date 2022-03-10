@@ -32,6 +32,7 @@ class DeviceController extends Controller
     public function send_message(Request $req)
     {
         $to = $req->number;
+        $message = $req->message;
 
         // CASE IF USER USE TO TEST NUMBER
         if($req->code !== null)
@@ -44,8 +45,18 @@ class DeviceController extends Controller
             $to = substr($req->code,1).$to;
         }
 
+        if($message == null)
+        {
+            return response()->json(['err'=>1]);
+        }
+
+         // INVALID NUMBER FILTER
+         if(is_numeric($to) == false)
+         {
+             return response()->json(['err'=>2]);
+         }
+
         $user = User::find($req->user_id);
-        $message = $req->message;
 
         // SPONSOR MESSAGE
         $ct = new Custom;
@@ -110,8 +121,33 @@ class DeviceController extends Controller
     {
         // 'https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png'
 
-        $user = User::find($req->user_id);
+        $to = $req->number;
         $message = $req->message;
+        $test = $req->test;
+
+        // CASE IF USER USE TO TEST NUMBER
+        if($req->code !== null)
+        {
+            if($to == null)
+            {
+                return response()->json(['err'=>1]);
+            }
+
+            $to = substr($req->code,1).$to;
+        }
+
+        if($message == null)
+        {
+            return response()->json(['err'=>1]);
+        }
+
+        // INVALID NUMBER FILTER
+        if(is_numeric($to) == false)
+        {
+            return response()->json(['err'=>2]);
+        }
+
+        $user = User::find($req->user_id);
 
         // SPONSOR MESSAGE
         $ct = new Custom;
@@ -120,10 +156,20 @@ class DeviceController extends Controller
             $message.= $ct::sponsor();
         }
 
+        // test = null which mean from broadcast or auto reply
+        if($test == null)
+        {
+            $media = Storage::disk('s3')->url($req->media);
+        }
+        else
+        {
+            $media = $req->media;
+        }
+
         $data = [
-            "to"=> $req->number,
+            "to"=> $to,
             "message"=> $message,
-            "media_url"=> Storage::disk('s3')->url($req->media),
+            "media_url"=> $media,
             "type"=> 'image',
             "reply_for"=> 0
         ];

@@ -14,8 +14,7 @@
                     <thead>
                         <tr>
                             <th>Recipient</th>
-                            <th>Messages</th>
-                            <th>Image</th>
+                            <th>Date Created</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -24,8 +23,7 @@
                             @foreach($data as $phone)
                             <tr>
                                 <td>{{ $phone->receiver }}</td>
-                                <td><textarea class="form-control">{{ $phone->message }}</textarea></td>
-                                <td>@if($phone->img_url !== false) <img src="{{ $phone->img_url }}" width="45" /> @else - @endif</td>
+                                <td>{{ $phone->created_at }}</td>
                                 <td>
                                     @if($phone->status == 1) <span class="text-primary">Sent</span>
                                     @elseif($phone->status == 2) <span class="text-success">Delivered</span>

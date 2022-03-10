@@ -82,7 +82,7 @@ class CheckEvents
             'prize_amount'=>['required',new CheckNumber(null)],
             'desc'=>[new CheckDescription],
             'message'=>['required','max:65000'],
-            'media'=>['bail','required','mimes:jpeg,jpg,png','max:5000'],
+            'media'=>['bail','required','mimes:jpeg,jpg,png','max:1024'],
         ];
 
         if($request->media_option !== null)
