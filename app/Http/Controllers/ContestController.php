@@ -192,6 +192,7 @@ class ContestController extends Controller
                     $wa_msg = new Messages;
                     $wa_msg->user_id = $ev->user_id;
                     $wa_msg->ev_id = $ev->id;
+                    $wa_msg->ct_id = $contestant_id;
                     $wa_msg->sender = $ph->number;
                     $wa_msg->receiver = $phone;
                     $wa_msg->message = $msg;

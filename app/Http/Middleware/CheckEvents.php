@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Rules\CheckDate;
 use App\Rules\CheckNumber;
 use App\Rules\CheckDescription;
+use App\Rules\CheckMessage;
 use App\Models\Events;
 use App\Helpers\Custom;
 
@@ -81,8 +82,8 @@ class CheckEvents
             'prize_name'=>['required','max:100'],
             'prize_amount'=>['required',new CheckNumber(null)],
             'desc'=>[new CheckDescription],
-            'message'=>['required','max:65000'],
-            'media'=>['bail','required','mimes:jpeg,jpg,png','max:1024'],
+            'message'=>['required','max:65000',new CheckMessage],
+            'media'=>['bail','mimes:jpeg,jpg,png','max:1024'],
         ];
 
         if($request->media_option !== null)

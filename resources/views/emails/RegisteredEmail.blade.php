@@ -3,7 +3,7 @@
 	Halo {{$name}},
 	<br>
 	<br>
-	Selamat datang di Loyaleads
+	Selamat datang di {{ env('APP_NAME') }}
 	<br>
 	<strong>Password anda adalah : </strong>: {{ $password }}
 	<br>
@@ -22,8 +22,8 @@
 	<br>
 	<br> Terima kasih,
 	<br>
-	Team Loyaleads<br>
-	<span style="font-style: italic;">*Loyaleads adalah bagian dari Activomni.com</span>
+	Team {{ env('APP_NAME') }}<br>
+	<span style="font-style: italic;">*{{ env('APP_NAME') }} adalah bagian dari Activomni.com</span>
 	<br>
 	<br>
 	Jika ada yang ingin ditanyakan,<br>

@@ -13,6 +13,7 @@ return [
     'conf'=>'for your confirmation',
     'congrats'=>'Congratulations',
     'connected'=>'Your device has been connected',
+    'ct'=>'You should choose 1 contestant at least.',
     'currency'=>'Rp.',
     'de'=>'Daily Entries',
     'del'=>'Are you sure to delete?',

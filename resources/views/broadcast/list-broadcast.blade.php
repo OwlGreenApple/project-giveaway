@@ -7,7 +7,7 @@
             <h1 class="big-theme" align="center">List Broadcast</h1>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-12 col-sm-12 col-md-8 col-lg-9 table-responsive">
             <div id="msg"><!-- --></div>
             <table class="table table-bordered mb-5">
                 <thead>
@@ -15,7 +15,6 @@
                         <th scope="col">Title</th>
                         <th scope="col">Message</th>
                         <th scope="col">Date Send</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -25,17 +24,10 @@
                         <td>{{ $broadcast->title }}</td>
                         <td>{{ $broadcast->message }}</td>
                         <td>{{ $broadcast->date_send }}</td>
-                        <td><?php 
-                            if ($broadcast->status ==0) {
-                                echo "Pending";
-                            }
-                            if ($broadcast->status ==1) {
-                                echo "Sent";
-                            }
-                        ?></td>
                         <td>
-                            <button type="button" class="btn btn-warning btn-lg text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
-                            <button type="button" class="btn btn-danger btn-lg text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
+                            <button type="button" class="btn btn-info btn-sm text-white btn-view" data-id="{{$broadcast->id}}">Messages</button>
+                            <button type="button" class="btn btn-warning btn-sm text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
                         </td>
                     </tr>
                     @endforeach
@@ -63,7 +55,7 @@ function datetimepicker()
     var date_1 = $('.datetimepicker_1').val();
 
     (date_1.length == 0)?date = ndate : date = moment(date_1);
-    
+
 
     var format_date = 'YYYY-MM-DD HH:mm';
 
@@ -71,7 +63,7 @@ function datetimepicker()
         format : format_date,
         minDate : date
     });
-    
+
 }
 
 function editBroadcast(){
@@ -83,6 +75,13 @@ function editBroadcast(){
 
 function deleteBroadcast(){
     $(document).on('click','.btn-delete',function(e) {
+        var cf = confirm('{{ Lang::get("custom.del") }}');
+
+        if(cf == false)
+        {
+            return false;
+        }
+
         id = $(this).attr('data-id');
         $.ajax({
             headers: {
@@ -98,21 +97,24 @@ function deleteBroadcast(){
             {
                 $('#loader').show();
                 $('.div-loading').addClass('background-load');
-                // $(".error").hide();
             },
             success : function(result)
             {
                 if(result.success == 1)
                 {
+                    location.href="{{ url('broadcast') }}";
+                }
+                else if(result.success == 0)
+                {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-success">Data deleted</div>')
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>')
                 }
                 else
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>')
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
                 }
             },
             error : function(xhr)

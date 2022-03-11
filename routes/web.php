@@ -80,10 +80,10 @@ Route::get('/delete-events', [App\Http\Controllers\HomeController::class, 'del_e
 Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_events'])->middleware('check_events');
 
 /* Broadcast */
+Route::get('broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast_index']);
 Route::get('/create-broadcast', [App\Http\Controllers\BroadcastController::class, 'create_broadcast']);
 Route::get('/display-contestants', [App\Http\Controllers\BroadcastController::class, 'display_contestants']);
-Route::get('/list-broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast_index']);
-Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast']);
+Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast'])->middleware('check_bc');
 Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
 Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'edit_broadcast']);
 

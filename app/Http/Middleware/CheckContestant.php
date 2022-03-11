@@ -20,14 +20,14 @@ class CheckContestant
     public function handle(Request $request, Closure $next)
     {
         $rules = [
-            'contestant'=>['required','max:50'],
+            'contestant'=>['required','max:30'],
             'email'=>['required','email'],
             'phone'=>['required','min:6', new CheckValidPhone($request->pcode)],
         ];
 
         $validator = Validator::make($request->all(),$rules);
         $err = $validator->errors();
-        
+
         if($validator->fails() == true)
         {
             $errors = [

@@ -131,6 +131,7 @@ class HomeController extends Controller
         // }
 
         try{
+            Messages::where('ct_id',$id)->delete();
             Contestants::find($id)->delete();
             $res['err'] = 0;
         }
@@ -683,11 +684,18 @@ class HomeController extends Controller
     }
 
     // SAVE WA IMAGE MESSAGE
-    private static function save_wa_image($request,$event_id)
+    public static function save_wa_image($request,$event_id)
     {
-        $newfile = env('FOLDER_PATH').'/wa/'.Date('Y-m-d-h-i-s-').".jpg";
+        $newfile = env('FOLDER_PATH').'/wa/'.Date('Y-m-d-h-i-s').".jpg";
         Storage::disk('s3')->put($newfile,file_get_contents($request->file('media')), 'public');
 
+        //IN BROADCAST CASE
+        if($event_id == null)
+        {
+            return $newfile;
+        }
+
+        //IN AUTO REPLY CASE
         $ev = Events::find($event_id);
 
         if($ev->img_url !== null)

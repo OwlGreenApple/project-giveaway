@@ -26,14 +26,37 @@
                         </div>
                         <div class="form-group mb-3">
                             <label>Message:<span class="text-danger">*</span></label>
-                            <textarea name="message" id="divInput-description-post" class="form-control"></textarea>
-                            <span class="text-danger err_desc"><!-- --></span>
+                            <textarea name="message" id="divInput-description-post"></textarea>
+                            <span class="text-danger err_message"><!-- --></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Image:</label>
+                                @if(isset($broadcast) && $broadcast->url !== null)
+                                    <div class="mb-2">
+                                        @if(isset($broadcast) && $obj->check_s3_image($broadcast->url) !== null)
+                                            <img src="{{ $obj->check_s3_image($broadcast->url) }}" width="100" />
+                                        @endif
+                                    </div>
+                                @endif
+                            <input type="file" class="form-control" name="media" />
+                            <span class="text-danger err_media"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
                             <label>Contestants</label>
                             <input id="contestant" autocomplete="off" type="text" class="form-control form-control-lg" name="contestant" />
                             <span class="contestants_list"><!-- --></span>
-                            <span class="contestants_choosed"><!-- --></span>
+                            <span class="contestants_choosed">
+                                @if(isset($ct))
+                                    @foreach($ct as $row)
+                                        <span class="btct badge bg-info text-light p-2 mt-1 me-2 bt_{{$row['id']}}">
+                                            <span class="cid">{{$row['name']}} -- {{$row['wa']}}</span>
+                                            <input type="hidden" value="{{$row['id']}}" name="ct_id[]" />
+                                            <span data-id="{{$row['id']}}" role="button" class="delc text-light text-decoration-none ms-2"><i class="far fa-trash-alt"></i></span>
+                                        </span>
+                                    @endforeach
+                                @endif
+                            </span>
+                            <span class="text-danger err_ct_id"><!-- --></span>
                         </div>
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
@@ -97,8 +120,9 @@ function add_contestants()
         }
 
         btn += '<span class="btct badge bg-info text-light p-2 mt-1 me-2 bt_'+id+'">';
-        btn += '<span data-id="'+id+'" class="cid">'+name+' -- '+phone+'</span>';
-        btn += '<span data-id="'+id+'" role="button" class="delc text-dark badge bg-light text-decoration-none ms-1">X</span></span>';
+        btn += '<span class="cid">'+name+' -- '+phone+'</span>';
+        btn += '<input type="hidden" value="'+id+'" name="ct_id[]" />';
+        btn += '<span data-id="'+id+'" role="button" class="delc text-light text-decoration-none ms-2"><i class="far fa-trash-alt"></i></span></span>';
         $(".contestants_choosed").append(btn);
     });
 }
@@ -148,7 +172,7 @@ function emoji()
         mainPathFolder : "{{url('')}}",
     });
 
-    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('@if(isset($event)){{ $event->message }}@endif');
+    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('@if(isset($broadcast)) {{ $broadcast->message }} @endif');
 }
 
 
@@ -185,10 +209,8 @@ function save_data()
 {
     $("#create_broadcast").submit(function(e){
         e.preventDefault();
-        var desc = $("#editor").html();
         var form = $("#create_broadcast")[0];
         var data = new FormData(form);
-        data.append('desc',desc);
 
         // return false;
 
@@ -207,30 +229,34 @@ function save_data()
             {
                 $('#loader').show();
                 $('.div-loading').addClass('background-load');
-                // $(".error").hide();
             },
             success : function(result)
             {
                 if(result.success == 1)
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-success">Data submitted</div>')
+                    location.href="{{ url('create-broadcast') }}";
                 }
-                else if(result.success == 2)
+                else if(result.success == 'edit')
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
+                    location.href="{{ url('edit-broadcast') }}/"+result.id;
                 }
                 else if(result.success == 'err')
                 {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    $(".err_title").html(result.title);
+                    $(".err_media").html(result.media);
+                    $(".err_message").html(result.message);
+                    $(".err_timezone").html(result.timezone);
+                    $(".err_date_send").html(result.date_send);
+                    $(".err_ct_id").html('<div>'+result.ct_id+'</div>');
                 }
                 else
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>')
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
                 }
             },
             error : function(xhr)
@@ -241,7 +267,6 @@ function save_data()
         });
     });
 }
-
 
 </script>
 @endsection

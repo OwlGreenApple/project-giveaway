@@ -107,9 +107,6 @@
                                 <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('create-broadcast') }}">Broadcast</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{{ url('account') }}">Accounts</a>
                             </li>
                             <li class="nav-item">
@@ -117,6 +114,13 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('scan') }}">Connect WA</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="bcDropdown" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Broadcast</a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bcDropdown">
+                                    <a class="dropdown-item" href="{{ url('create-broadcast') }}">Create Broadcast</a>
+                                    <a class="dropdown-item" href="{{ url('broadcast') }}">Broadcast List</a>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -162,7 +166,7 @@
                     <a href="#">FAQ</a>
                     <a href="#">TERMS</a>
                 </div>
-                <div class="mt-2"><small>Copyright&copy; 2022 Giveaway</small></div>
+                <div class="mt-2"><small>Copyright&copy; 2022 {{env('APP_NAME')}}</small></div>
             </div>
         </div>
     </div>
