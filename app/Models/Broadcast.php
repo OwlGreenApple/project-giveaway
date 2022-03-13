@@ -11,12 +11,4 @@ class Broadcast extends Model
 
     protected $table = "broadcasts";
 
-    /*
-        event_id :
-        0 -> all
-        
-        status :
-        0 -> pending
-        1 -> executed
-    */ 
 }

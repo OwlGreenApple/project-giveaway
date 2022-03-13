@@ -112,8 +112,7 @@ class BroadcastController extends Controller
 
         if (!is_null($broadcast))
         {
-            $ct = explode("|",$broadcast->ct_list);
-            array_pop($ct);
+            $ct = self::parsing_array($broadcast->ct_list);
             $cts = array();
 
             foreach($ct as $index=>$id):
@@ -140,6 +139,14 @@ class BroadcastController extends Controller
             return view('error404');
         }
     }
+
+    public static function parsing_array($ct)
+    {
+        $arr=explode("|",$ct);
+        array_pop($arr);
+        return $arr;
+    }
+
 
     public function save_broadcast(Request $request)
     {
