@@ -14,6 +14,7 @@ return [
     'congrats'=>'Congratulations',
     'connected'=>'Your device has been connected',
     'ct'=>'You should choose 1 contestant at least.',
+    'ct.max'=>'Maximum contestant is 10.',
     'currency'=>'Rp.',
     'de'=>'Daily Entries',
     'del'=>'Are you sure to delete?',

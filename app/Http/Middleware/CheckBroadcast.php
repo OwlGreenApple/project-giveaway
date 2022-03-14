@@ -34,19 +34,29 @@ class CheckBroadcast
 
         $validator = Validator::make($request->all(),$rules);
         $err = $validator->errors();
-        $errors = array();
+        $errors = $total_ct = array();
+        $rct = true;
 
-        if($validator->fails() == true || $request->ct_id == null)
+        if($request->ct_id == null)
         {
-            if($request->ct_id == null)
-            {
-                $ctid_err = Lang::get('custom.ct');
-            }
-            else
-            {
-                $ctid_err = '';
-            }
+            $ctid_err = Lang::get('custom.ct');
+            $rct = false;
+        }
+        else
+        {
+            $ctid_err = '';
+            $total_ct = count($request->ct_id);
 
+            // PREVENT MAX CONTESTANT GREATER THAN 10 WHEN USER TRYNG TO HACK
+            if($total_ct > 10)
+            {
+                $ctid_err = Lang::get('custom.ct.max');
+                $rct = false;
+            }
+        }
+
+        if($validator->fails() == true || $rct == false)
+        {
             $errors = [
                 'success'=>'err',
                 'title'=>$err->first('title'),

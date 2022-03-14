@@ -11,40 +11,71 @@
             <div id="msg"><!-- --></div>
             <table class="table table-bordered mb-5">
                 <thead>
-                    <tr class="table-success">
-                        <th scope="col">Title</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Date Send</th>
-                        <th scope="col">Action</th>
-                    </tr>
+                    @if(isset($msg))
+                        @if($msg->count() > 0)
+                            <tr class="table-success">
+                                <th scope="col">Receiver</th>
+                                <th scope="col">Message</th>
+                                <th scope="col">Date Created</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        @endif
+                    @else
+                        <tr class="table-success">
+                            <th scope="col">Title</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date Send</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    @endif
                 </thead>
+
                 <tbody>
-                    @foreach($broadcasts as $broadcast)
-                    <tr>
-                        <td>{{ $broadcast->title }}</td>
-                        <td>{{ $broadcast->message }}</td>
-                        <td>{{ $broadcast->date_send }}</td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-sm text-white btn-view" data-id="{{$broadcast->id}}">Messages</button>
-                            <button type="button" class="btn btn-warning btn-sm text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
-                        </td>
-                    </tr>
-                    @endforeach
+                    @if(isset($msg))
+                        @if($msg->count() > 0)
+                            @foreach($msg as $row)
+                            <tr>
+                                <td>{{ $row->receiver }}</td>
+                                <td>{{ $row->message }}</td>
+                                <td>{{ $row->created_at }}</td>
+                                <td>
+                                    @if($row->status == 0)
+                                        <button type="button" class="btn btn-danger btn-sm text-white btn-delete" msg="1" data-id="{{$row->id}}">Delete</button>
+                                    @else
+                                        <span class="@if($row->status == 1) text-primary @elseif($row->status == 2) text-success @elseif($row->status == 3) text-info @else text-danger @endif">{{ $row->status_msg }}</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        @endif
+                    @else
+                        @foreach($broadcasts as $broadcast)
+                        <tr>
+                            <td>{{ $broadcast->title }}</td>
+                            <td>{{ $broadcast->message }}</td>
+                            <td>{{ $broadcast->date_send }}</td>
+                            <td>
+                                <button type="button" class="btn btn-info btn-sm text-white btn-view" data-id="{{$broadcast->id}}">Messages</button>
+                                <button type="button" class="btn btn-warning btn-sm text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
+                                <button type="button" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
                 </tbody>
+
             </table>        <!-- end col -->
         </div>
 
     </div>
 </div>
 
-
-
 <script>
 $(function() {
     //datetimepicker();
     deleteBroadcast();
     editBroadcast();
+    messagesBroadcast();
 });
 
 
@@ -73,8 +104,17 @@ function editBroadcast(){
     });
 }
 
+function messagesBroadcast()
+{
+    $(document).on('click','.btn-view',function(e) {
+        id = $(this).attr('data-id');
+        window.location.href = "{{ url('message-broadcast') }}/"+id;
+    });
+}
+
 function deleteBroadcast(){
     $(document).on('click','.btn-delete',function(e) {
+        var url,red;
         var cf = confirm('{{ Lang::get("custom.del") }}');
 
         if(cf == false)
@@ -82,13 +122,27 @@ function deleteBroadcast(){
             return false;
         }
 
-        id = $(this).attr('data-id');
+        var id = $(this).attr('data-id');
+        var msg = $(this).attr('msg');
+        var bc_id = "@if(isset($bc_id)) {{ $bc_id }} @endif"
+
+        if(msg == undefined)
+        {
+            url = "{{ url('delete-broadcast') }}";
+            red = "{{ url('broadcast') }}"
+        }
+        else
+        {
+            url = "{{ url('delete-message') }}";
+            red = "{{ url('message-broadcast') }}/"+bc_id;
+        }
+
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             method:'POST',
-            url : "{{ url('delete-broadcast') }}",
+            url : url,
             data : {
                 'id':id
             },
@@ -102,7 +156,7 @@ function deleteBroadcast(){
             {
                 if(result.success == 1)
                 {
-                    location.href="{{ url('broadcast') }}";
+                    location.href=red;
                 }
                 else if(result.success == 0)
                 {

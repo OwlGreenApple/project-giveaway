@@ -36,19 +36,19 @@
   </div>
   <!-- end container -->
 </div>
-  
+
 
 <!-- Modal Confirm -->
 <div class="modal fade" id="confirm_popup" role="dialog">
 <div class="modal-dialog">
-  
+
   <!-- Modal content-->
   <div class="modal-content">
     <div class="modal-header">
       <h5 class="modal-title" id="modaltitle">
         Konfirmasi Pembayaran
       </h5>
-      
+
     </div>
     <div class="modal-footer" id="foot">
       <button class="btn btn-primary" id="btn_confirm" data-bs-dismiss="modal">
@@ -59,21 +59,21 @@
       </button>
     </div>
   </div>
-    
+
 </div>
 </div>
 
 <!-- Modal Cancel -->
 <div class="modal fade" id="cancel_popup" role="dialog">
   <div class="modal-dialog">
-    
+
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          Batal Order?
+          Batalkan Order?
         </h5>
-       
+
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" id="btn_cancel" data-bs-dismiss="modal">
@@ -84,7 +84,7 @@
         </button>
       </div>
     </div>
-      
+
   </div>
 </div>
 
@@ -114,7 +114,7 @@
      .off()
      .on('keyup keypress', delay(function() {
         $('#order_table').DataTable().search(this.value.trim(), false, false).draw();
-     },1000));    
+     },1000));
   }
 
   function delay(callback, ms) {
@@ -236,7 +236,7 @@
 
       $.ajax({
         type : 'GET',
-        url : "{{ url('/order-cancel') }}",
+        url : "{{ url('/cancel-order') }}",
         data : {id:id},
         dataType: 'json',
         beforeSend: function() {

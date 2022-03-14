@@ -86,6 +86,8 @@ Route::get('/display-contestants', [App\Http\Controllers\BroadcastController::cl
 Route::post('/save-broadcast', [App\Http\Controllers\BroadcastController::class, 'save_broadcast'])->middleware('check_bc');
 Route::post('/delete-broadcast', [App\Http\Controllers\BroadcastController::class, 'delete_broadcast']);
 Route::get('/edit-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'edit_broadcast']);
+Route::get('/message-broadcast/{id}', [App\Http\Controllers\BroadcastController::class, 'message_broadcast']);
+Route::post('/delete-message', [App\Http\Controllers\BroadcastController::class, 'delete_message']);
 
 /* Admin */
 Route::get('list-user',[App\Http\Controllers\AdminController::class, 'index']);
@@ -94,6 +96,7 @@ Route::get('order-load',[App\Http\Controllers\AdminController::class,'order']);
 Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm_order']);
 Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
 Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
+Route::get('cancel-order',[App\Http\Controllers\AdminController::class,'cancel_order']);
 
 /* Admin Redeem */
 Route::get('affiliate-admin',[App\Http\Controllers\AdminController::class, 'index']);

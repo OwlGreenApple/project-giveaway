@@ -140,13 +140,21 @@ class BroadcastController extends Controller
         }
     }
 
+    public function message_broadcast($id)
+    {
+        $msg = Messages::where([['user_id',Auth::id()],['bc_id','=',$id]])
+                ->select(DB::raw("*,(CASE WHEN status = 1 THEN 'Sent' WHEN status = 2 THEN 'Delivered'  WHEN status = 3 THEN 'Read' ELSE 'Failed' END) AS status_msg"))
+                ->get();
+
+        return view('broadcast.list-broadcast',['msg'=>$msg,'bc_id'=>$id]);
+    }
+
     public static function parsing_array($ct)
     {
         $arr=explode("|",$ct);
         array_pop($arr);
         return $arr;
     }
-
 
     public function save_broadcast(Request $request)
     {
@@ -258,7 +266,30 @@ class BroadcastController extends Controller
         }
 
         return response()->json($ret);
-}
+    }
+
+    public function delete_message(Request $request)
+    {
+        $user_id = Auth::id();
+        $ret = ["success"=>0];
+
+        // DELETE MESSAGE IF AVAILABLE
+        $msg = Messages::where([['id',$request->id],['user_id',$user_id]]);
+        if($msg->first() !== null)
+        {
+            try
+            {
+                $msg->delete();
+                $ret = ["success"=>1];
+            }
+            catch(QueryException $e)
+            {
+                $ret = ["success"=>'db'];
+            }
+        }
+
+        return response()->json($ret);
+    }
 
 /* end class */
 }

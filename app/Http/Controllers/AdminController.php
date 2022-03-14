@@ -43,7 +43,7 @@ class AdminController extends Controller
         $data['msg'] = 'User tidak ada';
         return response()->json($data);
       }
-      
+
       try
       {
         $user->status = 0;
@@ -96,7 +96,7 @@ class AdminController extends Controller
           $order = Orders::where('notes','LIKE',"%".$src."%");
         }
 
-        $orders = $order->orderBy('created_at','desc')->get();
+        $orders = $order->orderBy('created_at','desc')->skip($start)->limit($length)->get();
         $total = $orders->count();
       }
 
@@ -124,7 +124,7 @@ class AdminController extends Controller
           }
           elseif($row->status == 1)
           {
-          	$confirm = '<button type="button" class="btn btn-info btn-sm confirm" data-bs-toggle="modal" data-bs-target="#confirm_popup" data-id="'.$row->id.'">Konfirmasi</button> <button type="button" class="btn btn-danger btn-sm cancel" data-toggle="modal" data-target="#cancel_popup" data-id="'.$row->id.'">Batal</button>';
+          	$confirm = '<button type="button" class="btn btn-info btn-sm confirm" data-bs-toggle="modal" data-bs-target="#confirm_popup" data-id="'.$row->id.'">Konfirmasi</button> <button type="button" class="btn btn-danger btn-sm cancel" data-bs-toggle="modal" data-bs-target="#cancel_popup" data-id="'.$row->id.'">Batal</button>';
           }
           elseif($row->status == 2)
           {
@@ -172,7 +172,7 @@ class AdminController extends Controller
           ];
         }
       }
-     
+
       echo json_encode($data);
     }
 
@@ -188,7 +188,7 @@ class AdminController extends Controller
     	{
         $today = Carbon::now();
         $user = User::find($order->user_id);
-    
+
         $order->date_confirm = $today;
         $order->status = 2;
         $order->save();
@@ -198,7 +198,7 @@ class AdminController extends Controller
         $total_month = $ct->check_type($order->package)['terms'];
 
         // dd($user->id);
-        
+
         if($check_active_membership == 'active')
         {
             $data = [
@@ -221,7 +221,7 @@ class AdminController extends Controller
 
         // send mail to user
         Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
-        $data['success'] = 1; 
+        $data['success'] = 1;
     	}
     	else
     	{
@@ -275,7 +275,7 @@ class AdminController extends Controller
         //if available data
         $previous_end_day = Carbon::parse($check_membership->end)->setTime(0, 0, 0);
         $next_end_day = Carbon::parse($previous_end_day)->addMonths($data['terms']);
-        
+
         $membership->start = $previous_end_day;
         $membership->end = $next_end_day;
       }
@@ -314,7 +314,7 @@ class AdminController extends Controller
     	{
     		$order->status = 3;
     		$order->save();
-    		$data['success'] = 1; 
+    		$data['success'] = 1;
     	}
     	else
     	{
