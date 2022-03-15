@@ -159,43 +159,46 @@
             // e.preventDefault();
             // var data = $(this).serializeArray();
             // data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') });
-
-            $.ajax({
-                headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                method : 'POST',
-                // data : data,
-                url : '{{ url("connect") }}',
-                dataType : 'json',
-                beforeSend : function()
-                {
-                    $('#loader').show();
-                    $('.div-loading').addClass('background-load');
-                },
-                success : function(result)
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
-                    if(result.status == 'success')
-                    {
-                        $("#con").remove();
-                        waitingTime();
-                    }
-                    else if(result.status == 'etoken')
-                    {
-                        $("#msg").html('<div class="alert alert-warning mt-2">{{ Lang::get("custom.scan") }}</div>');
-                    }
-                    else
-                    {
-                        $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
-                    }
-                },
-                error: function(xhr){
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                }
-            });
+            register_login_device();
         })
+    }
+
+    function register_login_device()
+    {
+        $.ajax({
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            method : 'POST',
+            url : '{{ url("connect") }}',
+            dataType : 'json',
+            beforeSend : function()
+            {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success : function(result)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+
+                if(result.status == 'success')
+                {
+                    $("#con").remove();
+                    waitingTime();
+                }
+                else if(result.status == 'etoken')
+                {
+                    register_login_device();
+                }
+                else
+                {
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                }
+            },
+            error: function(xhr){
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
     }
 
     function scan()
@@ -230,6 +233,11 @@
                 if(result.err == 0)
                 {
                     $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>');
+                    setTimeout(function(){
+                        $('#loader').show();
+                        $('.div-loading').addClass('background-load');
+                        location.href="{{ url('scan') }}";
+                    },1000);
                 }
                 else
                 {

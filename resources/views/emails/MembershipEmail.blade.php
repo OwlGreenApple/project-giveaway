@@ -15,7 +15,7 @@
 Total : Rp.<b>{{ $ct::format($total) }}</b>
 <br>
 <br/>
-{{ Lang::get('email.transfer') }} : {{ env('BANK_NAME') }} <b>{{ env('NO_REK') }}</b> Sugiarto Lasjim<br>
+{{ Lang::get('email.transfer') }} : {{ Config::get('view.bank_name') }} <b>{{ Config::get('view.no_rek') }}</b> {{ Config::get('view.bank_owner') }}<br>
 {{ Lang::get('email.after') }} :
 <br>
 {{ Lang::get('email.upload.step') }} : <a href="{{ url('account') }}/payment">{{ Lang::get('email.upload') }}</a>
@@ -32,8 +32,8 @@ Team {{ env('APP_NAME') }}<br>
 <br>
 <br>
 {{ Lang::get('email.help.ask') }},<br>
-{{ Lang::get('email.help.support') }} : {{ env('ADMIN_EMAIL') }} <br>
+{{ Lang::get('email.help.support') }} : {{ Config::get('view.email_admin') }} <br>
 {{ Lang::get('email.help.reply') }} <br>
 <br>
-{{ Lang::get('email.help.or') }} : {{ env('ADMIN_PHONE') }} <br>
+{{ Lang::get('email.help.or') }} : {{ Config::get('view.phone_admin') }} <br>
 {{ Lang::get('email.hour') }}<br>

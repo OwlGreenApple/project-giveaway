@@ -109,11 +109,70 @@ class RunningMessages extends Command
 
         /* SEND MESSAGE LOGIC */
 
-        $msg = Messages::where('status',0)->orderBy('id','asc')->skip(0)->take(6)->get();
+        $messagebulk = Messages::where('status',0)->orderBy('id','asc')->get();
         $arr = array(11,8,13,6,9,12); // 59 seconds, because computer will count start from 0
         shuffle($arr);
 
-        if($msg->count() > 0)
+        $msg = $bc_id = $ev_id = array();
+        if($messagebulk->count() > 0)
+        {
+            foreach($messagebulk as $x=>$cols):
+                if($cols->bc_id > 0)
+                {
+                    $bc_id[] = $cols;
+                }
+
+                if($cols->ev_id > 0)
+                {
+                    $ev_id[] = $cols;
+                }
+            endforeach;
+        }
+
+        $total_bc = count($bc_id);
+        $total_ev = count($ev_id);
+        $total_msg = 0;
+
+        // bc
+        if($total_bc > 0 && $total_bc > 6)
+        {
+            if($total_ev < 1)
+            {
+                array_slice($bc_id,6);
+            }
+            else if($total_ev < 3)
+            {
+                $sum = $total_bc - $total_ev;
+                array_slice($bc_id,$sum);
+            }
+            else
+            {
+                array_slice($bc_id,4);
+            }
+        }
+
+        // ev
+        if($total_ev > 0)
+        {
+            if($total_ev > 6)
+            {
+                array_slice($ev_id,6);
+            }
+
+            $total_msg = $total_bc + $total_ev;
+
+            if($total_msg > 6)
+            {
+                $sum = $total_ev - $total_bc;
+                array_slice($ev_id,$sum);
+            }
+        }
+
+        $msg = array_merge($bc_id,$ev_id);
+
+        dd($msg);
+
+        if(count($msg) > 0)
         {
             $message = ''; //define variable to add sposor message according on package
             foreach($msg as $x=>$row):
@@ -126,8 +185,8 @@ class RunningMessages extends Command
                 }
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
-                // $cd = new CDV;
-                // $check_device = $cd->check_device($phone);
+                $cd = new CDV;
+                $check_device = $cd->check_device($phone);
 
                 if($phone->status == 0 || $user->counter_send_message_daily < 1)
                 {
@@ -149,8 +208,8 @@ class RunningMessages extends Command
                         'msg_id'=>$row->id
                     ];
                     $req = new Request($data);
-                    print_r($row->id."\n");
-                    // $send = $device->send_message($req);
+                    // print_r($row->id."\n");
+                    $send = $device->send_message($req);
                 }
                 else
                 {
@@ -163,8 +222,8 @@ class RunningMessages extends Command
                         'msg_id'=>$row->id
                     ];
                     $req = new Request($data);
-                    // $send = $device->send_media($req);
-                    print_r($row->id."\n");
+                    $send = $device->send_media($req);
+                    // print_r($row->id."\n");
                 }
             endforeach;
         }

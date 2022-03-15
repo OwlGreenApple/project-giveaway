@@ -1,57 +1,57 @@
 @if($destination == null)
 
-	Halo {{$name}},
+    {{ Lang::get('email.greet') }} {{$name}},
 	<br>
 	<br>
-	Selamat datang di {{ env('APP_NAME') }}
+	{{ Lang::get('email.welcome') }} {{ env('APP_NAME') }}
 	<br>
-	<strong>Password anda adalah : </strong>: {{ $password }}
-	<br>
-	<br>
-	<strong>Link login:</strong>
-	<br>
-	{{ url('/') }}/login
+	<strong>{{ Lang::get('email.pass') }} : </strong>: {{ $password }}
 	<br>
 	<br>
-	Jika anda memerlukan bantuan
+	<strong>{{ Lang::get('email.link') }} :</strong>
 	<br>
-	<strong>Silahkan kontak customer kami
+	{{ url('login') }}
+	<br>
+	<br>
+	{{ Lang::get('email.help.if') }}
+	<br>
+	<strong>{{ Lang::get('email.help.contact') }}
 	<br>
 	Telegram</strong>: @activomni_cs
 	<br>
 	<br>
-	<br> Terima kasih,
+	<br> {{ Lang::get('email.thank') }},
 	<br>
 	Team {{ env('APP_NAME') }}<br>
-	<span style="font-style: italic;">*{{ env('APP_NAME') }} adalah bagian dari Activomni.com</span>
+	<span style="font-style: italic;">*{{ env('APP_NAME') }} {{ Lang::get('email.part') }}</span>
 	<br>
 	<br>
-	Jika ada yang ingin ditanyakan,<br>
-	Silakan hubungi support kami di info@activomni.com <br>
-	Pesan Anda akan kami balas maximal 1x24 jam kerja. <br>
+	{{ Lang::get('email.help.ask') }}<br>
+	{{ Lang::get('email.help.contact') }} : {{ Config::get('view.email_admin') }} <br>
+	{{ Lang::get('email.help.reply') }}. <br>
 	<br>
-	Atau Anda juga bisa menghubungi support kami di WA 0817-318-368 <br>
-	Pada jam kerja, Senin s/d Jumat jam 08.00-17.00<br>
+	{{ Lang::get('email.help.or') }} : {{ Config::get('view.phone_admin') }} <br>
+	{{ Lang::get('email.hour') }}<br>
 
 @else
-	Halo {{$name}},
+    {{ Lang::get('email.greet') }} {{$name}},
 	<br>
 	<br>
-	Anda telah me-reset password anda, password anda yang baru adalah :
+	{{ Lang::get('email.reset') }} :
 	<br>
-	<strong>{{ $password }} </strong><br>
+	<strong>{{ $password }} </strong>
+    <br>
 	<br>
+	{{ Lang::get('email.help.if') }}
 	<br>
-	Jika anda memerlukan bantuan
-	<br>
-	<strong>Silahkan kontak customer kami
+	<strong>{{ Lang::get('email.help.contact') }}
 	<br>
 	Telegram</strong>: @activomni_cs
 	<br>
 	<br>
-	Terima kasih,
+	{{ Lang::get('email.thank') }},
 	<br>
-	Team Loyaleads
+	Team {{ env('APP_NAME') }}
 @endif
 
 

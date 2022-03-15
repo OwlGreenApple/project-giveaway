@@ -4,7 +4,7 @@
 
       <h5>
         <button type="button" class="btn btn-primary btn-confirm" data-bs-toggle="modal" data-bs-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
-          Informasi Pembayaran / Transfer
+          {{ Lang::get('order.transfer') }}
         </button>
       </h5>
 
@@ -41,22 +41,22 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          {{$lang::get('order.transfer')}}
+          {{ Lang::get('order.transfer') }}
         </h5>
         <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
 
           <p class="card-text">
-            {{$lang::get('order.step')}}
+            {{ Lang::get('order.step') }}
           </p>
           <h2>{!! Config::get('view.no_rek') !!}</h2>
           <p class="card-text">
             {!! Config::get('view.bank_name') !!} <b>{!! Config::get('view.bank_owner') !!}</b>
           </p>
           <p class="card-text">
-            {!! $lang::get('order.step_next') !!}<br> {{$lang::get('order.step_next_1')}} <b>{{ Config::get('view.email_admin') }}</b> <br>
-            {{$lang::get('order.admin_24')}}
+            {!! Lang::get('order.step_next') !!}<br> {{Lang::get('order.step_next_1')}} <b>{{ Config::get('view.email_admin') }}</b> <br>
+            {{Lang::get('order.admin')}}
           </p>
 
       </div>

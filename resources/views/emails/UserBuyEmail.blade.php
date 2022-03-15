@@ -1,47 +1,24 @@
-@if($case !== null)
-
-Terima kasih,
+{{ Lang::get('email.greet') }},
 <br>
-Admin telah MENERIMA KONFIRMASI PEMBAYARAN anda
+{{ Lang::get('email.accept') }}
 <br>
-berikut ini adalah rincian ORDER yang telah dikonfirmasi admin
+{{ Lang::get('email.detail') }} :
 <br>
 <br>
-No Order : <b>{{ $order->no_order }}</b>
+{{ Lang::get('email.no') }} : <b>{{ $order->no_order }}</b>
 <br>
-Nama : <b>{{$case}}</b>
+{{ Lang::get('email.name') }}  : <b>{{$case}}</b>
 <br>
-Status Order : <b>Confirmed</b>
+{{ Lang::get('email.status') }} : <b>{{ Lang::get('email.confirm') }}</b>
 <br>
-Anda telah memesan paket : <b>{{ $order->package }}</b> <b>Rp.{{ $pc::format($order->total_price) }}</b>
-<br>
-<br>
-Aktivasi telah sukses dilakukan. Anda sudah bisa menggunakan layanan {{ env('APP_NAME') }}. Segera hubungi kami jika masih ada ditanyakan di <a href="https://omli.club/">https://omli.club/</a>
+{{ Lang::get('email.package') }} : <b>{{ $order->package }}</b> <b>{{ Lang::get('email.currency') }}.{{ $pc::format($order->total_price) }}</b>
 <br>
 <br>
-Salam hangat,
-<br>
-{{ env('APP_NAME') }}
-
-@else
-
-Mohon Perhatian
+{{ Lang::get('email.activated') }} {{ env('APP_NAME') }}.
+<br />
+{{ Lang::get('email.help.ask') }} {{ Lang::get('email.help.support') }} : {{ Config::get('view.email_admin'); }}</a>
 <br>
 <br>
-Ada user yang melakukkan konfirmasi pembayaran dengan rincian:
+{{ Lang::get('email.regards') }}
 <br>
-<br>
-No Order : <b>{{ $order->no_order }}</b>
-<br>
-Paket : <b>{{ $order->package }}</b>
-<br>
-Harga : <b>{{ $pc::format($order->price) }}</b>
-<br>
-Total Harga : <b>Rp.{{ $pc::format($order->total_price) }}</b>
-<br>
-<br>
-Harap segera di cek.
-<br>
-<br>
-Terima kasih
-@endif
+Team {{ env('APP_NAME') }}

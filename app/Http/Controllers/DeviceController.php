@@ -22,6 +22,11 @@ class DeviceController extends Controller
         $this->password = 'xa2D@!fg75C/p';
     }
 
+    private static function email_wamate()
+    {
+        return Config::get('view.WAMATE_EMAIL').'-'.Auth::id().'@'.env('APP_NAME').".app";
+    }
+
     public function connect_wa()
     {
         $phone = Phone::where('user_id',Auth::id())->first();
@@ -229,18 +234,15 @@ class DeviceController extends Controller
         if($user->email_wamate == null)
         {
             $reg = $this->register_device();
-            $user->email_wamate = $reg['email'];
-            $user->wamate_id = $reg['id'];
-            $wamate_email = $reg['email'];
+            sleep(0.5);
         }
         else
         {
-            $wamate_email = $user->email_wamate;
             $newreg = false;
         }
 
         // LOGIN DEVICE
-        $login = $this->login_device($wamate_email);
+        $login = $this->login_device();
         $user->token = $login['token'];
         $user->refresh_token = $login['refreshToken'];
 
@@ -256,7 +258,7 @@ class DeviceController extends Controller
 
         try{
             $user->save();
-            return self::create_device();
+            return $this->create_device();
         }
         catch(QueryException $e)
         {
@@ -266,7 +268,7 @@ class DeviceController extends Controller
     }
 
     // CREATE DEVICE
-    public static function create_device()
+    public function create_device()
     {
         $ph = Phone::where('user_id',Auth::id())->first();
 
@@ -448,7 +450,7 @@ class DeviceController extends Controller
     }
 
     // REFRESH TOKEN
-    public function refresh()
+    public function refresh($api = null)
     {
         $auth = Auth::user();
 
@@ -501,15 +503,18 @@ class DeviceController extends Controller
             $user->save();
         }
 
-        return response()->json(['err'=>0]);
+        if($api == null)
+        {
+            return response()->json(['err'=>0]);
+        }
     }
 
     //LOGIN DEVICE TO OBTAIN NEW TOKEN AND REFRESH TOKEN
-    public function login_device($email)
+    public function login_device()
     {
         // $email = 'local-2@loyalleads.com';
         $data = [
-            'email'=>$email,
+            'email'=>self::email_wamate(),
             'password'=>$this->password,
         ];
 
@@ -545,7 +550,7 @@ class DeviceController extends Controller
     public function register_device()
     {
         $data = [
-            'email'=>Config::get('view.WAMATE_EMAIL').'-'.Auth::id().'@loyalleads.com',
+            'email'=>self::email_wamate(),
             'password'=>'xa2D@!fg75C/p',
         ];
 
@@ -574,9 +579,11 @@ class DeviceController extends Controller
         curl_close($ch);
 
         $response = json_decode($result,true);
+        $user = User::find(Auth::id());
 
         try{
-            $user = User::find(Auth::id());
+            $user->email_wamate = $response['email'];
+            $user->wamate_id = $response['id'];
             $user->ip_server = Config::get('view.WAMATE_URL');
             $user->save();
         }

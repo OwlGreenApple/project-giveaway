@@ -211,7 +211,7 @@
                       </td>
 
                       <td class="sumo-td-price text-right sumo-checkout-item cart-item">
-              					Rp. <?php echo number_format(session('order')['price'], 0, '', '.'); ?>
+                        {{ Lang::get('email.currency') }}. <?php echo number_format(session('order')['price'], 0, '', '.'); ?>
                       </td>
 
                     </tr>
@@ -223,7 +223,7 @@
                   <div class="as-checkout-entry" id="checkout-total" data-total="79.00">
                     <strong class="as-checkout-total">Total</strong>
                     <strong class="as-checkout-total-price total_price_default" id="totalprice_sidebar totalprice_mobile">
-              				Rp. <?php echo number_format(session('order')['price'], 0, '', '.'); ?>
+                        {{ Lang::get('email.currency') }}. <?php echo number_format(session('order')['price'], 0, '', '.'); ?>
               			</strong>
                   </div>
               </div>
@@ -298,7 +298,7 @@
       <div class="col-md-12 col-12">
         <strong class="as-checkout-total">Total : </strong>
         <strong class="as-checkout-total-price total_price" id="totalprice_sidebar totalprice_mobile"><b>
-        Rp. <?php echo number_format(session('order')['total'], 0, '', '.'); ?></b>
+        {{ Lang::get('email.currency') }}. <?php echo number_format(session('order')['total'], 0, '', '.'); ?></b>
   			</strong>
       </div>
     </div>
