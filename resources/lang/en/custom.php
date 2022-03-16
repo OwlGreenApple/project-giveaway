@@ -50,6 +50,7 @@ return [
     'pt.col'=>'Podcast URL',
     'redraw'=>'Are you sure to redraw this winner?',
     'scan'=>'Please click refresh button, and try to connect again.',
+    'scan.del'=>'Please delete number, and try to connect again.',
     'submit'=>'Submit',
     'success'=>'Your data has been saved successfully.',
     'test'=>'Phone and message required!',

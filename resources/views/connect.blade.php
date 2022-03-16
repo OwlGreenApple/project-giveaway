@@ -239,6 +239,10 @@
                         location.href="{{ url('scan') }}";
                     },1000);
                 }
+                else if(result.err == 'itoken')
+                {
+                    $("#msg").html('<div class="alert alert-warning">{{ Lang::get("custom.scan.del") }}</div>');
+                }
                 else
                 {
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');

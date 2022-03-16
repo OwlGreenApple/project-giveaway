@@ -234,7 +234,7 @@ function save_data()
             {
                 if(result.success == 1)
                 {
-                    location.href="{{ url('create-broadcast') }}";
+                    location.href="{{ url('broadcast') }}";
                 }
                 else if(result.success == 'edit')
                 {

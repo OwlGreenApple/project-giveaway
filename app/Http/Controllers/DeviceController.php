@@ -107,6 +107,11 @@ class DeviceController extends Controller
         $user->counter_send_message_daily--;
         $user->save();
 
+        if(!isset($result['id']))
+        {
+            return;
+        }
+
         //IN CASE IF THIS CODE CALL FROM AUTO REPLY CRON NOT USER TEST SEND MESSAGE
         if($req->msg_id !== null)
         {

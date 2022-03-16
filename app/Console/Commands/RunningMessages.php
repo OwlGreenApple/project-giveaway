@@ -63,8 +63,26 @@ class RunningMessages extends Command
                 $timezone = $row->timezone;
                 $contestants = $bdc::parsing_array($row->ct_list);
 
+                $user = User::find($user_id);
+                $phone = Phone::where('user_id',$user_id)->first();
+
+                // TO AVOID ERROR IF USER DELETE PHONE / DISCONNECTED PHONE OR DELETED USER
+                if(is_null($user) || is_null($phone))
+                {
+                    continue;
+                }
+
                 // FILTER TIME TO SEND MESSAGE ACCORDING ON TIMEZONE
                 if(Carbon::now($timezone)->lt(Carbon::parse($date_send)->toDateTimeString()))
+                {
+                    continue;
+                }
+
+                // CHECK DEVICE STATUS AND COUNTER DAILY
+                self::check_device($phone);
+                $ph = Phone::find($phone->id);
+
+                if($ph->status == 0 || $user->counter_send_message_daily < 1)
                 {
                     continue;
                 }
@@ -72,38 +90,28 @@ class RunningMessages extends Command
                 // PARSING CONTESTANTS
                 foreach($contestants as $ctid):
                     $ct = Contestants::find($ctid);
-                    $phone = Phone::where('user_id',$user_id)->first();
 
-                    // TO AVOID ERROR IF USER DELETE PHONE / DISCONNECTED PHONE
                     // TO AVOID ERROR IF USER DELETE CONTESTANTS
-                    if(is_null($phone) || is_null($ct))
+                    if(is_null($ct))
                     {
                         continue;
                     }
 
-                    // CHECK IF MESSAGE CREATED ALREADY
-                    $messages = Messages::where([['ct_id',$ctid],['status',0]])->first();
-                    if(is_null($messages))
-                    {
-                        $msge = new Messages;
-                        $msge->user_id = $user_id;
-                        $msge->bc_id = $bc_id;
-                        $msge->ct_id = $ctid;
-                        $msge->sender = $phone->number;
-                        $msge->receiver = $ct->wa_number;
-                        $msge->message = $message;
-                        $msge->img_url = $url;
-                        $msge->save();
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    $msge = new Messages;
+                    $msge->user_id = $user_id;
+                    $msge->bc_id = $bc_id;
+                    $msge->ct_id = $ctid;
+                    $msge->sender = $phone->number;
+                    $msge->receiver = $ct->wa_number;
+                    $msge->message = $message;
+                    $msge->img_url = $url;
+                    $msge->save();
                 endforeach; // end parsing
+
                  // update broadcast status
-                 $brc = Broadcast::find($bc_id);
-                 $brc->status = 1;
-                 $brc->save();
+                $brc = Broadcast::find($bc_id);
+                $brc->status = 1;
+                $brc->save();
             } // end broadcast loop
         endif;
 
@@ -133,45 +141,33 @@ class RunningMessages extends Command
         $total_ev = count($ev_id);
         $total_msg = 0;
 
-        // bc
-        if($total_bc > 0 && $total_bc > 6)
+        // filter priority
+        if(($total_bc > 6 && $total_ev > 6) || ($total_bc >= 4 && $total_ev >= 4))
         {
-            if($total_ev < 1)
-            {
-                array_slice($bc_id,6);
-            }
-            else if($total_ev < 3)
-            {
-                $sum = $total_bc - $total_ev;
-                array_slice($bc_id,$sum);
-            }
-            else
-            {
-                array_slice($bc_id,4);
-            }
+            $bc_id = array_slice($bc_id,0,4);
+            $ev_id = array_slice($ev_id,0,2);
+        }
+        elseif($total_bc > 6 && $total_ev < 1)
+        {
+            $bc_id = array_slice($bc_id,0,6);
+        }
+        elseif($total_bc < 1 && $total_ev > 6)
+        {
+            $ev_id = array_slice($ev_id,0,6);
+        }
+        elseif($total_bc > 6 && $total_ev < 4)
+        {
+            $bc_id = array_slice($bc_id,0,4);
+        }
+        else
+        {
+            $ev_id = array_slice($ev_id,0,6);
         }
 
-        // ev
-        if($total_ev > 0)
-        {
-            if($total_ev > 6)
-            {
-                array_slice($ev_id,6);
-            }
+        $total_msg = $total_bc + $total_ev;
+        $msg = array_slice(array_merge($bc_id,$ev_id),0,6);
 
-            $total_msg = $total_bc + $total_ev;
-
-            if($total_msg > 6)
-            {
-                $sum = $total_ev - $total_bc;
-                array_slice($ev_id,$sum);
-            }
-        }
-
-        $msg = array_merge($bc_id,$ev_id);
-
-        dd($msg);
-
+        // LOGIC TO SENDING MESSAGE
         if(count($msg) > 0)
         {
             $message = ''; //define variable to add sposor message according on package
@@ -179,16 +175,16 @@ class RunningMessages extends Command
                 $phone = Phone::where('user_id',$row->user_id)->first();
                 $user = User::find($row->user_id);
 
-                if(is_null($phone))
+                if(is_null($phone) || is_null($user))
                 {
                     continue;
                 }
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
-                $cd = new CDV;
-                $check_device = $cd->check_device($phone);
+                self::check_device($phone);
+                $ph = Phone::find($phone->id);
 
-                if($phone->status == 0 || $user->counter_send_message_daily < 1)
+                if($ph->status == 0 || $user->counter_send_message_daily < 1)
                 {
                     continue;
                 }
@@ -196,8 +192,9 @@ class RunningMessages extends Command
                 // DELAY INTERVAL TO AVOID BANNED FROM WA
                 sleep($arr[$x]);
 
-                $message = $row->message;
+                // print_r($arr[$x]."\n");
 
+                $message = $row->message;
                 if($row->img_url == null)
                 {
                     //SEND MESSAGE
@@ -208,8 +205,7 @@ class RunningMessages extends Command
                         'msg_id'=>$row->id
                     ];
                     $req = new Request($data);
-                    // print_r($row->id."\n");
-                    $send = $device->send_message($req);
+                    $device->send_message($req);
                 }
                 else
                 {
@@ -222,12 +218,23 @@ class RunningMessages extends Command
                         'msg_id'=>$row->id
                     ];
                     $req = new Request($data);
-                    $send = $device->send_media($req);
-                    // print_r($row->id."\n");
+                    $device->send_media($req);
                 }
+
+                // UNCOMMENT IF WANT TO TEST / DEBUG
+                // $mg = Messages::find($row->id);
+                // $mg->status = 1;
+                // $mg->save();
             endforeach;
         }
     }
+
+    private static function check_device($phone)
+    {
+        $cd = new CDV;
+        $cd->check_device($phone);
+    }
+
 
     /* end class */
 }
