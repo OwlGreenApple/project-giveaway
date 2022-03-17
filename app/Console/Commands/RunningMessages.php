@@ -102,7 +102,7 @@ class RunningMessages extends Command
                     $msge->bc_id = $bc_id;
                     $msge->ct_id = $ctid;
                     $msge->sender = $phone->number;
-                    $msge->receiver = $ct->wa_number;
+                    $msge->receiver = substr($ct->wa_number,1);
                     $msge->message = $message;
                     $msge->img_url = $url;
                     $msge->save();

@@ -16,12 +16,11 @@
                 <td class="align-middle">@if($row->status == 1) <span class="badge rounded-pill bg-custom">Running</span> @elseif($row->status == 2) <a href="{{ url('contestant-winner') }}/{{ $row->id }}" class="btn btn-success award">Award</a> @else <span class="badge rounded-pill bg-secondary">Awarded</span> @endif</td>
                 <td class="align-middle">
                     <div class="input-group">
-                        <button type="button" class="btn btn-outline-secondary">Broadcast</button>
+                        <a class="btn btn-outline-secondary" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a>
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a></li>
                             <li><a id="{{ $row->id }}" class="dropdown-item duplicate">Duplicate</a></li>
                             <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item">View</a></li>
                             <li><a href="{{ url('message-list') }}/{{ $row->id }}" target="_blank" class="dropdown-item">Messages</a></li>

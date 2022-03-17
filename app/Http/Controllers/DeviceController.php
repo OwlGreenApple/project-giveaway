@@ -107,15 +107,19 @@ class DeviceController extends Controller
         $user->counter_send_message_daily--;
         $user->save();
 
+        $msg = Messages::find($req->msg_id);
+
+        // IN CASE ERROR FROM FAKE PHONE NUMBER
         if(!isset($result['id']))
         {
+            $msg->status = 4;
+            $msg->save();
             return;
         }
 
         //IN CASE IF THIS CODE CALL FROM AUTO REPLY CRON NOT USER TEST SEND MESSAGE
         if($req->msg_id !== null)
         {
-            $msg = Messages::find($req->msg_id);
             $msg->msg_id = $result['id'];
             $msg->status = 1;
             $msg->save();
@@ -215,10 +219,19 @@ class DeviceController extends Controller
         $user->counter_send_message_daily--;
         $user->save();
 
+        $msg = Messages::find($req->msg_id);
+
+        // IN CASE ERROR FROM FAKE PHONE NUMBER
+        if(!isset($result['id']))
+        {
+            $msg->status = 4;
+            $msg->save();
+            return;
+        }
+
         //IN CASE IF THIS CODE CALL FROM AUTO REPLY CRON NOT USER TEST SEND MESSAGE
         if($req->msg_id !== null)
         {
-            $msg = Messages::find($req->msg_id);
             $msg->msg_id = $result['id'];
             $msg->status = 1;
             $msg->save();
@@ -248,8 +261,6 @@ class DeviceController extends Controller
 
         // LOGIN DEVICE
         $login = $this->login_device();
-        $user->token = $login['token'];
-        $user->refresh_token = $login['refreshToken'];
 
         //TO PROTECT REFILL COUNTER DAILY MESSAGE IF USER LOGOUT THEN LOGIN
         if($user->counter_send_message_daily < 1)
@@ -261,14 +272,14 @@ class DeviceController extends Controller
             }
         }
 
-        try{
+        try
+        {
             $user->save();
             return $this->create_device();
         }
         catch(QueryException $e)
         {
-            // echo $e->getMessage();
-            return 'err_token';
+            return 'err_db';
         }
     }
 
@@ -548,6 +559,21 @@ class DeviceController extends Controller
         curl_close($ch);
 
         $response = json_decode($result,true);
+
+        $user = User::find(Auth::id());
+        $user->token = $response['token'];
+        $user->refresh_token = $response['refreshToken'];
+
+        try{
+            $user->save();
+            $response['err_db'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            // echo $e->getMessage();
+            $response['err_db'] = 1;
+        }
+
         return $response;
     }
 

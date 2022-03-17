@@ -285,7 +285,7 @@
                         <div class="mb-3">
                             <div class="form-group mb-3">
                                 <label>Message:<span class="text-danger">*</span></label>
-                                <textarea name="message" id="divInput-description-post" class="form-control"></textarea>
+                                <textarea name="message" id="divInput-description-post" class="form-control form-control-lg">@if(isset($event)){{ $event->message }}@endif</textarea>
                                 <span class="text-danger err_message"><!-- --></span>
                             </div>
                             <div class="form-group">
@@ -333,7 +333,7 @@
 <script>
 $(function() {
     editor();
-    emoji();
+    // emoji();
     datetimepicker();
     count_logic();
     save_data();

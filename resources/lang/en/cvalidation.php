@@ -21,7 +21,7 @@ return [
     'ent_yt'=>'Entries youtube subscribe on forms ',
     'img'=>'You should upload at least 1 image',
     'lang'=>'Invalid Language',
-    'phone'=>'Invalid phone number',
+    'phone'=>'Invalid phone code',
     'prize'=>'Maximum prize value is 1.000.000',
     'time.award'=>'Time award cannot be less than time end.',
     'time.end'=>'Time end cannot be less than time start.',
