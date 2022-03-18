@@ -7,7 +7,7 @@
             <div class="position-relative gift-pos">
                 <div class="gift-strap"><!-- --></div>
             </div>
-            <div class="card logo px-2 py-4">LOGO</div>
+            <div class="card logo px-2 py-2"><img class="logo" src="{{ asset('assets/img/logo-topleads.png') }}"/></div>
             <div class="card px-2 py-2 fix-card">
                 <div class="card-body">
                     <h1 class="text-center mb-4 title">{{ __('Register') }}</h1>
@@ -27,8 +27,8 @@
                         <div class="mb-4">
                             <div class="form-inline">
                               <span class="text-muted">
-                                <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input me-2" /><small>{{ Lang::get('custom.agreement') }}</small>
-                                <a class="text-primary" target="_blank" rel="noopener noreferrer" href="">Click Here</a>
+                                <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input me-2" /><small>{{ Lang::get('custom.agreement') }}
+                                <a class="main-color" target="_blank" rel="noopener noreferrer" href="">Click Here</a></small>
                               </span>
                             </div>
                             <small class="text-danger tos"></small>
@@ -40,6 +40,10 @@
                             </button>
                         </div>
                     </form>
+                    <hr>
+                    <div class="login-foot">
+                        <span class="text-secondary">{{ Lang::get('auth.log') }}<a href="{{ route('login') }}" class="main-color">Login</a></span>
+                    </div>
 
                 </div>
             </div>
