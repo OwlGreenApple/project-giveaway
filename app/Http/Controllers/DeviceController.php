@@ -13,6 +13,7 @@ use App\Models\Phone;
 use App\Models\User;
 use App\Models\Messages;
 use Carbon\Carbon;
+use Symfony\Component\CssSelector\Parser\Token;
 
 class DeviceController extends Controller
 {
@@ -275,6 +276,7 @@ class DeviceController extends Controller
         try
         {
             $user->save();
+            sleep(1);
             return $this->create_device();
         }
         catch(QueryException $e)
@@ -298,6 +300,12 @@ class DeviceController extends Controller
         ];
 
         $token = Auth::user()->token;
+        if(!is_null($token))
+        {
+            $login = $this->login_device();
+            $token = $login['token'];
+        }
+
         $data_api = json_encode($data);
         $url =  Auth::user()->ip_server."/devices";
 

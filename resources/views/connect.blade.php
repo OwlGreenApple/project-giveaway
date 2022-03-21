@@ -113,6 +113,7 @@
         var sc = 0;
         var min = 0;
 
+        $("#scan").html('Loading...');
         $("#waiting").removeClass('d-none');
 
         tm = setInterval(function(){
@@ -187,7 +188,7 @@
                 }
                 else if(result.status == 'etoken')
                 {
-                    register_login_device();
+                    $("#scan").html('<div class="alert alert-info mt-2">{{ Lang::get("custom.try") }}</div>');
                 }
                 else
                 {

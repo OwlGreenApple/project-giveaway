@@ -57,6 +57,7 @@ return [
     'test.invalid'=>'Please use proper value!',
     'test.success'=>'Message sent',
     'thx'=>'Thank you',
+    'try'=>'Please click on connect button again.',
     'tw'=>'Twitter Follow',
     'tw.col'=>'Twitter Username',
     'tw.share'=>'Twitter Share',
