@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 //AUTH
 Route::get('/',[App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
+Route::get('logs-8877', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::post('pass_reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'reset'])->name('pass-reset');
 
 // App::setLocale('en');
