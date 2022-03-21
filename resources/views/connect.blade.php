@@ -188,7 +188,7 @@
                 }
                 else if(result.status == 'etoken')
                 {
-                    $("#scan").html('<div class="alert alert-info mt-2">{{ Lang::get("custom.try") }}</div>');
+                    $("#scan").html('<div class="alert alert-info mt-4">{{ Lang::get("custom.try") }}</div>');
                 }
                 else
                 {
