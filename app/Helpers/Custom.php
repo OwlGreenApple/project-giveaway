@@ -118,7 +118,7 @@ class Custom
         return $icon;
     }
 
-    public function share_prize($show)
+    public static function share_prize($show)
     {
         if($show == null)
         {
@@ -142,7 +142,7 @@ class Custom
         }
         else
         {
-            $msg .= 'Powered by <a href="https://topleads.app">'.env('APP_NAME').'</a>';
+            $msg .= 'Powered by <a class="main-color" href="https://topleads.app">'.env('APP_NAME').'</a>';
         }
 
         return $msg;
