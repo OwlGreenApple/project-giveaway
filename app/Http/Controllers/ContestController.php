@@ -358,16 +358,8 @@ class ContestController extends Controller
         $ev = Events::find($event_id);
         $ev_link = $ev->url_link;
         $ref_code = $ct->ref_code;
-
-        if(env('APP_ENV') == 'local')
-        {
-            $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
-        }
-        // else
-        // {
-        //     // $share_url =
-        // }
-
+        $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
+    
         if($type == 0 || $type == 3 || $type == 4 || $type == 5 || $type == 6)
         {
             // facebook like // youtube subscribe // podcast subscribe
