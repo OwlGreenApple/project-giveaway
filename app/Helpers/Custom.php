@@ -138,11 +138,11 @@ class Custom
 
         if($html == null)
         {
-            $msg .= "\n\n".'Powered by loyaleads.com';
+            $msg .= "\n\n".'Powered by topleads.app';
         }
         else
         {
-            $msg .= 'Powered by <a href="https://loyaleads.com">loyaleads.com</a>';
+            $msg .= 'Powered by <a href="https://topleads.app">'.env('APP_NAME').'</a>';
         }
 
         return $msg;
@@ -152,13 +152,13 @@ class Custom
     {
       $msg ='';
       $msg .='Halo '.$name.','."\n\n";
-      $msg .='Anda telah me-reset password anda, password anda yang baru adalah :'."\n";
+      $msg .='You have reset your password already, here\'s your new passowrd :'."\n";
       $msg .='*'.$password.'*'."\n\n";
-      $msg .='Jika anda memerlukan bantuan'."\n";
-      $msg .='*Silahkan kontak customer kami*'."\n";
+      $msg .='If you need assistance'."\n";
+      $msg .='*Please contact our customer service*'."\n";
       $msg .='Telegram : @activomni_cs'."\n\n";
-      $msg .='Terima Kasih'."\n";
-      $msg .='Team Loyaleads';
+      $msg .='Thank you'."\n";
+      $msg .='Team'.env('APP_NAME');
 
       return $msg;
     }
