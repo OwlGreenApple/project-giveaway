@@ -24,6 +24,7 @@ return [
     'phone'=>'Invalid phone code',
     'prize'=>'Maximum prize value is 1.000.000',
     'time.award'=>'Time award cannot be less than time end.',
+    'time.start'=>'Time can\'t be less than current time.',
     'time.end'=>'Time end cannot be less than time start.',
     'time.zone'=>'Invalid timezone',
     'url_cl'=>'URL click link on forms ',

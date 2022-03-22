@@ -741,32 +741,28 @@ function datetimepicker()
 {
     var date, tdate, adate;
     var ndate = new Date();
-    var date_1 = $('.datetimepicker_1').val();
-    var date_2 = $('.datetimepicker_2').val();
+   
+    var date_2 = $('.datetimepicker_2');
     var date_3 = $('.datetimepicker_3').val();
-
-    (date_1.length == 0)?date =  ndate : date = moment(date_1);
-    (date_2.length == 0)?tdate = ndate.setDate(date.getDate() + 2) : tdate = moment(date_2);
-    (date_3.length == 0)?adate = ndate : adate = moment(date_3);
-
-
     var format_date = 'YYYY-MM-DD HH:mm';
 
-    $('.datetimepicker_1').datetimepicker({
-        format : format_date,
-        minDate : date
+    $('.datetimepicker_1').on('focusin', function(e){
+        $(this).datetimepicker({
+            format : format_date,
+            defaultDate : ndate,
+            // debug: true
+        });
     });
 
     $('.datetimepicker_2').on('focusin', function(e){
         $(this).datetimepicker({
             format : format_date,
-            defaultDate : tdate
+            defaultDate : ndate
         });
     });
 
     $('.datetimepicker_3').datetimepicker({
         format : format_date,
-        minDate : adate
     });
 }
 

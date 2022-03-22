@@ -16,12 +16,14 @@ class CheckDate implements Rule
      */
     public $cond;
     public $date;
+    public $tmz;
     private $msg;
 
-    public function __construct($cond,$date)
+    public function __construct($cond,$date,$tmz = null)
     {
         $this->cond = $cond;
         $this->date = $date;
+        $this->tmz = $tmz;
     }
 
     /**
@@ -38,6 +40,12 @@ class CheckDate implements Rule
 
     private function check_time($value,$terms)
     {
+        if($terms == 'start')
+        {
+            $emsg = Lang::get('cvalidation.time.start');
+            return $this->current_moment($value,$emsg,$this->tmz);
+        }
+
         if($terms == 'end')
         {
             $emsg = Lang::get('cvalidation.time.end');
@@ -54,6 +62,20 @@ class CheckDate implements Rule
         {
             $emsg = Lang::get('cvalidation.time.zone');
             return $this->time_zone($value,$emsg);
+        }
+    }
+
+    private function current_moment($value,$emsg,$tmz)
+    {
+        $choosendate = Carbon::parse($value)->toDateTimeString();
+        if(Carbon::now($tmz)->gt($choosendate))
+        {
+            $this->msg = $emsg;
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
