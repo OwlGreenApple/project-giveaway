@@ -24,7 +24,7 @@ class CheckEvents
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
 
-    private static function total_events($membership)
+    public static function total_events($membership)
     {
         $package = new Custom;
         $cond = [['user_id',Auth::id()],['status',1]];
@@ -63,6 +63,13 @@ class CheckEvents
 
     public function handle(Request $request, Closure $next)
     {
+        $evt = Events::where([['id',$request->edit],['user_id',Auth::id()]])->select('status')->first();
+
+        if($evt == null || $evt->status >= 2)
+        {
+            return response()->json(['success'=>'err_end','message'=>Lang::get('custom.ev.end')]);
+        }
+
         $ev = self::total_events(Auth::user()->membership);
 
         if(count($ev) > 0 && $request->edit == null)

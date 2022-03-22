@@ -50,6 +50,8 @@ class CheckEventStatus extends Command
                     continue;
                 endif;
 
+                // print_r(Carbon::parse($row->end)->toDateTimeString());
+
                 if(Carbon::now($row->timezone)->gte(Carbon::parse($row->end)->toDateTimeString()))
                 {
                     $data[] = $row->id;

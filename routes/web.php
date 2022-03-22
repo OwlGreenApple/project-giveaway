@@ -53,7 +53,7 @@ Route::get('/list-contestants/{event_id}', [App\Http\Controllers\HomeController:
 Route::get('/contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'get_contestant']);
 Route::get('/export-contestant/{event_id}', [App\Http\Controllers\HomeController::class, 'export_contestants']);
 Route::get('/del-contestant', [App\Http\Controllers\HomeController::class, 'del_contestant']);
-Route::get('/draw-contestant-contestant', [App\Http\Controllers\HomeController::class, 'draw_contestant']);
+Route::get('/draw-contestant', [App\Http\Controllers\HomeController::class, 'draw_contestant']);
 Route::get('/contestant-winner/{event_id}', [App\Http\Controllers\HomeController::class, 'winner']);
 
 /* ACOUNTS */

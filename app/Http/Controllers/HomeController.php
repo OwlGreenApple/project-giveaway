@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
+use App\Http\Middleware\CheckEvents;
+use App\Helpers\Custom;
 use App\Models\Banners;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Models\Events;
 use App\Models\Contestants;
-use App\Helpers\Custom;
 use App\Models\Entries;
 use App\Models\Orders;
 use App\Models\Messages;
@@ -109,6 +110,39 @@ class HomeController extends Controller
         }
     }
 
+    // DRAW CONTESTANTS
+    public function draw_contestant(Request $request)
+    {
+        $id = strip_tags($request->id);
+        $draw = strip_tags($request->draw);
+        $ev_id = $request->ev_id;
+
+        $ct = Contestants::where('contestants.id',$id)
+            ->join('events','events.id','=','contestants.event_id')
+            ->join('users','users.id','=','events.user_id')
+            ->first();
+
+        if(is_null($ct))
+        {
+            return response()->json(['err'=>1]);
+        }
+
+        try{
+            $ctu = Contestants::find($id);
+            $ctu->status = 1;
+            $ctu->save();
+
+            $total_choosen_winner = $this->choosen_winner($ev_id);
+            $res['err'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            $res['err'] = 2;
+        }
+
+        return response()->json($res);
+    }
+
     // DELETE CONTESTANTS
     public function del_contestant(Request $request)
     {
@@ -159,9 +193,24 @@ class HomeController extends Controller
         return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1,'winner'=>true]);
     }
 
+    // GET AWARDED WINNER
+    public function choosen_winner($ev_id)
+    {
+        $ct = Contestants::where([['event_id',$ev_id],['status','=',1]])->orderBy('entries','desc')->orderBy('date_enter', 'asc')->get();
+        return $ct->count();
+    }
+
     // DUPLICATE EVENT
     public function duplicate_events(Request $request)
     {
+        $tev = new CheckEvents;
+        $evc = $tev::total_events(Auth::user()->membership);
+
+        if(count($evc) > 0)
+        {
+            return response()->json($evc);
+        }
+
         $ev_id = strip_tags($request->id);
         $ev = self::check_security_event($ev_id);
 

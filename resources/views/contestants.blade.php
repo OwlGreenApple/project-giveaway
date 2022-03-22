@@ -28,7 +28,7 @@
                     </thead>
                     <tbody>
                         @if($data->count() > 0)
-                            @foreach($data as $row)
+                            @foreach($data as $row) 
                             <tr>
                                 <td class="align-middle">{{ $no++ }}</td>
                                 <td class="align-middle">{{ $row->c_name }}</td>
@@ -41,14 +41,20 @@
                                 <td class="align-middle">
                                     <div class="input-group">
                                         @if(isset($winner))
-                                            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <span class="visually-hidden">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li class="text-center"><a class="btn btn-warning draw" id="{{ $row->id }}">{{ Lang::get('table.draw') }}</a></li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li class="text-center"><a id="{{ $row->id }}" class="btn btn-danger del">{{ Lang::get('table.remove') }}</a></li>
-                                            </ul>
+                                            @if($row->status == 0)
+                                                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li class="text-center"><a class="btn btn-warning draw" ev_id="{{ $row->event_id }}" id="{{ $row->id }}">{{ Lang::get('table.draw') }}</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="text-center"><a id="{{ $row->id }}" class="btn btn-danger del">{{ Lang::get('table.remove') }}</a></li>
+                                                </ul>
+                                            @elseif($row->status == 1)
+                                                <span class="text-info">Awarded</span>
+                                            @else
+                                                <span class="text-danger">Removed</span>
+                                            @endif
                                         @else
                                             <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>
                                         @endif
@@ -105,7 +111,7 @@
 
             if(conf == true)
             {
-                redraw_or_delete(id,'{{ url("draw-contestant") }}');
+                redraw_or_delete(id,'{{ url("draw-contestant") }}',"{{ url('contestant-winner') }}/{{ $ev->id }}");
             }
             else
             {
@@ -113,14 +119,14 @@
             }
         });
 
-        // delete contestants
+        // remove contestants
         $("body").on("click",".del",function(){
             var id = $(this).attr('id');
             var conf = confirm('{{ Lang::get("custom.delete") }}');
 
             if(conf == true)
             {
-                redraw_or_delete(id,'{{ url("del-contestant") }}');
+                redraw_or_delete(id,'{{ url("del-contestant") }}',"{{ url('list-contestants') }}/{{ $ev->id }}");
             }
             else
             {
@@ -129,12 +135,12 @@
         });
     }
 
-    function redraw_or_delete(id,target)
+    function redraw_or_delete(id,target,redirect)
     {
         $.ajax({
             method:'GET',
             url: target,
-            data : {'id':id},
+            data : {'id':id,'ev_id':"{{ $ev->id }}"},
             dataType:'json',
             beforeSend : function()
             {
@@ -145,7 +151,7 @@
             {
                 if(result.err == 0)
                 {
-                    location.href="{{ url('list-contestants') }}/{{ $ev->id }}";
+                    location.href=redirect;
                 }
                 else
                 {

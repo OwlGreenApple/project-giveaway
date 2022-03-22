@@ -10,6 +10,7 @@
                     <div class="float-end align-middle "><a href="{{ url('create') }}" class="btn btn-default bg-custom text-white">New Giveaway</a></div>
                 </div>
 
+                <span class="wmsg mt-3 px-3"><!--  --></span>
                 <div id="dashboard" class="card-body"><!-- display dashboard here --></div>
             </div>
         </div>
@@ -82,7 +83,7 @@
             method:'GET',
             url: target,
             data : {'id':id},
-            dataType:'html',
+            dataType:'json',
             beforeSend : function()
             {
                 $("#loader").show();
@@ -90,11 +91,22 @@
             },
             success: function(result)
             {
-                display_dashboard();
+                if(result.success == 'err_package')
+                {
+                    $(".wmsg").html("<div class='alert alert-warning'>"+result.package+"</div>");
+                }
+                else if(result.success == 'err')
+                {
+                    $(".wmsg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                }
+                else
+                {
+                    display_dashboard();
+                }
             },
             error:function(xhr)
             {
-                $("#dashboard").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                $(".wmsg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
             },
             complete : function(xhr){
                 $("#loader").hide();

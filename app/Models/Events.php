@@ -26,9 +26,9 @@ class Events extends Model
         1 --> set on contest
 
         status :
-        0 --> event finish / end
         1 --> event running
-        2 --> time for user giving prize
+        2 --> event finish / end
+        3 --> time for user giving prize
 
     */
 }

@@ -315,11 +315,13 @@
                     </div>
                 </div>
 
+                @if($event->status < 2)
                 <div class="mt-5 text-center">
                     <span class="err_package"><!-- --></span>
                     <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
                     <button type="submit" class="btn bg-custom btn-lg text-white">Save</button>
                 </div>
+                @endif
 
             </form>
         <!-- end col -->
@@ -646,12 +648,19 @@ function save_data()
                     $('.div-loading').removeClass('background-load');
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
                 }
+                else if(result.success == 'err_end')
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $(".err_package").show();
+                    $(".err_package").html('<div class="text-danger mb-3">'+result.message+'</div>');
+                }
                 else if(result.success == 'err_package')
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
                     $(".err_package").show();
-                    $(".err_package").html('<div class="text-danger">'+result.package+'</div>');
+                    $(".err_package").html('<div class="text-danger mb-3">'+result.package+'</div>');
                 }
                 else if(result.success == 'err')
                 {
