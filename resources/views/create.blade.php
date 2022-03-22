@@ -650,6 +650,7 @@ function save_data()
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
+                    $(".err_package").show();
                     $(".err_package").html('<div class="text-danger">'+result.package+'</div>');
                 }
                 else if(result.success == 'err')
