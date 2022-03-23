@@ -65,7 +65,7 @@ class CheckEvents
     {
         $evt = Events::where([['id',$request->edit],['user_id',Auth::id()]])->select('status')->first();
 
-        if($evt == null || $evt->status >= 2)
+        if(($evt == null || $evt->status >= 2) && $request->edit!==null )
         {
             return response()->json(['success'=>'err_end','message'=>Lang::get('custom.ev.end')]);
         }

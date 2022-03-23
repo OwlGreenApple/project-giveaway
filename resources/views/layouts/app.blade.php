@@ -132,6 +132,9 @@
                                         <a class="dropdown-item" href="{{ url('list-order') }}">List Order</a>
                                         <a class="dropdown-item" href="{{ url('affiliate-admin') }}">Redeem</a>
                                     @else
+                                        <a class="dropdown-item" href="{{ url('redeem-money') }}">
+                                            {{ __('Redeem Money') }}
+                                        </a>
                                         <a class="dropdown-item" href="{{ url('packages') }}">
                                             {{ __('Upgrade Package') }}
                                         </a>

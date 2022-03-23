@@ -51,6 +51,11 @@ class Custom
         return ['en'=>'english','id'=>'bahasa'];
     }
 
+    public static function redeem()
+    {
+        return [29000,195000,295000,395000,495000];
+    }
+
     public static function convert_amount($amount)
     {
         $amount = str_replace(",","",$amount);

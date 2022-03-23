@@ -17,6 +17,7 @@ use App\Models\Contestants;
 use App\Models\Entries;
 use App\Models\Orders;
 use App\Models\Messages;
+use App\Models\Redeem;
 use App\Mail\ContactEmail;
 use App\Exports\ContestantExport;
 use Illuminate\Database\QueryException;
@@ -132,7 +133,16 @@ class HomeController extends Controller
             $ctu->status = 1;
             $ctu->save();
 
+            $event = Events::where([['id',$ev_id],['user_id',Auth::id()]])->first();
             $total_choosen_winner = $this->choosen_winner($ev_id);
+
+            if($event->winners == $total_choosen_winner)
+            {
+                $evt = Events::find($ev_id);
+                $evt->status = 3;
+                $evt->save();
+            }
+
             $res['err'] = 0;
         }
         catch(QueryException $e)
@@ -148,6 +158,7 @@ class HomeController extends Controller
     {
         $id = strip_tags($request->id);
         $draw = strip_tags($request->draw);
+        $remove_winner = strip_tags($request->winner);
 
         $ct = Contestants::where('contestants.id',$id)
             ->join('events','events.id','=','contestants.event_id')
@@ -164,9 +175,27 @@ class HomeController extends Controller
         //     return
         // }
 
+        $cta = Contestants::find($id);
+
+        // CASE IF USER WANT TO REMOVE WINNER
+        if($remove_winner == 1)
+        {
+            try{
+                $cta->status = 2;
+                $cta->save();
+                $res['err'] = 0;
+            }
+            catch(QueryException $e)
+            {
+                $res['err'] = 2;
+            }
+            return response()->json($res);
+        }
+
+        // DELETE CONTESTANTS
         try{
             Messages::where('ct_id',$id)->delete();
-            Contestants::find($id)->delete();
+            $cta->delete();
             $res['err'] = 0;
         }
         catch(QueryException $e)
@@ -188,9 +217,16 @@ class HomeController extends Controller
             return view('error404');
         }
 
-        $winners = $ev->winners;
-        $ct = Contestants::where('event_id',$ev_id)->orderBy('entries','desc')->orderBy('date_enter', 'asc')->skip(0)->take($winners)->get();
+        $ct = self::get_total_winner($ev);
         return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1,'winner'=>true]);
+    }
+
+    // GET WINNERS ACCORDING ON EVENT TOTAL WINNERS
+    public static function get_total_winner($ev)
+    {
+        $winners = $ev->winners;
+        $ct = Contestants::where('event_id',$ev->id)->whereIn('status',[0,1])->orderBy('entries','desc')->orderBy('date_enter', 'asc')->skip(0)->take($winners)->get();
+        return $ct;
     }
 
     // GET AWARDED WINNER
@@ -336,6 +372,44 @@ class HomeController extends Controller
         $ct = Contestants::where('event_id',$ev_id)->get();
         $data = ['data'=>$ct,'ev'=>$events];
         return view('dashboard.contestant',$data);
+    }
+
+    public function redeem_money()
+    {
+        $helper = new Custom;
+        $funds = $helper::redeem();
+        return view('redeem',['funds'=>$funds,'helper'=>$helper]);
+    }
+
+    public function claim_money(Request $request)
+    {
+        $account = strip_tags($request->account);
+        $number = strip_tags($request->number);
+        $amount = strip_tags($request->amount);
+
+        $helper = new Custom;
+        $amount = $helper::redeem()[$amount];
+
+        $auth = Auth::user();
+        $redeem = new Redeem;
+        $redeem->user_id = $auth->id;
+        $redeem->name = $auth->name;
+        $redeem->total = $amount;
+        $redeem->account = $number;
+        $redeem->account_name = $account;
+        $redeem->withdrawal_method = 'DANA';
+
+        try
+        {
+            $redeem->save();
+            $res['success'] = 1;
+        }
+        catch(QueryException $e)
+        {
+            $res['success'] = 0;
+        }
+
+        return response()->json($res);
     }
 
     // CREATE GIVE AWAY

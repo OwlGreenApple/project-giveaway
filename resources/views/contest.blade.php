@@ -7,11 +7,13 @@
 
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                 @if($event->media == 0)
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
+                    @if(count($banners) > 0)   
+                        <div class="carousel-indicators">
+                        @foreach($banners as $index=>$row)
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $index }}" @if($index == 0)class="active" aria-current="true"@endif aria-label="Slide {{ $index }}"></button>
+                        @endforeach
+                        </div>
+                    @endif
                 @endif
                 <div class="carousel-inner">
                 @if($event->media == 0)
@@ -76,24 +78,37 @@
                 <!-- contestant enter -->
 
                 @if($check_contestants == true)
-                <form class="contest-form" id="save_contestant">
-                    <div class="form-group mb-3">
-                        <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
-                        <input name="contestant" required type="text" class="form-control form-control-lg" />
-                        <span class="text-danger err_contestant"><!-- --></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label>{{Lang::get('custom.email')}} <i class="fas fa-at ct_color"></i></label>
-                        <input name="email" required type="email" class="form-control form-control-lg" />
-                        <span class="text-danger err_email"><!-- --></span>
-                    </div>
-                    <div class="iti-wrapper mb-3">
-                        <label>{{Lang::get('custom.number')}} <b><i class="fab fa-whatsapp ct_color"></i></b></label>
-                        <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
-                        <span class="text-danger err_phone"><!-- --></span>
-                    </div>
-                    <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
-                </form>
+                    @if($end == false)
+                        <form class="contest-form" id="save_contestant">
+                            <div class="form-group mb-3">
+                                <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
+                                <input name="contestant" required type="text" class="form-control form-control-lg" />
+                                <span class="text-danger err_contestant"><!-- --></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>{{Lang::get('custom.email')}} <i class="fas fa-at ct_color"></i></label>
+                                <input name="email" required type="email" class="form-control form-control-lg" />
+                                <span class="text-danger err_email"><!-- --></span>
+                            </div>
+                            <div class="iti-wrapper mb-3">
+                                <label>{{Lang::get('custom.number')}} <b><i class="fab fa-whatsapp ct_color"></i></b></label>
+                                <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
+                                <span class="text-danger err_phone"><!-- --></span>
+                            </div>
+                            <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
+                        </form>
+                    @else
+                        <div class="contest-winner">
+                            <h4 class="main-color"><b>Winners : </b></h4>
+                            @if($winner->count() > 0)
+                                <ul class="list-group"> 
+                                @foreach($winner as $row)
+                                    <li class="list-group-item border-0"><i class="fas fa-trophy trophy"></i>&nbsp;{{ $row->c_name }} <i class="fab fa-whatsapp main-color"></i> {{ $row->wa_number }}</li>
+                                @endforeach
+                                </ul>
+                            @endif
+                        </div>
+                    @endif
                 @else
                     <div class="form_title text-center">{{ Lang::get('custom.fcontestants') }}</div>
                 @endif

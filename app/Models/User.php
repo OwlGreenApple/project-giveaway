@@ -17,6 +17,16 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    /* 
+        percentage : 
+        for admin to determine bonus referral 
+
+        is_admin :
+        0 == normal user
+        1 == admin user
+    */
+
     protected $fillable = [
         'name',
         'email',
@@ -31,7 +41,8 @@ class User extends Authenticatable
         'wamate_id',
         'token',
         'refresh_token',
-        'counter'
+        'counter',
+        'percentage'
     ];
 
     /**

@@ -39,11 +39,14 @@ Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'logi
 
 Auth::routes();
 
+// COMMON
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);
 Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact']);
 Route::get('/packages', [App\Http\Controllers\HomeController::class, 'upgrade_package']);
 Route::get('/message-list/{ev_id}', [App\Http\Controllers\HomeController::class, 'message_list']);
+Route::get('/redeem-money', [App\Http\Controllers\HomeController::class, 'redeem_money']);
+Route::post('/redeem-withdraw', [App\Http\Controllers\HomeController::class, 'claim_money'])->middleware('check_redeem');
 Route::post('/contact-admin', [App\Http\Controllers\HomeController::class, 'save_contact']);
 
 // Route::get('/test', [App\Http\Controllers\ApiController::class, 'mailchimp_valid_api']);

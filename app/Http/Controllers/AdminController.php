@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Mail; 
+use Illuminate\Support\Facades\Auth; 
 use App\Helpers\Custom;
 use App\Models\User;
 use App\Models\Orders;
@@ -193,11 +194,19 @@ class AdminController extends Controller
         $order->status = 2;
         $order->save();
 
-        $user = User::find($order->user_id);
         $check_active_membership = $this->check_term_membership($user);
         $total_month = $ct->check_type($order->package)['terms'];
 
-        // dd($user->id);
+        //referrer get money from referral
+        if($user->myreferral > 0)
+        {
+          $percentage = Auth::user()->percentage;
+          $money = $percentage * $order->total_price / 100;
+
+          $refferer = User::find($user->myreferral);
+          $refferer->money += round($money);
+          $refferer->save();
+        }
 
         if($check_active_membership == 'active')
         {

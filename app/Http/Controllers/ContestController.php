@@ -56,8 +56,13 @@ class ContestController extends Controller
                             ->join('events','events.id','=','contestants.event_id')->get()->count();
 
         // dd($total_contestant);
+        // to determine end event
+        $end = self::check_end_event($event);
+        $hm = new Home;
+        $winner = $hm::get_total_winner($event);
 
         $data = [
+            'end'=>$end,
             'event'=>$event,
             'banners'=>$images,
             'helpers'=>new Custom,
@@ -65,10 +70,24 @@ class ContestController extends Controller
             'link'=>$link,
             'ref'=>$ref,
             'branding'=>$user->branding,
+            'winner'=>$winner,
             'check_contestants'=>self::check_contestants_membership($user,$total_contestant)
         ];
 
         return view('contest',$data);
+    }
+
+    // CHECK EVENT DONE ACCORDING ON TIMEZONE
+    private static function check_end_event($event)
+    {
+        if(Carbon::now($event->timezone)->gte(Carbon::parse($event->end)->toDateTimeString()))
+        {
+            return true; 
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private static function check_contestants_membership($user,$total_contestant)
@@ -149,6 +168,7 @@ class ContestController extends Controller
                     'api_email'=>$email,
                     'api_phone'=>$phone,
                     'list_id'=>$act_list_id,
+                    'user_id'=>$ev->user_id
                 ];
 
                 $api->save_to_activrespon_lists($dt);
@@ -160,7 +180,8 @@ class ContestController extends Controller
                 $dta = [
                     'name'=>$name,
                     'email'=>$email,
-                    'list_id'=>$mlc_list_id
+                    'list_id'=>$mlc_list_id,
+                    'user_id'=>$ev->user_id
                 ];
 
                 $api->add_mailchimp($dta);
@@ -250,6 +271,19 @@ class ContestController extends Controller
                 ->join('users','users.id','=','events.user_id')
                 ->select("events.*","users.currency")
                 ->first();
+
+        if(is_null($ev))
+        {
+            return view('error404');
+        }
+
+        $end = self::check_end_event($ev);
+        if($end == true)
+        {
+            Cookie::queue(Cookie::forget('ct_id'));
+            Cookie::queue(Cookie::forget('ev_id'));
+            return redirect('c/'.$ev->url_link.'');
+        }
 
         $bonus = Bonus::where('event_id',$ev_id)->get();
         $banners = Banners::where('event_id',$ev->id)->select('url')->first();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use MailchimpMarketing as MC;
+use App\Models\User;
 use GuzzleHttp;
 
 class ApiController extends Controller
@@ -49,7 +50,7 @@ class ApiController extends Controller
   {
     // $url = "https://192.168.0.114/activrespons/save_customer";
     $url = "https://activrespon.com/dashboard/save_customer";
-    $user = Auth::user();
+    $user = User::find($data['user_id']);
 
     $data = array(
       "service" => '$2y$10$JMoAeSl6aV0JCHmTNNafTOuNlMg/S7Yo8a6LUauEZe4Rcy.YdU37S',
@@ -81,9 +82,17 @@ class ApiController extends Controller
   }
 
   //MAILCHIMP
-  private static function mailchimp()
+  private static function mailchimp($user_id = null)
   {
-    $api_key = Auth::user()->mailchimp_api;
+    if($user_id == null)
+    {
+      $api_key = Auth::user()->mailchimp_api;
+    }
+    else
+    {
+      $user = User::find($user_id);
+      $api_key = $user->mailchimp_api;
+    }
 
     if($api_key == null)
     {
@@ -137,7 +146,7 @@ class ApiController extends Controller
   //TO ADD CONTACTS / SUBSCRIBER INTO AUDIENCE/LIST ON MAILCHIMP
   public function add_mailchimp(array $data)
   {
-    $mailchimp = self::mailchimp();
+    $mailchimp = self::mailchimp($data['user_id']);
 
     $list_id = strip_tags($data['list_id']);
     $email = strip_tags($data['email']);

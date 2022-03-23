@@ -111,7 +111,7 @@
 
             if(conf == true)
             {
-                redraw_or_delete(id,'{{ url("draw-contestant") }}',"{{ url('contestant-winner') }}/{{ $ev->id }}");
+                redraw_or_delete(id,'{{ url("draw-contestant") }}',0);
             }
             else
             {
@@ -126,7 +126,7 @@
 
             if(conf == true)
             {
-                redraw_or_delete(id,'{{ url("del-contestant") }}',"{{ url('list-contestants') }}/{{ $ev->id }}");
+                redraw_or_delete(id,'{{ url("del-contestant") }}',1);
             }
             else
             {
@@ -135,12 +135,12 @@
         });
     }
 
-    function redraw_or_delete(id,target,redirect)
+    function redraw_or_delete(id,target,remove_winner)
     {
         $.ajax({
             method:'GET',
             url: target,
-            data : {'id':id,'ev_id':"{{ $ev->id }}"},
+            data : {'id':id,'ev_id':"{{ $ev->id }}",'winner':remove_winner},
             dataType:'json',
             beforeSend : function()
             {
@@ -151,7 +151,7 @@
             {
                 if(result.err == 0)
                 {
-                    location.href=redirect;
+                    location.href="{{ url('contestant-winner') }}/{{ $ev->id }}";
                 }
                 else
                 {

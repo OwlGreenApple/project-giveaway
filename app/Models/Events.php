@@ -13,9 +13,7 @@ class Events extends Model
 
     /*
         unlimited : 
-        0 --> not
-        1 --> yes
-        in case of unlimited then the date set to null
+        cancelled by boss -- march 23 - 2022
 
         media :
         0 --> image

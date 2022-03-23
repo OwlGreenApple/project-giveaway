@@ -7,7 +7,7 @@
             <h1 class="big-theme" align="center">Create Giveaway</h1>
         </div>
 
-        <div class="col-md-8">
+        <div id="err_scroll" class="col-md-8">
             <div id="msg">@if(Cookie::get('url') !== null) <div class="alert alert-info text-center">{{ Lang::get('custom.link') }} : <a class="main-color" href="{!! Cookie::get('url') !!}">{{ Lang::get('custom.click') }}</a></div> @endif</div>
             <form id="create_event">
                 <!-- form 1 -->
@@ -80,12 +80,7 @@
                                 <span class="text-danger err_winner"><!-- --></span>
                             </div>
                         </div>
-                        <div class="form-check mb-3">
-                            <input @if(isset($event) && $event->unlimited == 1) checked value="on" @endif class="form-check-input" type="checkbox" name="unl_cam" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                            Unlimited Campaign
-                            </label>
-                        </div>
+                        
                         <div class="form-group mb-3">
                             <label>Timezone</label>
                             <select class="form-select" name="timezone" id="timezone" required="">
@@ -315,7 +310,7 @@
                     </div>
                 </div>
 
-                @if($event->status < 2)
+                @if(!isset($event) || (isset($event) && $event->status < 2))
                 <div class="mt-5 text-center">
                     <span class="err_package"><!-- --></span>
                     <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
@@ -704,6 +699,10 @@ function save_data()
                     (result.err_edit_pt !== undefined)?display_bonus_error(result.err_edit_pt):false;
                     (result.err_edit_cl !== undefined)?display_bonus_error(result.err_edit_cl):false;
                     (result.err_edit_wyt !== undefined)?display_bonus_error(result.err_edit_wyt):false;
+                
+                    $('html, body').animate({
+                        scrollTop: $("#err_scroll").offset().top
+                    }, 700);
                 }
                 else
                 {

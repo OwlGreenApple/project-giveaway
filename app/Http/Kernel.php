@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'check_events' => \App\Http\Middleware\CheckEvents::class,
         'check_contestants' => \App\Http\Middleware\CheckContestant::class,
         'check_order' => \App\Http\Middleware\CheckValidOrder::class,
+        'check_redeem' => \App\Http\Middleware\CheckRedeem::class,
         'is_admin' => \App\Http\Middleware\AdminUser::class,
     ];
 }
