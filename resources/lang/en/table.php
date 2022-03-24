@@ -2,9 +2,10 @@
 
 return [
     'act'=>'Actions',
+    'award'=>'Award',
+    'award.done'=>'Awarded',
     'date'=>'Date Enter',
     'del'=>'Delete',
-    'draw'=>'Redraw',
     'email'=>'Email',
     'entry'=>'Entries',
     'ip'=>'IP',

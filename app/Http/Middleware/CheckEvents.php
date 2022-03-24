@@ -78,11 +78,11 @@ class CheckEvents
         }
 
         $rules = [
-            'title'=>['required','max:45'],
+            'title'=>['required','max:40'],
             'start'=>['required',new CheckDate('start',null,$request->timezone)],
             'end'=>['required',new CheckDate('end',$request->start)],
             'award'=>['required',new CheckDate('award',$request->end)],
-            'winner'=>['required','numeric','min:1','max:100'],
+            'winner'=>['required','numeric','min:1','max:50'],
             'timezone'=>['required', new CheckDate('timezone',null)],
             'owner_name'=>['required','max:45'],
             'owner_url'=>['required','url'],
@@ -91,6 +91,7 @@ class CheckEvents
             'desc'=>[new CheckDescription],
             'message'=>['required','max:65000',new CheckMessage],
             'media'=>['bail','mimes:jpeg,jpg,png','max:1024'],
+            'message_winner'=>['required','max:65000',new CheckMessage],
         ];
 
         if($request->media_option !== null)
@@ -126,6 +127,7 @@ class CheckEvents
                 12=>[$err->first('desc'),'desc'],
                 13=>[$err->first('message'),'message'],
                 14=>[$err->first('media'),'media'],
+                15=>[$err->first('message_winner'),'message_winner'],
             ];
 
             // return response()->json($errors);

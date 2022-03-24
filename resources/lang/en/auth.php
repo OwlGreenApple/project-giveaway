@@ -23,6 +23,8 @@ return [
     'failed' => 'These credentials do not match our records.',
     'log' => 'Have an account? Please click here ',
     'password' => 'The provided password is incorrect.',
+    'process' => 'Processing',
+    'process.complete' => 'Paid Off',
     'redeem' => 'Invalid amount!',
     'redeem.first' => 'Maximum withdraw for the first redeem is :', 
     'redeem.insufficient' => 'Insufficient balance!', 

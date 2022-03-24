@@ -20,10 +20,14 @@ class CheckUserProfile
     {
         $rules = [
             'profile_name'=>['required','max:50'],
-            'password'=>['required','min:8','max:50','confirmed'],
             'profile_currency'=>['required',new ProfileRules('cur')],
             'profile_lang'=>['required',new ProfileRules('lang')],
         ];
+
+        if($request->password !== null)
+        {
+            $rules['password'] = ['min:8','max:50','confirmed'];
+        }
 
         $validator = Validator::make($request->all(),$rules);
         $err = $validator->errors();

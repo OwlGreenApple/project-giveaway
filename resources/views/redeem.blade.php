@@ -32,7 +32,7 @@
                     <label>{{Lang::get('auth.account.money')}}</label>
                     <select name="amount" class="form-select">
                         @foreach($funds as $index=>$row)
-                            <option value="{{ $index }}">{{ $helper::currency()['idr'] }}-{{ $helper::format($row) }}</option>
+                            <option value="{{ $index }}">{{ $helper::currency()[Lang::get('auth.currency')] }}-{{ $helper::format($row) }}</option>
                         @endforeach
                     </select>
                     <span class="text-danger err_amount"><!-- --></span>
@@ -41,6 +41,34 @@
             </form>
         <!-- end col -->
         </div>
+
+        <!-- display redeem list -->
+        <div class="col-md-8 bg-white px-4 py-2">
+            <hr/>
+            <table id="data_redeem" class="responsive">
+                <thead>
+                    <th>Name</th>
+                    <th>Account Name</th>
+                    <th>No Account</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </thead>
+                @if($data->count() > 0)
+                <tbody>
+                    @foreach($data as $row)
+                        <tr>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->account_name }}</td>
+                            <td>{{ $row->account }}</td>
+                            <td>{{ $helper::currency()[Lang::get('auth.currency')] }}.{{ $helper::format($row->total) }}</td>
+                            <td>{!! $row->status !!}</td> 
+                        </tr>
+                    @endforeach
+                </tbody>
+                @endif
+            </table>
+        </div>
+
     </div>
     <!--  -->
 </div>
@@ -49,7 +77,13 @@
 
     $(function(){
         redeem();
+        datatable();
     });
+
+    function datatable()
+    {
+        $("#data_redeem").dataTable();
+    }
 
     function redeem()
     {

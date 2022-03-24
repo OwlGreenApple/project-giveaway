@@ -42,16 +42,9 @@
                                     <div class="input-group">
                                         @if(isset($winner))
                                             @if($row->status == 0)
-                                                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li class="text-center"><a class="btn btn-warning draw" ev_id="{{ $row->event_id }}" id="{{ $row->id }}">{{ Lang::get('table.draw') }}</a></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="text-center"><a id="{{ $row->id }}" class="btn btn-danger del">{{ Lang::get('table.remove') }}</a></li>
-                                                </ul>
+                                                <a class="btn btn-warning draw" ev_id="{{ $row->event_id }}" id="{{ $row->id }}">{{ Lang::get('table.award') }}</a>
                                             @elseif($row->status == 1)
-                                                <span class="text-info">Awarded</span>
+                                                <span class="text-info">{{ Lang::get('table.award.done') }}</span>
                                             @else
                                                 <span class="text-danger">Removed</span>
                                             @endif

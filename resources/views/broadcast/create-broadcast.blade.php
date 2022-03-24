@@ -26,7 +26,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label>Message:<span class="text-danger">*</span></label>
-                            <textarea name="message" id="divInput-description-post"></textarea>
+                            <textarea name="message" class="form-control form-control-lg"></textarea>
                             <span class="text-danger err_message"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
@@ -95,7 +95,7 @@
 <script src="{{ asset('assets/js/counting.js') }}" type="text/javascript"></script>
 <script>
 $(function() {
-    emoji();
+    // emoji();
     display_contestant();
     add_contestants();
     del_contestants();

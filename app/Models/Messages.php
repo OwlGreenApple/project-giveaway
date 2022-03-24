@@ -18,5 +18,6 @@ class Messages extends Model
         2 == message delivered
         3 == message READ
         4 == message FAILED
+        5 == case winner if user winning_run = 1 but user's phone inactive
     */
 }

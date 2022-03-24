@@ -91,21 +91,21 @@
             },
             success: function(result)
             {
-                if(result.success == 'err_package')
-                {
-                    $(".wmsg").html("<div class='alert alert-warning'>"+result.package+"</div>");
-                }
-                else if(result.success == 'err')
-                {
-                    $(".wmsg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
-                }
-                else
+                if(result.success == 1)
                 {
                     display_dashboard();
                 }
+                else if(result.success == 'err_package')
+                {
+                    $(".wmsg").html("<div class='alert alert-warning'>"+result.package+"</div>");
+                }
+                else
+                {
+                    $(".wmsg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                }
             },
             error:function(xhr)
-            {
+            { 
                 $(".wmsg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
             },
             complete : function(xhr){

@@ -17,6 +17,12 @@
             <input name="password_confirmation" type="password" class="form-control form-control-lg"/>
             <span class="text-danger err_password_confirmation"><!-- --></span>
         </div>
+        @if($user->is_admin == 1)
+        <div class="form-group mb-4">
+            <label>Change Percentage (%): <span class="text-info">Ini buat ganti jumlah percentage yg didapat oleh affiliate</span></label>
+            <input name="percentage" value="{{ $user->percentage }}" type="number" min="0" max="100" class="form-control form-control-lg"/>
+        </div>
+        @endif
         <div class="row mb-4">
             <div class="form-group col-md-6 col-lg-6">
                 <label>Currency:<span class="text-danger">*</span></label>

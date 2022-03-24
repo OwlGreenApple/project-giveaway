@@ -132,12 +132,12 @@
                 $("#secs").html('0'+sc);
             }
 
-            if(sc == 3 || sc == 10 || sc == 15 ||sc == 30 || sc == 59)
+            if(sc == 6 || sc == 12 || sc == 20 ||sc == 30 || sc == 52)
             {
                 pairing();
             }
 
-            if(sc % 6 == 0)
+            if(sc > 12 && sc % 6 == 0)
             {
                 check_connect();
             }

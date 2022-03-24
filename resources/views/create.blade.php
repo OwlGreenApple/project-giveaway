@@ -35,20 +35,20 @@
                                         </select>
                                     </div>
                                     <div class='btn-group'>
-                                    <a class='btn' data-role='bold'><b>Bold</b></a>
-                                    <a class='btn' data-role='italic'><em>Italic</em></a>
-                                    <a class='btn' data-role='underline'><u><b>U</b></u></a>
-                                    <a class='btn' data-role='strikeThrough'><strike>abc</strike></a>
+                                        <a class='btn' data-role='bold'><b>Bold</b></a>
+                                        <a class='btn' data-role='italic'><em>Italic</em></a>
+                                        <a class='btn' data-role='underline'><u><b>U</b></u></a>
+                                        <a class='btn' data-role='strikeThrough'><strike>abc</strike></a>
                                     </div>
                                     <div class='btn-group'>
-                                    <a class='btn' data-role='justifyLeft'><i class="fas fa-align-left"></i></a>
-                                    <a class='btn' data-role='justifyCenter'><i class="fas fa-align-center fa-flip-vertical"></i></a>
-                                    <a class='btn' data-role='justifyRight'><i class="fas fa-align-right"></i></a>
-                                    <a class='btn' data-role='justifyFull'><i class="fas fa-align-justify"></i></a>
+                                        <a class='btn' data-role='justifyLeft'><i class="fas fa-align-left"></i></a>
+                                        <a class='btn' data-role='justifyCenter'><i class="fas fa-align-center fa-flip-vertical"></i></a>
+                                        <a class='btn' data-role='justifyRight'><i class="fas fa-align-right"></i></a>
+                                        <a class='btn' data-role='justifyFull'><i class="fas fa-align-justify"></i></a>
                                     </div>
                                     <div class='btn-group'>
-                                    <a class='btn' data-role='indent'><i class="fas fa-indent"></i></a>
-                                    <a class='btn' data-role='outdent'><i class="fas fa-indent fa-flip-horizontal"></i></a>
+                                        <a class='btn' data-role='indent'><i class="fas fa-indent"></i></a>
+                                        <a class='btn' data-role='outdent'><i class="fas fa-indent fa-flip-horizontal"></i></a>
                                     </div>
                                 </div>
                                 <!-- textarea editor -->
@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Number Of Winners:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" class="form-control form-control-lg w-25" name="winner" />
+                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" max="50" class="form-control form-control-lg w-25" name="winner" />
                                 <span class="text-danger err_winner"><!-- --></span>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                             <select class="form-select" name="timezone" id="timezone" required="">
                                 @if(count($helper::timezone()) > 0)
                                     @foreach($helper::timezone() as $key=>$val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
+                                        <option value="{{ $key }}">{{ $val }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -302,6 +302,26 @@
                 </div>
 
                 <!-- form 6 -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-color main-theme">WA Message For Winner</h3>
+                        <div class="text-justify title mb-4">Set WA message so that when contestant win, will get message. Make sure if you have connect your phone here <a target="_blank" class="main-color" href="{{ url('scan') }}">Connect</a></div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch mb-2">
+                                <input @if(isset($event) && $event->winner_run == 1) value="on" checked @else value="off" @endif name="run_winner" class="form-check-input" type="checkbox" id="run_winner">
+                                <label class="form-check-label" for="run_winner">Activate</label>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Message to Winner:<span class="text-danger">*</span></label>
+                                <textarea name="message_winner" class="form-control form-control-lg">@if(isset($event)){{ $event->winner_message }}@endif</textarea>
+                                <span class="text-danger err_message_winner"><!-- --></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- form 7 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-theme title">EU GDPR consent checkbox</h3>
@@ -535,7 +555,7 @@ function setup_sharing()
     });
 }
 
-// DISPLAY VIDEO OR BANNER
+// DISPLAY VIDEO OR BANNER / RUNNING WINNER MESSAGE
 function display_media()
 {
     var val = $("#media_option").val();
@@ -544,6 +564,18 @@ function display_media()
     $("#media_option").click(function(){
         var value = $(this).val();
         detect_video_or_banner(value);
+    });
+
+    $("#run_winner").click(function(){
+        var val = $(this).val();
+        if(val == 'on')
+        {
+            $(this).val('off');
+        }
+        else
+        {
+            $(this).val('on');
+        }
     });
 }
 
@@ -678,6 +710,7 @@ function save_data()
                     $(".err_"+result[12][1]).html(result[12][0]);
                     $(".err_"+result[13][1]).html(result[13][0]);
                     $(".err_"+result[14][1]).html(result[14][0]);
+                    $(".err_"+result[15][1]).html(result[15][0]);
 
                     err_bonus =''; //to clear error message
 

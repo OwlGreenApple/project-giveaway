@@ -97,15 +97,18 @@ class RunningMessages extends Command
                         continue;
                     }
 
-                    $msge = new Messages;
-                    $msge->user_id = $user_id;
-                    $msge->bc_id = $bc_id;
-                    $msge->ct_id = $ctid;
-                    $msge->sender = $phone->number;
-                    $msge->receiver = substr($ct->wa_number,1);
-                    $msge->message = $message;
-                    $msge->img_url = $url;
-                    $msge->save();
+                    $msge = [
+                        'user_id'=>$user_id,
+                        'ev_id'=>0, 
+                        'bc_id'=>$bc_id, 
+                        'ct_id'=>$ctid,
+                        'sender'=>$phone->number,
+                        'receiver'=>substr($ct->wa_number,1),
+                        'message'=>$message,
+                        'img_url'=>$url
+                    ];
+
+                    self::ins_message($msge);
                 endforeach; // end parsing
 
                  // update broadcast status
@@ -233,6 +236,26 @@ class RunningMessages extends Command
     {
         $cd = new CDV;
         $cd->check_device($phone);
+    }
+
+    public static function ins_message($data)
+    {
+        $msge = new Messages;
+        $msge->user_id = $data['user_id'];
+        $msge->ev_id = $data['ev_id'];
+        $msge->bc_id = $data['bc_id'];
+        $msge->ct_id = $data['ct_id'];
+        $msge->sender = $data['sender'];
+        $msge->receiver = $data['receiver'];
+        $msge->message = $data['message'];
+        $msge->img_url = $data['img_url'];
+        
+        if(isset($data['status']))
+        {
+            $msge->status = $data['status'];
+        }
+
+        $msge->save();
     }
 
 

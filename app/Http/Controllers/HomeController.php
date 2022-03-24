@@ -255,13 +255,38 @@ class HomeController extends Controller
         {
             return response()->json(['success'=>'err']);
         }
+        // FILTER MEDIA OPTION
+        if($ev->media == 1)
+        {
+            $media = 'off';
+        }
+        else
+        {
+            $media = 'on';
+        }
+
+        // FILTER WINNER RUN
+        if($ev->winner_run == 0)
+        {
+            $winner_run = 'off';
+        }
+        else
+        {
+            $winner_run = 'on';
+        }
 
         //duplicate events
+        $title = $ev->title;
+        if(strlen($title) >= 40)
+        {
+            $title = substr($title,0,35);
+        }
+
         $req = [
-            'title'=>$ev->title,
-            'start'=>$ev->start,
-            'end'=>$ev->end,
-            'award'=>$ev->award,
+            'title'=>$ev->title."-copy",
+            'start'=>Carbon::now($ev->timezone),
+            'end'=>Carbon::now($ev->timezone)->addDay(1),
+            'award'=>Carbon::now($ev->timezone)->addDay(3),
             'winner'=>$ev->winners,
             'timezone'=>$ev->timezone,
             'owner_name'=>$ev->owner,
@@ -270,13 +295,17 @@ class HomeController extends Controller
             'prize_amount'=>$ev->prize_value,
             'youtube_url'=>$ev->youtube_banner,
             'desc'=>$ev->desc,
-            'media_option'=>$ev->media,
+            'media_option'=>$media,
             'unl_cam'=>$ev->unlimited,
+            'act_api_id'=> $ev->act_api_id,
+            'mlc_api_id'=>$ev->mlc_api_id,
             'tw'=>$ev->tw,
             'fb'=>$ev->fb,
             'wa'=>$ev->wa,
-            'ln'=>$ev->ln,
-            'mail'=>$ev->mail,
+            'ln'=>$ev->ln, 
+            'message'=>$ev->message,
+            'run_winner'=>$winner_run,
+            'message_winner'=>$ev->winner_message,
             'duplicate'=>1
         ];
 
@@ -285,6 +314,9 @@ class HomeController extends Controller
 
         // duplicate banners
         $this->duplicate_banner($ev->id,$new_ev_id);
+
+        // duplicate wa image
+        self::save_wa_image($reqt,$new_ev_id,$ev->img_url);
 
         //duplicate bonus
         $bonuses = Bonus::where('event_id',$ev->id)->get();
@@ -301,6 +333,8 @@ class HomeController extends Controller
                 self::db_bonus($bn,"new");
             endforeach;
         }
+
+        return response()->json(['success'=>1]);
     }
 
     private function duplicate_banner($ev_id,$new_event_id)
@@ -378,7 +412,10 @@ class HomeController extends Controller
     {
         $helper = new Custom;
         $funds = $helper::redeem();
-        return view('redeem',['funds'=>$funds,'helper'=>$helper]);
+        $processing = Lang::get('auth.process');
+        $paid = "<span class='text-success'>".Lang::get('auth.process.complete')."</span>";
+        $data = Redeem::where('user_id',Auth::id())->selectRaw('*,CASE WHEN is_paid = 0 THEN "'.$processing.'" ELSE "'.$paid.'" END AS status')->get();
+        return view('redeem',['funds'=>$funds,'helper'=>$helper,'data'=>$data]);
     }
 
     public function claim_money(Request $request)
@@ -600,6 +637,8 @@ class HomeController extends Controller
         $desc = $request->desc;
         $images = $request->file('images');
         $message = strip_tags($request->message);
+        $winner_run = strip_tags($request->run_winner);
+        $message_winner = strip_tags($request->message_winner);
 
         $act_api_id = strip_tags($request->act_api_id);
         $mlc_api_id = strip_tags($request->mlc_api_id);
@@ -607,6 +646,7 @@ class HomeController extends Controller
         ($mlc_api_id == null? $mlc_api_id = 0:false);
 
         ($request->media_option == 'off')?$mo = 1:$mo = 0;
+        ($winner_run == 'off')?$wr = 0:$wr = 1;
         $unl = self::determine_share($request->unl_cam);
         $tw = self::determine_share($request->tw);
         $fb = self::determine_share($request->fb);
@@ -652,6 +692,8 @@ class HomeController extends Controller
         $ev->mail = $mail;
         $ev->timezone = $timezone;
         $ev->message = $message;
+        $ev->winner_run = $wr;
+        $ev->winner_message = $message_winner;
         $ev->act_api_id = $act_api_id;
         $ev->mlc_api_id = $mlc_api_id;
 
@@ -677,7 +719,7 @@ class HomeController extends Controller
 
         if($request->duplicate == 1)
         {
-            return $event_id;
+            return $event_id; 
         }
 
         /* IMAGE WA */
@@ -807,10 +849,20 @@ class HomeController extends Controller
     }
 
     // SAVE WA IMAGE MESSAGE
-    public static function save_wa_image($request,$event_id)
+    public static function save_wa_image($request,$event_id,$duplicate = null)
     {
         $newfile = env('FOLDER_PATH').'/wa/'.Date('Y-m-d-h-i-s').".jpg";
-        Storage::disk('s3')->put($newfile,file_get_contents($request->file('media')), 'public');
+
+        if($duplicate == null)
+        {
+            $images = $request->file('media');
+        }
+        else
+        {
+            $images = Storage::disk('s3')->url($duplicate);
+        }
+
+        Storage::disk('s3')->put($newfile,file_get_contents($images), 'public');
 
         //IN BROADCAST CASE
         if($event_id == null)
@@ -841,15 +893,18 @@ class HomeController extends Controller
         if($duplicate == null)
         {
             $images = $request->file('images');
+            $dpl = 'new';
         }
         else
         {
             $images = $duplicate;
+            $dpl = 'dpl';
         }
 
         foreach($images as $index=>$file):
-            $newfile = env('FOLDER_PATH').'/banner/'.Date('Y-m-d-h-i-s-').$index.".jpg";
-            Storage::disk('s3')->put($newfile,file_get_contents($file), 'public');
+            $fl = file_get_contents($file);
+            $newfile = env('FOLDER_PATH').'/banner/'.Date('Y-m-d-h-i-s-').$index.'-'.$dpl.".jpg";
+            Storage::disk('s3')->put($newfile,$fl, 'public');
 
             $banners = new Banners;
             $banners->event_id = $event_id;
@@ -940,12 +995,13 @@ class HomeController extends Controller
         $bonus->type = strip_tags($data['type']);
         $bonus->prize = strip_tags($data['prize']);
 
-        try{
+        try
+        {
             $bonus->save();
         }
         catch(QueryException $e)
         {
-            //
+            echo $e->getMessage();
         }
     }
 
@@ -1037,11 +1093,17 @@ class HomeController extends Controller
         $password = strip_tags($request->password);
         $currency = strip_tags($request->profile_currency);
         $lang = strip_tags($request->profile_lang);
+        $percentage = strip_tags($request->percentage);
+
+        if($percentage == null)
+        {
+            $percentage = 0;
+        }
 
         $update = [
             'name'=>$name,
             'currency'=>$currency,
-            'lang'=>$lang,
+            'lang'=>$lang
         ];
 
         if($password !== null)
@@ -1049,7 +1111,14 @@ class HomeController extends Controller
             $update['password'] = Hash::make($password);
         }
 
-        try{
+        try
+        {
+            // UPDATE ENTIRE ADMIN PERCENTAGE FIELD VALUE ONLY
+            if(Auth::user()->is_admin == 1 && Auth::user()->percentage !== $percentage)
+            {
+                User::where('is_admin',1)->update(['percentage'=>$percentage]);
+            }
+
             User::where('id',Auth::id())->update($update);
             $res['success'] = 1;
         }
