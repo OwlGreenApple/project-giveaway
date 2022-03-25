@@ -11,6 +11,7 @@ use App\Rules\CheckDate;
 use App\Rules\CheckNumber;
 use App\Rules\CheckDescription;
 use App\Rules\CheckMessage;
+use App\Rules\ProfileRules;
 use App\Models\Events;
 use App\Helpers\Custom;
 
@@ -87,6 +88,7 @@ class CheckEvents
             'owner_name'=>['required','max:45'],
             'owner_url'=>['required','url'],
             'prize_name'=>['required','max:100'],
+            'currency'=>['required',new ProfileRules('cur')],
             'prize_amount'=>['required',new CheckNumber(null)],
             'desc'=>[new CheckDescription],
             'message'=>['required','max:65000',new CheckMessage],
@@ -128,6 +130,7 @@ class CheckEvents
                 13=>[$err->first('message'),'message'],
                 14=>[$err->first('media'),'media'],
                 15=>[$err->first('message_winner'),'message_winner'],
+                16=>[$err->first('currency'),'currency'],
             ];
 
             // return response()->json($errors);

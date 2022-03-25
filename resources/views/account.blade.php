@@ -116,6 +116,12 @@ $(function(){
                     {
                         $("#brd").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
                     }
+                    else if(result.err == 'vdt')
+                    {
+                        $.each(result, function(i, val){
+                            $(".err_"+i).html(val);
+                        });
+                    }
                     else
                     {
                         $("#brd").html("<div class='alert alert-danger'>{{ Lang::get('custom.failed') }}</div>");

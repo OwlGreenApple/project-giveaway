@@ -35,7 +35,7 @@ class CheckNumber implements Rule
         {
             return $this->max_prize_value($value);
         }
-        elseif($this->cond == 'img')
+        else
         {
             return $this->check_image($value);
         }
@@ -46,7 +46,7 @@ class CheckNumber implements Rule
         $helper = new Custom;
         $prize = $helper::convert_amount($value);
 
-        if($prize > 1000000)
+        if($prize > 9000000)
         {
             $this->msg = Lang::get('cvalidation.prize');
             return false;
@@ -59,7 +59,6 @@ class CheckNumber implements Rule
 
     private function check_image($value)
     {
-        dd($value);
         $val = count($value);
         if($val < 1)
         {

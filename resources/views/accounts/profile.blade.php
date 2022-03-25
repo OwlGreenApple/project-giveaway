@@ -25,17 +25,6 @@
         @endif
         <div class="row mb-4">
             <div class="form-group col-md-6 col-lg-6">
-                <label>Currency:<span class="text-danger">*</span></label>
-                <select name="profile_currency" class="form-select form-select-lg">
-                @if(count($helper::currency()) > 0)
-                    @foreach($helper::currency() as $key=>$val)
-                        <option value="{{ $key }}">{{ $val }}</option>
-                    @endforeach
-                @endif
-                </select>
-                <span class="text-danger err_profile_currency"><!-- --></span>
-            </div>
-            <div class="form-group col-md-6 col-lg-6">
                 <label>Giveaway Language:<span class="text-danger">*</span></label>
                 <select name="profile_lang" class="form-select form-select-lg">
                 @if(count($helper::lang()) > 0)

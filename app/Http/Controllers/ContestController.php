@@ -70,6 +70,7 @@ class ContestController extends Controller
             'link'=>$link,
             'ref'=>$ref,
             'branding'=>$user->branding,
+            'brand_link'=>$user->brand_link,
             'winner'=>$winner,
             'check_contestants'=>self::check_contestants_membership($user,$total_contestant)
         ];

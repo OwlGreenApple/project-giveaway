@@ -68,7 +68,7 @@
                 </div>
                 <h5 class="text-center mb-3">
                     <span class="me-2">
-                        <i class="fas fa-gift"></i> {{ Lang::get('custom.prize') }} : <b class="main-color"><span class="text-uppercase">{{ $user->currency }}</span> {{ $helpers::format($event->prize_value) }}</b>
+                        <i class="fas fa-gift"></i> {{ Lang::get('custom.prize') }} : <b class="main-color"><span class="text-uppercase">{{ $event->currency }}</span> {{ $helpers::format($event->prize_value) }}</b>
                     </span>
                     <span class="ms-2">
                         <i class="fas fa-trophy"></i> {{ Lang::get('custom.winner') }} : <b class="trophy">{{ $event->winners }}</b>
@@ -126,11 +126,7 @@
 
             <div class="mt-2 pb-3 text-center">
                 @if($branding !== null)
-                    <img src="{!! Storage::disk('s3')->url($branding) !!}" width="100" />
-                @endif
-
-                @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
-                    <div class="text-center mt-2">{!! $helpers::sponsor(1) !!}</div>
+                    @if($brand_link !== null || !empty($brand_link))<a target="_blank" rel="noopener noreferrer" href="{{ $brand_link }}">@endif<img class="img_brand" src="{!! Storage::disk('s3')->url($branding) !!}" width="100" />@if($brand_link !== null)</a>@endif
                 @endif
             </div>
         <!-- end col -->

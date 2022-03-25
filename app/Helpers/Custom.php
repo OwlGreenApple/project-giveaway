@@ -43,7 +43,7 @@ class Custom
 
     public static function currency()
     {
-        return ['usd'=>'USD','idr'=>'IDR'];
+        return ['usd'=>'USD','gbp'=>'GBP','sgd'=>'SGD','idr'=>'IDR','rm'=>'RM']; 
     }
 
     public static function lang()

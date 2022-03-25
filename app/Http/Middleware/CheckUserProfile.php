@@ -20,7 +20,6 @@ class CheckUserProfile
     {
         $rules = [
             'profile_name'=>['required','max:50'],
-            'profile_currency'=>['required',new ProfileRules('cur')],
             'profile_lang'=>['required',new ProfileRules('lang')],
         ];
 

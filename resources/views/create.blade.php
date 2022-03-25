@@ -117,9 +117,18 @@
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>Prize Value:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
-                                    <span class="input-group-text text-uppercase" id="inputGroup-sizing-lg">{{ $user->currency }}</span>
-                                    <input name="prize_amount" @if(isset($event)) value="{{ $event->prize_value }}" @endif id="amount" maxlength="8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                                @if(count($helper::currency()) > 0)
+                                <div class="input-group mb-3">
+                                    <select style="max-width:95px" class="form-select form-select-lg bg-custom text-white" name="currency">
+                                        @foreach($helper::currency() as $idt=>$row)
+                                            <option value="{{ $idt }}" @if(isset($event) && ($event->currency == $idt)) selected @endif>{{ $row }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input name="prize_amount" @if(isset($event)) value="{{ $event->prize_value }}" @endif id="amount" maxlength="8" type="text" class="form-control form-control-lg" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                                     <span class="text-danger err_prize_amount"><!-- --></span>
+                                    <span class="text-danger err_currency"><!-- --></span>
+                                </div>
+                                @endif
                                 </div>
                             </div>
                         </div>
@@ -186,7 +195,7 @@
                                     @if($row['type'] !== '5')
                                     <div class="form-group col-md-6 col-lg-6 mb-2">
                                         <label>{{ $row['col_name'] }}<span class="text-danger">*</span></label>
-                                        <input @if($row['type'] == '7') placeholder="https://www.youtube.com/watch?v=xxxxxx" @endif value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                        <input @if($row['type'] == '7') placeholder="Your youtube URL" @endif value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
                                     </div>
                                     @endif
 
@@ -322,13 +331,13 @@
                 </div>
 
                 <!-- form 7 -->
-                <div class="card px-4 py-4 mb-3">
+                <!-- <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-theme title">EU GDPR consent checkbox</h3>
                         <p class="fcs italic title">Are you planning to send your entrants marketing messages after the giveaway? Are any of your contestants located in the EU? If yes, or you’re not sure, enable the checkbox option below so your contestants can give clear consent as required by EU GDPR.</p>
                         <input type="checkbox" class="form-checkbox me-1" />&nbsp;<span class="title">GDPR Consent</span>
                     </div>
-                </div>
+                </div> -->
 
                 @if(!isset($event) || (isset($event) && $event->status < 2))
                 <div class="mt-5 text-center">
@@ -406,10 +415,23 @@ function pastePreview()
       }
 
       var pastedData = e.originalEvent.clipboardData.getData('text');
-      pastedData = pastedData.split("=");
+      var pasted_data = pastedData.split("=");
+      var data;
+
+      // https://youtu.be/xxxxxx
+      if(pasted_data[1] == undefined)
+      {
+        data = pastedData.split(".be");
+        data = data[1].split("/");
+        data = data[1];
+      }
+      else
+      {
+        data = pasted_data[1];
+      }
 
       setTimeout(function(){
-        $(".em_"+id).val(pastedData[1]);
+        $(".em_"+id).val(data);
       },100);
     })
   }
@@ -505,12 +527,12 @@ function column_entry(val)
 
         if(val == 'wyt')
         {
-            $column += '<input placeholder="https://www.youtube.com/watch?v=xxxxxx" type="text" class="em_new_'+len+' form-control form-control-lg emb" name="new_url_'+val+'[]" />';
+            $column += '<input placeholder="your youtube url" autocomplete="off" type="text" class="em_new_'+len+' form-control form-control-lg emb" name="new_url_'+val+'[]" />';
 
         }
         else
         {
-            $column += '<input type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+            $column += '<input type="text" autocomplete="off" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
         }
         $column += '</div>';
         $column += '<div class="form-group col-md-12 col-lg-12">';
@@ -711,6 +733,7 @@ function save_data()
                     $(".err_"+result[13][1]).html(result[13][0]);
                     $(".err_"+result[14][1]).html(result[14][0]);
                     $(".err_"+result[15][1]).html(result[15][0]);
+                    $(".err_"+result[16][1]).html(result[16][0]);
 
                     err_bonus =''; //to clear error message
 

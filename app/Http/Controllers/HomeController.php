@@ -624,6 +624,7 @@ class HomeController extends Controller
         $message = strip_tags($request->message);
         $winner_run = strip_tags($request->run_winner);
         $message_winner = strip_tags($request->message_winner);
+        $currency = strip_tags($request->currency);
 
         $act_api_id = strip_tags($request->act_api_id);
         $mlc_api_id = strip_tags($request->mlc_api_id);
@@ -668,6 +669,7 @@ class HomeController extends Controller
         $ev->owner_url = $owner_url;
         $ev->prize_name = $prize_name;
         $ev->prize_value = $prize_amount;
+        $ev->currency = $currency;
         $ev->media = $mo;
         $ev->youtube_banner = $youtube_url;
         $ev->tw = $tw;
@@ -1288,6 +1290,25 @@ class HomeController extends Controller
     //SAVE BRANDING ON USERS FIELD
     public function save_branding(Request $request)
     {
+        $rules = [
+            'logo_branding'=>['required','mimes:jpeg,jpg,png','max:600'],
+            'link_branding'=>['required','max:50'],
+        ];
+
+        $vdt = Validator::make($request->all(),$rules);
+        $err = $vdt->errors();
+
+        if($vdt->fails() == true)
+        {
+            $errors = [
+                'err'=>'vdt',
+                'logo_branding'=>$err->first('logo_branding'),
+                'link_branding'=>$err->first('link_branding'),
+            ];
+
+            return response()->json($errors);
+        }
+
         $user = User::find(Auth::id());
         $dir = env('FOLDER_PATH').'/branding/'.explode(' ',trim($user->name))[0].'-'.$user->id;
         $filename = Carbon::now()->toDateTimeString()."-".$user->id.'.jpg';
@@ -1295,6 +1316,7 @@ class HomeController extends Controller
         $user->branding = $dir."/".$filename;
 
         try{
+            $user->brand_link = strip_tags($request->link_branding);
             $user->save();
             $data['err'] = 0;
         }

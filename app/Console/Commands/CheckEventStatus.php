@@ -55,7 +55,10 @@ class CheckEventStatus extends Command
                 {
                     $data[] = $row->id;
                     // get the winner and create message to send it
-                    self::message_for_winner($row->id);
+                    if($row->winner_run == 1)
+                    {
+                        self::message_for_winner($row->id);
+                    }
                 }
             endforeach;
         }

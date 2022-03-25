@@ -119,7 +119,6 @@ class RunningMessages extends Command
         endif;
 
         /* SEND MESSAGE LOGIC */
-
         $messagebulk = Messages::where('status',0)->orderBy('id','asc')->get();
         $arr = array(11,8,13,6,9,12); // 59 seconds, because computer will count start from 0
         shuffle($arr);
