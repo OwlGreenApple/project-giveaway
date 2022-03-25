@@ -94,7 +94,7 @@ class HomeController extends Controller
 
     public function message_list($ev_id)
     {
-        $messages = Messages::where([['ev_id',$ev_id],['user_id',Auth::id()]])->get();
+        $messages = Messages::where([['ev_id',$ev_id],['user_id',Auth::id()]])->orderBy('id','desc')->get();
         return view('message-list',['data'=>$messages]);
     }
 

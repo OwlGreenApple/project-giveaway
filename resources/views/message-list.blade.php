@@ -29,6 +29,7 @@
                                     @elseif($phone->status == 2) <span class="text-success">Delivered</span>
                                     @elseif($phone->status == 3) <span class="text-info">Read</span>
                                     @elseif($phone->status == 4) <span class="text-danger">Failed</span>
+                                    @elseif($phone->status == 5) <span class="text-danger">User phone not available</span>
                                     @else <span class="text-dark">Queue</span></span>
                                     @endif
                                 </td>
