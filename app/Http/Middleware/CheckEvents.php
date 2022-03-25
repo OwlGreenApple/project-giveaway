@@ -79,7 +79,7 @@ class CheckEvents
 
         $rules = [
             'title'=>['required','max:40'],
-            'start'=>['required',new CheckDate('start',null,$request->timezone)],
+            'start'=>['required',new CheckDate('start',null,$request->timezone,$request->edit)],
             'end'=>['required',new CheckDate('end',$request->start)],
             'award'=>['required',new CheckDate('award',$request->end)],
             'winner'=>['required','numeric','min:1','max:50'],

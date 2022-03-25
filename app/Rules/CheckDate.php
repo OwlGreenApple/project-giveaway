@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Lang;
 use Carbon\Carbon;
 use App\Helpers\Custom;
+use App\Models\Events;
 
 class CheckDate implements Rule
 {
@@ -17,13 +18,15 @@ class CheckDate implements Rule
     public $cond;
     public $date;
     public $tmz;
+    public $event_id;
     private $msg;
 
-    public function __construct($cond,$date,$tmz = null)
+    public function __construct($cond,$date,$tmz = null,$event_id = 0)
     {
         $this->cond = $cond;
         $this->date = $date;
         $this->tmz = $tmz;
+        $this->event_id = $event_id;
     }
 
     /**
@@ -43,7 +46,7 @@ class CheckDate implements Rule
         if($terms == 'start')
         {
             $emsg = Lang::get('cvalidation.time.start');
-            return $this->current_moment($value,$emsg,$this->tmz);
+            return $this->current_moment($value,$emsg,$this->tmz,$this->event_id);
         }
 
         if($terms == 'end')
@@ -65,8 +68,18 @@ class CheckDate implements Rule
         }
     }
 
-    private function current_moment($value,$emsg,$tmz)
+    private function current_moment($value,$emsg,$tmz,$event_id)
     {
+        $ev = Events::find($event_id);
+
+        if(!is_null($ev))
+        {
+            if($value == $ev->start)
+            {
+                return true;
+            }
+        }
+
         $choosendate = Carbon::parse($value)->toDateTimeString();
         if(Carbon::now($tmz)->gt($choosendate))
         {

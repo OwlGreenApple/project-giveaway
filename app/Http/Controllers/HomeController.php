@@ -1106,6 +1106,12 @@ class HomeController extends Controller
             'lang'=>$lang
         ];
 
+        // RESULT "" FROM EMPTY FORM NEED TO CONVERT INTO NULL
+        if(empty($password))
+        {
+            $password = null;
+        }
+
         if($password !== null)
         {
             $update['password'] = Hash::make($password);
