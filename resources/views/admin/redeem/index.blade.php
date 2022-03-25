@@ -46,7 +46,7 @@
   <!-- End Modal -->
 
   <!-- MODAL -->
-  <div class="modal fade child-modal" id="buktibayar2" role="dialog">
+  <div class="modal fade child-modal" data-bs-toggle="modal" id="buktibayar2" role="dialog">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -92,7 +92,7 @@
       $("body").on("click",".reward",function(){
         var id = $(this).attr('id');
         // $("#buktibayar").modal();
-        $("#buktibayar2").modal();
+        $("#buktibayar2").modal('show');
         $("#upload_payment_2").attr('data-id',id);
       });
     }

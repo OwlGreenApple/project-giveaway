@@ -1,5 +1,5 @@
 <?php 
-use App\User;
+use App\Models\User;
 ?>
 <table class="table table-bordered" id="myTable">
   <thead align="center">

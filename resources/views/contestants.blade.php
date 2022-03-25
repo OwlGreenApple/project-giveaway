@@ -69,31 +69,9 @@
 
 <script type="text/javascript">
     $(function(){
-        // display_dashboard();
         action_table();
         datatable();
     });
-
-    function display_dashboard()
-    {
-        $.ajax({
-            method:'GET',
-            url:'{{ url("del-contestant") }}',
-            dataType:'html',
-            success: function(result)
-            {
-                $("#dashboard").html(result);
-            },
-            error:function(xhr)
-            {
-                $("#dashboard").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
-            },
-            complete : function(xhr)
-            {
-                datatable();
-            }
-        });
-    }
 
     function action_table()
     {
@@ -112,18 +90,43 @@
             }
         });
 
-        // remove contestants
+        // delete contestants
         $("body").on("click",".del",function(){
             var id = $(this).attr('id');
             var conf = confirm('{{ Lang::get("custom.delete") }}');
+            del_contestants(id);
+        });
+    }
 
-            if(conf == true)
+    function del_contestants(id)
+    {
+        $.ajax({
+            method:'GET',
+            url:'{{ url("del-contestant") }}',
+            data : {'id':id},
+            dataType:'json',
+            success: function(result)
             {
-                redraw_or_delete(id,'{{ url("del-contestant") }}',1);
-            }
-            else
+                if(result.err == 0)
+                {
+                    location.href="{{ url('list-contestants') }}/{{ $ev->id }}";
+                }
+                else
+                {
+                    $("#loader").hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#msg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}--</div>");
+                }
+            },
+            error:function(xhr)
             {
-                return false;
+                $("#loader").hide();
+                $('.div-loading').removeClass('background-load');
+                $("#dashboard").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+            },
+            complete : function(xhr)
+            {
+                datatable();
             }
         });
     }
@@ -133,7 +136,7 @@
         $.ajax({
             method:'GET',
             url: target,
-            data : {'id':id,'ev_id':"{{ $ev->id }}",'winner':remove_winner},
+            data : {'id':id,'ev_id':"{{ $ev->id }}"},
             dataType:'json',
             beforeSend : function()
             {

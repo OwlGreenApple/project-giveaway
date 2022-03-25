@@ -103,9 +103,9 @@ Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_use
 Route::get('cancel-order',[App\Http\Controllers\AdminController::class,'cancel_order']);
 
 /* Admin Redeem */
-Route::get('affiliate-admin',[App\Http\Controllers\AdminController::class, 'index']);
-Route::get('affiliate-admin-data',[App\Http\Controllers\AdminController::class,'affiliate_admin_data']);
-Route::post('upload-payment-2-redeem',[App\Http\Controllers\AdminController::class,'upload_payment_2']);
+Route::get('affiliate-admin',[App\Http\Controllers\AdminRedeemController::class, 'index']);
+Route::get('affiliate-admin-data',[App\Http\Controllers\AdminRedeemController::class,'affiliate_admin_data']);
+Route::post('upload-payment-2-redeem',[App\Http\Controllers\AdminRedeemController::class,'upload_payment_2']);
 
 
 /* Affiliate */

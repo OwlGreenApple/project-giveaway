@@ -43,12 +43,6 @@ class AdminRedeemController extends Controller
       $redeem->is_paid = 1;
       $redeem->withdrawal_method = $request->withdrawal_method;
 
-      $user = User::find($redeem->user_id);
-      if (!is_null($user)) {
-        $user->is_flag_redeem = 0;
-        $user->save();
-      }
-
       try{
         $redeem->save();
         $data['err'] = 0;

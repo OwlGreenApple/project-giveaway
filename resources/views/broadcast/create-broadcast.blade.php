@@ -26,7 +26,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label>Message:<span class="text-danger">*</span></label>
-                            <textarea name="message" class="form-control form-control-lg"></textarea>
+                            <textarea name="message" class="form-control form-control-lg">@if(isset($broadcast)) {{ $broadcast->message }} @endif</textarea>
                             <span class="text-danger err_message"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
@@ -172,7 +172,7 @@ function emoji()
         mainPathFolder : "{{url('')}}",
     });
 
-    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('@if(isset($broadcast)) {{ $broadcast->message }} @endif');
+    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText();
 }
 
 

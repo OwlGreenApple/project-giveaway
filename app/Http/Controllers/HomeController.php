@@ -158,7 +158,6 @@ class HomeController extends Controller
     {
         $id = strip_tags($request->id);
         $draw = strip_tags($request->draw);
-        $remove_winner = strip_tags($request->winner);
 
         $ct = Contestants::where('contestants.id',$id)
             ->join('events','events.id','=','contestants.event_id')
@@ -170,27 +169,7 @@ class HomeController extends Controller
             return response()->json(['err'=>1]);
         }
 
-        // if($draw !== null)
-        // {
-        //     return
-        // }
-
         $cta = Contestants::find($id);
-
-        // CASE IF USER WANT TO REMOVE WINNER
-        if($remove_winner == 1)
-        {
-            try{
-                $cta->status = 2;
-                $cta->save();
-                $res['err'] = 0;
-            }
-            catch(QueryException $e)
-            {
-                $res['err'] = 2;
-            }
-            return response()->json($res);
-        }
 
         // DELETE CONTESTANTS
         try{
@@ -209,10 +188,16 @@ class HomeController extends Controller
     // DISPLAY WINNERS
     public function winner($ev_id)
     {
-        $ev = self::check_security_event($ev_id);
+        $ev = self::check_security_event($ev_id); 
 
         //check event
         if($ev == false)
+        {
+            return view('error404');
+        }
+
+        // PREVENT USER OPEN PAGE WHEN CONTEST STILL RUNNING
+        if($ev->status < 2)
         {
             return view('error404');
         }
