@@ -346,6 +346,7 @@
                 {
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
+                    $("#msg").html('<div class="alert alert-warning">{{ Lang::get("custom.scan") }}</div>');
                 }
             },
             error: function(xhr){

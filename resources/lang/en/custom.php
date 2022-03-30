@@ -52,7 +52,7 @@ return [
     'pt.col'=>'Podcast URL',
     'redeem'=>'Redeem',
     'redraw'=>'Are you sure to redraw this winner?',
-    'scan'=>'Please click refresh button, and try to connect again.',
+    'scan'=>'Please click refresh button, and try to connect / delete again.',
     'scan.del'=>'Please delete number, and try to connect again.',
     'submit'=>'Submit',
     'success'=>'Your data has been saved successfully.',

@@ -450,10 +450,17 @@ class DeviceController extends Controller
         $ph = Phone::find($phone->id);
 
         // IN CASE OF DELETE
-        if($response == null)
+        if($req->del !== null)
         {
-            $ph->delete();
-            return response()->json(['status'=>'success']);
+            if($response == null)
+            {
+                $ph->delete();
+                return response()->json(['status'=>'success']);
+            }
+            else
+            {
+                return response()->json(['status'=>'ref']);
+            }
         }
 
         // IN CASE OF CHECK STATUS

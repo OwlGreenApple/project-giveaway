@@ -17,7 +17,7 @@ return [
     'account.confirm'=>'Confirm Dana account number',
     'account.money'=>'Total money',
     'account.number'=>'Dana account number',
-    'account.layout'=>'Accounts',
+    'layout'=>'Accounts',
     'affiliate'=>'Affiliate',
     'banned' => 'Sorry, your account has terminated.',
     'bc' => 'Broadcast',
