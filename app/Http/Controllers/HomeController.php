@@ -1078,7 +1078,6 @@ class HomeController extends Controller
     {
         $name = strip_tags($request->profile_name);
         $password = strip_tags($request->password);
-        $currency = strip_tags($request->profile_currency);
         $lang = strip_tags($request->profile_lang);
         $percentage = strip_tags($request->percentage);
 
@@ -1089,7 +1088,6 @@ class HomeController extends Controller
 
         $update = [
             'name'=>$name,
-            'currency'=>$currency,
             'lang'=>$lang
         ];
 
@@ -1117,7 +1115,7 @@ class HomeController extends Controller
         }
         catch(QueryException $e)
         {
-            //$e->getMessage()
+            // echo $e->getMessage();
             $res['success'] = 0;
         }
 
