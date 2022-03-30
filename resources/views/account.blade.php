@@ -12,10 +12,10 @@
                 <div class="px-4 py-4">
                     <a class="settings text-black-50 mn_1 active" data_target="1"><i class="far fa-user"></i>&nbsp;Profile</a>
                     <a class="settings text-black-50 mn_2" data_target="2"><i class="fas fa-exchange-alt"></i>&nbsp;Subscription</a>
+                    <a class="settings text-black-50 mn_6" data_target="6"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;Upgrade</a>
                     <a class="settings text-black-50 mn_3" data_target="3"><i class="fab fa-sketch"></i>&nbsp;Branding</a>
                     <a class="settings text-black-50 mn_4" data_target="4"><i class="fas fa-plug"></i>&nbsp;Integrate API</a>
                     <a class="settings text-black-50 mn_5" data_target="5"><i class="fas fa-shopping-basket"></i>&nbsp;Orders</a>
-                    <a class="settings text-black-50 mn_6" data_target="6"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;Upgrade Package</a>
                 </div>
             </div>
         </div>
@@ -37,6 +37,14 @@
                 </div>
             </div>
 
+             <!-- UPGRADE PACKAGE -->
+             <div id="settings_target_6" class="card target_hide d-none">
+                <div class="card-body px-5 py-5 row">
+                    @include('package-list')
+                </div>
+            </div>
+
+
             <!-- BRANDING -->
             <div id="settings_target_3" class="card target_hide d-none">
                 <div class="card-body px-5 py-5">
@@ -57,14 +65,6 @@
                     @include('accounts.order')
                 </div>
             </div>
-
-             <!-- UPGRADE PACKAGE -->
-             <div id="settings_target_6" class="card target_hide d-none">
-                <div class="card-body px-5 py-5 row">
-                    @include('package-list')
-                </div>
-            </div>
-
 
             <!-- end col -->
 
