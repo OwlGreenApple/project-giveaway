@@ -92,33 +92,33 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">{{ Lang::get('auth.login') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ Lang::get('auth.register') }}</a>
                                 </li>
                             @endif
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
+                                <a class="nav-link" href="{{ route('home') }}">{{ Lang::get('auth.dashboard') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('account') }}">Accounts</a>
+                                <a class="nav-link" href="{{ url('account') }}">{{ Lang::get('auth.account.layout') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('contact') }}">Contact Us</a>
+                                <a class="nav-link" href="{{ url('contact') }}">{{ Lang::get('auth.contact') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('scan') }}">Connect WA</a>
+                                <a class="nav-link" href="{{ url('scan') }}">{{ Lang::get('auth.layout') }}</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a id="bcDropdown" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Broadcast</a>
+                                <a id="bcDropdown" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Lang::get('auth.bc') }}</a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bcDropdown">
-                                    <a class="dropdown-item" href="{{ url('create-broadcast') }}">Create Broadcast</a>
-                                    <a class="dropdown-item" href="{{ url('broadcast') }}">Broadcast List</a>
+                                    <a class="dropdown-item" href="{{ url('create-broadcast') }}">{{ Lang::get('auth.bc.create') }}</a>
+                                    <a class="dropdown-item" href="{{ url('broadcast') }}">{{ Lang::get('auth.bc.list') }}</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -128,24 +128,24 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @if(Auth::user()->is_admin == 1)
-                                        <a class="dropdown-item" href="{{ url('list-user') }}">List User</a>
-                                        <a class="dropdown-item" href="{{ url('list-order') }}">List Order</a>
-                                        <a class="dropdown-item" href="{{ url('affiliate-admin') }}">Redeem</a>
+                                        <a class="dropdown-item" href="{{ url('list-user') }}">{{ Lang::get('auth.list.user') }}</a>
+                                        <a class="dropdown-item" href="{{ url('list-order') }}">{{ Lang::get('auth.list.order') }}</a>
+                                        <a class="dropdown-item" href="{{ url('affiliate-admin') }}">{{ Lang::get('auth.list.redeem') }}</a>
                                     @else
                                         <a class="dropdown-item" href="{{ url('affiliate') }}">
-                                            {{ __('Affiliate') }}
+                                            {{ Lang::get('auth.affiliate') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ url('redeem-money') }}">
-                                            {{ __('Redeem Money') }}
+                                            {{ Lang::get('auth.redeem') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ url('packages') }}">
-                                            {{ __('Upgrade Package') }}
+                                            {{ Lang::get('auth.package') }}
                                         </a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ Lang::get('auth.logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -169,10 +169,10 @@
         <div class="footer w-100 bg-white px-5 py-3 mt-2">
             <div class="container text-center">
                 <div class="d-inline">
-                    <a href="#">FAQ</a>
-                    <a href="#">TERMS</a>
+                    <a href="#">{{ Lang::get('auth.faq') }}</a>
+                    <a href="#">{{ Lang::get('auth.terms') }}</a>
                 </div>
-                <div class="mt-2"><small>Copyright&copy; 2022 {{env('APP_NAME')}}</small></div>
+                <div class="mt-2"><small>Copyright&copy; 2022 {{env('APP_NAME')}}.app</small></div>
             </div>
         </div>
     </div>
