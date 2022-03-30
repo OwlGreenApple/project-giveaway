@@ -1250,7 +1250,11 @@ class HomeController extends Controller
           {
             $status = '<span class="text-primary"><b>'.Lang::get('order.complete').'</b></span>';
           }
-          elseif($order->status==3)
+          elseif($order->status==3) 
+          {
+            $status = '<span class="text-danger"><b>'.Lang::get('order.cancel').'</b></span>';
+          }
+          elseif($order->status==4) 
           {
             $status = '<span class="text-danger"><b>'.Lang::get('order.cancel').'</b></span>';
           }
