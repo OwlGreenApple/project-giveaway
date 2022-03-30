@@ -270,7 +270,7 @@ class ContestController extends Controller
 
         $ev = Events::where('events.id',$ev_id)
                 ->join('users','users.id','=','events.user_id')
-                ->select("events.*","users.currency")
+                ->select("events.*")
                 ->first();
 
         if(is_null($ev))
