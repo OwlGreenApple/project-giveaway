@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center px-5">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Message Status</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('order.auto') }}</h1>
         </div>
 
         <div class="card">
@@ -13,9 +13,9 @@
                 <table id="message" class="table table-striped mt-4 mb-0">
                     <thead>
                         <tr>
-                            <th>Recipient</th>
-                            <th>Date Created</th>
-                            <th>Status</th>
+                            <th>{{ Lang::get('table.recipient') }}</th>
+                            <th>{{ Lang::get('table.cd') }}</th>
+                            <th>{{ Lang::get('table.status') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,12 +25,12 @@
                                 <td>{{ $phone->receiver }}</td>
                                 <td>{{ $phone->created_at }}</td>
                                 <td>
-                                    @if($phone->status == 1) <span class="text-primary">Sent</span>
-                                    @elseif($phone->status == 2) <span class="text-success">Delivered</span>
-                                    @elseif($phone->status == 3) <span class="text-info">Read</span>
-                                    @elseif($phone->status == 4) <span class="text-danger">Failed</span>
-                                    @elseif($phone->status == 5) <span class="text-danger">User phone not available</span>
-                                    @else <span class="text-dark">Queue</span></span>
+                                    @if($phone->status == 1) <span class="text-primary">{{ Lang::get('table.sent') }}</span>
+                                    @elseif($phone->status == 2) <span class="text-success">{{ Lang::get('table.delivered') }}</span>
+                                    @elseif($phone->status == 3) <span class="text-info">{{ Lang::get('table.read') }}</span>
+                                    @elseif($phone->status == 4) <span class="text-danger">{{ Lang::get('table.failed') }}</span>
+                                    @elseif($phone->status == 5) <span class="text-danger">{{ Lang::get('table.not') }}</span>
+                                    @else <span class="text-dark">{{ Lang::get('table.queue') }}</span></span>
                                     @endif
                                 </td>
                             </tr>
@@ -38,10 +38,10 @@
                         @endif
                     </tbody>
                 </table>
-                {{-- end card body --}}
+                <!-- end card body -->
             </div>
         </div>
-        {{-- end --}}
+        <!--  end  -->
     </div>
 </div>
 

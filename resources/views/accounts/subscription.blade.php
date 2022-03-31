@@ -9,3 +9,7 @@
         <div><i class="fas fa-check text-black-50"></i>&nbsp;Total Contestants : {{ $pc->check_type(Auth::user()->membership)['contestants'] }}</div>
     </div>
 </div>
+ <!-- display subscription -->
+<div class="row mt-4">
+        @include('package-list')
+</div>

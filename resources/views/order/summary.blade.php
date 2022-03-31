@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <link rel="stylesheet" href="{{asset('assets/css/summary.css')}}">
 
@@ -63,13 +64,13 @@
                               <form class="add-contact" id="form-register">
                                   <div class="form-group">
                                     <label>{{ $lang::get('order.name') }}*</label>
-                                    <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
+                                    <input type="text" name="username" class="form-control" placeholder="{{ Lang::get('auth.name') }}" required />
                                     <span class="text-danger error username" role="alert"></span>
                                   </div>
 
                                   <div class="form-group">
                                     <label>Email*</label>
-                                     <input id="email" type="email" class="form-control" name="email" required autocomplete="email" placeholder="Input Your Email">
+                                     <input id="email" type="email" class="form-control" name="email" required autocomplete="email" placeholder="{{ Lang::get('auth.email') }}">
                                      <span class="text-danger error email"></span>
                                   </div>
 
@@ -111,30 +112,28 @@
 
                                   </div> -->
 
-                                  <div class="form-group">
-                                      <label class="custom-checkbox">
-                                          <input value="0" type="checkbox" name="agreement" id="check-terms" required/>
-                                          <span class="checkmark-check"></span>
-                                      </label>
-                                      <label class="checkbox-left" for="check-terms"><sb>{{ $lang::get('order.agreement') }}<a href="{{ env('APP_URL') }}terms-of-services/" target="_blank" style="text-decoration: underline;">{{ $lang::get('order.terms') }}</a></sb></label>
+                                  <div class="form-check mb-3">
+                                      <input value="0" type="checkbox" name="agreement" id="check-terms" required/>
+                                      <span class="checkmark-check"></span>
+                                      <sb>{{ $lang::get('order.agreement') }} <a class="main-color" href="{{ env('APP_URL') }}terms-of-services/" target="_blank" style="text-decoration: underline;">{{ $lang::get('order.terms') }}</a></sb>
                                   </div>
 
                                   <div class="text-left">
-                                    <button id="btn-register" type="button" class="btn btn-primary btn-lg">{{ $lang::get('order.register') }}</button>
+                                    <button id="btn-register" type="button" class="btn bg-custom text-white btn-lg">{{ $lang::get('order.register') }}</button>
                                   </div>
                                   <input type="hidden" name="recaptcha_response" id="recaptchaResponse" readonly="readonly"/>
                               </form>
 
                               <hr class="mt-5" />
 
-                              <div class="mt-4 mb-3"><sb>{{ $lang::get('order.have_account') }}<a href="" id="link-to-login"> {{ $lang::get('order.login') }}</a></sb></div>
+                              <div class="mt-4 mb-3"><sb>{{ $lang::get('order.have_account') }}<a class="main-color" role="button" id="link-to-login"> {{ $lang::get('order.login') }}</a></sb></div>
               							</div>
               							<div id="div-login" style="display:none;">
               								<form class="add-contact" method="POST" id="form-login">
               										@csrf
               										 <div class="form-group">
               												<label>Email*</label>
-              												 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }} {{ Cookie::get('email') }}" required autocomplete="email" placeholder="Input Your Email">
+              												 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }} {{ Cookie::get('email') }}" required autocomplete="email" placeholder="{{ Lang::get('auth.email') }}">
 
               													@error('email')
               															<span class="invalid-feedback" role="alert">
@@ -145,7 +144,7 @@
 
               											<div class="form-group">
               												<label>Password *</label>
-              												 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="{{ Cookie::get('password') }}" placeholder="Input Your Password">
+              												 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="{{ Cookie::get('password') }}" placeholder="{{ Lang::get('auth.pass') }}">
 
               												 @error('password')
               															<span class="invalid-feedback" role="alert">
@@ -164,13 +163,13 @@
 
 
               											<div class="text-left">
-              												<button type="button" id="button-login" class="btn btn-primary btn-lg">{{ $lang::get('order.log_in') }}</button>
+              												<button type="button" id="button-login" class="btn bg-custom text-white btn-lg">{{ $lang::get('order.log_in') }}</button>
               											</div>
               								</form>
 
               								<hr class="mt-5" />
 
-              								<div class="mt-4 mb-3"><sb>{{ $lang::get('order.need') }} ?<a href="" id="link-to-register"> {{ $lang::get('order.reg') }}</a></sb></div>
+              								<div class="mt-4 mb-3"><sb>{{ $lang::get('order.need') }} ?<a class="main-color" role="button" id="link-to-register"> {{ $lang::get('order.reg') }}</a></sb></div>
               							</div>
               						<?php } ?>
                         </div>

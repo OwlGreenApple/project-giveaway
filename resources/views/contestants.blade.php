@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header clearfix bg-white px-3 py-3">
-                    <h3 class="float-start align-middle mb-0 info title">@if(!isset($winner)) Contestants @endif {{ $ev->title }} @if(isset($winner)) Winners @endif</h3>
+                    <h3 class="float-start align-middle mb-0 info title">@if(!isset($winner)) {{ Lang::get('table.contestant') }} @endif {{ $ev->title }} @if(isset($winner)) {{ Lang::get('table.winner') }} @endif</h3>
                     @if(Auth::user()->membership !== 'free' && !isset($winner))
                         <h3 class="float-end"><a href="{{ url('export-contestant') }}/{{ $ev->id }}" class="btn btn-success">Export XLS</a></h3>
                     @endif
@@ -43,10 +43,8 @@
                                         @if(isset($winner))
                                             @if($row->status == 0)
                                                 <a class="btn btn-warning draw" ev_id="{{ $row->event_id }}" id="{{ $row->id }}">{{ Lang::get('table.award') }}</a>
-                                            @elseif($row->status == 1)
-                                                <span class="text-info">{{ Lang::get('table.award.done') }}</span>
                                             @else
-                                                <span class="text-danger">Removed</span>
+                                                <span class="text-info">{{ Lang::get('table.award.done') }}</span>
                                             @endif
                                         @else
                                             <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>

@@ -37,7 +37,7 @@
                         <div class="row">
                             <div class="mb-4 text-center">
                                 <button type="submit" class="btn bg-custom btn-lg text-white">
-                                    {{ __('Send Password Reset Link') }}
+                                    {{ Lang::get('auth.reset') }}
                                 </button>
                             </div>
                         </div>

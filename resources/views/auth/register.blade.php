@@ -10,17 +10,17 @@
             <div class="card logo px-2 py-2"><img class="logo" src="{{ asset('assets/img/logo-topleads.png') }}"/></div>
             <div class="card px-2 py-2 fix-card">
                 <div class="card-body">
-                    <h1 class="text-center mb-4 title">{{ __('Register') }}</h1>
+                    <h1 class="text-center mb-4 title">{{ Lang::get('auth.register') }}</h1>
 
                     <form id="form-register">
                         @csrf
                         <div class="mb-3">
-                            <input placeholder="Your Name" id="name" type="text" class="form-control form-control-lg" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                            <input placeholder="{{ Lang::get('auth.name') }}" id="name" type="text" class="form-control form-control-lg" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
                             <span class="text-danger username"></span>
                         </div>
 
                         <div class="mb-3">
-                            <input placeholder="Your Email" id="email" type="email" class="form-control form-control-lg" name="email" value="{{ old('email') }}" required autocomplete="email">
+                            <input placeholder="{{ Lang::get('auth.email') }}" id="email" type="email" class="form-control form-control-lg" name="email" value="{{ old('email') }}" required autocomplete="email">
                             <span class="text-danger email"></span>
                         </div>
 
@@ -28,7 +28,7 @@
                             <div class="form-inline">
                               <span class="text-muted">
                                 <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input me-2" /><small>{{ Lang::get('custom.agreement') }}
-                                <a class="main-color" target="_blank" rel="noopener noreferrer" href="">Click Here</a></small>
+                                <a class="main-color" target="_blank" rel="noopener noreferrer" href="">{{ Lang::get('custom.agreement.privacy') }}</a></small>
                               </span>
                             </div>
                             <small class="text-danger tos"></small>
@@ -36,13 +36,13 @@
 
                         <div class="mb-4 text-center">
                             <button id="btn-register" type="button" class="btn bg-custom btn-lg btn-account text-white">
-                                {{ __('Register') }}
+                            {{ Lang::get('auth.register') }}
                             </button>
                         </div>
                     </form>
                     <hr>
-                    <div class="login-foot">
-                        <span class="text-secondary">{{ Lang::get('auth.log') }}<a href="{{ route('login') }}" class="main-color">Login</a></span>
+                    <div class="login-foot text-center">
+                        <span class="text-secondary">{{ Lang::get('auth.log') }}<a href="{{ route('login') }}" class="main-color">{{ Lang::get('auth.login') }}</a></span>
                     </div>
 
                 </div>

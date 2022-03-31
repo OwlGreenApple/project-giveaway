@@ -212,6 +212,15 @@ $(function(){
         $(".mn").removeClass('active');
         $(".mn_"+target).addClass('active');
 
+        if(target == 2)
+        {
+            $(".subs li:not(:last-child)").hide();
+        }
+        else
+        {
+            $(".subs li").show();
+        }
+
         if(target == 5)
         {
             load_page();

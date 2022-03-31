@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'act'=>'Action Text',
+    'act'=>'',
     'add_entry'=>'Add Entry Action',
     'agreement'=>'I\'ve read, understand and accept the terms of service',
     'balance'=>'Balance',

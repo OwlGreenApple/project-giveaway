@@ -1,10 +1,10 @@
 <table id="dashboard_table" class="table">
     <thead>
-        <th>Titles</th>
-        <th>Contestants</th>
-        <th>Entries</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th>{{ Lang::get('table.title') }}</th>
+        <th>{{ Lang::get('table.contestant') }}</th>
+        <th>{{ Lang::get('table.entry') }}</th>
+        <th>{{ Lang::get('table.status') }}</th>
+        <th>{{ Lang::get('table.act') }}</th>
     </thead>
     <tbody>
         @if($data->count() > 0)
@@ -13,19 +13,19 @@
                 <td class="align-middle"><span class="main-color">{{ $row->title }}</span><br/>{{ $row->award }}</td>
                 <td class="align-middle"><a class="main-color" target="_blank" href="{{ url('list-contestants') }}/{{ $row->id }}">{{ $row->total_contestant }}</a></td>
                 <td class="align-middle">{{ $row->total_entries }}</td>
-                <td class="align-middle">@if($row->status == 1) <span class="badge rounded-pill bg-custom">Running</span> @elseif($row->status == 2) <a href="{{ url('contestant-winner') }}/{{ $row->id }}" class="btn btn-success award">Award</a> @else <span class="badge rounded-pill bg-secondary">Awarded</span> @endif</td>
+                <td class="align-middle">@if($row->status == 1) <span class="badge rounded-pill bg-custom">{{ Lang::get('table.run') }}</span> @elseif($row->status == 2) <a href="{{ url('contestant-winner') }}/{{ $row->id }}" class="btn btn-success award">{{ Lang::get('table.award') }}</a> @else <span class="badge rounded-pill bg-secondary">{{ Lang::get('table.award.done') }}</span> @endif</td>
                 <td class="align-middle">
                     <div class="input-group">
-                        <a class="btn btn-outline-secondary" href="{{ url('edit-event') }}/{{ $row->id }}">Edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ url('edit-event') }}/{{ $row->id }}">{{ Lang::get('custom.edit') }}</a>
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="visually-hidden">Toggle Dropdown</span>
+                            <span role="button" class="visually-hidden">{{ Lang::get('custom.dropdown') }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a id="{{ $row->id }}" class="dropdown-item duplicate">Duplicate</a></li>
-                            <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item">View</a></li>
-                            <li><a href="{{ url('message-list') }}/{{ $row->id }}" target="_blank" class="dropdown-item">Messages</a></li>
+                            <li><a id="{{ $row->id }}" class="dropdown-item duplicate">{{ Lang::get('custom.duplicate.btn') }}</a></li>
+                            <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item">{{ Lang::get('custom.view') }}</a></li>
+                            <li><a href="{{ url('message-list') }}/{{ $row->id }}" target="_blank" class="dropdown-item">{{ Lang::get('custom.message') }}</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev">Delete</a></li>
+                            <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev">{{ Lang::get('table.del') }}</a></li>
                         </ul>
                     </div>
                 </td>

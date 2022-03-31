@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center px-5">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Connect WA</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.connect') }}</h1>
         </div>
 
         <!-- FORM -->
@@ -25,11 +25,11 @@
                         {{-- button --}}
                         <div class="input-group">
                             @if(is_null($phone))
-                                <button type="button" id="con" class="btn bg-custom btn-lg text-white">Connect</button>
+                                <button type="button" id="con" class="btn bg-custom btn-lg text-white">{{ Lang::get('custom.connect') }}</button>
                             @else
-                                <button type="button" id="pair" class="btn bg-info btn-lg text-white">Scan</button>
+                                <button type="button" id="pair" class="btn bg-info btn-lg text-white">{{ Lang::get('custom.scan.btn') }}</button>
                             @endif
-                            <button type="button" id="refresh" class="btn bg-warning btn-lg ms-2">Refresh</button>
+                            <button type="button" id="refresh" class="btn bg-warning btn-lg ms-2">{{ Lang::get('custom.refresh') }}</button>
                         </div>
 
                         {{-- qr-code --}}
@@ -49,25 +49,25 @@
                 <form id="test_message">
                     <div class="mb-3">
                         <div class="form-group iti-wrapper">
-                            <label>Number:<span class="text-danger">*</span></label>
+                            <label>{{ Lang::get('custom.number.test') }}:<span class="text-danger">*</span></label>
                             <input type="text" id="phone" name="number" class="form-control form-control-lg" required/>
                             <span class="error phone"></span>
                         </div>
                         <div class="form-group">
-                            <label>Message:<span class="text-danger">*</span></label>
+                            <label>{{ Lang::get('table.message') }}:<span class="text-danger">*</span></label>
                             <div class="input-group input-group-lg">
                                 <textarea name="message" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Image:</label>
+                            <label>{{ Lang::get('table.image') }}:</label>
                             <div class="input-group input-group-lg">
                                 <input value="off" type="checkbox" class="form-check" name="media" />
                             </div>
                         </div>
                         <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
                     </div>
-                    <button type="submit" class="btn btn-info text-white">TEST</button>
+                    <button type="submit" class="btn btn-info text-white">{{ Lang::get('table.test') }}</button>
                 </form>
             </div>
             <!-- END TEST SEND -->
@@ -113,7 +113,7 @@
         var sc = 0;
         var min = 0;
 
-        $("#scan").html('Loading...');
+        $("#scan").html('{{ Lang::get("custom.loading") }}');
         $("#waiting").removeClass('d-none');
 
         tm = setInterval(function(){

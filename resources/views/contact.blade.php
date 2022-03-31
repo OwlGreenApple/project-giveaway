@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center px-5">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Contact Us</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.contact') }}</h1>
         </div>
 
         <!-- FORM -->
@@ -13,12 +13,12 @@
             <span id="msg"><!-- --></span>
             <form id="contact_admin">
                 <div class="form-group mb-3">
-                    <label>Your Message:<span class="text-danger">*</span></label>
+                    <label>{{ Lang::get('table.message') }}:<span class="text-danger">*</span></label>
                     <textarea class="form-control form-control-lg" name="message"></textarea>
                     <span class="text-danger err_message"><!-- --></span>
                 </div> 
 
-                <button type="submit" class="btn bg-custom btn-lg text-white">Send</button>
+                <button type="submit" class="btn bg-custom btn-lg text-white">{{ Lang::get('table.send') }}</button>
             </form>
         <!-- end col -->
         </div>
