@@ -2,16 +2,16 @@
 <table class="table table-striped mt-4 mb-0">
     <thead>
         <tr>
-            <th>WA Number</th>
-            <th>Status</th>
-            <th>Quota</th>
-            <th>Delete</th>
+            <th>{{ Lang::get('table.wa') }}</th>
+            <th>{{ Lang::get('table.status') }}</th>
+            <th>{{ Lang::get('table.quota') }}</th>
+            <th>{{ Lang::get('table.del') }}</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>{{ $phone->number }}</td>
-            <td><span class="text-success">@if($phone->status == 1) <span class="text-success">Connected</span></span> @else <span class="text-danger">Disconnected</span></span> @endif</span></td>
+            <td><span class="text-success">@if($phone->status == 1) <span class="text-success">{{ Lang::get('table.connected') }}</span></span> @else <span class="text-danger">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
             <td><span class="text-info counter">{{ Auth::user()->counter_send_message_daily }}</span></td>
             <td><a id="{{ $phone->id }}" class="del text-danger"><i class="far fa-trash-alt"></i></a></td>
         </tr>

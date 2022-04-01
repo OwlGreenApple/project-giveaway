@@ -1,4 +1,4 @@
-{{-- display contestants according on name --}}
+<!-- display contestants according on name -->
 @if(count($data) > 0)
 <div class="mt-2">
     @foreach ($data as $row)

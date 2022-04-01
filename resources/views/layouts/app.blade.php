@@ -136,7 +136,7 @@
                                             {{ Lang::get('auth.affiliate') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ url('redeem-money') }}">
-                                            {{ Lang::get('auth.list.redeem') }} 
+                                            {{ Lang::get('title.redeem') }} 
                                         </a>
                                         <a class="dropdown-item" href="{{ url('packages') }}">
                                             {{ Lang::get('auth.package') }}

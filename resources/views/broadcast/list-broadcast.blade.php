@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">List Broadcast</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.broadcast') }}</h1>
         </div>
 
         <div class="col-12 col-sm-12 col-md-8 col-lg-9 table-responsive">
@@ -14,18 +14,18 @@
                     @if(isset($msg))
                         @if($msg->count() > 0)
                             <tr class="table-success">
-                                <th scope="col">Receiver</th>
-                                <th scope="col">Message</th>
-                                <th scope="col">Date Created</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">{{ Lang::get('table.recipient') }}</th>
+                                <th scope="col">{{ Lang::get('table.message') }}</th>
+                                <th scope="col">{{ Lang::get('table.cd') }}</th>
+                                <th scope="col">{{ Lang::get('table.act') }}</th>
                             </tr>
                         @endif
                     @else
                         <tr class="table-success">
-                            <th scope="col">Title</th>
-                            <th scope="col">Message</th>
-                            <th scope="col">Date Send</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">{{ Lang::get('table.title') }}</th>
+                            <th scope="col">{{ Lang::get('table.message') }}</th>
+                            <th scope="col">{{ Lang::get('table.date.send') }}</th>
+                            <th scope="col">{{ Lang::get('table.act') }}</th>
                         </tr>
                     @endif
                 </thead>
@@ -40,7 +40,7 @@
                                 <td>{{ $row->created_at }}</td>
                                 <td>
                                     @if($row->status == 0)
-                                        <button type="button" class="btn btn-danger btn-sm text-white btn-delete" msg="1" data-id="{{$row->id}}">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm text-white btn-delete" msg="1" data-id="{{$row->id}}">{{ Lang::get('table.del') }}</button>
                                     @else
                                         <span class="@if($row->status == 1) text-primary @elseif($row->status == 2) text-success @elseif($row->status == 3) text-info @else text-danger @endif">{{ $row->status_msg }}</span>
                                     @endif
@@ -55,9 +55,9 @@
                             <td>{{ $broadcast->message }}</td>
                             <td>{{ $broadcast->date_send }}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm text-white btn-view" data-id="{{$broadcast->id}}">Messages</button>
-                                <button type="button" class="btn btn-warning btn-sm text-white btn-edit" data-id="{{$broadcast->id}}">Edit</button>
-                                <button type="button" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$broadcast->id}}">Delete</button>
+                                <button type="button" class="btn btn-info btn-sm text-white btn-view" data-id="{{$broadcast->id}}">{{ Lang::get('table.message') }}</button>
+                                <button type="button" class="btn btn-warning btn-sm text-white btn-edit" data-id="{{$broadcast->id}}">{{ Lang::get('table.edit') }}</button>
+                                <button type="button" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$broadcast->id}}">{{ Lang::get('table.del') }}</button>
                             </td>
                         </tr>
                         @endforeach

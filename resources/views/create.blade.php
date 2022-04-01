@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Create Giveaway</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.create') }}</h1>
         </div>
 
         <div id="err_scroll" class="col-md-8">
@@ -13,25 +13,25 @@
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-color main-theme">Giveaway Information</h3>
-                        <div class="border-bottom info">Competition Information</div>
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.information') }}</h3>
+                        <div class="border-bottom info">{{ Lang::get('giveaway.information.competiton') }}</div>
 
                         <!-- begin form -->
                         <div class="form-group mb-3">
-                            <label>Title:<span class="text-danger">*</span></label>
+                            <label>{{ Lang::get('giveaway.title') }}:<span class="text-danger">*</span></label>
                             <input type="text" @if(isset($event)) value="{{ $event->title }}" @endif class="form-control form-control-lg" name="title" />
                             <span class="text-danger err_title"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Description:<span class="text-danger">*</span></label>
+                            <label>{{ Lang::get('giveaway.description') }}:<span class="text-danger">*</span></label>
                             <div id="editparent">
                                 <div id='editControls' class="py-2">
                                     <div class='btn-group'>
                                         <select class="fontsize form-select form-select-sm">
-                                            <option value='normal'>Normal</option>
-                                            <option value='h1'>Large</option>
-                                            <option value='h2'>Medium</option>
-                                            <option value='h3'>Small</option>
+                                            <option value='normal'>{{ Lang::get('giveaway.font.normal') }}</option>
+                                            <option value='h1'>{{ Lang::get('giveaway.font.large') }}</option>
+                                            <option value='h2'>{{ Lang::get('giveaway.font.medium') }}</option>
+                                            <option value='h3'>{{ Lang::get('giveaway.font.small') }}</option>
                                         </select>
                                     </div>
                                     <div class='btn-group'>
@@ -58,31 +58,31 @@
                         </div>
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Start At:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.start') }}:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->start }}" @endif type="text" class="form-control form-control-lg datetimepicker_1" name="start" />
                                 <span class="text-danger err_start"><!-- --></span>
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>End At:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.end') }}:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->end }}" @endif type="text" class="form-control form-control-lg datetimepicker_2" name="end" />
                                 <span class="text-danger err_end"><!-- --></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Awarded At:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.award') }}:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->award }}" @endif type="text" class="form-control form-control-lg datetimepicker_3" name="award" />
                                 <span class="text-danger err_award"><!-- --></span>
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Number Of Winners:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.winner') }}:<span class="text-danger">*</span></label>
                                 <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" max="50" class="form-control form-control-lg w-25" name="winner" />
                                 <span class="text-danger err_winner"><!-- --></span>
                             </div>
                         </div>
                         
                         <div class="form-group mb-3">
-                            <label>Timezone</label>
+                            <label>{{ Lang::get('giveaway.timezone') }}</label>
                             <select class="form-select" name="timezone" id="timezone" required="">
                                 @if(count($helper::timezone()) > 0)
                                     @foreach($helper::timezone() as $key=>$val)
@@ -93,10 +93,10 @@
                             <span class="text-danger err_timezone"><!-- --></span>
                         </div>
                         <!-- new line -->
-                        <div class="border-bottom info">Who's Running This Giveaway?</div>
+                        <div class="border-bottom info">{{ Lang::get('giveaway.who') }}</div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Name:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.name') }}:<span class="text-danger">*</span></label>
                                 <input name="owner_name" @if(isset($event)) value="{{ $event->owner }}" @endif type="text" class="form-control form-control-lg" />
                                 <span class="text-danger err_owner_name"><!-- --></span>
                             </div>
@@ -107,15 +107,15 @@
                             </div>
                         </div>
                         <!-- new line -->
-                        <div class="border-bottom info">What Are You Giving Away?</div>
+                        <div class="border-bottom info">{{ Lang::get('giveaway.what') }}</div>
                         <div class="row mb-3">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Prize Name:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.prize.name') }}:<span class="text-danger">*</span></label>
                                 <input name="prize_name" @if(isset($event)) value="{{ $event->prize_name }}" @endif type="text" class="form-control form-control-lg" />
                                 <span class="text-danger err_prize_name"><!-- --></span>
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Prize Value:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.prize.value') }}:<span class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg">
                                 @if(count($helper::currency()) > 0)
                                 <div class="input-group mb-3">
@@ -133,11 +133,11 @@
                             </div>
                         </div>
                         <!-- new line -->
-                        <div class="border-bottom info">Prize Images / Youtube Video.</div>
-                        <div class="text-justify title mb-3">Tip: use images with a 2x1 ratio (minimum of 680px width)</div>
+                        <div class="border-bottom info">{{ Lang::get('giveaway.banner') }} / {{ Lang::get('giveaway.youtube') }}</div>
+                        <div class="text-justify title mb-3">{{ Lang::get('giveaway.tips') }}</div>
                         <div class="form-check form-switch mb-2">
                             <input @if(isset($event) && $event->media == 1) value="on" checked @else value="off" @endif name="media_option" class="form-check-input" type="checkbox" id="media_option">
-                            <label class="form-check-label" for="media_option">Youtube Video</label>
+                            <label class="form-check-label" for="media_option">{{ Lang::get('giveaway.youtube') }}</label>
                         </div>
 
                         <div class="upload_banner form-group">
@@ -162,8 +162,8 @@
                 <!-- form 2 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-color main-theme">Sharing</h3>
-                        <div class="text-justify title">Click to select the platforms you want your contestants to use to share your giveaway:</div>
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.sharing') }}</h3>
+                        <div class="text-justify title">{{ Lang::get('giveaway.sharing.click') }}:</div>
                         <div class="giveaway-icons">
                             <div class="mx-auto icon-wrapper">
                                 <i data-id="tw" class="fab fa-twitter box @if(isset($event)) @if($event->tw == 1) box-color @endif @else box-color @endif"></i>
@@ -179,8 +179,8 @@
                 <!-- form 3 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-color main-theme">Bonus Entries</h3>
-                        <div class="title text-justify fst-italic border-bottom py-3 mb-4">These are actions a contestant can take to get even more entries.</div>
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.bonus') }}</h3>
+                        <div class="title text-justify fst-italic border-bottom py-3 mb-4">{{ Lang::get('giveaway.bonus.desc') }}</div>
 
                         @if(count($bonus) > 0)
                         <!-- entries column -->
@@ -195,7 +195,7 @@
                                     @if($row['type'] !== '5')
                                     <div class="form-group col-md-6 col-lg-6 mb-2">
                                         <label>{{ $row['col_name'] }}<span class="text-danger">*</span></label>
-                                        <input @if($row['type'] == '7') placeholder="Your youtube URL" @endif value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                        <input @if($row['type'] == '7') placeholder="Youtube URL" @endif value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
                                     </div>
                                     @endif
 
@@ -255,7 +255,7 @@
                 @if($apicheck == true)
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-color main-theme">Integration</h3>
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.integration') }}</h3>
 
                         @if(count($act) > 0)
                             <div class="border-bottom info">Activrespon</div>
@@ -283,17 +283,17 @@
                 <!-- form 5 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-color main-theme">WA Message</h3>
-                        <div class="text-justify title mb-4">Set WA message so that when contestant join on your event, will get message. Make sure if you have connect your phone here <a target="_blank" class="main-color" href="{{ url('scan') }}">Connect</a></div>
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.wa') }}</h3>
+                        <div class="text-justify title mb-4">{{ Lang::get('giveaway.wa.desc') }}, {{ Lang::get('giveaway.connect') }} <a target="_blank" class="main-color" href="{{ url('scan') }}">{{ Lang::get('giveaway.wa.connect') }}</a></div>
 
                         <div class="mb-3">
                             <div class="form-group mb-3">
-                                <label>Message:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.message') }}:<span class="text-danger">*</span></label>
                                 <textarea name="message" id="divInput-description-post" class="form-control form-control-lg">@if(isset($event)){{ $event->message }}@endif</textarea>
                                 <span class="text-danger err_message"><!-- --></span>
                             </div>
                             <div class="form-group">
-                                <label>Image Message</label>
+                                <label>{{ Lang::get('giveaway.message.img') }}</label>
                                 <div class="mb-2">
                                     @if(isset($event) && $event->img_url == null)
                                         -
@@ -313,16 +313,16 @@
                 <!-- form 6 -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
-                        <h3 class="main-color main-theme">WA Message For Winner</h3>
-                        <div class="text-justify title mb-4">Set WA message so that when contestant win, will get message. Make sure if you have connect your phone here <a target="_blank" class="main-color" href="{{ url('scan') }}">Connect</a></div>
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.wa.winner') }}</h3>
+                        <div class="text-justify title mb-4">{{ Lang::get('giveaway.wa.winner.desc') }}. {{ Lang::get('giveaway.connect') }} <a target="_blank" class="main-color" href="{{ url('scan') }}">{{ Lang::get('giveaway.wa.connect') }}</a></div>
 
                         <div class="mb-3">
                             <div class="form-check form-switch mb-2">
                                 <input @if(isset($event) && $event->winner_run == 1) value="on" checked @else value="off" @endif name="run_winner" class="form-check-input" type="checkbox" id="run_winner">
-                                <label class="form-check-label" for="run_winner">Activate</label>
+                                <label class="form-check-label" for="run_winner">{{ Lang::get('giveaway.activate') }}</label>
                             </div>
                             <div class="form-group mb-3">
-                                <label>Message to Winner:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('giveaway.message') }}:<span class="text-danger">*</span></label>
                                 <textarea name="message_winner" class="form-control form-control-lg">@if(isset($event)){{ $event->winner_message }}@endif</textarea>
                                 <span class="text-danger err_message_winner"><!-- --></span>
                             </div>
@@ -342,8 +342,8 @@
                 @if(!isset($event) || (isset($event) && $event->status < 2))
                 <div class="mt-5 text-center">
                     <span class="err_package"><!-- --></span>
-                    <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
-                    <button type="submit" class="btn bg-custom btn-lg text-white">Save</button>
+                    <button type="button" class="btn btn-secondary btn-lg">{{ Lang::get('giveaway.cancel') }}</button>
+                    <button type="submit" class="btn bg-custom btn-lg text-white">{{ Lang::get('giveaway.save') }}</button>
                 </div>
                 @endif
 
@@ -551,7 +551,7 @@ function column_entry(val)
     {
         $column += '<div class="col-auto">';
         $column += '<span class="form-text title">';
-        $column += 'How many entries this action is worth';
+        $column += '{{ Lang::get("giveaway.worth") }}';
         $column += '</span></div>';
     }
 
@@ -628,15 +628,14 @@ function detect_video_or_banner(val)
 function image_uploader()
 {
     $('.input-images').imageUploader({
-        label :'Maximum image is 5, must jpg, png or gif',
+        label :'{{ Lang::get("giveaway.max") }}',
         "{{ $preloaded }}": [
             @if(count($data) > 0)
                 @foreach($data as $id=>$row)
                     {id: "{{ $id }}", src: "{{ $row }}"},
                 @endforeach
             @endif
-        ],
-        maxFiles : 5
+        ]
     });
 
     $("body").on("click",".delete-image",function(){

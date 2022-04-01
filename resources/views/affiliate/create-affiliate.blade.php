@@ -9,12 +9,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          Copy Link
+          {{ Lang::get('custom.copy.link') }}
         </h5>
         <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
-        Copy link berhasil!
+          {{ Lang::get('custom.copy.link.success') }}
       </div>
       <div class="modal-footer" id="foot">
         <button class="btn btn-primary" data-bs-dismiss="modal">
@@ -29,7 +29,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Affiliate</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.affiliate') }}</h1>
         </div>
 
         <div class="col-md-8">
@@ -44,9 +44,9 @@
                         <div class="border-bottom info">Competition Information</div>-->
                         <div id="div-affiliate-link">
                             <?php if (is_null($referral_code)) {?>
-                                <button type="submit" class="btn bg-custom btn-lg text-white">Generate Referral Link</button>
+                                <button type="submit" class="btn bg-custom btn-lg text-white">{{ Lang::get('custom.generate') }}</button>
                             <?php } else { ?>
-                                Your Referral Link : 
+                                {{ Lang::get('custom.generate.your') }} : 
                                 <?php 
                                     $referral_link = url('').'/'.$referral_code;
                                 ?>
@@ -129,7 +129,7 @@ function save_data()
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
                     $("#msg").html('<div class="alert alert-success">Referral code generated</div>');
-                    $("#div-affiliate-link").html('Your Referral Link : <a href="" target="_blank" id="custom-link-show">'+result.referral_link+'</a> <span id="btn-copy-custom-link" class="btn-copy" data-link="'+result.referral_link+'"><svg class="svg-inline--fa fa-file fa-w-12" aria-hidden="true" style="width: 0.75em;" focusable="false" data-prefix="fas" data-icon="file" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></span>');
+                    $("#div-affiliate-link").html('{{ Lang::get("custom.generate.your") }} : <a href="" target="_blank" id="custom-link-show">'+result.referral_link+'</a> <span id="btn-copy-custom-link" class="btn-copy" data-link="'+result.referral_link+'"><svg class="svg-inline--fa fa-file fa-w-12" aria-hidden="true" style="width: 0.75em;" focusable="false" data-prefix="fas" data-icon="file" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></span>');
                 }
                 else if(result.success == 2)
                 {
@@ -155,10 +155,6 @@ function save_data()
         });
     });
 }
-
-
-
-
 
 </script>
 @endsection

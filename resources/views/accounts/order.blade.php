@@ -3,7 +3,7 @@
     <div class="col-md-12">
 
       <h5>
-        <button type="button" class="btn btn-primary btn-confirm" data-bs-toggle="modal" data-bs-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
+        <button type="button" class="btn bg-success text-white btn-confirm" data-bs-toggle="modal" data-bs-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
           {{ Lang::get('order.transfer') }}
         </button>
       </h5>

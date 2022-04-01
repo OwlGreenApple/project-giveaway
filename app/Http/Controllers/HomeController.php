@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\App;
 use App\Http\Middleware\CheckEvents;
 use App\Helpers\Custom;
 use App\Models\Banners;
@@ -40,6 +41,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        // App::setLocale('en');
     }
 
     /**
@@ -400,7 +402,7 @@ class HomeController extends Controller
         $processing = Lang::get('auth.process');
         $paid = "<span class='text-success'>".Lang::get('auth.process.complete')."</span>";
         $data = Redeem::where('user_id',Auth::id())->selectRaw('*,CASE WHEN is_paid = 0 THEN "'.$processing.'" ELSE "'.$paid.'" END AS status')->get();
-        return view('redeem',['funds'=>$funds,'helper'=>$helper,'data'=>$data]);
+        return view('affiliate.redeem',['funds'=>$funds,'helper'=>$helper,'data'=>$data]);
     }
 
     public function claim_money(Request $request)
@@ -1233,7 +1235,7 @@ class HomeController extends Controller
           }
           elseif($order->proof == null || $order->status == 0)
           {
-            $proof = '<button type="button" class="btn btn-info text-white btn-confirm" data-bs-toggle="modal" data-bs-target="#confirm-payment" data-id="'.$order->id.'" data-no-order="'.$order->no_order.'" data-package="'.$order->package.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" style="font-size: 13px; padding: 5px 8px;">'.Lang::get('order.confirm').'
+            $proof = '<button type="button" class="btn bg-custom text-white btn-confirm" data-bs-toggle="modal" data-bs-target="#confirm-payment" data-id="'.$order->id.'" data-no-order="'.$order->no_order.'" data-package="'.$order->package.'" data-total="'.$order->total_price.'" data-date="'.$order->created_at.'" style="font-size: 13px; padding: 5px 8px;">'.Lang::get('order.confirm').'
               </button>';
           }
           else

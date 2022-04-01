@@ -532,6 +532,7 @@ class DeviceController extends Controller
             $user->token = $response['token'];
             $user->refresh_token = $response['refreshToken'];
             $user->save();
+            $this->login_device();
         }
 
         if($api == null)

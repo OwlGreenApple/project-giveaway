@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Create Broadcast</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.broadcast.create') }}</h1>
         </div>
 
         <div class="col-md-8">
@@ -20,17 +20,17 @@
 
                         <!-- begin form -->
                         <div class="form-group mb-3">
-                            <label>Title:<span class="text-danger">*</span></label>
+                            <label>{{ Lang::get('table.title') }}<span class="text-danger">*</span></label>
                             <input type="text" class="form-control form-control-lg" name="title" @if(isset($broadcast)) value="{{ $broadcast->title }}" @endif />
                             <span class="text-danger err_title"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Message:<span class="text-danger">*</span></label>
+                            <label>{{ Lang::get('table.message') }}<span class="text-danger">*</span></label>
                             <textarea name="message" class="form-control form-control-lg">@if(isset($broadcast)) {{ $broadcast->message }} @endif</textarea>
                             <span class="text-danger err_message"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Image:</label>
+                            <label>{{ Lang::get('table.image') }}</label>
                                 @if(isset($broadcast) && $broadcast->url !== null)
                                     <div class="mb-2">
                                         @if(isset($broadcast) && $obj->check_s3_image($broadcast->url) !== null)
@@ -42,7 +42,7 @@
                             <span class="text-danger err_media"><!-- --></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Contestants</label>
+                            <label>{{ Lang::get('table.contestant') }}</label>
                             <input id="contestant" autocomplete="off" type="text" class="form-control form-control-lg" name="contestant" />
                             <span class="contestants_list"><!-- --></span>
                             <span class="contestants_choosed">
@@ -60,13 +60,13 @@
                         </div>
                         <div class="row mb-3 input-daterange">
                             <div class="form-group col-md-6 col-lg-6">
-                                <label>Date send:<span class="text-danger">*</span></label>
+                                <label>{{ Lang::get('table.date.send') }}<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg datetimepicker_1" name="date_send" @if(isset($broadcast)) value="{{ $broadcast->date_send }}" @endif/>
                                 <span class="text-danger err_date_send"><!-- --></span>
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label>Timezone</label>
+                            <label>{{ Lang::get('table.timezone') }}</label>
                             <select class="form-select" name="timezone" id="timezone" required="">
                                 @if(count($helper::timezone()) > 0)
                                     @foreach($helper::timezone() as $key=>$val)
@@ -76,13 +76,14 @@
                             </select>
                             <span class="text-danger err_timezone"><!-- --></span>
                         </div>
+                        <small class="text-left">{{ Lang::get('custom.ads') }} <a class="text-underline main-color" href="https://activrespon.com" target="_blank" rel="noopener">Activrespon</a></small>
                         <!-- end form -->
                     </div>
                 </div>
 
                 <div class="mt-5 text-center">
-                    <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
-                    <button type="submit" class="btn bg-custom btn-lg text-white">Submit</button>
+                    <button type="button" class="btn btn-secondary btn-lg">{{ Lang::get('table.cancel') }}</button>
+                    <button type="submit" class="btn bg-custom btn-lg text-white">{{ Lang::get('table.submit') }}</button>
                 </div>
 
             </form>

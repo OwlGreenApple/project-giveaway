@@ -31,7 +31,6 @@ return [
     'faq' => 'FAQ',
     'forgot' => 'Lupa Password',
     'list.order' => 'Daftar Order',
-    'list.redeem' => 'Cairkan',
     'list.user' => 'Daftar User',
     'log' => 'Punya akun? Silahkan klik disini ',
     'login' => 'Masuk',

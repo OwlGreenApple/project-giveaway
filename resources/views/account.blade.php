@@ -4,18 +4,18 @@
 <div class="container">
     <div class="row mt-3 px-5">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">Account</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('title.account') }}</h1>
         </div>
         <!-- LEFT TAB -->
         <div class="col-md-3 mb-4 px-3">
             <div class="card">
                 <div class="px-4 py-4">
-                    <a class="settings text-black-50 mn_1 active" data_target="1"><i class="far fa-user"></i>&nbsp;Profile</a>
-                    <a class="settings text-black-50 mn_2" data_target="2"><i class="fas fa-exchange-alt"></i>&nbsp;Subscription</a>
+                    <a class="settings text-black-50 mn_1 active" data_target="1"><i class="far fa-user"></i>&nbsp;{{ Lang::get('title.profile') }}</a>
+                    <a class="settings text-black-50 mn_2" data_target="2"><i class="fas fa-exchange-alt"></i>&nbsp;{{ Lang::get('title.subscription') }}</a>
                     <a class="settings text-black-50 mn_6" data_target="6"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;Upgrade</a>
-                    <a class="settings text-black-50 mn_3" data_target="3"><i class="fab fa-sketch"></i>&nbsp;Branding</a>
-                    <a class="settings text-black-50 mn_4" data_target="4"><i class="fas fa-plug"></i>&nbsp;Integrate API</a>
-                    <a class="settings text-black-50 mn_5" data_target="5"><i class="fas fa-shopping-basket"></i>&nbsp;Orders</a>
+                    <a class="settings text-black-50 mn_3" data_target="3"><i class="fab fa-sketch"></i>&nbsp;{{ Lang::get('title.branding') }}</a>
+                    <a class="settings text-black-50 mn_4" data_target="4"><i class="fas fa-plug"></i>&nbsp;{{ Lang::get('table.api') }}</a>
+                    <a class="settings text-black-50 mn_5" data_target="5"><i class="fas fa-shopping-basket"></i>&nbsp;{{ Lang::get('title.order') }}</a>
                 </div>
             </div>
         </div>
