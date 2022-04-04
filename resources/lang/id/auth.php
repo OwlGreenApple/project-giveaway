@@ -30,6 +30,7 @@ return [
     'failed' => 'Akun tidak terdaftar',
     'faq' => 'FAQ',
     'forgot' => 'Lupa Password',
+    'imail' => 'Email tidak valid',
     'list.order' => 'Daftar Order',
     'list.user' => 'Daftar User',
     'log' => 'Punya akun? Silahkan klik disini ',

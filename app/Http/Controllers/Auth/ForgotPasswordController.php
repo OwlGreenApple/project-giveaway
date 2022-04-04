@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
@@ -69,16 +70,20 @@ class ForgotPasswordController extends Controller
         //  $msg = $msg::forgot($generated_password,$user->username);
          $msg = null;
 
-         self::send_notify($user->id,$msg,new RegisteredEmail($generated_password,$user->username,'forgot'));
+         $send = self::send_notify($user->id,$msg,new RegisteredEmail($generated_password,$user->username,'forgot'));
+         if($send == false)
+         {
+            return redirect('password/reset')->with('error_email',Lang::get('auth.imail'));
+         }
          return redirect('password/reset')->with('status',Lang::get('auth.success'));
        }
        catch(QueryException $e)
        {
-         return redirect('password/reset')->with('error_email',Lang::get('custom.failed'));
+         return redirect('password/reset')->with('error_email',Lang::get('auth.imail'));
        }
      }
 
-     private static function send_notify($user_id,$msg,$email)
+    private static function send_notify($user_id,$msg,$email)
     {
       $user = User::find($user_id);
       $data = [
@@ -99,7 +104,8 @@ class ForgotPasswordController extends Controller
     //   $api = new Api;
 
     //   $api->send_wa_message($admin_id,$data['message'],$data['phone_number']);
-      Mail::to($data['email'])->send($data['obj']);
+      $helper = new Custom;
+      return $helper->mail($data['email'],$data['obj']);
     }
 
 /* end class */

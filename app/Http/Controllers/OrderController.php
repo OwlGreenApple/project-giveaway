@@ -110,6 +110,7 @@ class OrderController extends Controller
         $dt = Carbon::now();
         $str = 'ACT'.$dt->format('ymd').'-'.$dt->format('Hi');
 
+        $helper = new Custom;
         $order = new Orders;
         $order_number = self::autoGenerateID($order, 'no_order', $str, 3, '0');
         $order->user_id = Auth::id();
@@ -133,7 +134,7 @@ class OrderController extends Controller
                 // $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
 
                 // SEND EMAIL IF ORDER SUCCESSFUL
-                Mail::to($data['email'])->send(new MembershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
+                $helper->mail($data['email'],new MembershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
             }
 
             if(session('order') !== null)
@@ -181,7 +182,7 @@ class OrderController extends Controller
     }
 
     // SEND MESSAGE TO USER'S WA
-    public function send_message($package,$price,$total,$order_number,$phone_number,$after = null)
+   /*  public function send_message($package,$price,$total,$order_number,$phone_number,$after = null)
     {
         $pc = new Custom;
         $api = new Api;
@@ -202,7 +203,8 @@ class OrderController extends Controller
 
         $api->send_wa_message($admin_id,$message,$phone_number);
     }
-
+    */
+    
     // REPLACE SPECIAL CHARACTER ACCORDING ON ORDER
     public function replace_string_order($package,$price,$total,$order_number,$message)
     {

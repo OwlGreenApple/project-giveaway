@@ -217,7 +217,7 @@ class AdminController extends Controller
                 'terms'=>$total_month
             ];
             // send mail to user order later
-            Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
+            $ct->mail($user->email,new UserBuyEmail($order,$user->name));
             return $this->orderLater($data);
         }
         else
@@ -229,7 +229,7 @@ class AdminController extends Controller
         }
 
         // send mail to user
-        Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
+        $ct->mail($user->email,new UserBuyEmail($order,$user->name));
         $data['success'] = 1;
     	}
     	else

@@ -42,7 +42,8 @@ class User extends Authenticatable
         'token',
         'refresh_token',
         'counter',
-        'percentage'
+        'percentage',
+        'is_valid_email'
     ];
 
     /**

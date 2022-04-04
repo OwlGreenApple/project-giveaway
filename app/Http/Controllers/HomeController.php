@@ -1164,6 +1164,7 @@ class HomeController extends Controller
     {
         $user_email = Auth::user()->email;
         $message = strip_tags($request->message);
+        $helper = new Custom;
 
         $rule['message'] = ['required','max:255'];
 
@@ -1180,7 +1181,7 @@ class HomeController extends Controller
             return response()->json($errs);
         }
 
-        Mail::to(Config::get('view.email_admin'))->send(new ContactEmail($user_email,$message));
+        $helper->mail(Config::get('view.email_admin'),new ContactEmail($user_email,$message));
         return response()->json(['err'=>0]);
     }
 

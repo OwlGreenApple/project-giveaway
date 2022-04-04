@@ -1,6 +1,10 @@
 <?php
 namespace App\Helpers;
 use App\Models\Entries;
+use App\Models\User;
+use App\Rules\CheckBannedEmail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Lang;
 
 class Custom
 {
@@ -153,16 +157,81 @@ class Custom
         return $msg;
     }
 
+    // CHECK BOUNCING EMAIL
+    public function check_email_bouncing($email,$cond = null)
+    {
+        $user = User::where('email',$email)->first();
+
+        // PASS IF EMAIL  = 1 || 3
+        if($cond == null)
+        {
+        if(is_null($user) || $user->is_valid_email == 3)
+        {
+            return false;
+        }
+
+        if($user->is_valid_email == 1)
+        {
+            return true;
+        }
+
+        $user_id = $user->id;
+        $usr = User::find($user_id);
+        }
+        
+        $check = new CheckBannedEmail;
+        if($check::check_bouncing($email) == true)
+        {
+            if($cond == "new")
+            {
+                return 1;
+            }
+
+            $usr->is_valid_email = 1;
+            $status = true;
+        }
+        elseif($check::check_bouncing($email) == "empty")
+        {
+            if($cond == "new")
+            {
+                return 2;
+            }
+            $usr->is_valid_email = 2;
+            $status = false;
+        }
+        else
+        {
+            if($cond == "new")
+            {
+                return 3;
+            }
+            $usr->is_valid_email = 3;
+            $status = false;
+        }
+
+        $usr->save();
+        return $status;
+    }
+
+    public function mail($email,$obj)
+    {
+        if($this->check_email_bouncing($email) == true)
+        {
+            Mail::to($email)->send($obj);
+        }
+    }
+
+    // SETUP FOR WA
     public static function forgot($password,$name)
     {
       $msg ='';
-      $msg .='Halo '.$name.','."\n\n";
-      $msg .='You have reset your password already, here\'s your new passowrd :'."\n";
+      $msg .=Lang::get('email.hi').' '.$name.','."\n\n";
+      $msg .=Lang::get('email.reset').''."\n";
       $msg .='*'.$password.'*'."\n\n";
-      $msg .='If you need assistance'."\n";
-      $msg .='*Please contact our customer service*'."\n";
+      $msg .=Lang::get('email.help.if')."\n";
+      $msg .='*'.Lang::get('email.help.contact').'*'."\n";
       $msg .='Telegram : @activomni_cs'."\n\n";
-      $msg .='Thank you'."\n";
+      $msg .=Lang::get('email.thank')."\n";
       $msg .='Team'.env('APP_NAME');
 
       return $msg;

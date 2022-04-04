@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Helpers\Custom;
 use App\Mail\RegisteredEmail;
+use App\Rules\CheckBannedEmail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -64,6 +65,13 @@ class RegisterController extends Controller
         $membership = 'free';
         $end_membership = null;
 
+        $helper = new Custom;
+        $check = $helper->check_email_bouncing(strip_tags($data['email']),"new");
+        if($check == 3)
+        {
+          return 'imail';
+        }
+
         $col = [
           'name' => strip_tags($data['username']),
           'email' => strip_tags($data['email']),
@@ -71,6 +79,7 @@ class RegisterController extends Controller
           'membership'=>$membership,
           'end_membership'=>$end_membership,
           'myreferral'=>strip_tags($data['myreferral']),
+          'is_valid_email'=>$check,
         ];
 
         // PREMIUM MEMBERSHIP
@@ -102,7 +111,7 @@ class RegisterController extends Controller
     {
         $validator = Validator::make($data, [
             'username' => ['required','string','min:4','max:30'],
-            'email' => ['required','string', 'email', 'max:60', 'unique:users'],
+            'email' => ['required','string', 'email', 'max:60', 'unique:users', new CheckBannedEmail],
             //'code_country' => ['required',new CheckPlusCode,new CheckCallCode],
             //'phone' => ['required','numeric','digits_between:6,18',new InternationalTel,new CheckUserPhone($data['code_country'],null), new CheckUniquePhone($data['code_country'],$data['phone'])]
         ]);
@@ -164,7 +173,15 @@ class RegisterController extends Controller
     protected function register_ajax(array $data)
     {
         $signup = $this->create($data);
-        $order = null;
+
+        // IF EMAIL VALIDATOR == 3 / INVALID
+        if($signup == 'imail')
+        {
+          return response()->json([
+            'success' => 0,
+            'email' => Lang::get('auth.imail')
+          ]);
+        }
 
         Auth::loginUsingId($signup->id);
         return response()->json([
