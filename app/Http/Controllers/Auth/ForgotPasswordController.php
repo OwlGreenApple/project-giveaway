@@ -79,7 +79,7 @@ class ForgotPasswordController extends Controller
        }
        catch(QueryException $e)
        {
-         return redirect('password/reset')->with('error_email',Lang::get('auth.imail'));
+         return redirect('password/reset')->with('error_email',Lang::get('custom.error'));
        }
      }
 
@@ -91,9 +91,10 @@ class ForgotPasswordController extends Controller
         // 'phone_number'=>$user->phone_number,
         'email'=>$user->email,
         'obj'=>$email,
+        'cond'=>null
       ];
 
-      self::notify_user($data);
+      return self::notify_user($data);
     }
 
     // GLOBAL NOTIFCATION USER THROUGH wa AND EMAIL
@@ -105,7 +106,7 @@ class ForgotPasswordController extends Controller
 
     //   $api->send_wa_message($admin_id,$data['message'],$data['phone_number']);
       $helper = new Custom;
-      return $helper->mail($data['email'],$data['obj']);
+      return $helper->mail($data['email'],$data['obj'],$data['cond']);
     }
 
 /* end class */

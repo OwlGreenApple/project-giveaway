@@ -47,7 +47,7 @@ class CheckBannedEmail implements Rule
 
     }
 
-    // CANCELLED TO USE AS VALIDATOR TO AVOID DOUBLE CHECK VALIDATE EMAIL
+    // TO USE AS VALIDATOR TO AVOID DOUBLE CHECK VALIDATE EMAIL
     public static function check_bouncing($mail)
     {
         // set the api key and email to be validated
@@ -71,7 +71,7 @@ class CheckBannedEmail implements Rule
         {
             return false;
         }
-        elseif($json['hourlyQuotaRemaining'] < 1)
+        elseif(isset($json['hourlyQuotaRemaining']) && $json['hourlyQuotaRemaining'] < 1)
         {
             return 'empty';
         }

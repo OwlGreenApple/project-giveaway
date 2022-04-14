@@ -96,6 +96,7 @@ class RegisterController extends Controller
         $data = [
         //   'message'=>$msg,
         //   'phone_number'=>$phone_number,
+          'cond'=>"new",
           'email'=>$data['email'],
           'obj'=>new RegisteredEmail($generated_password,strip_tags($data['username'])),
         ];

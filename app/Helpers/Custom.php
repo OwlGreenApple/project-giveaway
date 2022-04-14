@@ -165,18 +165,18 @@ class Custom
         // PASS IF EMAIL  = 1 || 3
         if($cond == null)
         {
-        if(is_null($user) || $user->is_valid_email == 3)
-        {
-            return false;
-        }
+            if(is_null($user) || $user->is_valid_email == 3)
+            {
+                return false;
+            }
 
-        if($user->is_valid_email == 1)
-        {
-            return true;
-        }
+            if($user->is_valid_email == 1)
+            {
+                return true;
+            }
 
-        $user_id = $user->id;
-        $usr = User::find($user_id);
+            $user_id = $user->id;
+            $usr = User::find($user_id);
         }
         
         $check = new CheckBannedEmail;
@@ -213,11 +213,16 @@ class Custom
         return $status;
     }
 
-    public function mail($email,$obj)
+    public function mail($email,$obj,$cond)
     {
-        if($this->check_email_bouncing($email) == true)
+        if($this->check_email_bouncing($email,$cond) == true)
         {
             Mail::to($email)->send($obj);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
