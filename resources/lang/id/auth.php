@@ -51,7 +51,7 @@ return [
     'remember' => 'Ingat saya', 
     'reset' => 'Kirim Password Baru', 
     'success'=>'Password anda telah di reset, silahkan cek email anda',
-    'terms' => 'TERMS',
+    'terms' => 'Kebijakan Privasi',
     'throttle' => 'Terlalu banyak usaha masuk. Mohon coba lagi dalam :seconds seconds.',
     'wa'=>'Hubungkan WA',
 ];

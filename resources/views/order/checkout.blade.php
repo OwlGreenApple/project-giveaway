@@ -70,7 +70,7 @@
               <div class="form-group mt-4">
                 <div class="col-12 col-md-12">
                   <input type="checkbox" name="agree-term" id="agree-term" class="agree-term mr-1" required/>
-                  <label for="agree-term" class="label-agree-term text">{{ Lang::get('order.agreement.checkout') }}<a href="{{ env('APP_URL') }}terms-of-services/" class="term-service" target="_blank">{{ Lang::get('order.terms') }}</a></label>
+                  <label for="agree-term" class="label-agree-term text">{{ Lang::get('order.agreement.checkout') }}<a href="{{ url('privacy') }}" class="term-service" target="_blank">{{ Lang::get('auth.terms') }}</a></label>
                 </div>
               </div>
               <div class="form-group">

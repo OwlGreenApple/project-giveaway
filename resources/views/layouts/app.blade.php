@@ -169,8 +169,7 @@
         <div class="footer w-100 bg-white px-5 py-3 mt-2">
             <div class="container text-center">
                 <div class="d-inline">
-                    <a href="#">{{ Lang::get('auth.faq') }}</a>
-                    <a href="#">{{ Lang::get('auth.terms') }}</a>
+                    <a href="{{ url('privacy') }}">{{ Lang::get('auth.terms') }}</a>
                 </div>
                 <div class="mt-2"><small>Copyright&copy; 2022 {{env('APP_NAME')}}.app</small></div>
             </div>

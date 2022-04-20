@@ -204,5 +204,16 @@ class RegisterController extends Controller
       return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
     }
 
+    public function privacy()
+    {
+      return view('privacy');
+    }
+
+    public function test_email()
+    {
+        $test = new CheckBannedEmail;
+        $test->check_bouncing("cdsdcvfdvvfdvdv@dscsdc.com");
+    }
+
 /* end controller */
 }

@@ -115,7 +115,7 @@
                                   <div class="form-check mb-3">
                                       <input value="0" type="checkbox" name="agreement" id="check-terms" required/>
                                       <span class="checkmark-check"></span>
-                                      <sb>{{ $lang::get('order.agreement') }} <a class="main-color" href="{{ env('APP_URL') }}terms-of-services/" target="_blank" style="text-decoration: underline;">{{ $lang::get('order.terms') }}</a></sb>
+                                      <sb>{{ $lang::get('order.agreement') }} <a class="main-color" href="{{ url('privacy') }}/" target="_blank" style="text-decoration: underline;">{{ $lang::get('auth.terms') }}</a></sb>
                                   </div>
 
                                   <div class="text-left">
@@ -521,7 +521,7 @@
 			e.preventDefault();
       $("#div-login").hide();
       $("#div-register").show();
-      $("#header-step1").html("1. {{ Lang::get('order.account') }}");
+      $("#header-step1").html("1. {{ Lang::get('order.create_account') }}");
 			$('html, body').animate({scrollTop: '0px'}, 300);
     });
 	}

@@ -19,11 +19,12 @@
         </div>
         @if($user->is_admin == 1)
         <div class="form-group mb-4">
-            <label>Ganti Persentasi (%): <span class="text-info">Ini buat ganti jumlah percentage yg didapat oleh affiliate</span></label>
+            <label>Ganti Persentasi (%): <span class="text-info">Ini buat ganti jumlah persentasi yg didapat oleh affiliate</span></label>
             <input name="percentage" value="{{ $user->percentage }}" type="number" min="0" max="100" class="form-control form-control-lg"/>
         </div>
         @endif
-        <div class="row mb-4">
+        <!-- 
+        {{-- <div class="row mb-4">
             <div class="form-group col-md-6 col-lg-6">
                 <label>{{ Lang::get('table.lang') }}:<span class="text-danger">*</span></label>
                 <select name="profile_lang" class="form-select form-select-lg">
@@ -33,9 +34,9 @@
                     @endforeach
                 @endif
                 </select>
-                <span class="text-danger err_profile_lang"><!-- --></span>
+                <span class="text-danger err_profile_lang"></span>
             </div>
-        </div>
+        </div> --}} -->
 
         <button type="submit" class="btn bg-custom btn-lg text-white mt-2 btn-account">{{ Lang::get('table.update') }}</button>
     <!-- end form -->

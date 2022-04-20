@@ -28,7 +28,7 @@
                             <div class="form-inline">
                               <span class="text-muted">
                                 <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input me-2" /><small>{{ Lang::get('custom.agreement') }}
-                                <a class="main-color" target="_blank" rel="noopener noreferrer" href="">{{ Lang::get('custom.agreement.privacy') }}</a></small>
+                                <a class="main-color" target="_blank" rel="noopener noreferrer" href="{{ url('privacy') }}">{{ Lang::get('custom.agreement.privacy') }}</a></small>
                               </span>
                             </div>
                             <small class="text-danger tos"></small>
