@@ -39,9 +39,7 @@
 
              <!-- UPGRADE PACKAGE -->
              <div id="settings_target_6" class="card target_hide d-none">
-                <div class="card-body px-5 py-5 row">
-                    @include('package-list')
-                </div>
+                <div class="card-body px-3 py-5 price_list_data"><!--  --></div>
             </div>
 
 
@@ -389,5 +387,15 @@ $(function(){
     $('input:checkbox').not(this).prop('checked', this.checked);
   });
 
+</script>
+<script src="{{ asset('assets/js/pricing.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    var target_url = "{{ url('price-list') }}";
+    var is_account = 1;
+
+    $(function(){
+        display_pricelist(null);
+        change_price_list();
+    });
 </script>
 @endsection

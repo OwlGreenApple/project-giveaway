@@ -13,11 +13,14 @@ class Custom
         $price = [
             ['package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>50],
             ['package'=>'starter','price'=>100000,'terms'=>1,'contestants'=>1000,'campaign'=>2,'wa'=>100],
-            ['package'=>'starter-yearly','price'=>1200000,'terms'=>12,'contestants'=>1000,'campaign'=>2,'wa'=>100,'discount'=>100000],
+            ['package'=>'starter-3-month','price'=>85000,'terms'=>3,'contestants'=>1000,'campaign'=>2,'wa'=>100,'discount'=>100000],
+            ['package'=>'starter-yearly','price'=>60000,'terms'=>12,'contestants'=>1000,'campaign'=>2,'wa'=>100,'discount'=>100000],
             ['package'=>'gold','price'=>250000,'terms'=>1,'contestants'=>2500,'campaign'=>3,'wa'=>200],
-            ['package'=>'gold-yearly','price'=>2400000,'terms'=>12,'contestants'=>2500,'campaign'=>3,'wa'=>200,'discount'=>200000],
+            ['package'=>'gold-3-month','price'=>212500,'terms'=>3,'contestants'=>2500,'campaign'=>3,'wa'=>200,'discount'=>200000],
+            ['package'=>'gold-yearly','price'=>1500000,'terms'=>12,'contestants'=>2500,'campaign'=>3,'wa'=>200,'discount'=>200000],
             ['package'=>'platinum','price'=>350000,'terms'=>1,'contestants'=>5000,'campaign'=>5,'wa'=>300],
-            ['package'=>'platinum-yearly','price'=>3600000,'terms'=>12,'contestants'=>5000,'campaign'=>5,'wa'=>300,'discount'=>300000]
+            ['package'=>'platinum-3-month','price'=>297500,'terms'=>3,'contestants'=>5000,'campaign'=>5,'wa'=>300,'discount'=>300000],
+            ['package'=>'platinum-yearly','price'=>210000,'terms'=>12,'contestants'=>5000,'campaign'=>5,'wa'=>300,'discount'=>300000]
         ];
 
         return $price;
@@ -32,7 +35,10 @@ class Custom
             $this->get_price()[3]['package'] => $this->get_price()[3],
             $this->get_price()[4]['package'] => $this->get_price()[4],
             $this->get_price()[5]['package'] => $this->get_price()[5],
-            $this->get_price()[6]['package'] => $this->get_price()[6]
+            $this->get_price()[6]['package'] => $this->get_price()[6],
+            $this->get_price()[7]['package'] => $this->get_price()[7],
+            $this->get_price()[8]['package'] => $this->get_price()[8],
+            $this->get_price()[9]['package'] => $this->get_price()[9]
         ];
 
         if(isset($pack[$package]))

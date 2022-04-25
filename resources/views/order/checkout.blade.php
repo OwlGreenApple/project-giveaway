@@ -20,11 +20,11 @@
                       @foreach($api->get_price() as $index=>$row)
                         @if($row['price'] > 0) 
                            @if($index == $page)
-                            <option data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
+                            <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
                               {{$row['package']}} - IDR {{ $api::format($row['price']) }}
                             </option>
                             @else
-                            <option data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
+                            <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
                               {{$row['package']}} - IDR {{ $api::format($row['price']) }}
                             </option>
                             @endif
@@ -60,10 +60,10 @@
               <div class="form-group">
                 <div class="col-md-12 col-12">
                   <label class="label-title-test" for="formGroupExampleInput">
-                    Total: 
+                    <span class="subtotal" style="font-size:18px"></span>
                   </label>
                   <div class="col-md-12 pl-0">
-                    <span class="total" style="font-size:18px"></span>
+                    TOTAL: <b><span class="total" style="font-size:18px"></span></b>
                   </div>
               </div>
 
@@ -274,7 +274,10 @@
   function setPricing()
   {
     var price = parseInt($("#select-auto-manage").find("option:selected").attr("data-price"));
-    $('.total').html('IDR '+formatNumber(price));
+    var terms = parseInt($("#select-auto-manage").find("option:selected").attr("data-terms"));
+    var total = terms * price;
+    $('.subtotal').html(terms+" x IDR "+formatNumber(price));
+    $('.total').html('IDR '+formatNumber(total));
   }
 
   function change_qty()

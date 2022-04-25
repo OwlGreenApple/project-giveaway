@@ -1,14 +1,17 @@
-@if(count( $pc->get_price() ) > 0)
-@php $idx = 0; @endphp
-    @foreach($pc->get_price() as $index=>$row)
-        @if($index == 1)  @php $idx = 2; @endphp @endif
-        @if($index == 3)  @php $idx = 4; @endphp @endif
-        @if($index == 5)  @php $idx = 6; @endphp @endif
-
-        @if($index == 0 || $index == 2 || $index == 4 || $index == 6)
-            @php continue; @endphp
+@if(count( $data ) > 0)
+    <div class="ms-auto me-auto col-lg-6 col-md-6 col-12 mb-4">
+        <div style="max-width:236px" class="input-group ms-auto me-auto col-lg-6 col-md-6 col-12">
+            <button type="button" class="btn bg-custom text-white pricing_list">{{ Lang::get('order.month.m') }}</button>
+            <button data-total="3" style="border-left:1px solid white;" type="button" class="btn bg-custom text-white pricing_list">{{ Lang::get('order.month.t') }}</button>
+            <button data-total="12" style="border-left : 1px solid white;" type="button" class="btn bg-custom text-white pricing_list">{{ Lang::get('order.month.y') }}</button>
+        </div>
+        @if($save > 0)
+            <div class="ms-auto me-auto text-center mt-2 col-lg-6 text-success">{{ Lang::get('order.save') }} {{ $save }}%</div>
         @endif
+    </div>
 
+    <div class="row">
+    @foreach($data as $index)
         <div class="col-lg-4 col-md-4 col-12">
             <div class="card card-pricing @if($index == 1) popular @endif shadow text-center px-3 mb-4">
                 <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-custom text-white shadow-sm text-capitalize">{{ $pc->get_price()[$index]['package'] }}</span>
@@ -28,7 +31,6 @@
                             <li>{{ Lang::get('order.winner') }}</li>
                             <li>{{ Lang::get('order.export') }}</li>
                             <li>WA {{ $pc->get_price()[$index]['wa'] }} Message / {{ Lang::get('order.day') }}</li>
-                            <li><input name="year" id="{{ $idx }}" data-id="{{ $index }}" class="me-2" type="checkbox" />{{ Lang::get('order.year') }} {{ Lang::get('custom.currency') }}{{ $pc::format($pc->get_price()[$idx]['price']) }} / {{ $pc::format($pc->get_price()[$idx]['discount']) }} {{ Lang::get('order.month') }}</li>
                         @endif
                         </ul>
                     <a href="{{ url('checkout') }}/{{$index}}" target="_blank" class="btn bg-custom text-white mb-3 order-{{ $index }}">{{ Lang::get('order.order') }}</a>
@@ -36,33 +38,5 @@
             </div>
         </div>
     @endforeach
-
-<script type="text/javascript">
-    $(function(){
-        change_link();
-    });
-
-    function change_link()
-    {
-        $("input[name='year']").click(function()
-        {
-            var origin, res;
-            var id = $(this).attr('id');
-            var data_id = $(this).attr('data-id');
-            
-            if($(this).is(':checked'))
-            {
-                res = id;
-            }
-            else
-            {
-                res = data_id;
-            }
-
-            console.log(res);
-
-            $(".order-"+data_id).attr('href',"{{ url('checkout') }}/"+res);
-        });
-    }
-</script>
+    </div>
 @endif

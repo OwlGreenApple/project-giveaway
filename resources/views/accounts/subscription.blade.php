@@ -10,6 +10,4 @@
     </div>
 </div>
  <!-- display subscription -->
-<div class="row mt-4">
-        @include('package-list')
-</div>
+<div class="price_list_data mt-4"></div>

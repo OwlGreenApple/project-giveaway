@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 
 //AUTH
 Route::get('/',[App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
+Route::get('/price-list',[App\Http\Controllers\OrderController::class, 'price_list']);
 Route::get('/test-email',[App\Http\Controllers\Auth\RegisterController::class, 'test_email']);
 Route::get('/privacy',[App\Http\Controllers\Auth\RegisterController::class, 'privacy']);
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
