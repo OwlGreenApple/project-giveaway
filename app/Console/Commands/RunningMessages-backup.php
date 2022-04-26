@@ -10,8 +10,7 @@ use App\Models\User;
 use App\Models\Broadcast;
 use App\Models\Contestants;
 use App\Helpers\Custom;
-// use App\Http\Controllers\DeviceController AS Device;
-use App\Http\Controllers\WABlasController AS Device;
+use App\Http\Controllers\DeviceController AS Device;
 use App\Console\Commands\CheckDeviceStatus AS CDV;
 use App\Http\Controllers\BroadcastController AS BDC;
 use Carbon\Carbon;
@@ -65,6 +64,13 @@ class RunningMessages extends Command
                 $contestants = $bdc::parsing_array($row->ct_list);
 
                 $user = User::find($user_id);
+                $phone = Phone::where('user_id',$user_id)->first();
+
+                // TO AVOID ERROR IF USER DELETE PHONE / DISCONNECTED PHONE OR DELETED USER
+                if(is_null($user) || is_null($phone))
+                {
+                    continue;
+                }
 
                 // FILTER TIME TO SEND MESSAGE ACCORDING ON TIMEZONE
                 if(Carbon::now($timezone)->lt(Carbon::parse($date_send)->toDateTimeString()))
@@ -73,7 +79,10 @@ class RunningMessages extends Command
                 }
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
-                if($user->counter_send_message_daily < 1)
+                self::check_device($phone);
+                $ph = Phone::find($phone->id);
+
+                if($ph->status == 0 || $user->counter_send_message_daily < 1)
                 {
                     continue;
                 }
@@ -93,7 +102,7 @@ class RunningMessages extends Command
                         'ev_id'=>0, 
                         'bc_id'=>$bc_id, 
                         'ct_id'=>$ctid,
-                        'sender'=>env('WA_TEMP'),
+                        'sender'=>$phone->number,
                         'receiver'=>substr($ct->wa_number,1),
                         'message'=>$message,
                         'img_url'=>$url
@@ -165,15 +174,19 @@ class RunningMessages extends Command
         {
             $message = ''; //define variable to add sposor message according on package
             foreach($msg as $x=>$row):
+                $phone = Phone::where('user_id',$row->user_id)->first();
                 $user = User::find($row->user_id);
 
-                if(is_null($user))
+                if(is_null($phone) || is_null($user))
                 {
                     continue;
                 }
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
-                if($user->counter_send_message_daily < 1)
+                self::check_device($phone);
+                $ph = Phone::find($phone->id);
+
+                if($ph->status == 0 || $user->counter_send_message_daily < 1)
                 {
                     continue;
                 }
@@ -196,7 +209,20 @@ class RunningMessages extends Command
                     $req = new Request($data);
                     $device->send_message($req);
                 }
-               
+                else
+                {
+                    //SEND MEDIA MESSAGE
+                    $data = [
+                        'number'=>$row->receiver,
+                        'message'=>$message,
+                        "media"=> $row->img_url,
+                        'user_id'=>$row->user_id,
+                        'msg_id'=>$row->id
+                    ];
+                    $req = new Request($data);
+                    $device->send_media($req);
+                }
+
                 // UNCOMMENT IF WANT TO TEST / DEBUG
                 // $mg = Messages::find($row->id);
                 // $mg->status = 1;

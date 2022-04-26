@@ -212,7 +212,7 @@ class RegisterController extends Controller
     public function test_email()
     {
         $test = new CheckBannedEmail;
-        $test->check_bouncing("cdsdcvfdvvfdvdv@dscsdc.com");
+        $test::check_bouncing("cdsdcvfdvvfdvdv@dscsdc.com");
     }
 
 /* end controller */

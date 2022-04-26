@@ -284,7 +284,7 @@
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.wa') }}</h3>
-                        <div class="text-justify title mb-4">{{ Lang::get('giveaway.wa.desc') }}, {{ Lang::get('giveaway.connect') }} <a target="_blank" class="main-color" href="{{ url('scan') }}">{{ Lang::get('giveaway.wa.connect') }}</a></div>
+                        <div class="text-justify title mb-4">{{ Lang::get('giveaway.wa.desc') }} <!--, {{ Lang::get('giveaway.connect') }}  <a target="_blank" class="main-color" href="{{ url('scan') }}">{{ Lang::get('giveaway.wa.connect') }}</a> --></div>
 
                         <div class="mb-3">
                             <div class="form-group mb-3">
@@ -292,7 +292,7 @@
                                 <textarea name="message" id="divInput-description-post" class="form-control form-control-lg">@if(isset($event)){{ $event->message }}@endif</textarea>
                                 <span class="text-danger err_message"><!-- --></span>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group"> +++ temp +++
                                 <label>{{ Lang::get('giveaway.message.img') }}</label>
                                 <div class="mb-2">
                                     @if(isset($event) && $event->img_url == null)
@@ -304,8 +304,8 @@
                                     @endif
                                 </div>
                                 <input type="file" class="form-control form-control-lg" name="media" />
-                                <span class="text-danger err_media"><!-- --></span>
-                            </div>
+                                <span class="text-danger err_media"></span>
+                            </div> +++ temp +++ --> 
                         </div>
                     </div>
                 </div>
@@ -314,7 +314,7 @@
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.wa.winner') }}</h3>
-                        <div class="text-justify title mb-4">{{ Lang::get('giveaway.wa.winner.desc') }}. {{ Lang::get('giveaway.connect') }} <a target="_blank" class="main-color" href="{{ url('scan') }}">{{ Lang::get('giveaway.wa.connect') }}</a></div>
+                        <div class="text-justify title mb-4">{{ Lang::get('giveaway.wa.winner.desc') }}. <!-- {{ Lang::get('giveaway.connect') }} <a target="_blank" class="main-color" href="{{ url('scan') }}">{{ Lang::get('giveaway.wa.connect') }}</a>--></div>
 
                         <div class="mb-3">
                             <div class="form-check form-switch mb-2">

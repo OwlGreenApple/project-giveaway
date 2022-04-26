@@ -203,11 +203,11 @@ class ContestController extends Controller
                 $contestant_id = $ct->id;
 
                 // SET AUTO REPLY WA MESSAGE
-                $ph = Phone::where('user_id',$ev->user_id)->first();
+                // $ph = Phone::where('user_id',$ev->user_id)->first(); +++ temp due wablas +++
                 $phone = substr($phone,1); // remove + sign
 
-                if(!is_null($ph))
-                {
+                // if(!is_null($ph)) +++ temp due wablas +++
+                // { +++ temp due wablas +++
                     $msg = $ev->message;
                     $msg .= "\n\n".'Please click to confirm : '.url('confirmation').'/'.bin2hex($contestant_id);
 
@@ -215,12 +215,13 @@ class ContestController extends Controller
                     $wa_msg->user_id = $ev->user_id;
                     $wa_msg->ev_id = $ev->id;
                     $wa_msg->ct_id = $contestant_id;
-                    $wa_msg->sender = $ph->number;
+                    // $wa_msg->sender = $ph->number;
+                    $wa_msg->sender = env('WA_TEMP');
                     $wa_msg->receiver = $phone;
                     $wa_msg->message = $msg;
                     $wa_msg->img_url = $ev->img_url;
                     $wa_msg->save();
-                }
+                // } +++ temp due wablas +++
             }
             else
             {

@@ -29,7 +29,7 @@
                             <textarea name="message" class="form-control form-control-lg">@if(isset($broadcast)) {{ $broadcast->message }} @endif</textarea>
                             <span class="text-danger err_message"><!-- --></span>
                         </div>
-                        <div class="form-group mb-3">
+                        <!-- <div class="form-group mb-3"> +++ temp +++
                             <label>{{ Lang::get('table.image') }}</label>
                                 @if(isset($broadcast) && $broadcast->url !== null)
                                     <div class="mb-2">
@@ -39,8 +39,8 @@
                                     </div>
                                 @endif
                             <input type="file" class="form-control" name="media" />
-                            <span class="text-danger err_media"><!-- --></span>
-                        </div>
+                            <span class="text-danger err_media"></span>
+                        </div> +++ temp +++ -->
                         <div class="form-group mb-3">
                             <label>{{ Lang::get('table.contestant') }}</label>
                             <input id="contestant" autocomplete="off" type="text" class="form-control form-control-lg" name="contestant" />

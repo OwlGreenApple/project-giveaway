@@ -87,7 +87,7 @@ class CheckEventStatus extends Command
         if($ct->count() > 0)
         {
             foreach($ct as $row):
-                $phone = Phone::where([['user_id',$ev->user_id],['status',1]])->first();
+                /* +++ temp +++ $phone = Phone::where([['user_id',$ev->user_id],['status',1]])->first();
                 if(is_null($phone))
                 {
                     $number = 0;
@@ -97,18 +97,21 @@ class CheckEventStatus extends Command
                 {
                     $number = $phone->number;
                     $status = 0;
-                }
+                } +++ temp +++ */
 
                 $msge = [
                     'user_id'=>$ev->user_id,
                     'ev_id'=>$ev->id,
                     'bc_id'=>0,
                     'ct_id'=>$row->id,
-                    'sender'=>$number,
+                    // 'sender'=>$number,
+                    'sender'=>env('WA_TEMP'),
                     'receiver'=>substr($row->wa_number,1),
-                    'message'=>$ev->message,
-                    'img_url'=>$ev->img_url,
-                    'status'=>$status
+                    'message'=>$ev->winner_message,
+                    // 'img_url'=>$ev->img_url,
+                    'img_url'=>null,
+                    // 'status'=>$status
+                    'status'=>0
                 ];
 
                 $send = new MSG;
