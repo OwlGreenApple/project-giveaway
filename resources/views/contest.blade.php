@@ -74,11 +74,12 @@
                         <i class="fas fa-trophy"></i> {{ Lang::get('custom.winner') }} : <b class="trophy">{{ $event->winners }}</b>
                     </span>
                 </h5>
-                <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
+
                 <!-- contestant enter -->
 
                 @if($check_contestants == true)
                     @if($end == false)
+                    <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
                         <form class="contest-form" id="save_contestant">
                             <div class="form-group mb-3">
                                 <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
@@ -110,7 +111,11 @@
                         </div>
                     @endif
                 @else
-                    <div class="form_title text-center">{{ Lang::get('custom.fcontestants') }}</div>
+                    @if($user->membership == 'free')
+                        <div class="alert alert-warning text-center">{!! Lang::get('custom.fcontestants.free') !!} <b>{{ $event->admin_contact }}</b></div>
+                    @else
+                        <div class="alert alert-warning text-center">{{ Lang::get('custom.fcontestants') }}</div>
+                    @endif
                 @endif
 
                 <!-- description -->
@@ -121,7 +126,7 @@
             <!-- footer -->
             <div class="row px-3 py-3">
                 <div class="col-lg-6 desc">{{ Lang::get('custom.giveaway_timezone') }} : {{ $event->timezone }}</div>
-                <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a></div>
+                <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a><br/>{{ Lang::get('custom.contact') }} : {{ $event->admin_contact }}</div>
             </div>
 
             <div class="mt-2 pb-3 text-center">

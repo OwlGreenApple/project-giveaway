@@ -111,9 +111,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('contact') }}">{{ Lang::get('auth.contact') }}</a>
                             </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="{{('scan') }}">{{ Lang::get('auth.wa') }}</a>
-                            </li> -->
+                            @php $disable = 1 @endphp <!-- +++ temp +++ -->
+                            @if($disable == 0)<!-- +++ temp +++ -->
+                            <li class="nav-item"> 
+                                <a class="nav-link" href="{{ url('scan') }}">{{ Lang::get('auth.wa') }}</a>
+                            </li> 
                             <li class="nav-item dropdown">
                                 <a id="bcDropdown" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Lang::get('auth.bc') }}</a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bcDropdown">
@@ -121,6 +123,7 @@
                                     <a class="dropdown-item" href="{{ url('broadcast') }}">{{ Lang::get('auth.bc.list') }}</a>
                                 </div>
                             </li>
+                            @endif<!-- +++ temp +++-->
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}

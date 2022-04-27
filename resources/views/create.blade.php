@@ -121,7 +121,7 @@
                                 <div class="input-group mb-3">
                                     <select style="max-width:95px" class="form-select form-select-lg bg-custom text-white" name="currency">
                                         @foreach($helper::currency() as $idt=>$row)
-                                            <option value="{{ $idt }}" @if(isset($event) && ($event->currency == $idt)) selected @endif>{{ $row }}</option>
+                                            <option value="{{ $idt }}" @if((isset($event) && ($event->currency == $idt)) || $idt == 'idr') selected @endif>{{ $row }}</option>
                                         @endforeach
                                     </select>
                                     <input name="prize_amount" @if(isset($event)) value="{{ $event->prize_value }}" @endif id="amount" maxlength="8" type="text" class="form-control form-control-lg" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
@@ -176,7 +176,7 @@
                     </div>
                 </div>
 
-                <!-- form 3 -->
+                <!-- Bonus Point -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.bonus') }}</h3>
@@ -251,7 +251,7 @@
                     </div>
                 </div>
 
-                <!-- form 4 -->
+                <!-- Integration -->
                 @if($apicheck == true)
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
@@ -280,7 +280,17 @@
                 </div>
                 @endif
 
-                <!-- form 5 -->
+                <!-- admin contact / host contact -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.admin') }}</h3>
+                        <p class="text-justify title">{{ Lang::get('giveaway.admin.desc') }}</p>
+                        <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
+                        <span class="text-danger err_phone"><!-- --></span>
+                    </div>
+                </div>
+
+                <!-- whatsapp message -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.wa') }}</h3>
@@ -310,7 +320,7 @@
                     </div>
                 </div>
 
-                <!-- form 6 -->
+                <!-- WA winner message -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.wa.winner') }}</h3>
@@ -330,15 +340,6 @@
                     </div>
                 </div>
 
-                <!-- form 7 -->
-                <!-- <div class="card px-4 py-4 mb-3">
-                    <div class="card-body">
-                        <h3 class="main-theme title">EU GDPR consent checkbox</h3>
-                        <p class="fcs italic title">Are you planning to send your entrants marketing messages after the giveaway? Are any of your contestants located in the EU? If yes, or you’re not sure, enable the checkbox option below so your contestants can give clear consent as required by EU GDPR.</p>
-                        <input type="checkbox" class="form-checkbox me-1" />&nbsp;<span class="title">GDPR Consent</span>
-                    </div>
-                </div> -->
-
                 @if(!isset($event) || (isset($event) && $event->status < 2))
                 <div class="mt-5 text-center">
                     <span class="err_package"><!-- --></span>
@@ -354,8 +355,7 @@
     </div>
 </div>
 
-
-
+<script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 <script>
 $(function() {
     editor();
@@ -390,7 +390,7 @@ function select_timezone()
     @if(isset($timezone))
         timezone = '{{ $timezone }}';
     @else
-        timezone = 'Pacific/Auckland';
+        timezone = 'Asia/Jakarta';
     @endif
 
     $("#timezone option[value='"+timezone+"']").prop('selected',true);
@@ -648,11 +648,15 @@ function save_data()
 {
     $("#create_event").submit(function(e){
         e.preventDefault();
+        
         var desc = $("#editor").html();
         var len = $(".box-color").length;
         var form = $("#create_event")[0];
+        var code = $(".iti__selected-flag").attr('data-code');
+        
         var data = new FormData(form);
         data.append('desc',desc);
+        data.append('pcode', code);
 
         @if(isset($event))
             data.append('edit','{{ $event->id }}');
@@ -733,6 +737,7 @@ function save_data()
                     $(".err_"+result[14][1]).html(result[14][0]);
                     $(".err_"+result[15][1]).html(result[15][0]);
                     $(".err_"+result[16][1]).html(result[16][0]);
+                    $(".err_"+result[17][1]).html(result[17][0]);
 
                     err_bonus =''; //to clear error message
 

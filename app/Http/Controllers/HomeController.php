@@ -611,6 +611,8 @@ class HomeController extends Controller
         $edit = false;
         $helper = new Custom;
         $title = strip_tags($request->title);
+        $admin_contact = strip_tags($request->phone);
+        $country_code = strip_tags($request->pcode);
         $start = strip_tags($request->start);
         $end = strip_tags($request->end);
         $award = strip_tags($request->award);
@@ -661,6 +663,7 @@ class HomeController extends Controller
         }
 
         $ev->title = $title;
+        $ev->admin_contact = $country_code.$admin_contact;
         $ev->desc = $desc;
         $ev->start = $start;
         $ev->end = $end;

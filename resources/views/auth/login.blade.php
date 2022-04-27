@@ -7,7 +7,7 @@
             <div class="position-relative gift-pos">
                 <div class="gift-strap"><!-- --></div>
             </div>
-            <div class="card logo px-2 py-2"><img class="logo" src="{{ asset('assets/img/logo-topleads.png') }}"/></div>
+            <div class="card logo px-2 py-2"><img src="{{ asset('assets/img/logo-topleads.png') }}"/></div>
             <div class="card px-2 py-2 fix-card">
                 @if(session('error'))
                     <span class="text-danger text-center"><strong>{{ session('error') }}</strong></span>

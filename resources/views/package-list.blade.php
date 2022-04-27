@@ -30,8 +30,11 @@
                             <li>{{ Lang::get('order.history') }}</li>
                             <li>{{ Lang::get('order.winner') }}</li>
                             <li>{{ Lang::get('order.export') }}</li>
-                            <li>WA {{ $pc->get_price()[$index]['wa'] }} Message / {{ Lang::get('order.day') }}</li>
-                        @endif
+                                @php $disable = 1 @endphp <!-- +++ temp +++ -->
+                                @if($disable == 0)
+                                    <li>WA {{ $pc->get_price()[$index]['wa'] }} Message / {{ Lang::get('order.day') }}</li>
+                                @endif <!-- +++ temp +++ -->
+                            @endif
                         </ul>
                     <a href="{{ url('checkout') }}/{{$index}}" target="_blank" class="btn bg-custom text-white mb-3 order-{{ $index }}">{{ Lang::get('order.order') }}</a>
                 </div>

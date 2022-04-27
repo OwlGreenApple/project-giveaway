@@ -12,6 +12,7 @@ use App\Rules\CheckNumber;
 use App\Rules\CheckDescription;
 use App\Rules\CheckMessage;
 use App\Rules\ProfileRules;
+use App\Rules\CheckValidPhone;
 use App\Models\Events;
 use App\Helpers\Custom;
 
@@ -80,6 +81,7 @@ class CheckEvents
 
         $rules = [
             'title'=>['required','max:40'],
+            'phone'=>['required','min:6', new CheckValidPhone($request->pcode)],
             'start'=>['required',new CheckDate('start',null,$request->timezone,$request->edit)],
             'end'=>['required',new CheckDate('end',$request->start)],
             'award'=>['required',new CheckDate('award',$request->end)],
@@ -131,6 +133,7 @@ class CheckEvents
                 14=>[$err->first('media'),'media'],
                 15=>[$err->first('message_winner'),'message_winner'],
                 16=>[$err->first('currency'),'currency'],
+                17=>[$err->first('phone'),'phone'],
             ];
 
             // return response()->json($errors);

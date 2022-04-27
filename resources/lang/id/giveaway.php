@@ -2,6 +2,8 @@
 
 return [
     'activate'=>'Aktifkan',
+    'admin'=>'Kontak Admin',
+    'admin.desc'=>'No WA yang di gunakan oleh host / pembuat event',
     'award'=>'Pemberian Hadiah',
     'banner'=>'Gambar Slide',
     'bonus'=>'Bonus Poin',
@@ -28,7 +30,7 @@ return [
     'sharing.click'=>'Klik pada platform dibawah ini yang akan digunakan kontestan untuk share giveaway ini',
     'start'=>'Dimulai pada',
     'timezone'=>'Zona Waktu',
-    'tips'=>'Tips: gunakan gamabr dengan rasio 2x1 (lebar minimal 680px)',
+    'tips'=>'Tips: gunakan gambar dengan rasio 2x1 (lebar minimal 680px)',
     'title'=>'Judul Giveaway',
     'wa'=>'Pesan Whatsapp',
     'wa.connect'=>'Sambungkan',
