@@ -626,7 +626,7 @@ class HomeController extends Controller
         $desc = $request->desc;
         $images = $request->file('images');
         $message = strip_tags($request->message);
-        $winner_run = strip_tags($request->run_winner);
+        $winner_run = strip_tags($request->run_winner); 
         $message_winner = strip_tags($request->message_winner);
         $currency = strip_tags($request->currency);
 
@@ -636,7 +636,16 @@ class HomeController extends Controller
         ($mlc_api_id == null? $mlc_api_id = 0:false);
 
         ($request->media_option == 'off')?$mo = 1:$mo = 0;
-        ($winner_run == 'off')?$wr = 0:$wr = 1;
+       
+        if($winner_run == 'off' || $winner_run =="" || $winner_run == null)
+        {
+            $wr = 0;
+        }
+        else
+        {
+            $wr = 1;
+        }
+
         $unl = self::determine_share($request->unl_cam);
         $tw = self::determine_share($request->tw);
         $fb = self::determine_share($request->fb);
@@ -649,6 +658,7 @@ class HomeController extends Controller
             $ev = new Events;
             $ev->user_id = Auth::id();
             $ev->url_link = self::generate_event_link();
+            $ev->admin_contact = $country_code.$admin_contact;
         }
         else
         {
@@ -660,10 +670,15 @@ class HomeController extends Controller
                 $response['success'] = 'id';
                 return response()->json($response);
             }
+
+            // admin contact in case update and let the field empty
+            if(!is_null($admin_contact))
+            {
+                $ev->admin_contact = $country_code.$admin_contact;
+            }
         }
 
         $ev->title = $title;
-        $ev->admin_contact = $country_code.$admin_contact;
         $ev->desc = $desc;
         $ev->start = $start;
         $ev->end = $end;

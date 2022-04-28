@@ -77,27 +77,28 @@
 
                 <!-- contestant enter -->
 
-                @if($check_contestants == true)
                     @if($end == false)
-                    <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
-                        <form class="contest-form" id="save_contestant">
-                            <div class="form-group mb-3">
-                                <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
-                                <input name="contestant" required type="text" class="form-control form-control-lg" />
-                                <span class="text-danger err_contestant"><!-- --></span>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label>{{Lang::get('custom.email')}} <i class="fas fa-at ct_color"></i></label>
-                                <input name="email" required type="email" class="form-control form-control-lg" />
-                                <span class="text-danger err_email"><!-- --></span>
-                            </div>
-                            <div class="iti-wrapper mb-3">
-                                <label>{{Lang::get('custom.number')}} <b><i class="fab fa-whatsapp ct_color"></i></b></label>
-                                <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
-                                <span class="text-danger err_phone"><!-- --></span>
-                            </div>
-                            <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
-                        </form>
+                        <div id="max_contestant">
+                            <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
+                            <form class="contest-form" id="save_contestant">
+                                <div class="form-group mb-3">
+                                    <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
+                                    <input name="contestant" required type="text" class="form-control form-control-lg" />
+                                    <span class="text-danger err_contestant"><!-- --></span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>{{Lang::get('custom.email')}} <i class="fas fa-at ct_color"></i></label>
+                                    <input name="email" required type="email" class="form-control form-control-lg" />
+                                    <span class="text-danger err_email"><!-- --></span>
+                                </div>
+                                <div class="iti-wrapper mb-3">
+                                    <label>{{Lang::get('custom.number')}} <b><i class="fab fa-whatsapp ct_color"></i></b></label>
+                                    <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
+                                    <span class="text-danger err_phone"><!-- --></span>
+                                </div>
+                                <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
+                            </form>
+                        </div>
                     @else
                         <div class="contest-winner">
                             <h4 class="main-color"><b>Winners : </b></h4>
@@ -110,13 +111,6 @@
                             @endif
                         </div>
                     @endif
-                @else
-                    @if($user->membership == 'free')
-                        <div class="alert alert-warning text-center">{!! Lang::get('custom.fcontestants.free') !!} <b>{{ $event->admin_contact }}</b></div>
-                    @else
-                        <div class="alert alert-warning text-center">{{ Lang::get('custom.fcontestants') }}</div>
-                    @endif
-                @endif
 
                 <!-- description -->
                 <div class="terms mt-4">{!! $event->desc !!}</div>
@@ -138,10 +132,7 @@
     </div>
 </div>
 
-@if($check_contestants == true)
-    <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
-@endif
-
+<script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 <script>
     var global_date = "{{ $event->end }}"; //set target event date
 
@@ -185,6 +176,12 @@
                     $(".err_"+result[0][1]).html(result[0][0]);
                     $(".err_"+result[1][1]).html(result[1][0]);
                     $(".err_"+result[2][1]).html(result[2][0]);
+
+                    // if contestant full
+                    if(result[3] !== 'nmax')
+                    {
+                        $("#max_contestant").html(result[3]);
+                    }
                 }
                 else
                 {

@@ -81,6 +81,25 @@
     </div>
 </div>
 
+<!-- copy modal for type 13  -->
+<div class="modal" id="copy_link">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        {!! Lang::get('giveaway.copy') !!}
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">{{ Lang::get('giveaway.close') }}</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <script>
     var global_date = "{{ $ev->end }}"; //set target event date
 
@@ -88,6 +107,7 @@
         task();
         loadtask();
         hover_plus();
+        copyLink(); //type = 13
     });
 
     function hover_plus()
@@ -141,8 +161,26 @@
             }
 
             var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : data_type, 'bid': data_id};
-            task_run(data);
+            task_run(data); 
         });
+    }
+
+    function copyLink(){
+      $( "body" ).on("click",".btn-copy",function(e) 
+      {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var link = $(this).attr("data-link");
+
+        var tempInput = document.createElement("input");
+        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+        tempInput.value = link;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+      });
     }
 
     function task_run(data)
@@ -170,6 +208,11 @@
                     {
                         window.open(result.url, "_blank");
                     }
+                }
+
+                if(result.success == 'copy')
+                {
+                    $("#copy_link").modal('show');
                 }
             },
             error : function(xhr)

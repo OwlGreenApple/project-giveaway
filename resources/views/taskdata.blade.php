@@ -38,6 +38,14 @@
             </div>
         </li>
     @endif
+    @if($ev->link == 1)  
+        <li class="list-group-item clearfix">{!! $helper::get_marks(0,$ev->id,13,$ct_id) !!}
+            <a class="task btn-copy" data-type="13" data-link="{{ $share }}"><i class="fas fa-link"></i>&nbsp;{{ Lang::get('custom.link.share') }}</a>
+            <div class="float-end prize bg_share_13"> 
+                {{ $helper::share_prize(null) }}&nbsp;{{ Lang::get('custom.per') }}</div>
+            </div>
+        </li>
+    @endif
     @if($bonus->count() > 0)
         @foreach($bonus as $row)
             @php 

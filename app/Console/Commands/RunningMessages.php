@@ -73,10 +73,11 @@ class RunningMessages extends Command
                 }
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
-                if($user->counter_send_message_daily < 1)
-                {
-                    continue;
-                }
+                /* +++ temp +++ */
+                // if($user->counter_send_message_daily < 1)
+                // {
+                //     continue;
+                // }
 
                 // PARSING CONTESTANTS
                 foreach($contestants as $ctid):
@@ -173,10 +174,11 @@ class RunningMessages extends Command
                 }
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
-                if($user->counter_send_message_daily < 1)
-                {
-                    continue;
-                }
+                /* +++ temp +++ */
+                // if($user->counter_send_message_daily < 1)
+                // {
+                //     continue;
+                // }
 
                 // DELAY INTERVAL TO AVOID BANNED FROM WA
                 sleep($arr[$x]);

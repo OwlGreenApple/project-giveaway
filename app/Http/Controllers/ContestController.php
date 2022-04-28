@@ -52,10 +52,7 @@ class ContestController extends Controller
         }
 
         $user = User::find($event->user_id);
-        $total_contestant = Contestants::where([['contestants.event_id',$event->id],['events.user_id',$user->id]])
-                            ->join('events','events.id','=','contestants.event_id')->get()->count();
 
-        // dd($total_contestant);
         // to determine end event
         $end = self::check_end_event($event);
         $hm = new Home;
@@ -71,8 +68,7 @@ class ContestController extends Controller
             'ref'=>$ref,
             'branding'=>$user->branding,
             'brand_link'=>$user->brand_link,
-            'winner'=>$winner,
-            'check_contestants'=>self::check_contestants_membership($user,$total_contestant)
+            'winner'=>$winner
         ];
 
         return view('contest',$data);
@@ -89,18 +85,6 @@ class ContestController extends Controller
         {
             return false;
         }
-    }
-
-    private static function check_contestants_membership($user,$total_contestant)
-    {
-        $ct = new Custom;
-        $max_contestants = $ct->check_type($user->membership)['contestants'];
-        if($total_contestant >= $max_contestants)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     // save contestant
@@ -209,7 +193,7 @@ class ContestController extends Controller
                 // if(!is_null($ph)) +++ temp due wablas +++
                 // { +++ temp due wablas +++
                     $msg = $ev->message;
-                    $msg .= "\n\n".'Please click to confirm : '.url('confirmation').'/'.bin2hex($contestant_id);
+                    $msg .= "\n\n".Lang::get('giveaway.confirm').url('confirmation').'/'.bin2hex($contestant_id);
 
                     $wa_msg = new Messages;
                     $wa_msg->user_id = $ev->user_id;
@@ -323,12 +307,23 @@ class ContestController extends Controller
         $ev_id = strip_tags($request->ev_id);
 
         $ev = Events::find($ev_id);
-        $bonus = Bonus::where('event_id',$ev_id)->get();
+        $ct = Contestants::find($id);
+
+        if(is_null($ev) || is_null($ct))
+        {
+            return view('error404');
+        }
+
+        $ev_link = $ev->url_link;
+        $ref_code = $ct->ref_code;
+        $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
+        $bonus = Bonus::where('event_id',$ev_id)->get(); 
 
         $data = [
             'ev'=>$ev,
             'ct_id'=>$id,
             'bonus'=>$bonus,
+            'share'=>$share_url,
             'helper'=>new Custom,
         ];
         return view('taskdata',$data);
@@ -446,6 +441,12 @@ class ContestController extends Controller
             // mail to
             $ret['url'] = "mailto:?subject=".$ev->title."&amp;body=".$share_url."";
             $ret['success'] = 1;
+        }
+        elseif($type == 13)
+        {
+            // copy link to share
+            $ret['url'] = null;
+            $ret['success'] = "copy";
         }
 
         return response()->json($ret);

@@ -15,7 +15,7 @@ function display_pricelist(target)
         dataType:"html",
         success : function(result)
         {
-            $(".price_list_data").html(result);
+            $(".price_list_data").html(result);   
         },
         error : function(xhr)
         {

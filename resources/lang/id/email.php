@@ -35,4 +35,6 @@ return [
     'name'=>'Nams',
     'regards'=>'Hormat Kami',
     'status'=>'Status order',
+    /* Middleware\CheckContestant line : 57 */
+    'max_contestant'=>'Halo,'."\n\n".'Ada kontestan yang ingin berpartisipasi pada event anda,'."\n".'tapi sayangnya jumlah kontestan di event anda sudah penuh.'."\n".'silahkan upgrade paket anda di :'."\n\n".' https://topleads.app/dashboard'
 ];

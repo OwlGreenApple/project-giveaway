@@ -12,24 +12,31 @@ class Custom
     {
         $contestant_starter = 1000;
         $campaign_starter = 2;
+        $wa_starter = 100;
 
         $contestant_gold = 2500;
         $campaign_gold = 3;
+        $wa_gold = 200;
 
         $contestant_platinum = 5000;
         $campaign_platinum = 5;
+        $wa_platinum = 300;
+
+        $term_monthly = 1;
+        $term_3_month = 3;
+        $term_yearly = 12;
 
         $price = [
             ['package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>50],
-            ['package'=>'starter','price'=>100000,'terms'=>1,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>100],
-            ['package'=>'starter-3-month','price'=>85000,'terms'=>3,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>100,'discount'=>100000],
-            ['package'=>'starter-yearly','price'=>60000,'terms'=>12,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>100,'discount'=>100000],
-            ['package'=>'gold','price'=>250000,'terms'=>1,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>200],
-            ['package'=>'gold-3-month','price'=>212500,'terms'=>3,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>200,'discount'=>200000],
-            ['package'=>'gold-yearly','price'=>150000,'terms'=>12,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>200,'discount'=>200000],
-            ['package'=>'platinum','price'=>350000,'terms'=>1,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>300],
-            ['package'=>'platinum-3-month','price'=>297500,'terms'=>3,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>300,'discount'=>300000],
-            ['package'=>'platinum-yearly','price'=>210000,'terms'=>12,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>300,'discount'=>300000]
+            ['package'=>'starter','price'=>100000,'terms'=>$term_monthly,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter],
+            ['package'=>'starter-3-month','price'=>85000,'terms'=>$term_3_month,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'discount'=>100000],
+            ['package'=>'starter-yearly','price'=>60000,'terms'=>$term_yearly,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'discount'=>100000],
+            ['package'=>'gold','price'=>250000,'terms'=>$term_monthly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold],
+            ['package'=>'gold-3-month','price'=>212500,'terms'=>$term_3_month,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000],
+            ['package'=>'gold-yearly','price'=>150000,'terms'=>$term_yearly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000],
+            ['package'=>'platinum','price'=>350000,'terms'=>$term_monthly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum],
+            ['package'=>'platinum-3-month','price'=>297500,'terms'=>$term_3_month,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000],
+            ['package'=>'platinum-yearly','price'=>210000,'terms'=>$term_yearly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000]
         ];
 
         return $price;

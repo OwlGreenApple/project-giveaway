@@ -159,7 +159,7 @@
                     </div>
                 </div>
 
-                <!-- form 2 -->
+                <!-- share link -->
                 <div class="card px-4 py-4 mb-3">
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.sharing') }}</h3>
@@ -171,6 +171,7 @@
                                 <i data-id="wa" class="fab fa-whatsapp box @if(isset($event)) @if($event->wa == 1) box-color @endif @else box-color @endif"></i>
                                 <i data-id="ln" class="fab fa-linkedin-in box @if(isset($event)) @if($event->ln == 1) box-color @endif @endif"></i>
                                 <i data-id="mail" class="far fa-envelope box @if(isset($event)) @if($event->mail == 1) box-color @endif @endif"></i>
+                                <i data-id="lnk" class="fas fa-link box @if(isset($event)) @if($event->link == 1) box-color @endif @else box-color @endif"></i>
                             </div>
                         </div>
                     </div>
@@ -285,7 +286,11 @@
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.admin') }}</h3>
                         <p class="text-justify title">{{ Lang::get('giveaway.admin.desc') }}</p>
-                        <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
+                        <input type="text" id="phone" name="phone" class="form-control form-control-lg" />
+                        @if(isset($event))
+                            <small class="main-color">{{ Lang::get('custom.phone') }}</small>
+                            <div class="form-control disabled"> {{$event->admin_contact}}</div>
+                        @endif
                         <span class="text-danger err_phone"><!-- --></span>
                     </div>
                 </div>
@@ -328,8 +333,8 @@
 
                         <div class="mb-3">
                             <div class="form-check form-switch mb-2">
-                                <input @if(isset($event) && $event->winner_run == 1) value="on" checked @else value="off" @endif name="run_winner" class="form-check-input" type="checkbox" id="run_winner">
-                                <label class="form-check-label" for="run_winner">{{ Lang::get('giveaway.activate') }}</label>
+                                <input name="run_winner" class="form-check-input" type="checkbox" id="run_winner" @if(isset($event) && $event->winner_run == 1) value="on" checked @else value="off" @endif />
+                                <label class="form-check-label">{{ Lang::get('giveaway.activate') }}</label>
                             </div>
                             <div class="form-group mb-3">
                                 <label>{{ Lang::get('giveaway.message') }}:<span class="text-danger">*</span></label>

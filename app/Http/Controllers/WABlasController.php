@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 use App\Models\User;
 use App\Models\Messages;
+use App\Models\Events;
 use App\Helpers\Custom;
 
 class WABlasController extends Controller
@@ -42,6 +44,21 @@ class WABlasController extends Controller
         $to = $req->number;
         $message = $req->message;
 
+        // ADDING ADMIN MESSAGE TO WA
+        $msg = Messages::find($req->msg_id);
+        $ev = Events::find($msg->ev_id);
+
+        if(!is_null($ev))
+        {
+            $admin_contact = $ev->admin_contact;
+            
+            // prevent adding message if sending message to admin_contact
+            if($to !== substr($admin_contact,1))
+            {
+                $message .= "\n\n".Lang::get('giveaway.host')." : ".$admin_contact;
+            }
+        }
+
         // SPONSOR MESSAGE
         $ct = new Custom;
         if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
@@ -75,10 +92,10 @@ class WABlasController extends Controller
         $res = json_decode($result,true);
 
         //CUT QUOTA
-        $user->counter_send_message_daily--;
-        $user->save();
+        /* +++ temp +++ */
+        // $user->counter_send_message_daily--;
+        // $user->save();
 
-        $msg = Messages::find($req->msg_id);
         $msg->status = 2;
         $msg->wablas_id = $res['data']['messages'][0]['id'];
         $msg->save();

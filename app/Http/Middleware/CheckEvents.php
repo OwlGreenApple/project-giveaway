@@ -81,7 +81,6 @@ class CheckEvents
 
         $rules = [
             'title'=>['required','max:40'],
-            'phone'=>['required','min:6', new CheckValidPhone($request->pcode)],
             'start'=>['required',new CheckDate('start',null,$request->timezone,$request->edit)],
             'end'=>['required',new CheckDate('end',$request->start)],
             'award'=>['required',new CheckDate('award',$request->end)],
@@ -97,6 +96,18 @@ class CheckEvents
             'media'=>['bail','mimes:jpeg,jpg,png','max:1024'],
             'message_winner'=>['required','max:65000',new CheckMessage],
         ];
+
+        if($request->edit == null)
+        {
+            $rules['phone']=['required','min:6', new CheckValidPhone($request->pcode)];
+        }
+        else
+        {
+            if($request->phone !== null)
+            {   
+                $rules['phone']=['min:6', new CheckValidPhone($request->pcode)];
+            }
+        }
 
         if($request->media_option !== null)
         {
