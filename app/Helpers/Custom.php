@@ -2,6 +2,7 @@
 namespace App\Helpers;
 use App\Models\Entries;
 use App\Models\User;
+use App\Models\Promo;
 use App\Rules\CheckBannedEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Lang;
@@ -126,18 +127,25 @@ class Custom
     }
 
     //TO GIVE CIRCLE MARK IF CONTESTANT HAD DONE WITH BONUS ENTRIES
-    public static function get_marks($bonus_id,$event_id,$type,$contestant_id)
+    public static function get_marks($bonus_id,$event_id,$type,$contestant_id,$promo = null,$cond = 0)
     {
-        $logic = [
-            ['bonus_id',$bonus_id],
-            ['event_id',$event_id],
-            ['type',$type],
-            ['contestant_id',$contestant_id],
-        ];
+        if($promo == null)
+        {
+            $logic = [
+                ['bonus_id',$bonus_id],
+                ['event_id',$event_id],
+                ['type',$type],
+                ['contestant_id',$contestant_id],
+            ];
+    
+            $db = Entries::where($logic)->first();
+        }
+        else
+        {
+            $db = Promo::where([['event_id',$event_id],[$type,$cond]])->first();
+        }
 
-        $et = Entries::where($logic)->first();
-
-        if(is_null($et))
+        if(is_null($db))
         {
             $icon = '<i class="far fa-circle"></i>';
         }

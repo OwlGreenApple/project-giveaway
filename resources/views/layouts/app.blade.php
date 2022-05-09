@@ -57,6 +57,7 @@
 
 </head>
 <body>
+
     <!--Loading Bar-->
     <div class="div-loading">
       <div id="loader" style="display: none;"></div>

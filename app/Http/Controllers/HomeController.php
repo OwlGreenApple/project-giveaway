@@ -19,6 +19,7 @@ use App\Models\Entries;
 use App\Models\Orders;
 use App\Models\Messages;
 use App\Models\Redeem;
+use App\Models\Promo;
 use App\Mail\ContactEmail;
 use App\Exports\ContestantExport;
 use Illuminate\Database\QueryException;
@@ -706,6 +707,12 @@ class HomeController extends Controller
 
         try{
             $ev->save();
+
+            // save promo
+            $promo = new Promo;
+            $promo->event_id = $ev->id;
+            $promo->save();
+
             if($request->edit == null)
             {
                 $event_id = $ev->id;
@@ -836,6 +843,109 @@ class HomeController extends Controller
         }
 
         return response()->json(['success'=>1,'id'=>$event_id]);
+    }
+
+    // DISPLAY PROMO PAGE
+    public function promo($link) 
+    {
+        $event = Events::where([['user_id',Auth::id()],['url_link',$link]])->first();
+        if(is_null($event))
+        {
+            return view('error404');
+        }
+
+        $user = User::find(Auth::id());
+        if($user->branding == null)
+        {
+            $img = Lang::get('custom.join')." ".$event->title;
+        }
+        else
+        {
+            $img = "<img width='80' src=".Storage::disk('s3')->url($user->branding)." />";
+        }
+
+        $share_url = env('APP_URL').'/c/'.$event->url_link;
+        $widget = "<a target='_blank' href=".$share_url.">".$img."</a>";
+
+        $data = [
+            'ev'=>$event,
+            'helper'=>new Custom,
+            'link'=>$link,
+            'widget'=>$widget,
+            'copy'=>$share_url
+        ];
+
+        return view('promo',$data);
+    }
+
+    // SAVE PROMO PAGE
+    public function save_promo(Request $request) 
+    {
+        $ev_id = $request->evid;
+        $type = $request->type;
+
+        $pr = Promo::where('event_id',$ev_id)->first();
+        if(is_null($pr))
+        {
+            return response()->json(['success'=>0]);
+        }
+
+        $pr->$type = 1;
+        $ev = Events::find($ev_id);
+
+        if(is_null($ev))
+        {
+            return response()->json(['success'=>0]);
+        }
+
+        $share_url = env('APP_URL').'/c/'.$ev->url_link;
+        $ret = 1;
+
+        if($type == "tw")
+        {
+            $url = 'https://twitter.com/share?url='.$share_url;
+           
+        }
+        elseif($type == "fb")
+        {
+            $url = "https://www.facebook.com/sharer/sharer.php?u=".$share_url."";
+        }
+        elseif($type == "wa")
+        {
+            $url = "https://api.whatsapp.com/send?text=".$share_url."";
+        }
+        elseif($type == "tg")
+        {
+            $url = "https://t.me/share/url?url=".$share_url."";
+        }
+        elseif($type == "mail")
+        {
+            $url = "mailto:?subject=".$ev->title."&amp;body=".$share_url."";;
+        }
+        elseif($type == "wd")
+        {
+            $ret = $type;
+            $url = null;
+        }
+        else
+        {
+            $ret = $type;
+            $url = null;
+        }
+
+       try
+       {
+            $pr->save();
+            $res['success'] = $ret;
+            $res['url'] = $url;
+            $res['type'] = $type;
+       }
+       catch(QueryException $e)
+       {
+            $res['success'] = 0;
+       }
+
+       return response()->json($res);
     }
 
     private static function determine_share($obj)

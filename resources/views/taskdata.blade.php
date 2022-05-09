@@ -15,8 +15,9 @@
             </div>
         </li>
     @endif
-    @if($ev->wa == 1)
-        <li class="list-group-item clearfix">{!! $helper::get_marks(0,$ev->id,10,$ct_id) !!}<a class="task" data-type="10"><i class="fab fa-whatsapp"></i>&nbsp;{{ Lang::get('custom.wa.share') }}</a> 
+    @if($ev->wa == 1) 
+        <li class="list-group-item clearfix">{!! $helper::get_marks(0,$ev->id,10,$ct_id) !!}<a class="task" data-type="10">
+            <i class="fab fa-whatsapp"></i>&nbsp;{{ Lang::get('custom.wa.share') }}</a> 
             <div class="float-end prize bg_share_10">
                 {{ $helper::share_prize(null) }}&nbsp;{{ Lang::get('custom.per') }}</div>
             </div>
@@ -30,7 +31,7 @@
             </div>
         </li>
     @endif
-    @if($ev->mail == 1)
+    @if($ev->mail == 1) 
         <li class="list-group-item clearfix">{!! $helper::get_marks(0,$ev->id,12,$ct_id) !!}
             <a class="task" data-type="12"><i class="fas fa-at"></i>&nbsp;{{ Lang::get('custom.email.share') }}</a>
             <div class="float-end prize bg_share_12">

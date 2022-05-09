@@ -43,14 +43,41 @@ var {
 
 /* PACKAGE */
 
+.card-pricing {
+    position: relative;
+}
+
 .card-pricing.popular {
-    z-index: 1;
     border: 3px solid #29ae61;
 }
 .card-pricing .list-unstyled li {
     padding: 0.8rem 0;
     color: #6c757d;
 }
+
+/* RIBBON SOURCE : https://stackoverflow.com/questions/54351700/create-css-badge-with-pseudo-element-only */
+
+.bestseller:after {
+    content: attr(data-ribbon);
+    z-index: 1;
+    overflow: hidden;
+    font-size: 10px;
+    font-weight: bold;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    transform: rotate(45deg);
+    width: 90px;
+    display: block; 
+    background: #168946;
+    background: linear-gradient(#1eaf5b 0,#168946 100%);
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 8px; right: -30px;
+    clip-path: polygon(90px 28px,31px -30px,46px -21px,0 25px,10px 27px,47px 30px);
+    ;
+  }
 
 @media screen and (max-width: 768px){
 	.menu-mobile {

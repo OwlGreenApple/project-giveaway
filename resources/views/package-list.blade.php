@@ -1,4 +1,4 @@
-@if(count( $data ) > 0)
+@if(count( $data ) > 0) 
     <div class="ms-auto me-auto col-lg-6 col-md-6 col-12 mb-4">
         <div class="input-group ms-auto me-auto col-lg-6 col-md-6 col-12">
             <button type="button" class="pricing_list monthly @if($save == 0) active @endif">{{ Lang::get('order.month.m') }}</button>
@@ -15,19 +15,17 @@
                 </span>
             </button>
         </div>
-        @if($save > 0)
-            <div class="ms-auto me-auto text-center mt-2 col-lg-6 text-success">{{ Lang::get('order.save') }} {{ $save }}%</div>
-        @endif
     </div>
 
     <div class="row">
     @foreach($data as $index)
         <div class="col-lg-4 col-md-4 col-12">
-            <div class="card card-pricing @if($index == 1) popular @endif shadow text-center px-3 mb-4">
+            <div data-ribbon="@if($index == 4 || $index == 5 || $index == 6) -15% @else -40% @endif" class="card card-pricing @if($index == 1 || $index == 2 || $index == 3) popular @else bestseller @endif shadow text-center px-3 mb-4">
                 <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-custom text-white shadow-sm text-capitalize">{{ $pc->get_price()[$index]['package'] }}</span>
                 <div class="bg-transparent card-header pt-4 border-0">
                     <h3 class="@if($account == 1) h4 @else h3 @endif font-weight-normal text-custom text-center mb-0" data-pricing-value="30">{{ Lang::get('custom.currency') }}&nbsp;<span class="price">{{ $pc::format($pc->get_price()[$index]['price']) }}</span><hr><div class="h6 text-muted ml-2"><span class="text-capitalize">{{ Lang::get('order.month') }}</span></div></h3>
                 </div>
+
                 <!--  -->
                 <div class="card-body pt-0">
                     <ul style="@if($account == 1) font-size:14px @else font-size:16px @endif" class="subs list-unstyled mb-4">

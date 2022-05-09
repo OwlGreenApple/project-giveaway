@@ -89,6 +89,8 @@ Route::get('/edit-event/{id}', [App\Http\Controllers\HomeController::class, 'edi
 Route::get('/duplicate-events', [App\Http\Controllers\HomeController::class, 'duplicate_events']);
 Route::get('/delete-events', [App\Http\Controllers\HomeController::class, 'del_event']);
 Route::post('/save-events', [App\Http\Controllers\HomeController::class, 'save_events'])->middleware('check_events');
+Route::get('/promo/{link}', [App\Http\Controllers\HomeController::class, 'promo']);
+Route::post('/save-promo', [App\Http\Controllers\HomeController::class, 'save_promo']);
 
 /* Broadcast */
 // Route::get('broadcast', [App\Http\Controllers\BroadcastController::class, 'list_broadcast_index']);
