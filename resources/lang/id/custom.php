@@ -52,7 +52,7 @@ return [
     'ig.col' => 'Instagram Username',
     'in' => 'Anda sudah masuk',
     'join' => 'Gabung kontes',
-    'link'=>'Link kontes anda',
+    'link'=>'Link event giveaway anda',
     'link.share'=>'Copy Dan Share link',
     'ln.share'=>'Linkedin Share',
     'loading'=>'Harap Tunggu...',
