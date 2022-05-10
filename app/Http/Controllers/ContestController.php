@@ -54,11 +54,14 @@ class ContestController extends Controller
         $user = User::find($event->user_id);
 
         // to determine end event
-        $end = self::check_end_event($event);
+        $start = self::check_start_event($event); 
+        $end = self::check_end_event($event); 
         $hm = new Home;
         $winner = $hm::get_total_winner($event);
+        $format = "M-d-Y H:i:s";
 
         $data = [
+            'start'=>$start, 
             'end'=>$end,
             'event'=>$event,
             'banners'=>$images,
@@ -68,10 +71,25 @@ class ContestController extends Controller
             'ref'=>$ref,
             'branding'=>$user->branding,
             'brand_link'=>$user->brand_link,
-            'winner'=>$winner
+            'winner'=>$winner,
+            'start_time'=>Lang::get('giveaway.start')." : <b class='text-black-custom'>".Carbon::parse($event->start)->format($format)."</b>",
+            'end_time'=>Lang::get('giveaway.end')." : <b class='text-black-custom'>".Carbon::parse($event->end)->format($format)."</b>",
         ];
 
         return view('contest',$data);
+    }
+
+    // CHECK EVENT START ACCORDING ON TIMEZONE
+    public static function check_start_event($event)
+    {
+        if(Carbon::now($event->timezone)->gte(Carbon::parse($event->start)->toDateTimeString()))
+        {
+            return true; 
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // CHECK EVENT DONE ACCORDING ON TIMEZONE

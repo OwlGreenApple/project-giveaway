@@ -63,7 +63,7 @@ class HomeController extends Controller
                 ->groupBy('events.id')
                 ->get();
 
-        $data = ['data'=>$events];
+        $data = ['data'=>$events,'carbon'=>new Carbon];
         return view('home-table',$data);
     }
 
@@ -371,6 +371,7 @@ class HomeController extends Controller
             Contestants::where('event_id',$ev_id)->delete();
             Entries::where('event_id',$ev_id)->delete();
             Events::find($ev_id)->delete();
+            Promo::where('event_id',$ev_id)->delete();
             $res['success'] = 1;
         }
         catch(QueryException $e)
@@ -609,7 +610,7 @@ class HomeController extends Controller
     {
         // dd($request->all());
         $req = $request->all();
-        $edit = false;
+        $edit = 0;
         $helper = new Custom;
         $title = strip_tags($request->title);
         $admin_contact = strip_tags($request->phone);
@@ -653,17 +654,18 @@ class HomeController extends Controller
         $wa = self::determine_share($request->wa);
         $ln = self::determine_share($request->ln);
         $mail = self::determine_share($request->mail);
+        $generated_link = self::generate_event_link();
 
         if($request->edit == null)
         {
             $ev = new Events;
             $ev->user_id = Auth::id();
-            $ev->url_link = self::generate_event_link();
+            $ev->url_link = $generated_link;
             $ev->admin_contact = $country_code.$admin_contact;
         }
         else
         {
-            $edit = true;
+            $edit = 1;
             $ev = Events::where([['id',$request->edit],['user_id',Auth::id()]])->first();
 
             if(is_null($ev))
@@ -673,7 +675,7 @@ class HomeController extends Controller
             }
 
             // admin contact in case update and let the field empty
-            if(!is_null($admin_contact))
+            if(!empty($admin_contact))
             {
                 $ev->admin_contact = $country_code.$admin_contact;
             }
@@ -692,7 +694,7 @@ class HomeController extends Controller
         $ev->prize_value = $prize_amount;
         $ev->currency = $currency;
         $ev->media = $mo;
-        $ev->youtube_banner = $youtube_url;
+        $ev->youtube_banner = self::youtube_repacing($youtube_url);
         $ev->tw = $tw;
         $ev->fb = $fb;
         $ev->wa = $wa;
@@ -708,14 +710,13 @@ class HomeController extends Controller
         try{
             $ev->save();
 
-            // save promo
-            $promo = new Promo;
-            $promo->event_id = $ev->id;
-            $promo->save();
-
             if($request->edit == null)
             {
                 $event_id = $ev->id;
+                // SAVE PROMO
+                $promo = new Promo;
+                $promo->event_id = $ev->id;
+                $promo->save();
             }
             else
             {
@@ -842,7 +843,35 @@ class HomeController extends Controller
             $this->call_bonus_entry($mod,$event_id,$type,$req);
         }
 
-        return response()->json(['success'=>1,'id'=>$event_id]);
+        return response()->json(['success'=>1,'id'=>$event_id,'edit'=>$edit,'link'=>$generated_link]);
+    }
+
+    // REPLACE YOUTUBE URL IF NOT CONTAIN EMBED
+    public static function youtube_repacing($url)
+    {
+        if(preg_match("/^(https\:)\/\/(www)\.(youtube)\.(com)\/(embed)\/.*/i",$url))
+        {
+            return $url."?rel=0";
+        }
+        elseif(preg_match("/^(https\:)\/\/(youtu)\.(be)\/.*/i",$url))
+        {
+            $dt = explode(".be",$url);
+            $dt = explode("/",$dt[1]);
+            $dt = $dt[1];
+        }
+        elseif(preg_match("/^(https\:)\/\/(www)\.(youtube)\.(com)\/(watch)\?(v)\=.*/i",$url))
+        {
+            $dt = explode("=",$url);
+            $dt = $dt[1];
+        }
+        else
+        {
+            // short
+            $dt = explode("shorts/",$url);
+            $dt = $dt[1];
+        }
+
+        return "https://www.youtube.com/embed/".$dt."?rel=0";
     }
 
     // DISPLAY PROMO PAGE

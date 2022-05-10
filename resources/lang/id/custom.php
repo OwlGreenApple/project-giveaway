@@ -67,6 +67,7 @@ return [
     'per'=>'Per referral',
     'phone'=>'Biarkan kosong, kecuali jika anda mau mengganti no WA.',
     'prize'=>'Hadiah',
+    'promo'=>'Promosikan',
     'profile_password'=>'Biarkan kosong, kecuali jika anda mau mengganti password.',
     'pt'=>'Podcast Subscribe',
     'pt.col'=>'Podcast URL',

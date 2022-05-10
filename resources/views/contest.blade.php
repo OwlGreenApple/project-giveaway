@@ -47,6 +47,7 @@
 
             <div class="col-lg-9 mx-auto">
                 <div class="contest-title mt-3">{{ $event->title }}</div>
+            @if($start == true)
                 <div class="time-contest">
                     <div class="bg-dot"></div>
                     <div class="text">Time Left</div>
@@ -76,7 +77,6 @@
                 </h5>
 
                 <!-- contestant enter -->
-
                     @if($end == false)
                         <div id="max_contestant">
                             <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
@@ -101,7 +101,7 @@
                         </div>
                     @else
                         <div class="contest-winner">
-                            <h4 class="main-color"><b>Winners : </b></h4>
+                            <h4 class="main-color"><b>{{ Lang::get('giveaway.winner.text') }} : </b></h4>
                             @if($winner->count() > 0)
                                 <ul class="list-group"> 
                                 @foreach($winner as $row)
@@ -114,12 +114,23 @@
 
                 <!-- description -->
                 <div class="terms mt-4">{!! $event->desc !!}</div>
-
-                <!-- end container -->
+            @else
+                <!-- event not started yet -->
+                <div class="text-center mt-3">
+                    <h2><b class="text-secondary">{{ Lang::get('giveaway.start.not') }}</b></h2><hr />
+                    <ul class="list-group">
+                        <li class="list-group-item border-0">{!! $start_time !!}</li>
+                        <li class="list-group-item border-0">{!! $end_time !!}</li>
+                    </ul>
+                </div>
+                <hr />
+            @endif
+            <!-- end container -->
             </div>
+
             <!-- footer -->
             <div class="row px-3 py-3">
-                <div class="col-lg-6 desc">{{ Lang::get('custom.giveaway_timezone') }} : {{ $event->timezone }}</div>
+                <div class="col-lg-6 desc">{{ Lang::get('custom.giveaway_timezone') }} : <b class="text-black-custom">{{ $event->timezone }}</b></div>
                 <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a><br/>{{ Lang::get('custom.contact') }} : {{ $event->admin_contact }}</div>
             </div>
 

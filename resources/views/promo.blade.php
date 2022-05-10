@@ -6,7 +6,7 @@
             <h1 class="congrats mt-3">{{ Lang::get('giveaway.promo.congrats') }}</h1>
             <h3 class="congrats text-center mb-4">{!! Lang::get('giveaway.promo.share') !!}</h3>
 
-            <div id="taskdata" class="col-lg-9 mx-auto"> 
+            <div id="taskdata" class="col-lg-9 mx-auto mb-5"> 
                 <ul class="list-group">
                     <li class="list-group-item clearfix"><span class="circle-tw">{!! $helper::get_marks(0,$ev->id,'tw',0,true,1) !!}</span><a class="task" data-type="tw">
                         <i class="fab fa-twitter"></i>&nbsp;{{ Lang::get('custom.tw.share') }}</a> 
@@ -32,8 +32,14 @@
                 </ul>
             </div>  
         <!-- end col -->
-        <!-- <a href="{{ url('') }}">{{ Lang::get('giveaway.promo.page') }}</a> -->
     </div>
+
+    <div class="mt-3 text-center"> 
+        <div class="mb-2"><a class="main-color" target="_blank" rel="noopener noreferer" href="{{ url('c') }}/{{ $ev->url_link }}">{{ Lang::get('giveaway.promo.page') }}</a></div>
+        <div class="mb-2"><a class="main-color" target="_blank" rel="noopener noreferer" href="{{ url('edit-event') }}/{{ $ev->id }}">{{ Lang::get('giveaway.promo.edit') }}</a></div>
+        <div><a class="main-color" target="_blank" rel="noopener noreferer" href="{{ url('home') }}">{{ Lang::get('giveaway.manage') }}</a></div>
+    </div>
+        
 </div>
 
 <!-- copy modal for type 13  -->

@@ -42,6 +42,7 @@ return [
     'run'=>'Berjalan',
     'send'=>'Kirim',
     'sent'=>'Sedang Dikirim',
+    'start.not'=>'Belum dimulai',
     'status'=>'Status',
     'submit'=>'Kirim',
     'timezone'=>'Zona Waktu',

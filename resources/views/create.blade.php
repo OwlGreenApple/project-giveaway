@@ -8,7 +8,7 @@
         </div>
 
         <div id="err_scroll" class="col-md-8">
-            <div id="msg">@if(Cookie::get('url') !== null) <div class="alert alert-info text-center">{{ Lang::get('custom.link') }} : <a class="main-color" href="{!! Cookie::get('url') !!}">{{ Lang::get('custom.click') }}</a></div> @endif</div>
+            <div id="msg">@if(Cookie::get('url') !== null) <div class="alert alert-info text-center">{{ Lang::get('custom.link') }} : <a target="_blank" rel="noopener noreferrer" class="main-color" href="{!! Cookie::get('url') !!}">{{ Lang::get('custom.click') }}</a></div> @endif</div>
             <form id="create_event">
                 <!-- form 1 -->
                 <div class="card px-4 py-4 mb-3">
@@ -427,8 +427,16 @@ function pastePreview()
       if(pasted_data[1] == undefined)
       {
         data = pastedData.split(".be");
-        data = data[1].split("/");
-        data = data[1];
+        try
+        {
+            data = data[1].split("/");
+            data = data[1];
+        }
+        catch(e)
+        {
+            data = pastedData.split("/");
+            data = data[4];
+        }
       }
       else
       {
@@ -697,7 +705,14 @@ function save_data()
             {
                 if(result.success == 1)
                 {
-                    location.href="{{ url('edit-event') }}/"+result.id;
+                    if(result.edit === 0)
+                    {
+                        location.href="{{ url('promo') }}/"+result.link;
+                    }
+                    else
+                    {
+                        location.href="{{ url('edit-event') }}/"+result.id;
+                    }
                 }
                 else if(result.success == 2)
                 {
