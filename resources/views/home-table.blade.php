@@ -34,7 +34,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a id="{{ $row->id }}" class="dropdown-item text-secondary duplicate"><i class="far fa-clone"></i>&nbsp;{{ Lang::get('custom.duplicate.btn') }}</a></li>
-                            <li><a href="{{ url('promo') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item text-secondary"><i class="fas fa-broadcast-tower"></i>&nbsp;{{ Lang::get('custom.promo') }}</a></li>
+                            <li><a href="{{ url('promo') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item text-secondary"><i class="fas fa-bullhorn"></i>&nbsp;{{ Lang::get('custom.promo') }}</a></li>
                             <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item text-secondary"><i class="far fa-eye"></i>&nbsp;{{ Lang::get('custom.view') }}</a></li>
                             <li><a href="{{ url('message-list') }}/{{ $row->id }}" target="_blank" class="dropdown-item text-secondary"><i class="fas fa-envelope"></i>&nbsp;{{ Lang::get('custom.message') }}</a></li>
                             <li><hr class="dropdown-divider"></li>
