@@ -10,7 +10,7 @@
         @if($data->count() > 0)
             @foreach($data as $row)
             <tr>
-                <td class="align-middle"><span class="main-color">{{ $row->title }}</span><br/>{{ $row->award }}</td>
+                <td class="align-middle"><a href="{{ url('edit-event') }}/{{ $row->id }}" target="_blank" rel="noopener noreferer" class="main-color">{{ $row->title }}</a><br/>{{ $row->award }}</td>
                 <td class="align-middle"><a class="main-color" target="_blank" href="{{ url('list-contestants') }}/{{ $row->id }}">{{ $row->total_contestant }}</a></td>
                 <td class="align-middle">{{ $row->total_entries }}</td>
                 <td class="align-middle">

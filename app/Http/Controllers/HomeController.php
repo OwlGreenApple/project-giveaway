@@ -271,10 +271,10 @@ class HomeController extends Controller
         }
 
         $req = [
-            'title'=>$ev->title."-copy",
-            'start'=>Carbon::now($ev->timezone),
-            'end'=>Carbon::now($ev->timezone)->addDay(1),
-            'award'=>Carbon::now($ev->timezone)->addDay(3),
+            'title'=>$title."-copy",
+            'start'=>Carbon::now($ev->timezone)->addDay(3),
+            'end'=>Carbon::now($ev->timezone)->addDay(9),
+            'award'=>Carbon::now($ev->timezone)->addDay(12),
             'winner'=>$ev->winners,
             'timezone'=>$ev->timezone,
             'owner_name'=>$ev->owner,
@@ -304,7 +304,7 @@ class HomeController extends Controller
         $this->duplicate_banner($ev->id,$new_ev_id);
 
         // duplicate wa image
-        self::save_wa_image($reqt,$new_ev_id,$ev->img_url);
+        /*+++ temp self::save_wa_image($reqt,$new_ev_id,$ev->img_url); +++*/
 
         //duplicate bonus
         $bonuses = Bonus::where('event_id',$ev->id)->get();
