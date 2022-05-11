@@ -2,7 +2,7 @@
     <h3 class="mb-4 account-title"><b><i class="fas fa-plug main-color"></i>&nbsp;{{ Lang::get('table.api') }}</b></h3>
 
     <form id="api">
-    <!-- API 1 -->
+    <!-- +++ temp API 1 
     <div class="row border-top py-4">
         <div class="col-lg-3 text-center">
             <img class="act" src="{{ asset('assets/img/activrespon.png') }}" />
@@ -12,7 +12,7 @@
             <input value="{{ $user->activrespon_api }}" type="text" name="act_api" class="form-control form-control-lg" />
             <div class="text-black-50 mt-2"><small>{{ Lang::get('table.can') }} activrespon list</small></div>
         </div>
-    </div>
+    </div> +++ -->
 
     <!-- API 2 -->
     <div class="row border-top py-4">

@@ -142,6 +142,12 @@ a.main-color:hover {
     margin-right: auto;
 }
 
+.pricing_fix_account {
+    padding-left : 25px;
+    padding-right : 25px;
+    font-size : 16px;
+}
+
 .info {
     margin-bottom : 15px;
     font-weight: bold;
@@ -200,7 +206,7 @@ a.main-color:hover {
 .settings {
     display : block;
     text-decoration: none;
-    padding : 10px;
+    padding : 10px 1.5rem;
     font-weight: bold;
     cursor: pointer;
 }
@@ -627,6 +633,12 @@ h2.congrats {
     #countdown ul li {
         margin-right: 5px;
     }
+
+    .pricing_fix_account {
+        padding-left : 20px;
+        padding-right : 20px;
+        font-size : 12px;
+    }
 }
 
 @media(min-width : 361px) and (max-width:575px){
@@ -642,12 +654,24 @@ h2.congrats {
     #countdown ul li {
         margin-right: 5px;
     }
+
+    .pricing_fix_account {
+        padding-left : 20px;
+        padding-right : 20px;
+        font-size : 12px;
+    }
 }
 
 @media(min-width : 576px) and (max-width:767px){
     .pricing_list {
         padding:8px 25px;
         font-size : 18px;
+    }
+
+    .pricing_fix_account {
+        padding-left : 20px;
+        padding-right : 20px;
+        font-size : 12px;
     }
 }
 
@@ -656,11 +680,70 @@ h2.congrats {
         padding:8px 19px;
         font-size : 18px;
     }
+
+    .pricing_fix_account {
+        padding-left : 14px;
+        padding-right : 14px;
+        font-size : 12px;
+    }
+
+    .settings {
+        font-size : 12px;
+        padding-left : 0.25rem;
+        padding-right : 0.25rem;
+    }
+
+    .card-header {
+        padding-left : 0.25rem;
+        padding-right : 0.25rem;
+    }
+
+    .card-header h3, .card-header h3 > div > span, .card-pricing .list-unstyled li {
+        font-size : 12px;
+    }
+
+    .card-pricing .list-unstyled li {
+        padding-top : 0.5rem !important;
+        padding-bottom : 0.5rem !important;
+    }
+
+    .card-pricing hr {
+        margin-top : 0;
+        margin-bottom : 0;
+    }
 }
 
 @media(min-width : 992px) and (max-width:1280px){
     .pricing_list {
         padding:8px 32px;
         font-size : 22px;
+    }
+
+    .pricing_fix_account {
+        padding-left : 14px;
+        padding-right : 14px;
+        font-size : 12px;
+    }
+
+    .settings {
+        font-size : 14px;
+    }
+
+    .card-header h3 {
+        font-size : 16px;
+    }
+
+    .card-header h3 > div > span, .card-pricing .list-unstyled li, .card-pricing .bg-custom {
+        font-size : 12px;
+    }
+
+    .card-pricing .list-unstyled li {
+        padding-top : 0.5rem;
+        padding-bottom : 0.5rem;
+    }
+
+    .card-pricing hr {
+        margin-top : 0;
+        margin-bottom : 0;
     }
 }

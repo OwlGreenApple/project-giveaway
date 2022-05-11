@@ -1,14 +1,14 @@
 @if(count( $data ) > 0) 
     <div class="ms-auto me-auto col-lg-6 col-md-6 col-12 mb-4">
         <div class="input-group ms-auto me-auto col-lg-6 col-md-6 col-12">
-            <button type="button" class="pricing_list monthly @if($save == 0) active @endif">{{ Lang::get('order.month.m') }}</button>
-            <button data-total="3" type="button" class="pricing_list tri @if($save == 15) active @endif position-relative">
+            <button type="button" class="pricing_list monthly @if($save == 0) active @endif @if($account == 1) pricing_fix_account @endif">{{ Lang::get('order.month.m') }}</button>
+            <button data-total="3" type="button" class="pricing_list tri @if($save == 15) active @endif position-relative @if($account == 1) pricing_fix_account @endif">
                 {{ Lang::get('order.month.t') }}
                 <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning">
                     -15%
                 </span>
             </button> 
-            <button data-total="12" type="button" class="pricing_list yearly @if($save == 40) active @endif position-relative">
+            <button data-total="12" type="button" class="pricing_list yearly @if($save == 40) active @endif position-relative @if($account == 1) pricing_fix_account @endif">
                 {{ Lang::get('order.month.y') }}
                 <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning">
                     -40%

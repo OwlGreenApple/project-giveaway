@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="container">
-    <div class="row mt-3 px-5">
+    <div class="row mt-3 px-2">
         <div class="col-md-12 mb-3">
             <h1 class="big-theme" align="center">{{ Lang::get('title.account') }}</h1>
         </div>
         <!-- LEFT TAB -->
         <div class="col-md-3 mb-4 px-3">
             <div class="card">
-                <div class="px-4 py-4">
+                <div class="px-2 py-4">
                     <a class="settings text-black-50 mn_1 active" data_target="1"><i class="far fa-user"></i>&nbsp;{{ Lang::get('title.profile') }}</a>
                     <a class="settings text-black-50 mn_2" data_target="2"><i class="fas fa-exchange-alt"></i>&nbsp;{{ Lang::get('title.subscription') }}</a>
                     <a class="settings text-black-50 mn_6" data_target="6"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;Upgrade</a>
@@ -25,14 +25,14 @@
             <span id="msg"><!-- message --></span>
             <!-- PROFILE -->
             <div id="settings_target_1" class="card target_hide">
-                <div class="card-body px-5 py-5">
+                <div class="card-body px-3 py-4">
                     @include('accounts.profile')
                 </div>
             </div>
 
             <!-- SUBSCRIPTION -->
             <div id="settings_target_2" class="card target_hide d-none">
-                <div class="card-body px-5 py-5">
+                <div class="card-body px-3 py-4">
                     @include('accounts.subscription')
                 </div>
             </div>
@@ -45,21 +45,21 @@
 
             <!-- BRANDING -->
             <div id="settings_target_3" class="card target_hide d-none">
-                <div class="card-body px-5 py-5">
+                <div class="card-body px-3 py-4">
                     @include('accounts.branding')
                 </div>
             </div>
 
             <!-- INTEGRATION -->
             <div id="settings_target_4" class="card target_hide d-none">
-                <div class="card-body px-5 py-5">
+                <div class="card-body px-3 py-4">
                     @include('accounts.integration')
                 </div>
             </div>
 
             <!-- UPLOAD PAYMENT PROOF -->
             <div id="settings_target_5" class="card target_hide d-none">
-                <div class="card-body px-5 py-5">
+                <div class="card-body px-3 py-3">
                     @include('accounts.order')
                 </div>
             </div>
