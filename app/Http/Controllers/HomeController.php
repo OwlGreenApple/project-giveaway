@@ -694,7 +694,7 @@ class HomeController extends Controller
         $ev->prize_value = $prize_amount;
         $ev->currency = $currency;
         $ev->media = $mo;
-        $ev->youtube_banner = self::youtube_repacing($youtube_url);
+        $ev->youtube_banner = self::youtube_replacing($youtube_url);
         $ev->tw = $tw;
         $ev->fb = $fb;
         $ev->wa = $wa;
@@ -847,7 +847,7 @@ class HomeController extends Controller
     }
 
     // REPLACE YOUTUBE URL IF NOT CONTAIN EMBED
-    public static function youtube_repacing($url)
+    public static function youtube_replacing($url)
     {
         if(preg_match("/^(https\:)\/\/(www)\.(youtube)\.(com)\/(embed)\/.*/i",$url))
         {
@@ -864,11 +864,15 @@ class HomeController extends Controller
             $dt = explode("=",$url);
             $dt = $dt[1];
         }
-        else
+        else if(preg_match("/^(https\:)\/\/(www)\.(youtube)\.(com)\/(shorts)\/.*/i",$url))
         {
             // short
             $dt = explode("shorts/",$url);
             $dt = $dt[1];
+        }
+        else
+        {
+            return null;
         }
 
         return "https://www.youtube.com/embed/".$dt."?rel=0";
