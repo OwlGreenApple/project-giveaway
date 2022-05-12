@@ -6,6 +6,15 @@ body {
     font-size : 16px;
 }
 
+.confetti {
+    background: url('../img/confetti.gif') repeat;
+    top : 0;
+    left : 0;
+    right : 0;
+    bottom : 0;
+    position: fixed;
+}
+
 .main-color, .footer a, .login-foot a, .box-color, #taskdata li a:hover {
     color : #29ae61 !important;
     text-decoration: none;
@@ -302,6 +311,7 @@ a.main-color:hover {
     width : 220px;
     padding-left : 5px;
     padding-right : 5px;
+    font-size : 14px;
 }
 
 .bg-dot {
@@ -356,7 +366,7 @@ a.main-color:hover {
 }
 
 .form_title h4{
-    font-size: 1rem !important;
+    font-size: 1rem;
 }
 
 .ct_color {
@@ -436,6 +446,7 @@ a.main-color:hover {
     position: fixed;
     bottom: 0;
     left: 0;
+    right : 0;
 }
 
 .task_entries .main-color{
@@ -485,7 +496,7 @@ a.main-color:hover {
 }
 
 h1.congrats {
-    font-size: 3.25em;
+    font-size: 3em;
     text-align: center;
     padding : 15px 0;
     margin-bottom : 0 !important;
@@ -610,6 +621,19 @@ h2.congrats {
     padding-right: 0;
 }
 
+.point-left {
+    float : left;
+}
+
+.point-right {
+    float : right;
+    display : flex; 
+}
+
+.point-entry.time .text-uppercase {
+    line-height: 32px;
+}
+
 /* FOOTER */
 
 .footer a {
@@ -618,6 +642,13 @@ h2.congrats {
 
 .footer a:hover {
     text-decoration: underline !important;
+}
+
+@media(min-width : 320px){ 
+    .contest-page {
+        padding-left : 1.25rem;
+        padding-right : 1.25rem;
+    }
 }
 
 @media(max-width : 360px){
@@ -638,6 +669,64 @@ h2.congrats {
         padding-left : 20px;
         padding-right : 20px;
         font-size : 12px;
+    }
+
+    .form_title h4 {
+        font-size : 0.75rem;
+    }
+
+    /* task page */
+    h1.congrats {
+        font-size : 1.45rem;
+    }
+
+    h2.congrats {
+        font-size: 18px;
+        padding : 0 0 15px 0;
+    } 
+
+    #taskdata .task {
+        font-size : 14px;
+    }
+
+    #taskdata .prize {
+        font-size : 12px;
+    }
+
+    #taskdata i {
+        font-size: 21px;
+        margin-right: 0px;
+    }
+
+    .footer-task {
+        padding : 0;
+    }
+
+    .bg-task {
+        padding : 25px 16px;
+        display : block;
+    } 
+
+    .task_entries {
+        padding : 1rem 0.55rem;
+    }
+
+    .point-entry {
+        float : none;
+        display : block;
+    }   
+
+    .point-entry.time { 
+        margin-top : 0.75rem; 
+        display : block;
+    }
+
+    .point-entry.time .text-uppercase {  
+        margin-bottom : 0.75rem; 
+    }
+
+    .point-left,.point-right {
+        float : none;
     }
 }
 
@@ -660,6 +749,60 @@ h2.congrats {
         padding-right : 20px;
         font-size : 12px;
     }
+
+    .form_title h4 {
+        font-size : 0.75rem;
+    }
+
+    /* task page */
+    h1.congrats {
+        font-size : 1.6rem;
+    }
+
+    h2.congrats {
+        font-size: 18px;
+        padding : 0 5px 15px 5px; 
+    } 
+
+    #taskdata .task {
+        font-size : 14px;
+    }
+
+    #taskdata .prize {
+        font-size : 12px;
+    }
+
+    #taskdata i {
+        font-size: 21px;
+        margin-right: 0px;
+    }
+
+    .footer-task {
+        padding : 0;
+    }
+
+    .bg-task {
+        padding : 25px 16px;
+        display : block;
+    } 
+
+    .task_entries {
+        padding : 1rem 0.55rem;
+    }
+
+    .point-entry {
+        float : none;
+        display : block;
+    }   
+
+    .point-entry.time { 
+        margin-top : 0.75rem; 
+        display : block;
+    }
+
+    .point-entry.time .text-uppercase {  
+        margin-bottom : 0.75rem; 
+    } 
 }
 
 @media(min-width : 576px) and (max-width:767px){
@@ -672,6 +815,56 @@ h2.congrats {
         padding-left : 20px;
         padding-right : 20px;
         font-size : 12px;
+    }
+
+    /* task page */
+    h1.congrats {
+        font-size : 2rem;
+    }
+
+    h2.congrats {
+        font-size: 24px; 
+        padding : 0 5px 15px 5px; 
+    } 
+
+    #taskdata .task {
+        font-size : 14px;
+    }
+
+    #taskdata .prize {
+        font-size : 12px;
+    }
+
+    #taskdata i {
+        font-size: 21px;
+        margin-right: 0px;
+    }
+
+    .footer-task {
+        padding : 0;
+    }
+
+    .bg-task {
+        padding : 25px 16px;
+        display : block;
+    } 
+
+    .task_entries { 
+        padding : 1rem 0.55rem;
+    }
+
+    .point-entry {
+        float : none;
+        display : block;
+    }   
+
+    .point-entry.time { 
+        margin-top : 0.75rem; 
+        display : block;
+    }
+
+    .point-entry.time .text-uppercase {  
+        margin-bottom : 0.75rem; 
     }
 }
 
@@ -711,6 +904,61 @@ h2.congrats {
         margin-top : 0;
         margin-bottom : 0;
     }
+
+    .contest-page {
+        padding-left : 2.75rem;
+        padding-right : 2.75rem;
+    }
+
+    /* task page */
+    h1.congrats {
+        font-size : 2rem;
+    }
+
+    h2.congrats {
+        font-size: 24px; 
+        padding : 0 5px 15px 5px; 
+    } 
+
+    #taskdata .task {
+        font-size : 14px;
+    }
+
+    #taskdata .prize {
+        font-size : 12px;
+    }
+
+    #taskdata i {
+        font-size: 21px;
+        margin-right: 0px;
+    }
+
+    .footer-task {
+        padding : 0;
+    }
+
+    .bg-task {
+        padding : 25px 16px;
+        display : block;
+    } 
+
+    .task_entries {  
+        padding : 1rem 0.55rem;
+    }
+
+    .point-entry {
+        float : none;
+        display : block;
+    }   
+
+    .point-entry.time { 
+        margin-top : 0.75rem; 
+        display : block;
+    }
+
+    .point-entry.time .text-uppercase {  
+        margin-bottom : 0.75rem; 
+    }
 }
 
 @media(min-width : 992px) and (max-width:1280px){
@@ -745,5 +993,41 @@ h2.congrats {
     .card-pricing hr {
         margin-top : 0;
         margin-bottom : 0;
+    }
+
+    /* task page */
+    h1.congrats {
+        font-size : 2.25rem;
+    }
+
+    h2.congrats {
+        font-size: 20px; 
+        padding : 0 5px 15px 5px; 
+    } 
+
+    #taskdata .task {
+        font-size : 14px;
+    }
+
+    #taskdata .prize {
+        font-size : 12px;
+    }
+
+    #taskdata i {
+        font-size: 21px;
+        margin-right: 0px;
+    }
+
+    .footer-task {
+        padding : 0;
+    }
+
+    .bg-task {
+        padding : 25px 16px;
+        display : block;
+    } 
+
+    .task_entries {  
+        padding : 1rem 0.55rem;
     }
 }

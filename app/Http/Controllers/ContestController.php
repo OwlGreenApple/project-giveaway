@@ -19,6 +19,7 @@ use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
 use App\Http\Controllers\ApiController as API;
+use DateTimeZone, Datetime;
 
 class ContestController extends Controller
 {
@@ -60,6 +61,10 @@ class ContestController extends Controller
         $winner = $hm::get_total_winner($event);
         $format = "M-d-Y H:i:s";
 
+        // determine timer according on timezone
+        $enddate = strtotime($event->end);
+        $timezone = Carbon::createFromTimestamp($enddate)->tz($event->timezone); 
+
         $data = [
             'start'=>$start, 
             'end'=>$end,
@@ -72,6 +77,7 @@ class ContestController extends Controller
             'branding'=>$user->branding,
             'brand_link'=>$user->brand_link,
             'winner'=>$winner,
+            'timer'=>$timezone,
             'start_time'=>Lang::get('giveaway.start')." : <b class='text-black-custom'>".Carbon::parse($event->start)->format($format)."</b>",
             'end_time'=>Lang::get('giveaway.end')." : <b class='text-black-custom'>".Carbon::parse($event->end)->format($format)."</b>",
         ];

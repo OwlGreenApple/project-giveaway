@@ -56,8 +56,8 @@
     @endif
 
 </head>
-<body>
 
+<body> 
     <!--Loading Bar-->
     <div class="div-loading">
       <div id="loader" style="display: none;"></div>
@@ -165,8 +165,8 @@
         </nav>
         @endif
 
-        <main class="@if(Request::segment(1) == 'login') pt-4 bg-login @elseif(Request::segment(1) == 'register')pt-4 bg-register @else py-4 @endif">
-            @if(Request::segment(1) == 'login' || Request::segment(1) == 'register')<div class="wave-white"></div>@endif
+        <main class="@if(Request::segment(1) == 'login') pt-4 bg-login @elseif(Request::segment(1) == 'register')pt-4 bg-register @elseif(Request::segment(1) == 'contest') py-0 @else py-4 @endif">
+            @if(Request::segment(1) == 'login' || Request::segment(1) == 'register')<div class="wave-white"></div>@endif 
                 @yield('content')
         </main>
 

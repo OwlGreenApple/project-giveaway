@@ -45,7 +45,7 @@
             </div>
             <!-- end carousel -->
 
-            <div class="col-lg-9 mx-auto">
+            <div class="col-lg-9 mx-auto contest-page">
                 <div class="contest-title mt-3">{{ $event->title }}</div>
             @if($start == true)
                 <div class="time-contest">
@@ -55,14 +55,15 @@
                 <div class="container">
                     <!-- timer -->
                     <div id="countdown" class="text-center mt-3">
+                        <div id="defaultCountdown"></div>
                         <ul>
-                            <li><div class="count" id="days"></div><div class="count-label">Days</div></li>
+                            <li><div class="count" id="days"></div><div class="count-label">{{ Lang::get('giveaway.days') }}</div></li>
                             <li class="count-space"><span class="count">:</span></li>
-                            <li><div class="count" id="hours"></div><div class="count-label">Hours</div></li>
+                            <li><div class="count" id="hours"></div><div class="count-label">{{ Lang::get('giveaway.hours') }}</div></li>
                             <li class="count-space"><span class="count">:</span></li>
-                            <li><div class="count" id="minutes"></div><div class="count-label">Minutes</div></li>
+                            <li><div class="count" id="minutes"></div><div class="count-label">{{ Lang::get('giveaway.minutes') }}</div></li>
                             <li class="count-space"><span class="count">:</span></li>
-                            <li><div class="count" id="seconds"></div><div class="count-label">Seconds</div></li>
+                            <li><div class="count" id="seconds"></div><div class="count-label">{{ Lang::get('giveaway.seconds') }}</div></li>
                         </ul>
                     </div>
                     <!-- end timer -->
@@ -145,7 +146,7 @@
 
 <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 <script>
-    var global_date = "{{ $event->end }}"; //set target event date
+    var global_date = "{{ $timer }}"; //set diff current carbon according on timezone and millisec
 
     $(function(){
         register_contestant();
@@ -208,5 +209,5 @@
     }
 
 </script>
-<script src="{{ asset('assets/js/countdowntimer.js') }}"></script>
+<script defer src="{{ asset('assets/js/countdowntimer.js') }}"></script>
 @endsection

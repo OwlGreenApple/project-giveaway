@@ -3,11 +3,29 @@
           minute = second * 60,
           hour = minute * 60,
           day = hour * 24;
-   
-        let offer= global_date, //to determine target time
-        countDown = new Date(offer).getTime(),
+
+        let offer= global_date; //to determine target time
+
+        var times = offer.split(" ");
+        var dt = times[0];
+        var tm = times[1];
+
+        // format ex : 2022-05-01
+        var dtp = dt.split("-");
+        var yr = parseInt(dtp[0]); //year
+        var mth = parseInt(dtp[1]); //month
+        var dy = parseInt(dtp[2]); //day
+
+        //format time ex : 16:00:00
+        var tms = tm.split(":");
+        var hr = parseInt(tms[0]);
+        var mn = parseInt(tms[1]);
+
+        //string date and time :: sec always 0 so that easy to count
+        var fmt = mth+"/"+dy+"/"+yr+" "+hr+":"+mn+":"+0;  
+        countDown = new Date(fmt).getTime(),
+
         x = setInterval(function() {    
-   
           let now = new Date().getTime(),
               distance = countDown - now;
 
@@ -56,7 +74,8 @@
           document.getElementById("days").innerText = days,
           document.getElementById("hours").innerText = hours,
           document.getElementById("minutes").innerText = mint,
-          document.getElementById("seconds").innerText = sec;
+          document.getElementById("seconds").innerText = sec
+          ;
           //seconds
         }, 0)
     }());

@@ -50,7 +50,7 @@ return [
     'giveaway_timezone'=>'Giveaway zona waktu',
     'ig' => 'Instagram Follow',
     'ig.col' => 'Instagram Username',
-    'in' => 'Anda sudah masuk',
+    'in' => 'Anda sudah terdaftar',
     'join' => 'Gabung kontes',
     'link'=>'Link event giveaway anda',
     'link.share'=>'Copy Dan Share link',

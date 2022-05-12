@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="col-md-9 pt-0 pb-3 wrapper">
+<div class="confetti"></div> 
+<div class="container px-0"> 
+    <div class="col-md-9 pt-0 pb-3 wrapper"> 
         <!-- youtube or banner carousel -->
 
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -23,10 +24,14 @@
             </div>
         </div>
         <!-- end carousel -->
-
+ 
         <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
-        <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
-        <h4 class="text-center text-uppercase">{{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helpers::format($ev->prize_value) }}</b></h4>
+        <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2> 
+        <h4 class="text-center text-uppercase px-3">
+            <div class="alert alert-warning">
+                {{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helpers::format($ev->prize_value) }}</b>
+            </div>
+        </h4> 
 
         <div class="col-lg-9 mx-auto">
             <div id="taskdata"><!-- display task here --></div>
@@ -50,17 +55,17 @@
 </div>
 
 <!-- fixed timer -->
-
 <div class="col-lg-12 text-center bg-white task_entries">
-    <div class="container row">
-        <div class="col-lg-6 clearfix">
-            <div class="float-end d-flex">
-                <div class="me-1 text-uppercase">Your Entries :</div>
-                <div class="main-color">{{$ct->entries}}</div>
+    <div class="container row mx-auto"> 
+        <div class="col-lg-6 clearfix mx-auto point-left">  
+            <div class="point-entry"> 
+                <div class="me-1 text-uppercase">
+                    {{ Lang::get('giveaway.point') }} : <span class="main-color">{{$ct->entries}}</span>
+                </div>
             </div>
         </div>
 
-        <div class="col-lg-6 d-flex">
+        <div class="col-lg-6 point-entry time point-right"> 
             <div class="text-uppercase">Time Left :</div>
             <!-- timer -->
             <div id="countdown" class="text-center">
@@ -108,7 +113,15 @@
         loadtask();
         hover_plus();
         copyLink(); //type = 13
+        stop_confetti();
     });
+
+    function stop_confetti()
+    {
+        setTimeout(function(){
+            $(".confetti").hide();
+        },800);
+    }
 
     function hover_plus()
     {
