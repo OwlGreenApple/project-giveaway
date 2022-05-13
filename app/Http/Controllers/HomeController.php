@@ -1321,7 +1321,7 @@ class HomeController extends Controller
             return response()->json($errs);
         }
 
-        $helper->mail(Config::get('view.email_admin'),new ContactEmail($user_email,$message));
+        $helper->mail(Config::get('view.email_admin'),new ContactEmail($user_email,$message),'admin');
         return response()->json(['err'=>0]);
     }
 

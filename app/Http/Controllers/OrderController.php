@@ -27,6 +27,11 @@ class OrderController extends Controller
         $this->middleware('auth', ['only' => ['confirm_payment_order']]);
     }
 
+    public function privacy()
+    {
+      return view('privacy');
+    }
+
     public function index()
     {
     	// REMOVE SESSION IF AVAILABLE
@@ -133,7 +138,7 @@ class OrderController extends Controller
                 // SEND WA MESSAGE IF ORDER SUCCESSFUL
                 // $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
 
-                // SEND EMAIL IF ORDER SUCCESSFUL 
+                // SEND EMAIL IF ORDER SUCCESSFUL
                 $helper->mail($data['email'],new MembershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']),"new");
             }
 
@@ -204,7 +209,7 @@ class OrderController extends Controller
         $api->send_wa_message($admin_id,$message,$phone_number);
     }
     */
-    
+
     // REPLACE SPECIAL CHARACTER ACCORDING ON ORDER
     public function replace_string_order($package,$price,$total,$order_number,$message)
     {
@@ -266,8 +271,9 @@ class OrderController extends Controller
           $order->save();
 
           $data = [
-            'email'=>Config::get('view.email_admin'),
-            'obj'=>new UserBuyEmail($order,null)
+            'email'=>$user->email,
+            'obj'=>new UserBuyEmail($order,null),
+            'cond'=>1
           ];
 
         //  SEND EMAIL TO ADMIN IF USER HAS UPLOAD PAYMENT PROOF
