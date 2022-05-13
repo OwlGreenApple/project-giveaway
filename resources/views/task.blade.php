@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="confetti"></div> 
-<div class="container px-0"> 
-    <div class="col-md-9 pt-0 pb-3 wrapper"> 
+<div class="confetti d-none"></div>
+
+<div class="container px-0">
+    <div class="col-md-9 pt-0 pb-3 wrapper">
         <!-- youtube or banner carousel -->
 
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -24,14 +25,14 @@
             </div>
         </div>
         <!-- end carousel -->
- 
+
         <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
-        <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2> 
+        <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
         <h4 class="text-center text-uppercase px-3">
             <div class="alert alert-warning">
                 {{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helpers::format($ev->prize_value) }}</b>
             </div>
-        </h4> 
+        </h4>
 
         <div class="col-lg-9 mx-auto">
             <div id="taskdata"><!-- display task here --></div>
@@ -41,6 +42,7 @@
 
         <!-- footer -->
         <div class="footer-task">
+
             <div class="bg-task">
                 <div class="desc px-0">{{ Lang::get('custom.giveaway_timezone') }} : {{ $ev->timezone }}</div>
                 <div class="desc px-0 ms-auto">{{ Lang::get('custom.offered') }} : <a href="{{ $ev->owner_url }}" class="main-color">{{ $ev->owner }}</a></div>
@@ -56,16 +58,16 @@
 
 <!-- fixed timer -->
 <div class="col-lg-12 text-center bg-white task_entries">
-    <div class="container row mx-auto"> 
-        <div class="col-lg-6 clearfix mx-auto point-left">  
-            <div class="point-entry"> 
+    <div class="container row mx-auto">
+        <div class="col-lg-6 clearfix mx-auto point-left">
+            <div class="point-entry">
                 <div class="me-1 text-uppercase">
                     {{ Lang::get('giveaway.point') }} : <span class="main-color">{{$ct->entries}}</span>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-6 point-entry time point-right"> 
+        <div class="col-lg-6 point-entry time point-right">
             <div class="text-uppercase">Time Left :</div>
             <!-- timer -->
             <div id="countdown" class="text-center">
@@ -85,6 +87,7 @@
         <!-- end container -->
     </div>
 </div>
+
 
 <!-- copy modal for type 13  -->
 <div class="modal" id="copy_link">
@@ -106,21 +109,25 @@
 </div>
 
 <script>
-    var global_date = "{{ $ev->end }}"; //set target event date
+    var global_date = "{{ $timer }}"; //set target event date
 
     $(function(){
         task();
         loadtask();
         hover_plus();
         copyLink(); //type = 13
-        stop_confetti();
+        confetti();
     });
 
-    function stop_confetti()
+     function confetti()
     {
         setTimeout(function(){
-            $(".confetti").hide();
-        },800);
+            $(".confetti").removeClass('d-none');
+        },1000);
+
+        setTimeout(function(){
+            $(".confetti").addClass('d-none');
+        },2500);
     }
 
     function hover_plus()
@@ -174,19 +181,19 @@
             }
 
             var data = {"evid": "{{ $ev->id }}","ct_id": "{{ $ct_id }}","type" : data_type, 'bid': data_id};
-            task_run(data); 
+            task_run(data);
         });
     }
 
     function copyLink(){
-      $( "body" ).on("click",".btn-copy",function(e) 
+      $( "body" ).on("click",".btn-copy",function(e)
       {
         e.preventDefault();
         e.stopPropagation();
 
         var link = $(this).attr("data-link");
-
         var tempInput = document.createElement("input");
+
         tempInput.style = "position: absolute; left: -1000px; top: -1000px";
         tempInput.value = link;
         document.body.appendChild(tempInput);
@@ -198,6 +205,7 @@
 
     function task_run(data)
     {
+        // var windowReference = window.open();
         $.ajax({
             headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             method : 'POST',
@@ -213,15 +221,6 @@
             {
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
-
-                if(result.success == 1)
-                {
-                    // code to styling after contestant doing task
-                    if(result.url !== null)
-                    {
-                        window.open(result.url, "_blank");
-                    }
-                }
 
                 if(result.success == 'copy')
                 {
@@ -242,6 +241,7 @@
 
     function loadtask()
     {
+        var res;
         $.ajax({
             headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             method : 'POST',
@@ -250,11 +250,15 @@
             dataType : "html",
             success : function(result)
             {
-                $("#taskdata").html(result);
+                res = result;
             },
             error : function()
             {
                 $("#taskdata").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+            },
+            complete: function()
+            {
+                $("#taskdata").html(res);
             }
         });
     }
