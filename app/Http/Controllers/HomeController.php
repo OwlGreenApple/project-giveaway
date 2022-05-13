@@ -191,7 +191,7 @@ class HomeController extends Controller
     // DISPLAY WINNERS
     public function winner($ev_id)
     {
-        $ev = self::check_security_event($ev_id); 
+        $ev = self::check_security_event($ev_id);
 
         //check event
         if($ev == false)
@@ -290,7 +290,7 @@ class HomeController extends Controller
             'tw'=>$ev->tw,
             'fb'=>$ev->fb,
             'wa'=>$ev->wa,
-            'ln'=>$ev->ln, 
+            'ln'=>$ev->ln,
             'message'=>$ev->message,
             'run_winner'=>$winner_run,
             'message_winner'=>$ev->winner_message,
@@ -628,7 +628,7 @@ class HomeController extends Controller
         $desc = $request->desc;
         $images = $request->file('images');
         $message = strip_tags($request->message);
-        $winner_run = strip_tags($request->run_winner); 
+        $winner_run = strip_tags($request->run_winner);
         $message_winner = strip_tags($request->message_winner);
         $currency = strip_tags($request->currency);
 
@@ -638,7 +638,7 @@ class HomeController extends Controller
         ($mlc_api_id == null? $mlc_api_id = 0:false);
 
         ($request->media_option == 'off')?$mo = 1:$mo = 0;
-       
+
         if($winner_run == 'off' || $winner_run =="" || $winner_run == null)
         {
             $wr = 0;
@@ -734,7 +734,7 @@ class HomeController extends Controller
 
         if($request->duplicate == 1)
         {
-            return $event_id; 
+            return $event_id;
         }
 
         /* IMAGE WA */
@@ -879,7 +879,7 @@ class HomeController extends Controller
     }
 
     // DISPLAY PROMO PAGE
-    public function promo($link) 
+    public function promo($link)
     {
         $event = Events::where([['user_id',Auth::id()],['url_link',$link]])->first();
         if(is_null($event))
@@ -905,14 +905,14 @@ class HomeController extends Controller
             'helper'=>new Custom,
             'link'=>$link,
             'widget'=>$widget,
-            'copy'=>$share_url
+            'share'=>$share_url
         ];
 
         return view('promo',$data);
     }
 
     // SAVE PROMO PAGE
-    public function save_promo(Request $request) 
+    public function save_promo(Request $request)
     {
         $ev_id = $request->evid;
         $type = $request->type;
@@ -934,28 +934,7 @@ class HomeController extends Controller
         $share_url = env('APP_URL').'/c/'.$ev->url_link;
         $ret = 1;
 
-        if($type == "tw")
-        {
-            $url = 'https://twitter.com/share?url='.$share_url;
-           
-        }
-        elseif($type == "fb")
-        {
-            $url = "https://www.facebook.com/sharer/sharer.php?u=".$share_url."";
-        }
-        elseif($type == "wa")
-        {
-            $url = "https://api.whatsapp.com/send?text=".$share_url."";
-        }
-        elseif($type == "tg")
-        {
-            $url = "https://t.me/share/url?url=".$share_url."";
-        }
-        elseif($type == "mail")
-        {
-            $url = "mailto:?subject=".$ev->title."&amp;body=".$share_url."";;
-        }
-        elseif($type == "wd")
+        if($type == "wd")
         {
             $ret = $type;
             $url = null;
@@ -1414,11 +1393,11 @@ class HomeController extends Controller
           {
             $status = '<span class="text-primary"><b>'.Lang::get('order.complete').'</b></span>';
           }
-          elseif($order->status==3) 
+          elseif($order->status==3)
           {
             $status = '<span class="text-danger"><b>'.Lang::get('order.cancel').'</b></span>';
           }
-          elseif($order->status==4) 
+          elseif($order->status==4)
           {
             $status = '<span class="text-danger"><b>'.Lang::get('order.cancel').'</b></span>';
           }
