@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container px-0">
     <div class="col-md-9 px-0 wrapper">
             <!-- youtube or banner carousel -->
 
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                 @if($event->media == 0)
-                    @if(count($banners) > 0)   
+                    @if(count($banners) > 0)
                         <div class="carousel-indicators">
                         @foreach($banners as $index=>$row)
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $index }}" @if($index == 0)class="active" aria-current="true"@endif aria-label="Slide {{ $index }}"></button>
@@ -104,7 +104,7 @@
                         <div class="contest-winner">
                             <h4 class="main-color"><b>{{ Lang::get('giveaway.winner.text') }} : </b></h4>
                             @if($winner->count() > 0)
-                                <ul class="list-group"> 
+                                <ul class="list-group">
                                 @foreach($winner as $row)
                                     <li class="list-group-item border-0"><i class="fas fa-trophy trophy"></i>&nbsp;{{ $row->c_name }} <i class="fab fa-whatsapp main-color"></i> {{ $row->wa_number }}</li>
                                 @endforeach

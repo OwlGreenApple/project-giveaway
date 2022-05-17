@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Auth;
 //AUTH
 Route::get('/',[App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
 Route::get('/price-list',[App\Http\Controllers\OrderController::class, 'price_list']);
+Route::get('/privacy',[App\Http\Controllers\OrderController::class, 'privacy']);
 Route::get('/test-email',[App\Http\Controllers\Auth\RegisterController::class, 'test_email']);
-Route::get('/privacy',[App\Http\Controllers\Auth\RegisterController::class, 'privacy']);
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
 Route::get('logs-8877', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class,'index']);
 Route::post('pass_reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'reset'])->name('pass-reset');

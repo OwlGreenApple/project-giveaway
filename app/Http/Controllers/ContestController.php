@@ -55,18 +55,15 @@ class ContestController extends Controller
         $user = User::find($event->user_id);
 
         // to determine end event
-        $start = self::check_start_event($event); 
-        $end = self::check_end_event($event); 
+        $start = self::check_start_event($event);
+        $end = self::check_end_event($event);
         $hm = new Home;
         $winner = $hm::get_total_winner($event);
         $format = "M-d-Y H:i:s";
-
-        // determine timer according on timezone
-        $enddate = strtotime($event->end);
-        $timezone = Carbon::createFromTimestamp($enddate)->tz($event->timezone); 
+        $timezone = self::convert_timezone($event);
 
         $data = [
-            'start'=>$start, 
+            'start'=>$start,
             'end'=>$end,
             'event'=>$event,
             'banners'=>$images,
@@ -85,12 +82,20 @@ class ContestController extends Controller
         return view('contest',$data);
     }
 
+    public static function convert_timezone($event)
+    {
+        // determine timer according on timezone
+        $enddate = strtotime($event->end);
+        $timezone = Carbon::createFromTimestamp($enddate)->tz($event->timezone);
+        return $timezone;
+    }
+
     // CHECK EVENT START ACCORDING ON TIMEZONE
     public static function check_start_event($event)
     {
         if(Carbon::now($event->timezone)->gte(Carbon::parse($event->start)->toDateTimeString()))
         {
-            return true; 
+            return true;
         }
         else
         {
@@ -103,7 +108,7 @@ class ContestController extends Controller
     {
         if(Carbon::now($event->timezone)->gte(Carbon::parse($event->end)->toDateTimeString()))
         {
-            return true; 
+            return true;
         }
         else
         {
@@ -310,6 +315,7 @@ class ContestController extends Controller
 
         $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();
         $user = User::find($ev->user_id);
+        $timezone = self::convert_timezone($ev);
 
         $data = [
             'ev'=>$ev,
@@ -319,6 +325,7 @@ class ContestController extends Controller
             'ct'=>$contestants,
             'user'=>$user,
             'helpers'=>new Custom,
+            'timer' => $timezone
         ];
 
         return view('task',$data);
@@ -341,7 +348,13 @@ class ContestController extends Controller
         $ev_link = $ev->url_link;
         $ref_code = $ct->ref_code;
         $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
-        $bonus = Bonus::where('event_id',$ev_id)->get(); 
+        $bonus = Bonus::where('event_id',$ev_id)->get();
+        // $bonus = Bonus::where([['event_id',$event_id],['id',$bonus_id]])->first();
+
+        // SHARE REDIRECT
+        $ev_link = $ev->url_link;
+        $ref_code = $ct->ref_code;
+        $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
 
         $data = [
             'ev'=>$ev,
@@ -410,11 +423,11 @@ class ContestController extends Controller
         }
 
         // SHARE REDIRECT
-        $ev = Events::find($event_id);
+       /*  $ev = Events::find($event_id);
         $ev_link = $ev->url_link;
         $ref_code = $ct->ref_code;
         $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
-    
+
         if($type == 0 || $type == 3 || $type == 4 || $type == 5 || $type == 6)
         {
             // facebook like // youtube subscribe // podcast subscribe
@@ -465,8 +478,8 @@ class ContestController extends Controller
             // mail to
             $ret['url'] = "mailto:?subject=".$ev->title."&amp;body=".$share_url."";
             $ret['success'] = 1;
-        }
-        elseif($type == 13)
+        } */
+        if($type == 13)
         {
             // copy link to share
             $ret['url'] = null;

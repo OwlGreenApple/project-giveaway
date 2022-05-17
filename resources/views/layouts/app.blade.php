@@ -57,7 +57,7 @@
 
 </head>
 
-<body> 
+<body>
     <!--Loading Bar-->
     <div class="div-loading">
       <div id="loader" style="display: none;"></div>
@@ -115,9 +115,9 @@
                             </li>
                             @php $disable = 1 @endphp <!-- +++ temp +++ -->
                             @if($disable == 0)<!-- +++ temp +++ -->
-                            <li class="nav-item"> 
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ url('scan') }}">{{ Lang::get('auth.wa') }}</a>
-                            </li> 
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="bcDropdown" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ Lang::get('auth.bc') }}</a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bcDropdown">
@@ -141,7 +141,7 @@
                                             {{ Lang::get('auth.affiliate') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ url('redeem-money') }}">
-                                            {{ Lang::get('title.redeem') }} 
+                                            {{ Lang::get('title.redeem') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ url('packages') }}">
                                             {{ Lang::get('auth.package') }}
@@ -165,8 +165,8 @@
         </nav>
         @endif
 
-        <main class="@if(Request::segment(1) == 'login') pt-4 bg-login @elseif(Request::segment(1) == 'register')pt-4 bg-register @elseif(Request::segment(1) == 'contest') py-0 @else py-4 @endif">
-            @if(Request::segment(1) == 'login' || Request::segment(1) == 'register')<div class="wave-white"></div>@endif 
+        <main class="@if(Request::segment(1) == 'login') pt-4 bg-login @elseif(Request::segment(1) == 'register')pt-4 bg-register @elseif(Request::segment(1) == 'contest') @elseif(Request::segment(1) == 'c') py-0 @else py-4 @endif">
+            @if(Request::segment(1) == 'login' || Request::segment(1) == 'register')<div class="wave-white"></div>@endif
                 @yield('content')
         </main>
 

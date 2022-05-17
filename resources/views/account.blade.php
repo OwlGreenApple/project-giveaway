@@ -112,7 +112,8 @@ $(function(){
 
                     if(result.err == 0)
                     {
-                        $("#brd").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
+                        location.href="{{ url('account') }}/branding";
+                        // $("#brd").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
                     }
                     else if(result.err == 'vdt')
                     {
@@ -165,7 +166,7 @@ $(function(){
          .off()
          .on('keyup', delay(function() {
             $('#data_order').DataTable().search(this.value.trim(), false, false).draw();
-         },1000));    
+         },1000));
     }
 
     function delay(callback, ms) {
@@ -194,7 +195,12 @@ $(function(){
         {
             target_tabs(5);
         }
-        
+
+        if(segment == 'branding')
+        {
+            target_tabs(3);
+        }
+
         $(".settings").click(function(){
             var target = $(this).attr('data_target');
             target_tabs(target)
@@ -206,7 +212,7 @@ $(function(){
         $(".settings").removeClass('active');
         $(".target_hide").addClass('d-none');
         $("#settings_target_"+target).removeClass('d-none');
-        
+
         $(".mn").removeClass('active');
         $(".mn_"+target).addClass('active');
 
@@ -346,8 +352,8 @@ $(function(){
 
             var total = parseInt($(this).attr('data-total'));
             $('#mod-total').html('Rp. ' + total.toLocaleString());
-            $('#mod-purchased_view').html(parseInt($(this).attr('data-purchased-view')).toLocaleString()); 
-        
+            $('#mod-purchased_view').html(parseInt($(this).attr('data-purchased-view')).toLocaleString());
+
             $('#mod-date').html($(this).attr('data-date'));
 
             var keterangan = '-';
@@ -368,8 +374,8 @@ $(function(){
             $('.details-'+id).toggleClass('d-none');
         });
     }
-    
-  
+
+
   $( "body" ).on( "click", ".btn-search", function() {
     currentPage = '';
     refresh_page();

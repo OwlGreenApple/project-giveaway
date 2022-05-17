@@ -70,7 +70,7 @@ class Custom
 
     public static function currency()
     {
-        return ['usd'=>'USD','gbp'=>'GBP','sgd'=>'SGD','idr'=>'IDR','rm'=>'RM']; 
+        return ['usd'=>'USD','gbp'=>'GBP','sgd'=>'SGD','idr'=>'IDR','rm'=>'RM'];
     }
 
     public static function lang()
@@ -137,7 +137,7 @@ class Custom
                 ['type',$type],
                 ['contestant_id',$contestant_id],
             ];
-    
+
             $db = Entries::where($logic)->first();
         }
         else
@@ -192,6 +192,12 @@ class Custom
     {
         $user = User::where('email',$email)->first();
 
+        //  in case contact us
+        if($cond == 'admin')
+        {
+            return true;
+        }
+
         // PASS IF EMAIL  = 1 || 3
         if($cond == null)
         {
@@ -204,12 +210,12 @@ class Custom
             {
                 return true;
             }
-
-            $user_id = $user->id;
-            $usr = User::find($user_id);
         }
-        
+
+        $user_id = $user->id;
+        $usr = User::find($user_id);
         $check = new CheckBannedEmail;
+
         if($check::check_bouncing($email) == true)
         {
             if($cond == "new")

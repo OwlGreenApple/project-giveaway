@@ -1,7 +1,10 @@
 <div class="row">
     <h3 class="mb-4 account-title"><b><i class="fab fa-sketch main-color"></i>&nbsp;{{ Lang::get('title.branding') }}</b></h3>
     <span id="brd"><!-- --></span>
+    {{-- image --}}
+
     <div class="text-justify fst-italic border-bottom py-3 mb-4">{{ Lang::get('table.branding') }}</div>
+    @if($user->branding !== null) <img class="wd-100 mb-2" style="max-width : 160px" src="{{ Storage::disk('s3')->url($user->branding) }}" /> @endif
     <form id="upload_branding">
         <input type="file" name="logo_branding" class="form-control form-control-lg mb-2" />
         <span class="text-danger err_logo_branding"><!--  --></span>
