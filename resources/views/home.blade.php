@@ -46,7 +46,7 @@
 
     function duplicate_or_del_ev()
     {
-        // update events
+        // duplicate events
         $("body").on("click",".duplicate",function(){
             var id = $(this).attr('id');
             var conf = confirm('{{ Lang::get("custom.duplicate") }}');

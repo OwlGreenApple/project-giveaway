@@ -14,25 +14,25 @@
 
                 <div class="card-body">
                 <span id="msg"><!-- message --></span>
-                <table id="dashboard_table" class="table stripe">
+                <table id="dashboard_table" class="display responsive nowrap">
                     <thead>
                         <th>{{ Lang::get('table.no') }}</th>
-                        <th>{{ Lang::get('table.name') }}</th>
                         <th>{{ Lang::get('table.email') }}</th>
+                        <th>{{ Lang::get('table.name') }}</th>
                         <th>{{ Lang::get('table.wa') }}</th>
                         <th>{{ Lang::get('table.entry') }}</th>
                         <th>{{ Lang::get('table.referral') }}</th>
                         <th>{{ Lang::get('table.ip') }}</th>
                         <th>{{ Lang::get('table.date') }}</th>
-                        <th>{{ Lang::get('table.act') }}</th>
+                        <th><!-- Lang::get('table.act') --></th>
                     </thead>
                     <tbody>
                         @if($data->count() > 0)
                             @foreach($data as $row) 
                             <tr>
                                 <td class="align-middle">{{ $no++ }}</td>
-                                <td class="align-middle">{{ $row->c_name }}</td>
                                 <td class="align-middle">{{ $row->c_email }}</td>
+                                <td class="align-middle">{{ $row->c_name }}</td>
                                 <td class="align-middle">{{ $row->wa_number }}</td>
                                 <td class="align-middle">{{ $row->entries }}</td>
                                 <td class="align-middle">{{ $row->referrals }}</td>
@@ -80,7 +80,7 @@
 
             if(conf == true)
             {
-                redraw_or_delete(id,'{{ url("draw-contestant") }}',0);
+                redraw_or_delete(id,'{{ url("draw-contestant") }}',0); 
             }
             else
             {

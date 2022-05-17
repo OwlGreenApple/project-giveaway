@@ -31,21 +31,21 @@ class CheckEvents
         $package = new Custom;
         $cond = [['user_id',Auth::id()],['status',1]];
 
-        if($membership == 'starter' || $membership == 'starter-yearly')
+        if($membership == 'starter' || $membership =='starter-3-month' || $membership == 'starter-yearly')
         {
             $limit = $package->get_price()[1]['campaign'];
         }
-        elseif($membership == 'gold' || $membership == 'gold-yearly')
+        elseif($membership == 'gold' || $membership =='gold-3-month' || $membership == 'gold-yearly')
         {
-            $limit = $package->get_price()[3]['campaign'];
+            $limit = $package->get_price()[4]['campaign'];
         }
-        elseif($membership == 'platinum' || $membership == 'platinum-yearly')
+        elseif($membership == 'platinum' || $membership =='platinum-3-month' || $membership == 'platinum-yearly')
         {
-            $limit = $package->get_price()[5]['campaign'];
+            $limit = $package->get_price()[7]['campaign']; 
         }
         else
         {
-            $cond = [['user_id',Auth::id()]];
+            // $cond = [['user_id',Auth::id()]];
             $limit = $package->get_price()[0]['campaign'];
         }
 

@@ -1,4 +1,4 @@
-<table id="dashboard_table" class="table">
+<table id="dashboard_table" class="display responsive nowrap" style="width:100%">
     <thead>
         <th>{{ Lang::get('table.title') }}</th>
         <th>{{ Lang::get('table.contestant') }}</th>
@@ -28,15 +28,15 @@
                 </td>
                 <td class="align-middle">
                     <div class="input-group">
-                        <a class="btn btn-outline-secondary" href="{{ url('edit-event') }}/{{ $row->id }}"><i class="far fa-edit"></i>&nbsp;{{ Lang::get('custom.edit') }}</a>
+                        <a href="{{ url('promo') }}/{{ $row->url_link }}" target="_blank" class="btn btn-outline-secondary"><i class="fas fa-bullhorn"></i>&nbsp;{{ Lang::get('custom.promo') }}</a>
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span role="button" class="visually-hidden">{{ Lang::get('custom.dropdown') }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a id="{{ $row->id }}" class="dropdown-item text-secondary duplicate"><i class="far fa-clone"></i>&nbsp;{{ Lang::get('custom.duplicate.btn') }}</a></li>
-                            <li><a href="{{ url('promo') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item text-secondary"><i class="fas fa-bullhorn"></i>&nbsp;{{ Lang::get('custom.promo') }}</a></li>
+                            <li><a class="dropdown-item text-secondary" href="{{ url('edit-event') }}/{{ $row->id }}"><i class="far fa-edit"></i>&nbsp;{{ Lang::get('custom.edit') }}</a></li>
                             <li><a href="{{ url('c') }}/{{ $row->url_link }}" target="_blank" class="dropdown-item text-secondary"><i class="far fa-eye"></i>&nbsp;{{ Lang::get('custom.view') }}</a></li>
                             <li><a href="{{ url('message-list') }}/{{ $row->id }}" target="_blank" class="dropdown-item text-secondary"><i class="fas fa-envelope"></i>&nbsp;{{ Lang::get('custom.message') }}</a></li>
+                            <li><a id="{{ $row->id }}" class="dropdown-item text-secondary duplicate"><i class="far fa-clone"></i>&nbsp;{{ Lang::get('custom.duplicate.btn') }}</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a id="{{ $row->id }}" class="dropdown-item text-danger del_ev"><i class="far fa-trash-alt"></i>&nbsp;{{ Lang::get('table.del') }}</a></li>
                         </ul>
