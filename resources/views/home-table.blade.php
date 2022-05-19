@@ -1,6 +1,5 @@
 <table id="dashboard_table" class="display responsive nowrap" style="width:100%">
     <thead>
-        <th class="datatable-btn-responsive"><!-- empty for button responsive --></th>
         <th>{{ Lang::get('table.title') }}</th>
         <th>{{ Lang::get('table.contestant') }}</th>
         <th>{{ Lang::get('table.entry') }}</th> 
@@ -11,7 +10,6 @@
         @if($data->count() > 0)
             @foreach($data as $row)
             <tr>
-                <td class="align-middle datatable-btn-responsive"><!-- empty for button responsive --></td>
                 <td class="align-middle"><a href="{{ url('edit-event') }}/{{ $row->id }}" target="_blank" rel="noopener noreferer" class="main-color">{{ $row->title }}</a><br/>{{ $row->award }}</td>
                 <td class="align-middle"><a class="main-color" target="_blank" href="{{ url('list-contestants') }}/{{ $row->id }}">{{ $row->total_contestant }}</a></td>
                 <td class="align-middle">{{ $row->total_entries }}</td>
