@@ -6,8 +6,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header clearfix bg-white px-3 py-3">
-                    <h3 class="float-start align-middle mb-0 info title">{{ Lang::get('custom.giveaway') }}</h3>
-                    <div class="float-end align-middle "><a href="{{ url('create') }}" class="btn btn-default bg-custom text-white"><i class="fas fa-plus-circle"></i>&nbsp;{{ Lang::get('custom.giveaway.new') }}</a></div>
+                    <h3 class="left-info align-middle mb-0 info title">{{ Lang::get('custom.giveaway') }}</h3>
+                    <div class="right-info align-middle "><a href="{{ url('create') }}" class="btn btn-default bg-custom text-white"><i class="fas fa-plus-circle"></i>&nbsp;{{ Lang::get('custom.giveaway.new') }}</a></div>
                 </div>
 
                 <span class="wmsg mt-3 px-3"><!--  --></span>

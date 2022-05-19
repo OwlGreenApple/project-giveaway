@@ -59,7 +59,7 @@
 
             <!-- UPLOAD PAYMENT PROOF -->
             <div id="settings_target_5" class="card target_hide d-none">
-                <div class="card-body px-3 py-3">
+                <div class="card-body px-2 py-4">
                     @include('accounts.order')
                 </div>
             </div>

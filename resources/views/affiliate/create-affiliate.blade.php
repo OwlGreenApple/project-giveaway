@@ -54,7 +54,45 @@
 
                             <?php } ?>
                         </div>
+                        
+                        <!-- condition -->
+                        <div class="mt-3 text-justify mx-auto">
+                            <h2><b>Syarat Affiliate Topleads :</b></h2>
 
+                            <p>
+                            - Setiap user akan mendapatkan 1 kode affiliasi aktif<br/>
+                            - Affiliate fee didapatkan jika referral melakukan pembelian di Topleads<br/>
+                            - Berikut fee yang didapatkan :
+                            </p>
+                            <p>
+                            1-10 referrals = dapat 15%<br/>
+                            11-50 referrals = dapat 20%<br/>
+                            51-100 referrals = dapat 25%<br/>
+                            lebih dari 101 referrals = dapat 30%
+                            </p>
+                            <p>
+                            - Wajib mendaftar dan memiliki member Premium (min Starter)<br/>
+                            - Apabila belum memiliki member premium, Affiliate fee tidak bisa dicashout<br/>
+                            - Segala bentuk kecurangan yang ada akan menyebabkan affiliate fee hangus<br/>
+                            - Ketentuan & Peraturan adalah hak Topleads dan bersifat mutlak
+                            </p>
+                            <p>
+                            Syarat Cashout Affiliate Topleads :<br/>
+                            - User wajib memiliki member Premium (min Starter)<br/>
+                            - Cashout pertama yang dapat dilakukan dengan nominal Rp. 29.000<br/>
+                            - Pencairan selanjutnya Anda bisa memilih nominal yang tertera, yaitu :
+                                <p>
+                                1. Rp. 195.000<br/>
+                                2. Rp. 295.000<br/>
+                                3. Rp. 395.000 <br/>
+                                4. Rp. 495.000
+                                </p>
+                            - Affiliate reward dikirimkan melalui DANA yang telah diinformasikan dengan mengisi Nama dan No Telp DANA<br/>
+                            - Pencairan akan diproses max 7 hari kerja
+                            </p>
+                            <a role="button" class="btn bg-custom text-white" href="{{ url('redeem-money') }}">{{ Lang::get('title.redeem') }}</a>
+                        </div>
+                        <!-- end condition -->
                     </div>
                 </div>
 

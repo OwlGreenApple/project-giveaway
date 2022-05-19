@@ -137,14 +137,11 @@
                                         <a class="dropdown-item" href="{{ url('list-order') }}">{{ Lang::get('auth.list.order') }}</a>
                                         <a class="dropdown-item" href="{{ url('affiliate-admin') }}">{{ Lang::get('auth.list.redeem') }}</a>
                                     @else
+                                        <a class="dropdown-item" href="{{ url('packages') }}">
+                                            <b class="main-color"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;{{ Lang::get('auth.package') }}</b>
+                                        </a>
                                         <a class="dropdown-item" href="{{ url('affiliate') }}">
                                             {{ Lang::get('auth.affiliate') }}
-                                        </a>
-                                        <a class="dropdown-item" href="{{ url('redeem-money') }}">
-                                            {{ Lang::get('title.redeem') }}
-                                        </a>
-                                        <a class="dropdown-item" href="{{ url('packages') }}">
-                                            {{ Lang::get('auth.package') }}
                                         </a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"

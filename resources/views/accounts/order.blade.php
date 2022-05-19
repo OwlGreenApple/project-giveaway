@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h5>
+      <h5 class="mb-4">
         <button type="button" class="btn bg-success text-white btn-confirm" data-bs-toggle="modal" data-bs-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
           {{ Lang::get('order.transfer') }}
         </button>
@@ -12,10 +12,10 @@
 
     <div class="col-md-12">
       <form class="table-responsive">
-        <table class="display responsive nowrap" id="data_order">
+        <table class="display responsive nowrap" id="data_order"> 
           <thead>
-            <th>{{$lang::get('order.proof')}}</th>
             <th>{{$lang::get('order.no')}}</th>
+            <th>{{$lang::get('order.proof')}}</th>
             <th>{{$lang::get('order.package')}}</th>
             <th>{{$lang::get('order.price')}}</th>
             <th>{{$lang::get('order.total')}}</th>

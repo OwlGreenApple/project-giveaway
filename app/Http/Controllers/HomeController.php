@@ -1416,8 +1416,8 @@ class HomeController extends Controller
           }
 
           $data['data'][] = [
-            0=>'<div class="text-center">'.$proof.'</div>',
-            1=>$order->no_order,
+            0=>$order->no_order,
+            1=>'<div class="text-center">'.$proof.'</div>',
             2=>$order->package,
             3=>$order->currency.".".$prc->format($order->price),
             4=>$order->currency.".".$prc->format($order->total_price),

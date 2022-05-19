@@ -162,6 +162,14 @@ a.main-color:hover {
     font-weight: bold;
 }
 
+.left-info {
+    float : left;
+}
+
+.right-info {
+    float : right; 
+}
+
 .act {
     width : 100%;
     max-width : 40px;
@@ -638,6 +646,11 @@ h2.congrats {
     line-height: 32px;
 }
 
+/* DATATABLE */
+.datatable-btn-responsive {
+    display  :none;
+}
+
 /* FOOTER */
 
 .footer a {
@@ -679,6 +692,21 @@ h2.congrats {
 
     .form_title h4 {
         font-size : 0.75rem;
+    }
+
+    .datatable-btn-responsive {
+        display  :revert;
+        width : 0 !important;
+    }
+
+    .dataTables_length,.dataTables_filter {
+        text-align: justify !important;
+        margin-bottom : 16px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border: 2px solid #ccc;
+        padding : 3px;
     }
 
     /* task page */
@@ -731,8 +759,18 @@ h2.congrats {
         margin-bottom : 0.75rem;
     }
 
-    .point-left,.point-right {
+    .point-left,.point-right,.left-info,.right-info {
         float : none;
+    }
+
+    .left-info {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .right-info {
+        margin-top : 12px;
+        text-align: center;
     }
 }
 
@@ -767,6 +805,21 @@ h2.congrats {
 
     .form_title h4 {
         font-size : 0.75rem;
+    }
+
+    .datatable-btn-responsive {
+        display  :revert;
+        width : 0 !important;
+    }
+
+    .dataTables_length,.dataTables_filter {
+        text-align: justify !important;
+        margin-bottom : 16px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border: 2px solid #ccc;
+        padding : 3px;
     }
 
     /* task page */
@@ -818,6 +871,17 @@ h2.congrats {
     .point-entry.time .text-uppercase {
         margin-bottom : 0.75rem;
     }
+
+    .left-info {
+        float : none;
+        text-align: center;
+    }
+
+    .right-info {
+        float : none;
+        margin-top : 12px;
+        text-align: center;
+    }
 }
 
 @media(min-width : 576px) and (max-width:767px){
@@ -839,6 +903,11 @@ h2.congrats {
 
     .contest-title {
         font-size : 36px;
+    }
+
+    .datatable-btn-responsive {
+        display  :revert;
+        width : 0 !important;
     }
 
     /* task page */
@@ -890,6 +959,17 @@ h2.congrats {
     .point-entry.time .text-uppercase {
         margin-bottom : 0.75rem;
     }
+
+    .left-info {
+        float : none;
+        text-align: center;
+    }
+
+    .right-info {
+        float : none;
+        margin-top : 12px;
+        text-align: center;
+    }
 }
 
 @media(min-width : 768px) and (max-width:991px){
@@ -934,8 +1014,17 @@ h2.congrats {
         padding-right : 2.75rem;
     }
 
+    .left-info {
+        font-size : 24px !important;
+    }
+
     .contest-title {
         font-size : 36px;
+    }
+
+    .datatable-btn-responsive {
+        display  :revert;
+        width : 0 !important;
     }
 
     /* task page */
