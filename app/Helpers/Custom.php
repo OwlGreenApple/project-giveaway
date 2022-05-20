@@ -191,6 +191,7 @@ class Custom
     public function check_email_bouncing($email,$cond = null)
     {
         $user = User::where('email',$email)->first();
+        $check = new CheckBannedEmail;
 
         //  in case contact us
         if($cond == 'admin')
@@ -212,10 +213,6 @@ class Custom
             }
         }
 
-        $user_id = $user->id;
-        $usr = User::find($user_id);
-        $check = new CheckBannedEmail;
-
         if($check::check_bouncing($email) == true)
         {
             if($cond == "new")
@@ -223,7 +220,7 @@ class Custom
                 return 1;
             }
 
-            $usr->is_valid_email = 1;
+            $is_valid_email = 1;
             $status = true;
         }
         elseif($check::check_bouncing($email) == "empty")
@@ -232,7 +229,7 @@ class Custom
             {
                 return 2;
             }
-            $usr->is_valid_email = 2;
+            $is_valid_email = 2;
             $status = false;
         }
         else
@@ -241,11 +238,19 @@ class Custom
             {
                 return 3;
             }
-            $usr->is_valid_email = 3;
+            $is_valid_email = 3;
             $status = false;
         }
 
-        $usr->save();
+        // REGISTERED USER
+        if(!is_null($user))
+        {
+            $user_id = $user->id; 
+            $usr = User::find($user_id);
+            $usr->is_valid_email = $is_valid_email;
+            $usr->save();
+        }
+    
         return $status;
     }
 
