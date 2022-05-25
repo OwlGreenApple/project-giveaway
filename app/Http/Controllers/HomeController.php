@@ -596,6 +596,7 @@ class HomeController extends Controller
         $apicheck = self::check_api($user);
         $act = self::display_api('act');
         $mlc = self::display_api('mlc');
+        $sdf = self::display_api('sdf');
 
         // dd($act);
 
@@ -613,6 +614,7 @@ class HomeController extends Controller
             'apicheck'=>$apicheck,
             'act'=>$act,
             'mlc'=>$mlc,
+            'sdf'=>$sdf,
             'obj'=> new Homecontroller
         ];
         return view('create',$arr);

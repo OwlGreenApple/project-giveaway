@@ -291,7 +291,7 @@
                             <select id="sdf_api_id" name="sdf_api_id" class="form-select">
                             <option value="0">Choose</option>
                                 @foreach($sdf['data'] as $index=>$row) 
-                                    <option value="{{ $row['id'] }}" @if(isset($event) && $event->sdf_api_id == $row->id) selected @endif>{{ $row['name'] }}</option>
+                                    <option value="{{ $row['id'] }}" @if(isset($event) && $event->sdf_api_id == $row['id']) selected @endif>{{ $row['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
