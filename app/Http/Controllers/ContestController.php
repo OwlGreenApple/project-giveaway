@@ -145,6 +145,7 @@ class ContestController extends Controller
         $api = new API;
         $act_list_id = $ev->act_api_id; //activrespon
         $mlc_list_id = $ev->mlc_api_id; //mailchimp
+        $sfd_list_id = $ev->sfd_api_id; //sendfox
 
         if($ref !== null)
         {
@@ -199,6 +200,18 @@ class ContestController extends Controller
                 ];
 
                 $api->add_mailchimp($dta);
+            }
+
+            // save contestant data to sendfox
+            if($sfd_list_id !== '0')
+            {
+                $c_email = $email;
+                $first_name = $name;
+                $last_name = null;
+                $list = $ev->sdf_api_id;
+                $user_id = $ev->user_id;
+
+                $api->saveSendFox($c_email,$first_name,$last_name,$list,$user_id);
             }
         }
         else

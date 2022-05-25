@@ -170,6 +170,72 @@ class ApiController extends Controller
     return $err['success'];
   }
 
+  /* SENDFOX */
+  public function display_sendfox_lists()
+  {
+    $url = "https://api.sendfox.com/lists";
+
+    $user = Auth::user();
+    $token = $user->sendfox_api;
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_VERBOSE, 0);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Content-Type: application/json',
+    'authorization: Bearer '.$token
+    ));
+
+    $res=curl_exec($ch);
+
+    // dd($res);
+    return json_decode($res,true);
+  }
+
+  public function saveSendFox($email,$first_name,$last_name,$list,$user_id)
+    {
+        $user = User::find($user_id);
+        $token = $user->sendfox_api;
+
+        $data = array(
+            'email'=>$email,
+            'first_name'=>$first_name,
+            'last_name'=>$last_name,
+            'lists'=> $list
+        );
+
+        $url = 'https://api.sendfox.com/contacts';
+        $data_string = json_encode($data);
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'authorization: Bearer '.$token
+        ));
+       
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+
+        if ($err) {
+          echo "cURL Error #:" . $err;
+        } else {
+          json_decode($response,true);
+        }
+    }
 
 /* end class */
 }

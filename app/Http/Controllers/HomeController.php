@@ -450,6 +450,7 @@ class HomeController extends Controller
         $apicheck = self::check_api($user);
         $act = self::display_api('act');
         $mlc = self::display_api('mlc');
+        $sdf = self::display_api('sdf');
 
         $data = [
             'data'=>$banners,
@@ -460,6 +461,7 @@ class HomeController extends Controller
             'apicheck'=>$apicheck,
             'act'=>$act,
             'mlc'=>$mlc,
+            'sdf'=>$sdf,
         ];
         return view('create',$data);
     }
@@ -495,6 +497,16 @@ class HomeController extends Controller
                 return array();
             }
             return $api->display_mailchimp_lists();
+        }
+
+        // SENDFOX
+        if($cond == 'sdf')
+        {
+            if($api->display_sendfox_lists() == null)
+            {
+                return array(); 
+            }
+            return $api->display_sendfox_lists();
         }
     }
 
@@ -634,8 +646,11 @@ class HomeController extends Controller
 
         $act_api_id = strip_tags($request->act_api_id);
         $mlc_api_id = strip_tags($request->mlc_api_id);
+        $sdf_api_id = strip_tags($request->sdf_api_id);
+
         ($act_api_id == null? $act_api_id = 0:false);
         ($mlc_api_id == null? $mlc_api_id = 0:false);
+        ($sdf_api_id == null? $sdf_api_id = 0:false);
 
         ($request->media_option == 'off')?$mo = 1:$mo = 0;
 
@@ -706,6 +721,7 @@ class HomeController extends Controller
         $ev->winner_message = $message_winner;
         $ev->act_api_id = $act_api_id;
         $ev->mlc_api_id = $mlc_api_id;
+        $ev->sdf_api_id = $sdf_api_id;
 
         try{
             $ev->save();
@@ -1269,16 +1285,18 @@ class HomeController extends Controller
     {
         $activrespon = strip_tags($request->act_api);
         $mailchimp = strip_tags($request->mail_api);
+        $sendfox = strip_tags($request->sendfox_api);
 
         $user = User::find(Auth::id());
 
-        if($activrespon== null && $mailchimp == null)
+        if($activrespon== null && $mailchimp == null && $sendfox == null)
         {
             return response()->json([]);
         }
 
         $user->activrespon_api = $activrespon;
         $user->mailchimp_api = $mailchimp;
+        $user->sendfox_api = $sendfox;
 
         try
         {

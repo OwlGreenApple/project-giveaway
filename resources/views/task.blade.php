@@ -121,13 +121,15 @@
 
      function confetti()
     {
-        setTimeout(function(){
-            $(".confetti").removeClass('d-none');
-        },1000);
+        $(document).ready(function(){
+            setTimeout(function(){
+                $(".confetti").removeClass('d-none');
+            },1000);
 
-        setTimeout(function(){
-            $(".confetti").addClass('d-none');
-        },2500);
+            setTimeout(function(){
+                $(".confetti").addClass('d-none');
+            },4500);
+        });
     }
 
     function hover_plus()

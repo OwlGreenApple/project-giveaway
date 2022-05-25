@@ -258,7 +258,9 @@
                     <div class="card-body">
                         <h3 class="main-color main-theme">{{ Lang::get('giveaway.integration') }}</h3>
 
+                         <!-- Activrespon -->
                         @if(count($act) > 0)
+                        <div class="mb-2">
                             <div class="border-bottom info">Activrespon</div>
                             <select id="act_api_id" name="act_api_id" class="form-select">
                             <option value="0">Choose</option>
@@ -266,9 +268,12 @@
                                     <option value="{{ $row['id'] }}" @if(isset($event) && $event->act_api_id == $row['id']) selected @endif>{{ $row['label'] }}</option>
                                 @endforeach
                             </select>
+                        </div>
                         @endif
 
+                        <!-- Mailchimp -->
                         @if(count($mlc) > 0)
+                        <div class="mb-2">
                             <div class="border-bottom info">Mailchimp</div>
                             <select id="mlc_api_id" name="mlc_api_id" class="form-select">
                             <option value="0">Choose</option>
@@ -276,6 +281,20 @@
                                     <option value="{{ $row->id }}" @if(isset($event) && $event->mlc_api_id == $row->id) selected @endif>{{ $row->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        @endif
+
+                        <!-- Sendfox -->
+                        @if(count($sdf) > 0)
+                        <div class="mb-2">
+                            <div class="border-bottom info">Sendfox</div>
+                            <select id="sdf_api_id" name="sdf_api_id" class="form-select">
+                            <option value="0">Choose</option>
+                                @foreach($sdf['data'] as $index=>$row) 
+                                    <option value="{{ $row['id'] }}" @if(isset($event) && $event->sdf_api_id == $row->id) selected @endif>{{ $row['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         @endif
                     </div>
                 </div>
