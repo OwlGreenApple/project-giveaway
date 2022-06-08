@@ -29,7 +29,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12 mb-3">
-            <h1 class="big-theme" align="center">{{ Lang::get('title.affiliate') }}</h1>
+            <h1 class="big-theme" align="center">{{ Lang::get('auth.affiliate') }}</h1>
         </div>
 
         <div class="col-md-8">
@@ -57,27 +57,26 @@
                         
                         <!-- condition -->
                         <div class="mt-3 text-justify mx-auto">
-                            <h2><b>Syarat Affiliate Topleads :</b></h2>
-
+                            <h2><b>Syarat Referral Topleads :</b></h2>
                             <p>
-                            - Setiap user akan mendapatkan 1 kode affiliasi aktif<br/>
-                            - Affiliate fee didapatkan jika referral melakukan pembelian di Topleads<br/>
+                            - Setiap user akan mendapatkan 1 kode referral aktif<br/>
+                            - Referral fee didapatkan jika user yang di refer melakukan pembelian di Topleads<br/>
                             - Berikut fee yang didapatkan :
                             </p>
                             <p>
-                            1-10 referrals = dapat 15%<br/>
-                            11-50 referrals = dapat 20%<br/>
-                            51-100 referrals = dapat 25%<br/>
-                            lebih dari 101 referrals = dapat 30%
+                                1-10 referrals = dapat 15%<br/>
+                                11-50 referrals = dapat 20%<br/>
+                                51-100 referrals = dapat 25%<br/>
+                                lebih dari 101 referrals = dapat 30%
                             </p>
                             <p>
                             - Wajib mendaftar dan memiliki member Premium (min Starter)<br/>
-                            - Apabila belum memiliki member premium, Affiliate fee tidak bisa dicashout<br/>
-                            - Segala bentuk kecurangan yang ada akan menyebabkan affiliate fee hangus<br/>
+                            - Apabila belum memiliki member premium, Referral fee tidak bisa dicashout<br/>
+                            - Segala bentuk kecurangan yang ada akan menyebabkan referral fee hangus<br/>
                             - Ketentuan & Peraturan adalah hak Topleads dan bersifat mutlak
                             </p>
                             <p>
-                            Syarat Cashout Affiliate Topleads :<br/>
+                            Syarat Cashout Referral Fee Topleads:<br/>
                             - User wajib memiliki member Premium (min Starter)<br/>
                             - Cashout pertama yang dapat dilakukan dengan nominal Rp. 29.000<br/>
                             - Pencairan selanjutnya Anda bisa memilih nominal yang tertera, yaitu :
@@ -87,8 +86,8 @@
                                 3. Rp. 395.000 <br/>
                                 4. Rp. 495.000
                                 </p>
-                            - Affiliate reward dikirimkan melalui DANA yang telah diinformasikan dengan mengisi Nama dan No Telp DANA<br/>
-                            - Pencairan akan diproses max 7 hari kerja
+                            - Referral fee dikirimkan melalui <b>DANA</b> yang telah diinformasikan dengan mengisi Nama dan No Telp DANA<br/>
+                            - Pencairan akan diproses max <b>7</b> hari kerja
                             </p>
                             <a role="button" class="btn bg-custom text-white" href="{{ url('redeem-money') }}">{{ Lang::get('title.redeem') }}</a>
                         </div>

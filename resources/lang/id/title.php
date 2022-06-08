@@ -2,7 +2,6 @@
 
 return [
     'account'=>'Akun',
-    'affiliate'=>'Affiliasi',
     'branding'=>'Logo',
     'broadcast'=>'Daftar Broadcast',
     'broadcast.create'=>'Kirim Broadcast',

@@ -18,7 +18,7 @@ return [
     'account.money'=>'Total Uang',
     'account.number'=>'Nomer Akun Dana',
     'account.layout'=>'Akun',
-    'affiliate'=>'Affiliasi',
+    'affiliate'=>'Referral',
     'banned' => 'Maaf, akun anda telah di berhentikan',
     'bc' => 'Broadcast',
     'bc.create' => 'Buat Broadcast',
