@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\Custom;
 
 class Orders extends Model
 {
@@ -21,4 +22,13 @@ class Orders extends Model
     */
 
     protected $table = 'orders';
+
+	// DISPLAY PRICING LIST
+	public static function display_pricing_list()
+	{
+	   $data = [1,2,3,4,5,6,7,8,9];
+       return $data;
+	}
+
+/* end class */
 }

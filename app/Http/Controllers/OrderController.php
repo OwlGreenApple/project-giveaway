@@ -288,38 +288,5 @@ class OrderController extends Controller
         return view('order.thankyou-confirm-payment',['lang'=>new Lang]);
       }
 
-    // SHOW PRICING LIST BASED ON AJAX
-    public function price_list(Request $request)
-    {
-       $pc= new Custom;
-       if($request->default == 12)
-       {
-          $arr = [0,1,2,4,5,7,8]; /* yearly */
-          $save = 40;
-       }
-       elseif($request->default == 3)
-       {
-          $arr = [0,1,3,4,6,7,9]; /* 3 month */
-          $save = 15;
-       }
-       else
-       {
-          $arr = [0,2,3,5,6,8,9]; /* monthly */
-          $save = 0;
-       }
-
-       if(count( $pc->get_price() ) > 0)
-       {
-          foreach($pc->get_price() as $index=>$row):
-            if(in_array($index,$arr))
-            {
-              continue;
-            }
-            $data[] = $index;
-          endforeach;
-       }
-       return view('package-list',['data'=>$data,'pc'=>$pc,'account'=>$request->account,'save'=>$save]);
-    }
-
 /*end class*/
 }

@@ -1,25 +1,27 @@
 function change_price_list()
-{
-    $("body").on("click",".pricing_list",function(){
-        var time = $(this).attr('data-total');
-        display_pricelist(time);
-    });
-}
+{ 
+    $(".pricing_list").click(function(){
+        $(".pricing_list").removeClass('active');
+        var id = $(this).attr('id'); 
+        $("#"+id).addClass('active');
 
-function display_pricelist(target)
-{
-    $.ajax({
-        type:'GET',
-        url: target_url,
-        data:{'default':target,'account':is_account},
-        dataType:"html",
-        success : function(result)
+        if(id == "month_data")
         {
-            $(".price_list_data").html(result);   
-        },
-        error : function(xhr)
+            $(".month_data").removeClass('d-none');
+            $(".tmonth_data").addClass('d-none');
+            $(".year_data").addClass('d-none');
+        }
+        else if(id == "tmonth_data")
         {
-            console.log(xhr.responseText);
+            $(".tmonth_data").removeClass('d-none');
+            $(".month_data").addClass('d-none');
+            $(".year_data").addClass('d-none');
+        }
+        else
+        {
+            $(".year_data").removeClass('d-none');
+            $(".month_data").addClass('d-none');
+            $(".tmonth_data").addClass('d-none');
         }
     });
 }

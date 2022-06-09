@@ -60,10 +60,10 @@
               <div class="form-group">
                 <div class="col-md-12 col-12">
                   <label class="label-title-test" for="formGroupExampleInput">
-                    <span class="subtotal" style="font-size:18px"></span>
+                    <div class="subtotal"></div>
                   </label>
                   <div class="col-md-12 pl-0">
-                    TOTAL: <b><span class="total" style="font-size:18px"></span></b>
+                    <b>TOTAL</b> : <span class="total main-color"></span>
                   </div>
               </div>
 

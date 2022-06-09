@@ -1,14 +1,14 @@
 @if(count( $data ) > 0) 
     <div class="ms-auto me-auto col-lg-6 col-md-6 col-12 mb-4">
         <div class="input-group ms-auto me-auto col-lg-6 col-md-6 col-12">
-            <button type="button" class="pricing_list monthly @if($save == 0) active @endif @if($account == 1) pricing_fix_account @endif">{{ Lang::get('order.month.m') }}</button>
-            <button data-total="3" type="button" class="pricing_list tri @if($save == 15) active @endif position-relative @if($account == 1) pricing_fix_account @endif">
+            <button id="month_data" type="button" class="pricing_list monthly active @if($account == 1) pricing_fix_account @endif">{{ Lang::get('order.month.m') }}</button>
+            <button id="tmonth_data" data-total="3" type="button" class="pricing_list tri position-relative @if($account == 1) pricing_fix_account @endif">
                 {{ Lang::get('order.month.t') }}
                 <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning">
                     -15%
                 </span>
             </button> 
-            <button data-total="12" type="button" class="pricing_list yearly @if($save == 40) active @endif position-relative @if($account == 1) pricing_fix_account @endif">
+            <button id="year_data" data-total="12" type="button" class="pricing_list yearly position-relative @if($account == 1) pricing_fix_account @endif">
                 {{ Lang::get('order.month.y') }}
                 <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning">
                     -40%
@@ -19,7 +19,7 @@
 
     <div class="row">
     @foreach($data as $index)
-        <div class="col-lg-4 col-md-4 col-12">
+        <div class="col-lg-4 col-md-4 col-12 @if($index == 1 || $index == 4 || $index == 7) month_data @elseif($index == 2 || $index == 5 || $index == 8) tmonth_data d-none @else year_data d-none @endif">
             <div data-ribbon="@if($index == 4 || $index == 5 || $index == 6) -15% @else -40% @endif" class="card card-pricing @if($index == 1 || $index == 2 || $index == 3) popular @else bestseller @endif shadow px-3 mb-4">
                 <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-custom text-white shadow-sm text-capitalize">{{ $pc->get_price()[$index]['package'] }}</span>
                 <div class="bg-transparent card-header pt-4 border-0">

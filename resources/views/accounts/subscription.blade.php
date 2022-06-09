@@ -10,4 +10,6 @@
     </div>
 </div>
  <!-- display subscription -->
-<div class="price_list_data mt-4"></div>
+<div class="mt-4 text-left col-lg-4 col-md-6">
+    <a class="btn btn-success settings" data_target="6" role="button"><i class="fas fa-arrow-alt-circle-up text-warning"></i>&nbsp;{{ Lang::get('auth.package') }}</a>
+</div>

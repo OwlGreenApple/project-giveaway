@@ -1230,7 +1230,8 @@ class HomeController extends Controller
         $user = User::find(Auth::id());
         $conf = $request->segment(2);
 
-        $data = ['user'=>$user,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf,'pc'=> new Custom,'cond'=>true,'account'=>1];
+        $price_list = Orders::display_pricing_list();
+        $data = ['user'=>$user,'data'=>$price_list,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf,'pc'=> new Custom,'cond'=>true,'account'=>1];
         return view('account',$data);
     }
 
@@ -1496,7 +1497,8 @@ class HomeController extends Controller
     // UPGRADE PACKAGE
     public function upgrade_package()
     {
-        return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
+        $price_list = Orders::display_pricing_list();
+        return view('package',['pc'=> new Custom,'data'=>$price_list,'cond'=>true,'account'=>0]);
     }
 
     public static function generate_event_link()

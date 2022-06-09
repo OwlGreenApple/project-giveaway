@@ -664,7 +664,26 @@ h2.congrats {
     text-decoration: underline !important;
 }
 
-@media(max-width : 360px){
+@media(min-width : 280px) and (max-width : 320px)
+{
+    .pricing_list {
+        padding:6px 14px;
+        font-size : 12px;
+    }
+
+    .pricing_fix_account {
+        padding-left : 9px;
+        padding-right : 9px;
+        font-size : 12px;
+    }
+
+    .card-pricing .list-unstyled li {
+        font-size : 12px;
+        padding : 0.1rem 0 !important;
+    }
+}
+
+@media(min-width : 321px) and (max-width : 360px){
     .pricing_list {
         padding:8px 18px;
         font-size : 14px;
@@ -774,6 +793,10 @@ h2.congrats {
     .right-info {
         margin-top : 12px;
         text-align: center;
+    }
+
+    .card-pricing .list-unstyled li {
+        padding : 0.1rem 0 !important;
     }
 }
 
@@ -885,6 +908,10 @@ h2.congrats {
         margin-top : 12px;
         text-align: center;
     }
+
+    .card-pricing .list-unstyled li {
+        padding : 0.15rem 0 !important;
+    }
 }
 
 @media(min-width : 576px) and (max-width:767px){
@@ -972,6 +999,10 @@ h2.congrats {
         float : none;
         margin-top : 12px;
         text-align: center;
+    }
+
+    .card-pricing .list-unstyled li {
+        padding : 0.25rem 0 !important;
     }
 }
 

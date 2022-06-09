@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Auth\ForgotPasswordController AS FG;
 use App\Providers\RouteServiceProvider;
-use App\Models\User;
+use App\Models\User; 
+use App\Models\Orders;
 use App\Helpers\Custom;
 use App\Mail\RegisteredEmail;
 use App\Rules\CheckBannedEmail;
@@ -191,7 +192,7 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function price_page($referral_code=null)
+    public function price_page($referral_code=null) 
     {
       $minutes = 60*24*7; // 7 days
 
@@ -201,7 +202,8 @@ class RegisterController extends Controller
         Cookie::queue(Cookie::make('referral_code',$referral_code, $minutes));
       }
 
-      return view('package',['pc'=> new Custom,'cond'=>true,'account'=>0]);
+      $price_list = Orders::display_pricing_list();
+      return view('package',['pc'=> new Custom,'data'=>$price_list,'cond'=>true,'account'=>0]);
     }
 
     public function test_email()
