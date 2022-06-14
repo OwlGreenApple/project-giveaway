@@ -323,7 +323,7 @@
                         <div class="mb-3">
                             <div class="form-group mb-3">
                                 <label>{{ Lang::get('giveaway.message') }}:<span class="text-danger">*</span></label>
-                                <textarea name="message" id="divInput-description-post" class="form-control form-control-lg">@if(isset($event)){{ $event->message }}@endif</textarea>
+                                <textarea name="message" class="form-control form-control-lg">@if(isset($event)){{ $event->message }}@endif</textarea>
                                 <span class="text-danger err_message"><!-- --></span>
                             </div>
                             <!-- <div class="form-group"> +++ temp +++
@@ -405,7 +405,7 @@ function emoji()
         mainPathFolder : "{{url('')}}",
     });
 
-    $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('@if(isset($event)){{ $event->message }}@endif');
+    // $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('if(isset($event)) $event->message endif');
 }
 
 function select_timezone()
