@@ -269,7 +269,7 @@ $(function(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             method : 'POST',
-            url : '{{ url("update-profile") }}',
+            url : '{{ url("update-profile") }}', 
             data : data,
             dataType : "json",
             beforeSend: function()
@@ -288,7 +288,7 @@ $(function(){
                     $(".err_"+result[0][1]).html(result[0][0]);
                     $(".err_"+result[1][1]).html(result[1][0]);
                     $(".err_"+result[2][1]).html(result[2][0]);
-                    $(".err_"+result[3][1]).html(result[3][0]);
+                    // $(".err_"+result[3][1]).html(result[3][0]);
                 }
                 else
                 {
