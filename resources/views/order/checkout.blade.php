@@ -17,15 +17,15 @@
                 <div class="col-12 col-md-12">
                   <label class="text" for="formGroupExampleInput">{{ Lang::get('order.package') }} :</label>
                   <select class="form-select text-capitalize" id="select-auto-manage">
-                      @foreach($api->get_price() as $index=>$row)
-                        @if($row['price'] > 0) 
+                      @foreach($api->get_price() as $index=>$row) 
+                        @if($row['price'] > 0)
                            @if($index == $page)
-                            <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
-                              {{$row['package']}} - IDR {{ $api::format($row['price']) }}
+                            <option data-title="{{$row['title']}}" data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
+                              {{$row['title']}} - IDR {{ $api::format($row['price']) }} - {{ Lang::get('order.month') }}
                             </option>
                             @else
                             <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
-                              {{$row['package']}} - IDR {{ $api::format($row['price']) }}
+                              {{$row['title']}} - IDR {{ $api::format($row['price']) }} - {{ Lang::get('order.month') }}
                             </option>
                             @endif
                         @endif
@@ -173,13 +173,8 @@
     });
   }
 
-  function check_kupon(status_upgrade = null){
-
-    if(status_upgrade == null)
-    {
-      status_upgrade = $("input[name='status_upgrade']").val();
-    }
-
+  function check_kupon(status_upgrade = null)
+  {
     $.ajax({
       type: 'POST',
       url: "{{url('/check-coupon')}}",
@@ -191,8 +186,6 @@
         kupon : $('#kupon').val(),
         reseller_coupon : "",
         idpaket : $( "#select-auto-manage" ).val(),
-        status_upgrade : status_upgrade,
-        chat : 0,
         namapaket :  $("#select-auto-manage").find("option:selected").attr("data-paket")
       },
       dataType: 'text',

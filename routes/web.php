@@ -109,6 +109,8 @@ Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm
 Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
 Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
 Route::get('cancel-order',[App\Http\Controllers\AdminController::class,'cancel_order']);
+Route::get('settings',[App\Http\Controllers\AdminController::class,'settings']);
+Route::post('save-settings',[App\Http\Controllers\AdminController::class,'settings_save']);
 
 /* Admin Redeem */
 Route::get('affiliate-admin',[App\Http\Controllers\AdminRedeemController::class, 'index']);

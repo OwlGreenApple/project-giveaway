@@ -12,6 +12,7 @@ use App\Helpers\Custom;
 use App\Models\User;
 use App\Models\Orders;
 use App\Models\Membership;
+use App\Models\Settings;
 use App\Mail\UserBuyEmail;
 use Carbon\Carbon;
 
@@ -57,6 +58,32 @@ class AdminController extends Controller
         $data['msg'] = $e->getMessage();
       }
       return response()->json($data);
+    }
+
+    public function settings()
+    {
+      $settings = Settings::all()->first();
+      return view('admin.settings',['row'=>$settings]);
+    }
+
+    public function settings_save(Request $request)
+    {
+      try
+      {
+        Settings::where('id',1)->update([
+          'percentage'=>strip_tags($request->percentage),
+          'sponsor'=>strip_tags($request->sponsor_message),
+          'changed_by'=>Auth::id(),
+        ]);
+        $ret['success'] = 1;
+      }
+      catch(QueryException $e)
+      {
+         $e->getMessage();
+         $ret['success'] = 0;
+      }
+
+      return response()->json($ret);
     }
 
     /*** ORDER ***/

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'act'=>'Tindakan',
+    'act'=>'Tindakan', 
     'api'=>'Integrasi API',
     'award'=>'Beri Hadiah',
     'award.done'=>'Hadiah Sudah Diberikan',
@@ -31,6 +31,16 @@ return [
     'no'=>'No',
     'no.account'=>'No Akun',
     'not'=>'No pengirim tidak ada',
+    'package.doubt'=>'Masih ragu?',
+    'package.feature'=>'Fitur',
+    'package.free'=>'Paket Free',
+    'package.limit'=>'memulai Giveaway & Kontes dengan skala kecil dan peserta yang terbatas.',
+    'package.max'=>'Max 100 Kontestan',
+    'package.order'=>'MULAI DISINI',
+    'package.start'=>'Mulai dengan Paket Free',
+    'package.suitable'=>'Paket Free ini cocok untuk individu dan cocok untuk Anda yang ingin',
+    'package.support'=>'Support via email',
+    'package.total'=>'Total campaign / event : 1',
     'password'=>'Password',
     'password.retype'=>'Konfirmasi Password',
     'queue'=>'Antrian',

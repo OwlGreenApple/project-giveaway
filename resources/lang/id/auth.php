@@ -50,6 +50,7 @@ return [
     'register' => 'Daftar', 
     'remember' => 'Ingat saya', 
     'reset' => 'Kirim Password Baru', 
+    'settings'=>'Settings',
     'success'=>'Password anda telah di reset, silahkan cek email anda',
     'terms' => 'Kebijakan Privasi',
     'throttle' => 'Terlalu banyak usaha masuk. Mohon coba lagi dalam :seconds seconds.',

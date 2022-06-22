@@ -121,7 +121,7 @@
                                 <div class="input-group mb-3">
                                     <select style="max-width:95px" class="form-select form-select-lg bg-custom text-white" name="currency">
                                         @foreach($helper::currency() as $idt=>$row)
-                                            <option value="{{ $idt }}" @if((isset($event) && ($event->currency == $idt)) || $idt == 'idr') selected @endif>{{ $row }}</option>
+                                            <option value="{{ $idt }}" @if((isset($event) && ($event->currency == $idt))) selected @endif>{{ $row }}</option>
                                         @endforeach
                                     </select>
                                     <input name="prize_amount" @if(isset($event)) value="{{ $event->prize_value }}" @endif id="amount" maxlength="8" type="text" class="form-control form-control-lg" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">

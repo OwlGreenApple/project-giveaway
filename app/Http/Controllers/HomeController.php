@@ -50,6 +50,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
     public function index()
     {
         return view('home');
@@ -1439,7 +1440,7 @@ class HomeController extends Controller
           $data['data'][] = [
             0=>$order->no_order,
             1=>'<div class="text-center">'.$proof.'</div>',
-            2=>$order->package,
+            2=>$order->package_title,
             3=>$order->currency.".".$prc->format($order->price),
             4=>$order->currency.".".$prc->format($order->total_price),
             5=>Carbon::parse($order->created_at)->toDateTimeString(),

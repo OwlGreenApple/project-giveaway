@@ -133,6 +133,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @if(Auth::user()->is_admin == 1)
+                                        <a class="dropdown-item" href="{{ url('settings') }}">{{ Lang::get('auth.settings') }}</a>
                                         <a class="dropdown-item" href="{{ url('list-user') }}">{{ Lang::get('auth.list.user') }}</a>
                                         <a class="dropdown-item" href="{{ url('list-order') }}">{{ Lang::get('auth.list.order') }}</a>
                                         <a class="dropdown-item" href="{{ url('affiliate-admin') }}">{{ Lang::get('auth.list.redeem') }}</a>

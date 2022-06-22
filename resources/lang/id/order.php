@@ -46,6 +46,7 @@ return [
     'month.m'=>'Bulanan',
     'month.t'=>'3 Bulan',
     'month.y'=>'Tahunan',
+    'month.text'=>'Bulan',
     'name'=>'Nama',
     'need'=>'Perlu akun?',
     'need_help'=>'Perlu bantuan?',

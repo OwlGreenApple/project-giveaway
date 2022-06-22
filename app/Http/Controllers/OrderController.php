@@ -62,6 +62,7 @@ class OrderController extends Controller
         {
             $order = [
                 "package" => session('order')['package'],
+                "title" => session('order')['title'],
                 "price" => session('order')['price'],
                 "total" => session('order')['total'],
             ];
@@ -70,10 +71,13 @@ class OrderController extends Controller
         {
             $order = [
                 "package" => $package,
+                "title" => $pack['title'],
                 "price" => $pack['price'],
                 "total" => $pack['price'] * $pack['terms'],
             ];
         }
+
+        // package still in english but display only with title
 
         if(session('order') == null)
         {
@@ -121,6 +125,7 @@ class OrderController extends Controller
         $order->user_id = Auth::id();
         $order->no_order = $order_number;
         $order->package = $data['package'];
+        $order->package_title = $data['title'];
         $order->price = $data['price'];
         $order->total_price = $data['total'];
 

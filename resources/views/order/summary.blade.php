@@ -204,7 +204,7 @@
                     <tr>
                       <td class="sumo-td-name">
                         <div class="sumo-title">
-                          <b>{!! session('order')['package'] !!}</b>
+                          <b>{!! session('order')['title'] !!}</b>
 
                         </div>
                       </td>
@@ -277,7 +277,7 @@
         <tr>
           <td class="sumo-td-name">
             <div class="sumo-title">
-              {{ $lang::get('order.package') }} : <b class="text-capitalize">{!! session('order')['package'] !!}</b>
+              {{ $lang::get('order.package') }} : <b class="text-capitalize">{!! session('order')['title'] !!}</b>
             </div>
           </td>
         </tr>
