@@ -19,6 +19,8 @@ use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
 use App\Http\Controllers\ApiController as API;
+use App\Console\Commands\RunningMessages AS Msg;
+use Illuminate\Support\Facades\DB;
 use DateTimeZone, Datetime;
 
 class ContestController extends Controller
@@ -32,7 +34,6 @@ class ContestController extends Controller
         }
 
         //dd($contestants);
-
     }
 
     public function contest($link,$ref = null)
@@ -234,11 +235,10 @@ class ContestController extends Controller
 
                 // if(!is_null($ph)) +++ temp due wablas +++
                 // { +++ temp due wablas +++
-                    $msg = $ev->message;
+                    $msg = $ev->message; 
                     $msg .= "\n\n".Lang::get('giveaway.confirm').url('confirmation').'/'.bin2hex($contestant_id);
 
-                    $wa_msg = new Messages;
-                    $wa_msg->user_id = $ev->user_id;
+                    /* $wa_msg->user_id = $ev->user_id;
                     $wa_msg->ev_id = $ev->id;
                     $wa_msg->ct_id = $contestant_id;
                     // $wa_msg->sender = $ph->number;
@@ -246,7 +246,24 @@ class ContestController extends Controller
                     $wa_msg->receiver = $phone;
                     $wa_msg->message = $msg;
                     $wa_msg->img_url = $ev->img_url;
-                    $wa_msg->save();
+                    $wa_msg->save(); */
+
+                    $mg = new Messages;
+                    $sender = $mg::sender();
+
+                    $msge = [
+                        'user_id'=>$ev->user_id,
+                        'ev_id'=>$ev->id, 
+                        'bc_id'=>0, 
+                        'ct_id'=>$contestant_id,
+                        'sender'=>$sender, 
+                        'receiver'=>$phone,
+                        'message'=>$msg,
+                        'img_url'=>$ev->img_url
+                    ];
+
+                    $wa_msg = new Msg;
+                    $wa_msg::ins_message($msge);
                 // } +++ temp due wablas +++
             }
             else

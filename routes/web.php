@@ -110,7 +110,10 @@ Route::get('ban-user',[App\Http\Controllers\AdminController::class,'ban_user']);
 Route::get('load-user',[App\Http\Controllers\AdminController::class,'display_users']);
 Route::get('cancel-order',[App\Http\Controllers\AdminController::class,'cancel_order']);
 Route::get('settings',[App\Http\Controllers\AdminController::class,'settings']);
+Route::get('admin-phone',[App\Http\Controllers\AdminController::class,'display_admin_phone']);
+Route::get('admin-phone-del',[App\Http\Controllers\AdminController::class,'del_admin_phone']);
 Route::post('save-settings',[App\Http\Controllers\AdminController::class,'settings_save']);
+Route::post('save-admin-phone',[App\Http\Controllers\AdminController::class,'settings_phone']);
 
 /* Admin Redeem */
 Route::get('affiliate-admin',[App\Http\Controllers\AdminRedeemController::class, 'index']);

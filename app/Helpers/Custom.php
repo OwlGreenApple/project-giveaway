@@ -127,6 +127,31 @@ class Custom
         return $timezone;
     }
 
+    public static function get_wablas(){
+        $data = [
+          'https://ampel.wablas.com/',
+          'https://console.wablas.com/',
+          'https://india.wablas.com/',
+          'https://klego.wablas.com/',
+          'https://kacangan.wablas.com/',
+          'https://sambi.wablas.com/',
+          'https://selo.wablas.com/',
+          'https://cepogo.wablas.com/',
+          'https://us.wablas.com/',
+          'https://teras.wablas.com/',
+          'https://sawit.wablas.com/',
+          'https://texas.wablas.com/',
+          'https://tx.wablas.com/',
+          'https://solo.wablas.com/',
+          'https://tx.wablas.com/',
+          'https://pati.wablas.com',
+          'https://kudus.wablas.com',
+          'https://eu.wablas.com/',
+        ];
+    
+        return $data;
+      }
+
     //TO GIVE CIRCLE MARK IF CONTESTANT HAD DONE WITH BONUS ENTRIES
     public static function get_marks($bonus_id,$event_id,$type,$contestant_id,$promo = null,$cond = 0)
     {

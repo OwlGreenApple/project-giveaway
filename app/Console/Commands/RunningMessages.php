@@ -89,12 +89,15 @@ class RunningMessages extends Command
                         continue;
                     }
 
+                    $mg = new Messages;
+                    $sender = $mg::sender();
+
                     $msge = [
                         'user_id'=>$user_id,
                         'ev_id'=>0, 
                         'bc_id'=>$bc_id, 
                         'ct_id'=>$ctid,
-                        'sender'=>env('WA_TEMP'),
+                        'sender'=>$sender, 
                         'receiver'=>substr($ct->wa_number,1),
                         'message'=>$message,
                         'img_url'=>$url

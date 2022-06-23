@@ -23,5 +23,26 @@ function change_price_list()
             $(".month_data").addClass('d-none');
             $(".tmonth_data").addClass('d-none');
         }
+    }); 
+}
+
+function service()
+{
+    $("select[name='service']").change(function(){
+        var val = $(this).val();
+        change_service(val);
     });
+}
+
+function change_service(val)
+{
+    var wablas = $(".wablas-server");
+    if(val == 1)
+    {
+        wablas.removeClass('d-none');
+    }
+    else
+    {
+        wablas.addClass('d-none');
+    }
 }

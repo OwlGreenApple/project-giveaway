@@ -77,6 +77,7 @@
 var segment = "{{ $conf }}";
 
 $(function(){
+    service();
     data_tabs();
     set_lang_cur();
     update_profile();

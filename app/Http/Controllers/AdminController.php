@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Orders;
 use App\Models\Membership;
 use App\Models\Settings;
+use App\Models\Phone;
 use App\Mail\UserBuyEmail;
 use Carbon\Carbon;
 
@@ -63,8 +64,9 @@ class AdminController extends Controller
     public function settings()
     {
       $settings = Settings::all()->first();
-      return view('admin.settings',['row'=>$settings]);
-    }
+      $helper = new Custom;
+      return view('admin.settings',['row'=>$settings,'ct'=>$helper]);
+    } 
 
     public function settings_save(Request $request)
     {
@@ -83,6 +85,62 @@ class AdminController extends Controller
          $ret['success'] = 0;
       }
 
+      return response()->json($ret);
+    }
+
+    // SAVE ADMIN PHONE
+    public function settings_phone(Request $request)
+    { 
+      if($request->phone_id == null)
+      {
+        $phone = new Phone;
+      }
+      else
+      {
+        $phone = Phone::find($request->phone_id); 
+      }
+      $phone->user_id = Auth::id();
+      $phone->number = strip_tags($request->phone);
+      $phone->device_key = strip_tags($request->api_key);
+      $phone->service_id = strip_tags($request->service);
+      $phone->device_id = strip_tags($request->wablas);
+      $phone->status = 3;
+
+      try
+      {
+         $phone->save();
+         $ret['success'] = 1;
+      }
+      catch(QueryException $e)
+      {
+         $e->getMessage();
+         $ret['success'] = 0;
+      }
+
+      return response()->json($ret);
+    }
+
+    public function display_admin_phone()
+    {
+      $phone = Phone::where('status',3)->get();
+      $helper = new Custom;
+      return view('admin.phone',['data'=>$phone,'no'=>1,'ct'=>$helper]);
+    }
+
+    // DELETE ADMIN PHONE
+    public function del_admin_phone(Request $req)
+    {
+      $phone = Phone::find($req->id);
+      try
+      {
+        $phone->delete();
+        $ret['success'] = 1;
+      }
+      catch(QueryException $e)
+      {
+        $e->getMessage();
+        $ret['success'] = 0;
+      }
       return response()->json($ret);
     }
 
@@ -227,7 +285,7 @@ class AdminController extends Controller
         //referrer get money from referral
         if($user->myreferral > 0)
         {
-          $percentage = Auth::user()->percentage;
+          $percentage = Settings::find(1)->percentage;
           $money = $percentage * $order->total_price / 100;
 
           $refferer = User::find($user->myreferral);

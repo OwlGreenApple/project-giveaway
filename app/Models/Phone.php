@@ -16,5 +16,6 @@ class Phone extends Model
         status :
         0 == disconnect
         1 == connected
+        3 == admin phone
     */
 }
