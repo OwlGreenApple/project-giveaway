@@ -64,9 +64,10 @@ Route::get('/contestant-winner/{event_id}', [App\Http\Controllers\HomeController
 /* ACOUNTS */
 Route::get('/account/{id?}', [App\Http\Controllers\HomeController::class, 'accounts']);
 Route::get('/orders', [App\Http\Controllers\HomeController::class, 'order_list']);
+Route::get('/del-phone', [App\Http\Controllers\HomeController::class, 'del_phone']);
 Route::post('order-confirm-payment',[App\Http\Controllers\OrderController::class, 'confirm_payment_order']);
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_user_profile');
-Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api']);
+Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api'])->middleware('check-phone');
 Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'save_branding']);
 
 /* DEVICES */

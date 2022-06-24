@@ -72,6 +72,7 @@
     </div>
 </div>
 
+<script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/pricing.js') }}" type="text/javascript"></script>
 <script>
 var segment = "{{ $conf }}";
@@ -86,6 +87,7 @@ $(function(){
     payment_detail();
     upload_branding();
     change_price_list();
+    del_phone();
 });
 
     function upload_branding()
@@ -236,6 +238,43 @@ $(function(){
         }
     }
 
+    // PHONE DELETE -- INTEGRATION
+    function del_phone()
+    {
+        $("body").on("click","#del_phone",function()
+        {
+            var cfm = confirm('Apakah yakin mau menghapus?')
+
+            if(cfm == false)
+            {
+                return false;
+            }
+
+            $.ajax({
+                method : 'GET',
+                url : '{{ url("del-phone") }}',
+                dataType : 'json',
+                success : function(result)
+                {
+                    if(result.status == 1)
+                    {
+                        $("#msg_phone .alert").removeClass('d-none');
+                        $("#msg_phone").html('<div class="alert alert-success">{{ Lang::get("custom.success.del") }}</div>');
+                        $("#del_phone").remove();
+                    }
+                    else
+                    {
+                        $("#msg_phone").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                    }
+                },
+                error : function()
+                {
+                    $("#msg_phone").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                }
+            });
+        });
+    }
+
     //PROFILE
     function set_lang_cur()
     {
@@ -258,7 +297,9 @@ $(function(){
         // save api
         $("#api").submit(function(e){
             e.preventDefault();
-            var data = $(this).serialize();
+            var data = $(this).serializeArray();
+            var code = $(".iti__selected-flag").attr('data-code');
+            data.push({name : 'pcode', value : code});
             save_api(data);
         });
     }
@@ -325,13 +366,15 @@ $(function(){
             },
             success :function(result)
             {
-                if(result.success == true)
+                if(result.success == true) 
                 {
                     $("#msg").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
                 }
                 else
                 {
-                    $("#msg").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
+                    $.each(result,function(index, value){
+                        $(".err_"+index).html(value);
+                    });
                 }
             },
             error:function()
@@ -347,7 +390,6 @@ $(function(){
     }
 
     //END PROFILE
-
     function payment_detail()
     {
         $( "body" ).on( "click", ".btn-confirm", function() {

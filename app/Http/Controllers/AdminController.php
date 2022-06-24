@@ -89,8 +89,9 @@ class AdminController extends Controller
     }
 
     // SAVE ADMIN PHONE
-    public function settings_phone(Request $request)
+    public function settings_phone(Request $request) 
     { 
+      $ct = new Custom;
       if($request->phone_id == null)
       {
         $phone = new Phone;
@@ -99,12 +100,35 @@ class AdminController extends Controller
       {
         $phone = Phone::find($request->phone_id); 
       }
+
+      // phone status
+      if($request->user == null)
+      {
+        $status = 3; // IF PHONE CREATED BY ADMIN
+      }
+      else
+      {
+        $status = 1; // IF PHONE CREATED BY USER
+      }
+
+      if(Auth::user()->is_admin == 1 && $request->user == null)
+      {
+        $phone_number = strip_tags($request->phone);
+      }
+      else
+      {
+        $phn = strip_tags($request->phone); 
+        $code = strip_tags($request->pcode);
+        $phone_number = $code.$phn;
+        $phone_number = substr($phone_number,1);
+      }
+      
       $phone->user_id = Auth::id();
-      $phone->number = strip_tags($request->phone);
+      $phone->number = $phone_number;
       $phone->device_key = strip_tags($request->api_key);
       $phone->service_id = strip_tags($request->service);
       $phone->device_id = strip_tags($request->wablas);
-      $phone->status = 3;
+      $phone->status = $status;
 
       try
       {

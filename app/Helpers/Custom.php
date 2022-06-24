@@ -29,16 +29,16 @@ class Custom
         $term_yearly = 12;
 
         $price = [
-            ['title'=>'free','package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>50],
-            ['title'=>'Starter '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'starter','price'=>100000,'terms'=>$term_monthly,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter],
-            ['title'=>'Starter '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'starter-3-month','price'=>85000,'terms'=>$term_3_month,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'discount'=>100000],
-            ['title'=>'Starter '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'starter-yearly','price'=>60000,'terms'=>$term_yearly,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'discount'=>100000],
-            ['title'=>'gold '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'gold','price'=>250000,'terms'=>$term_monthly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold],
-            ['title'=>'gold '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'gold-3-month','price'=>212500,'terms'=>$term_3_month,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000],
-            ['title'=>'gold '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'gold-yearly','price'=>150000,'terms'=>$term_yearly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000],
-            ['title'=>'platinum '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'platinum','price'=>350000,'terms'=>$term_monthly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum],
-            ['title'=>'platinum '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'platinum-3-month','price'=>297500,'terms'=>$term_3_month,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000],
-            ['title'=>'platinum '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'platinum-yearly','price'=>210000,'terms'=>$term_yearly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000]
+            ['title'=>'free','package'=>'free','price'=>0,'terms'=>1,'contestants'=>100,'campaign'=>1,'discount'=>0,'wa'=>50,'sponsor'=>1],
+            ['title'=>'Starter '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'starter','price'=>100000,'terms'=>$term_monthly,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'sponsor'=>1],
+            ['title'=>'Starter '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'starter-3-month','price'=>85000,'terms'=>$term_3_month,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'discount'=>100000,'sponsor'=>0],
+            ['title'=>'Starter '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'starter-yearly','price'=>60000,'terms'=>$term_yearly,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'discount'=>100000,'sponsor'=>0],
+            ['title'=>'gold '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'gold','price'=>250000,'terms'=>$term_monthly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'sponsor'=>0],
+            ['title'=>'gold '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'gold-3-month','price'=>212500,'terms'=>$term_3_month,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000,'sponsor'=>0],
+            ['title'=>'gold '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'gold-yearly','price'=>150000,'terms'=>$term_yearly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000,'sponsor'=>0],
+            ['title'=>'platinum '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'platinum','price'=>350000,'terms'=>$term_monthly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'sponsor'=>0],
+            ['title'=>'platinum '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'platinum-3-month','price'=>297500,'terms'=>$term_3_month,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000,'sponsor'=>0],
+            ['title'=>'platinum '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'platinum-yearly','price'=>210000,'terms'=>$term_yearly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000,'sponsor'=>0]
         ];
 
         return $price;

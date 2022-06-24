@@ -40,6 +40,7 @@ return [
     'package' => 'Upgrade Paket',
     'pass' => 'Password anda.',
     'password' => 'Password tidak sesuai.',
+    'phone.del' => 'Hapus No WA', 
     'process' => 'Sedang diproses', 
     'process.complete' => 'Sudah dibayar',
     'redeem' => 'Jumlah tidak benar!',

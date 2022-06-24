@@ -20,6 +20,7 @@ use App\Models\Orders;
 use App\Models\Messages;
 use App\Models\Redeem;
 use App\Models\Promo;
+use App\Models\Phone;
 use App\Mail\ContactEmail;
 use App\Exports\ContestantExport;
 use Illuminate\Database\QueryException;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Aws\S3\Exception\S3Exception;
 use App\Http\Controllers\ApiController as API;
+use App\Http\Controllers\AdminController as Admin;
 use Carbon\Carbon;
 
 class HomeController extends Controller
@@ -1230,9 +1232,10 @@ class HomeController extends Controller
         $helper = new Custom;
         $user = User::find(Auth::id());
         $conf = $request->segment(2);
+        $phone = Phone::where([['user_id',Auth::id()],['status',1]])->first();
 
         $price_list = Orders::display_pricing_list();
-        $data = ['user'=>$user,'data'=>$price_list,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf,'pc'=> new Custom,'cond'=>true,'account'=>1];
+        $data = ['user'=>$user,'data'=>$price_list,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf,'pc'=> new Custom,'cond'=>true,'account'=>1,'phone'=>$phone];
         return view('account',$data);
     }
 
@@ -1290,18 +1293,31 @@ class HomeController extends Controller
         $activrespon = strip_tags($request->act_api);
         $mailchimp = strip_tags($request->mail_api);
         $sendfox = strip_tags($request->sendfox_api);
-
+        $request->user = 1; // so that phone status = 1
+ 
+        $admin = new Admin;
+        $phone = Phone::where([['user_id',Auth::id()],['status',1]])->first();
         $user = User::find(Auth::id());
 
-        if($activrespon== null && $mailchimp == null && $sendfox == null)
+        if(is_null($phone))
+        {
+            $request->phone_id = null;
+        }
+        else
+        {
+            $request->phone_id = $phone->id;
+        }
+        $admin->settings_phone($request); // create phone
+
+        /* if($activrespon== null && $mailchimp == null && $sendfox == null)
         {
             return response()->json([]);
-        }
+        } */
 
         $user->activrespon_api = $activrespon;
         $user->mailchimp_api = $mailchimp;
         $user->sendfox_api = $sendfox;
-
+     
         try
         {
             $user->save();
@@ -1314,6 +1330,31 @@ class HomeController extends Controller
         }
 
         return response()->json($res);
+    }
+
+    // DELETE USER PHONE
+    public function del_phone()
+    {
+        $phone = Phone::where([['user_id',Auth::id()],['status',1]])->first();
+
+        if(is_null($phone))
+        {
+            $ret['status'] = 0;
+            return response()->json($ret);
+        }
+
+        try
+        {
+            $ph = Phone::find($phone->id);
+            $ph->delete();
+            $ret['status'] = 1;
+        }
+        catch(QueryException $e)
+        {
+            $ret['status'] = 0;
+        }
+
+        return response()->json($ret);
     }
 
     //CONTACT

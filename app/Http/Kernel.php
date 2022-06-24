@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'check_order' => \App\Http\Middleware\CheckValidOrder::class,
         'check_redeem' => \App\Http\Middleware\CheckRedeem::class,
         'is_admin' => \App\Http\Middleware\AdminUser::class,
+        'check-phone' => \App\Http\Middleware\CheckPhone::class,
     ];
 }

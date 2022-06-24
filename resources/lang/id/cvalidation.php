@@ -34,5 +34,6 @@ return [
     'url_tw'=>'URL twitter follow pada forms ',
     'url_pt'=>'URL nonton podcast pada forms ',
     'url_wyt'=>'URL nonton youtube video pada forms ',
-    'url_yt'=>'URL subscribe youtube pada forms '
+    'url_yt'=>'URL subscribe youtube pada forms ',
+    'check_user_phone'=>'Value tidak sah'
 ];

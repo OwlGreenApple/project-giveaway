@@ -9,6 +9,7 @@ return [
     'can'=>'Anda dapat menyambungkan dengan',
     'cancel'=>'Batal',
     'cd'=>'Tanggal dibuat',
+    'click'=>'Klik disini',
     'connected'=>'Tersambung',
     'contestant'=>'Peserta',
     'date'=>'Tanggal',

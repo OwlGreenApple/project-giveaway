@@ -40,9 +40,13 @@ function change_service(val)
     if(val == 1)
     {
         wablas.removeClass('d-none');
+        $(".img_wablas").removeClass('d-none'); //on page integration
+        $(".img_fonnte").addClass('d-none'); 
     }
     else
     {
         wablas.addClass('d-none');
-    }
+        $(".img_wablas").addClass('d-none');
+        $(".img_fonnte").removeClass('d-none');//on page integration
+    } 
 }

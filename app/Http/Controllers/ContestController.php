@@ -249,7 +249,7 @@ class ContestController extends Controller
                     $wa_msg->save(); */
 
                     $mg = new Messages;
-                    $sender = $mg::sender();
+                    $sender = $mg::sender($ev->user_id);
 
                     $msge = [
                         'user_id'=>$ev->user_id,

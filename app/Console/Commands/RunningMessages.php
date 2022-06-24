@@ -49,7 +49,8 @@ class RunningMessages extends Command
      */
     public function handle()
     {
-        $device = new Device;
+        // $device = new Device;
+        $device = new Messages;
         $bc = Broadcast::where('status','=',0)->get();
         $bdc = new BDC;
 
@@ -90,7 +91,7 @@ class RunningMessages extends Command
                     }
 
                     $mg = new Messages;
-                    $sender = $mg::sender();
+                    $sender = $mg::sender($user_id);
 
                     $msge = [
                         'user_id'=>$user_id,
@@ -189,7 +190,10 @@ class RunningMessages extends Command
                 // print_r($arr[$x]."\n");
 
                 $message = $row->message;
-                if($row->img_url == null)
+                $image = $row->img_url;
+                $status = $device::sendingwa($user,$row->receiver,$message,$image,$row->sender);
+
+                /* if($row->img_url == null)
                 {
                     //SEND MESSAGE
                     $data = [
@@ -200,12 +204,12 @@ class RunningMessages extends Command
                     ];
                     $req = new Request($data);
                     $device->send_message($req);
-                }
+                } */
                
-                // UNCOMMENT IF WANT TO TEST / DEBUG
-                // $mg = Messages::find($row->id);
-                // $mg->status = 1;
-                // $mg->save();
+                // UNCOMMENT IF WANT TO TEST / DEBUG -- temporary opened
+                $mg = Messages::find($row->id);
+                $mg->status = $status;
+                $mg->save();
             endforeach;
         }
     }

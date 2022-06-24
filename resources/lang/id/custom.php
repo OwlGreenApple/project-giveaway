@@ -79,6 +79,7 @@ return [
     'scan.del'=>'Silahkan hapus nomer, dan coba sambungkan lagi.',
     'submit'=>'Kirim',
     'success'=>'Data anda berhasil disimpan.',
+    'success.del'=>'Data anda berhasil dihapus.',
     'test'=>'Telepon dan pesan di perlukan!',
     'test.invalid'=>'Isi tidak valid',
     'test.success'=>'Pesan terkirim',

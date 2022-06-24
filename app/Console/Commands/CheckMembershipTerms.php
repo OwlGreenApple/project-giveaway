@@ -39,8 +39,7 @@ class CheckMembershipTerms extends Command
      */
     public function handle()
     {
-        $membership = User::where('status','>',0)->whereRaw("CONVERT_TZ (NOW(), '+00:00','+07:00') >= STR_TO_DATE(end_membership,'%Y-%m-%d %h:%i:%s')")->select('id','status')->get();
-      
+        $membership = User::where('status','>',0)->whereRaw("CONVERT_TZ (NOW(), '+00:00','+07:00') >= STR_TO_DATE(end_membership,'%Y-%m-%d %H:%i:%s')")->select('id','status')->get();
         if($membership->count() > 0)
         {
            foreach($membership as $row):
