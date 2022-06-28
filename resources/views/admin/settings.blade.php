@@ -19,7 +19,7 @@
                             </div>
                             <div class="form-group mb-4">
                                 <label>Pesan Sponsor: </label> 
-                                <input name="sponsor_message" value="{{ $row->sponsor }}" type="text" class="form-control form-control-lg"/>
+                                <textarea name="sponsor_message" class="form-control form-control-lg">{{ $row->sponsor }}</textarea>
                             </div>
                             <button type="button" id="sbt" class="btn btn-success">Submit</button>
                         </form>

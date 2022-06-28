@@ -803,12 +803,12 @@ function save_data()
                         scrollTop: $("#err_scroll").offset().top
                     }, 700);
                 }
-                else
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>')
-                }
+            },
+            complete : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+                $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>');
             },
             error : function(xhr)
             {
