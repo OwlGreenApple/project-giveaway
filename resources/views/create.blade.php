@@ -803,9 +803,7 @@ function save_data()
                         scrollTop: $("#err_scroll").offset().top
                     }, 700);
                 }
-            },
-            complete : function()
-            {
+
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
                 $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>');
