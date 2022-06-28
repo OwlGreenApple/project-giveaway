@@ -30,6 +30,18 @@ function service()
 {
     $("select[name='service']").change(function(){
         var val = $(this).val();
+        var url;
+        
+       /*  if(val == '2') 
+        {
+            url = 'https://md.fonnte.com/register?ref=16';
+        }
+        else
+        {
+            url = 'https://wablas.com/';
+        }
+
+        $(".service").html('<a class="main-color" target="blank" href="'+url+'">'+service+'</a>'); */
         change_service(val);
     });
 }

@@ -37,7 +37,8 @@ class CheckPhone implements Rule
 
         if($this->cond == 'service')
         {
-            $number = [1,2];
+            // $number = [1,2]; -- temporary disabled due there is no respond from wablas
+            $number = [2];
             if(in_array($value,$number) == true)
             {
                 return true;
@@ -49,7 +50,7 @@ class CheckPhone implements Rule
         }
         
         // wablas server array
-        $number = $ct::get_wablas();
+        /* $number = $ct::get_wablas();
         if(isset($number[$value]))
         {
             return true;
@@ -57,7 +58,7 @@ class CheckPhone implements Rule
         else
         {
             return false;
-        }
+        } */
     }
 
     /**

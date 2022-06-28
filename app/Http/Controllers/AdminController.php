@@ -95,10 +95,12 @@ class AdminController extends Controller
       if($request->phone_id == null)
       {
         $phone = new Phone;
+        $phn_update = 0;
       }
       else
       {
-        $phone = Phone::find($request->phone_id); 
+        $phone = Phone::find($request->phone_id);
+        $phn_update = 1;
       }
 
       // phone status
@@ -114,6 +116,7 @@ class AdminController extends Controller
       if(Auth::user()->is_admin == 1 && $request->user == null)
       {
         $phone_number = strip_tags($request->phone);
+        $phn = $phone_number;
       }
       else
       {
@@ -122,22 +125,30 @@ class AdminController extends Controller
         $phone_number = $code.$phn;
         $phone_number = substr($phone_number,1);
       }
-      
+
+      // in case phone == null (when user doesn't want to update phone)
+      if(strlen($phn) > 0)
+      { 
+        $phone->number = $phone_number;
+      }
+
       $phone->user_id = Auth::id();
-      $phone->number = $phone_number;
       $phone->device_key = strip_tags($request->api_key);
       $phone->service_id = strip_tags($request->service);
-      $phone->device_id = strip_tags($request->wablas);
+      // $phone->device_id = strip_tags($request->wablas); disabled temporary
+      $phone->device_id = 0;
       $phone->status = $status;
 
       try
       {
          $phone->save();
          $ret['success'] = 1;
+         $ret['phone_update'] = $phn_update;
+         $ret['phone'] = $phone_number;
       }
       catch(QueryException $e)
       {
-         $e->getMessage();
+        //  dd($e->getMessage());
          $ret['success'] = 0;
       }
 

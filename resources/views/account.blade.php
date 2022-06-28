@@ -78,7 +78,7 @@
 var segment = "{{ $conf }}";
 
 $(function(){
-    service();
+    // service();
     data_tabs();
     set_lang_cur();
     update_profile();
@@ -369,6 +369,11 @@ $(function(){
                 if(result.success == true) 
                 {
                     $("#msg").html("<div class='alert alert-success'>{{ Lang::get('custom.success') }}</div>");
+                    if(result.phone_update == 0)
+                    {
+                        $(".mph").removeClass('d-none');
+                    }
+                    $(".my_phone").val(result.phone)
                 }
                 else
                 {
