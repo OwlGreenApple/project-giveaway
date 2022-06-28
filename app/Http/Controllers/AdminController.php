@@ -132,11 +132,18 @@ class AdminController extends Controller
         $phone->number = $phone_number;
       }
 
+      $wablas_server = strip_tags($request->wablas);
+
+      //  in case if data come from user 
+      if($wablas_server == null)
+      {
+        $wablas_server = 0;
+      }
+
       $phone->user_id = Auth::id();
       $phone->device_key = strip_tags($request->api_key);
       $phone->service_id = strip_tags($request->service);
-      // $phone->device_id = strip_tags($request->wablas); disabled temporary
-      $phone->device_id = 0;
+      $phone->device_id = $wablas_server;
       $phone->status = $status;
 
       try

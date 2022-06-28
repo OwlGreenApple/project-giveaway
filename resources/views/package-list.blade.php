@@ -21,7 +21,7 @@
     @foreach($data as $index)
         <div class="col-lg-4 col-md-4 col-12 @if($index == 1 || $index == 4 || $index == 7) month_data @elseif($index == 2 || $index == 5 || $index == 8) tmonth_data d-none @else year_data d-none @endif">
             <div data-ribbon="@if($index == 4 || $index == 5 || $index == 6) -15% @else -40% @endif" class="card card-pricing @if($index == 1 || $index == 2 || $index == 3) popular @else bestseller @endif shadow px-3 mb-4">
-                <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-custom text-white shadow-sm text-capitalize">{{ $pc->get_price()[$index]['package'] }}</span>
+                <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-custom text-white shadow-sm text-capitalize">{{ $pc->get_price()[$index]['title'] }}</span>
                 <div class="bg-transparent card-header pt-4 border-0">
                     <h3 class="text-center @if($account == 1) h4 @else h3 @endif font-weight-normal text-custom text-center mb-0" data-pricing-value="30">{{ Lang::get('custom.currency') }}&nbsp;<span class="price">{{ $pc::format($pc->get_price()[$index]['price']) }}</span>
                     <div class="mt-2 text-muted ml-2 h5 mb-0"><span class="text-capitalize">{{ Lang::get('order.month') }}</span></div></h3>

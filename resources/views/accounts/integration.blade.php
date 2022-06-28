@@ -82,7 +82,7 @@
             <div class="form-group mb-4">
                 <label>Nomor WA</label>
                 <input id="phone" name="phone" type="text" class="form-control"/>
-                @if(!is_null($phone))<small class="text-info">{{ Lang::get('auth.phone.empty') }}</small>@endif
+                @if(!is_null($phone))<small class="text-black-50">{{ Lang::get('auth.phone.empty') }}</small>@endif
                 <span class="text-danger err_phone"><!-- error --></span>
             </div>
             <div class="form-group mb-4"> 
