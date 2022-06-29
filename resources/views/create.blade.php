@@ -685,6 +685,7 @@ function save_data()
         var len = $(".box-color").length;
         var form = $("#create_event")[0];
         var code = $(".iti__selected-flag").attr('data-code');
+        var error = 0;
         
         var data = new FormData(form);
         data.append('desc',desc);
@@ -735,28 +736,24 @@ function save_data()
                 }
                 else if(result.success == 2)
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
+                    error = 1;
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>')
                 }
                 else if(result.success == 'err_end')
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
+                    error = 1;
                     $(".err_package").show();
                     $(".err_package").html('<div class="text-danger mb-3">'+result.message+'</div>');
                 }
                 else if(result.success == 'err_package')
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
+                    error = 1;
                     $(".err_package").show();
                     $(".err_package").html('<div class="text-danger mb-3">'+result.package+'</div>');
                 }
                 else if(result.success == 'err')
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
+                    error = 1;
                     $(".err_package").hide();
 
                     $(".err_"+result[0][1]).html(result[0][0]);
@@ -803,15 +800,23 @@ function save_data()
                         scrollTop: $("#err_scroll").offset().top
                     }, 700);
                 }
-
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
-                $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>');
+                else
+                {
+                    error = 1;
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error.id") }}</div>');
+                }
             },
             error : function(xhr)
             {
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
+            },
+            complete : function(){
+                if(error == 1)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
             }
         });
     });
