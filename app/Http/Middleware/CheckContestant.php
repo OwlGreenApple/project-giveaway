@@ -45,45 +45,46 @@ class CheckContestant
         $user = User::find($event->user_id);
         $total_contestant = Contestants::where([['contestants.event_id',$event->id],['events.user_id',$user->id]])
                             ->join('events','events.id','=','contestants.event_id')->get()->count();
-        $ct = self::check_contestants_membership($user,$total_contestant); 
+        $ct = self::check_contestants_membership($user,$total_contestant);
 
-        if($validator->fails() == true || $ct == false)
+        if($ct === true)
         {
-            if($ct == true)
+            if($user->membership == 'free')
             {
-                $max_message = 'nmax';
+                $max_message = '<div class="alert alert-warning text-center">'.Lang::get('custom.fcontestants.free').' <b> '.$event->admin_contact.'</b></div>';
             }
             else
             {
-                if($user->membership == 'free'):
-                    $max_message = '<div class="alert alert-warning text-center">'.Lang::get('custom.fcontestants.free').' <b> '.$event->admin_contact.'</b></div>';
-                else:
-                    $max_message = '<div class="alert alert-warning text-center">'.Lang::get('custom.fcontestants').'</div>';
-                endif;
-
-                // logic send wa
-                $wa_msg = Lang::get('email.max_contestant');
-
-                $wa = new CMD;
-                $msge = [
-                    'user_id'=>$user->id,
-                    'ev_id'=>$event->id, 
-                    'bc_id'=>0, 
-                    'ct_id'=>0,
-                    'sender'=>env('WA_TEMP'),
-                    'receiver'=>substr($event->admin_contact,1),
-                    'message'=>$wa_msg,
-                    'img_url'=>null
-                ];
-                $wa::ins_message($msge);
+                $max_message = '<div class="alert alert-warning text-center">'.Lang::get('custom.fcontestants').'</div>';
             }
 
+            // logic send wa
+            $wa_msg = Lang::get('email.max_contestant');
+
+            $wa = new CMD;
+            $msge = [
+                'user_id'=>$user->id,
+                'ev_id'=>$event->id, 
+                'bc_id'=>0, 
+                'ct_id'=>0,
+                'sender'=>env('WA_TEMP'),
+                'receiver'=>substr($event->admin_contact,1),
+                'message'=>$wa_msg,
+                'img_url'=>null
+            ];
+            $wa::ins_message($msge);
+            
+            $rt['nmax'] = $max_message;
+            return response()->json($rt);
+        }
+
+        if($validator->fails() == true)
+        {
             $errors = [
                 'err'=>1,
                 0 =>[$err->first('contestant'),'contestant'],
                 1 =>[$err->first('email'),'email'],
                 2 =>[$err->first('phone'),'phone'],
-                3 =>$max_message,
             ];
 
             return response()->json($errors);

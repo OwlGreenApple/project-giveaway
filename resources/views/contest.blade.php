@@ -78,7 +78,7 @@
                 </h5>
 
                 <!-- contestant enter -->
-                    @if($end == false)
+                    @if($end == false) 
                         <div id="max_contestant">
                             <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
                             <form class="contest-form" id="save_contestant">
@@ -188,12 +188,13 @@
                     $(".err_"+result[0][1]).html(result[0][0]);
                     $(".err_"+result[1][1]).html(result[1][0]);
                     $(".err_"+result[2][1]).html(result[2][0]);
-
+                }
+                else if(result['nmax'] !== undefined) 
+                {
                     // if contestant full
-                    if(result[3] !== 'nmax')
-                    {
-                        $("#max_contestant").html(result[3]);
-                    }
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $("#max_contestant").html(result['nmax']);
                 }
                 else
                 {

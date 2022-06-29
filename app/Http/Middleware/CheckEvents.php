@@ -127,24 +127,24 @@ class CheckEvents
         {
             $errors = [
                 'success'=>'err',
-                0=>[$err->first('title'),'title'],
-                1=>[$err->first('start'),'start'],
-                2=>[$err->first('end'),'end'],
-                3=>[$err->first('award'),'award'],
-                4=>[$err->first('winner'),'winner'],
-                5=>[$err->first('timezone'),'timezone'],
-                6=>[$err->first('owner_name'),'owner_name'],
-                7=>[$err->first('owner_url'),'owner_url'],
-                8=>[$err->first('prize_name'),'prize_name'],
-                9=>[$err->first('prize_amount'),'prize_amount'],
-                10=>[$err->first('images'),'images'],
-                11=>[$err->first('youtube_url'),'youtube_url'],
-                12=>[$err->first('desc'),'desc'],
-                13=>[$err->first('message'),'message'],
-                14=>[$err->first('media'),'media'],
-                15=>[$err->first('message_winner'),'message_winner'],
-                16=>[$err->first('currency'),'currency'],
-                17=>[$err->first('phone'),'phone'],
+                'title'=> $err->first('title'),
+                'start'=>$err->first('start'),
+                'end'=>$err->first('end'),
+                'award'=>$err->first('award'),
+                'winner'=>$err->first('winner'),
+                'timezone'=>$err->first('timezone'),
+                'owner_name'=>$err->first('owner_name'),
+                'owner_url'=>$err->first('owner_url'),
+                'prize_name'=>$err->first('prize_name'),
+                'prize_amount'=>$err->first('prize_amount'),
+                'images'=>$err->first('images'),
+                'youtube_url'=>$err->first('youtube_url'),
+                'desc'=>$err->first('desc'),
+                'message'=>$err->first('message'),
+                'media'=>$err->first('media'),
+                'message_winner'=>$err->first('message_winner'),
+                'currency'=>$err->first('currency'),
+                'phone'=>$err->first('phone'),
             ];
 
             // return response()->json($errors);
@@ -156,81 +156,128 @@ class CheckEvents
         //CREATE
         if(isset($req['new_text_fb']))
         {
-           $err_fb = $this->filter_validator($req,'fb','new');
-           if(count($err_fb) > 0)
-           {
-               $errors['success'] = 'err';
-               $errors['err_fb'] = self::fix_lang('new','fb',$err_fb);
-           }
+           $type = 'fb';
+           $protocol = 'new';
+           $err_fb = $this->filter_validator($req,$type,$protocol);
+           
+            if(count($err_fb) > 0)
+            {
+                $errors['success'] = 'err';
+                foreach($err_fb as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+                endforeach;
+            }
         }
 
         if(isset($req['new_text_ig']))
         {
-           $err_ig = $this->filter_validator($req,'ig','new');
+           $type = 'ig';
+           $protocol = 'new';
+           $err_ig = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_ig) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_ig'] = self::fix_lang('new','ig',$err_ig);
+               foreach($err_ig as $key=> $msg_err):
+                   $key = str_replace(".","_",$key);
+                   $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['new_text_tw']))
         {
-           $err_tw = $this->filter_validator($req,'tw','new');
+           $type = 'tw';
+           $protocol = 'new';
+           $err_tw = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_tw) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_tw'] = self::fix_lang('new','tw',$err_tw);
+               foreach($err_tw as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['new_text_yt']))
         {
-           $err_yt = $this->filter_validator($req,'yt','new');
+           $type = 'yt';
+           $protocol = 'new';
+           $err_yt = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_yt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_yt'] = self::fix_lang('new','yt',$err_yt);
+               foreach($err_yt as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['new_text_pt']))
         {
-           $err_pt = $this->filter_validator($req,'pt','new');
+            $type = 'pt';
+           $protocol = 'new';
+           $err_pt = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_pt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_pt'] = self::fix_lang('new','pt',$err_pt);
+                foreach($err_pt as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+                endforeach;
            }
         }
 
         if(isset($req['new_text_de']))
         {
-           $err_de = $this->filter_validator($req,'de','new');
+            $type = 'de';
+            $protocol = 'new';
+           $err_de = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_de) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_de'] = self::fix_lang('new','de',$err_de);
+               foreach($err_de as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['new_text_cl']))
         {
-           $err_cl = $this->filter_validator($req,'cl','new');
+            $type = 'cl';
+            $protocol = 'new';
+           $err_cl = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_cl) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_cl'] = self::fix_lang('new','cl',$err_cl);
+                foreach($err_cl as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+                endforeach;
            }
         }
 
         if(isset($req['new_text_wyt']))
         {
-           $err_wyt = $this->filter_validator($req,'wyt','new');
+            $type = 'wyt';
+            $protocol = 'new';
+           $err_wyt = $this->filter_validator($req,$type,$protocol);
            if(count($err_wyt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_cl'] = self::fix_lang('new','wyt',$err_wyt);
+               foreach($err_wyt as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
@@ -353,7 +400,7 @@ class CheckEvents
 
         if($validator->fails() == true)
         {
-            return $validator->messages()->all();
+            return $validator->errors()->toArray();
         }
         else
         {

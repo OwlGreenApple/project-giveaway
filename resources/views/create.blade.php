@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+<style>.text-danger {font-size: 14px;}</style>
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -542,16 +544,20 @@ function column_entry(val)
     }
 
     var len = $(".entries").length;
+    var err_len = $(".errt_"+val).length; //for error messsage class
 
     $column = '';
-    $column += '<div class="row mb-4 entries pos_'+len+'">';
+    $column += '<div class="row mb-4 errt_'+val+' entries pos_'+len+'">';
     $column += '<div class="border-bottom info">'+title+' <a del_new_id='+len+' class="del-entry"><i class="far fa-trash-alt title"></i></a></div>';
 
+    // activity
     $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
     $column += '<label>'+col_1+':<span class="text-danger">*</span></label>';
     $column += '<input type="text" class="form-control form-control-lg" name="new_text_'+val+'[]" />';
+    $column += '<span class="text-danger err_new_text_'+val+'_'+err_len+'"></span>';//error activity
     $column += '</div>';
 
+    // url
     if(val !== 'de')
     {
         $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
@@ -562,10 +568,16 @@ function column_entry(val)
             $column += '<input placeholder="your youtube url" autocomplete="off" type="text" class="em_new_'+len+' form-control form-control-lg emb" name="new_url_'+val+'[]" />';
 
         }
+        else if(val == 'cl')
+        {
+            $column += '<input placeholder="{{ Lang::get("table.ex") }}" autocomplete="off" type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+        }
         else
         {
             $column += '<input type="text" autocomplete="off" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
         }
+
+        $column += '<span class="text-danger err_new_url_'+val+'_'+err_len+'"></span>';//error text
         $column += '</div>';
         $column += '<div class="form-group col-md-12 col-lg-12">';
     }
@@ -573,11 +585,13 @@ function column_entry(val)
         $column += '<div class="form-group col-md-6 col-lg-6 mb-2">';
     }
 
-    $column += '<label>'+col_3+'<span class="text-danger">*</span></label>';
+    // point
+    $column += '<label>'+col_3+'<span class="text-danger">*</span></label>'; 
     $column += '<div class="row g1">';
     $column += '<div class="col-auto">';
     $column += '<input type="number" min="1" class="form-control form-control-lg" name="new_entries_'+val+'[]" />';
     $column += '</div>';
+    $column += '<span class="text-danger err_new_entries_'+val+'_'+err_len+'"></span>'; // error point
 
     if(val !== 'de')
     {
@@ -755,47 +769,37 @@ function save_data()
                 {
                     error = 1;
                     $(".err_package").hide();
+                    $(".text-danger").html('');
+                    $.each(result,function(key, value)
+                    {
+                        $(".err_"+key).html(value);
 
-                    $(".err_"+result[0][1]).html(result[0][0]);
-                    $(".err_"+result[1][1]).html(result[1][0]);
-                    $(".err_"+result[2][1]).html(result[2][0]);
-                    $(".err_"+result[3][1]).html(result[3][0]);
-                    $(".err_"+result[4][1]).html(result[4][0]);
-                    $(".err_"+result[5][1]).html(result[5][0]);
-                    $(".err_"+result[6][1]).html(result[6][0]);
-                    $(".err_"+result[7][1]).html(result[7][0]);
-                    $(".err_"+result[8][1]).html(result[8][0]);
-                    $(".err_"+result[9][1]).html(result[9][0]);
-                    $(".err_"+result[10][1]).html(result[10][0]);
-                    $(".err_"+result[11][1]).html(result[11][0]);
-                    $(".err_"+result[12][1]).html(result[12][0]);
-                    $(".err_"+result[13][1]).html(result[13][0]);
-                    $(".err_"+result[14][1]).html(result[14][0]);
-                    $(".err_"+result[15][1]).html(result[15][0]);
-                    $(".err_"+result[16][1]).html(result[16][0]);
-                    $(".err_"+result[17][1]).html(result[17][0]);
+                        // validation for tambah point / add task 
+                        for($e=1;$e<=$(".entries").length;$e++)
+                        {
+                            $('.'+key).html(value); 
+                        }
 
-                    err_bonus =''; //to clear error message
+                        // new bonus entry validation
+                        /* (result.err_fb !== undefined)?display_bonus_error(result.err_fb):false;
+                        (result.err_ig !== undefined)?display_bonus_error(result.err_ig):false;
+                        (result.err_tw !== undefined)?display_bonus_error(result.err_tw):false;
+                        (result.err_yt !== undefined)?display_bonus_error(result.err_yt):false;
+                        (result.err_pt !== undefined)?display_bonus_error(result.err_pt):false;
+                        (result.err_de !== undefined)?display_bonus_error(result.err_de):false;
+                        (result.err_cl !== undefined)?display_bonus_error(result.err_cl):false;
+                        (result.err_wyt !== undefined)?display_bonus_error(result.err_wyt):false;
 
-                    // new bonus entry validation
-                    (result.err_fb !== undefined)?display_bonus_error(result.err_fb):false;
-                    (result.err_ig !== undefined)?display_bonus_error(result.err_ig):false;
-                    (result.err_tw !== undefined)?display_bonus_error(result.err_tw):false;
-                    (result.err_yt !== undefined)?display_bonus_error(result.err_yt):false;
-                    (result.err_pt !== undefined)?display_bonus_error(result.err_pt):false;
-                    (result.err_de !== undefined)?display_bonus_error(result.err_de):false;
-                    (result.err_cl !== undefined)?display_bonus_error(result.err_cl):false;
-                    (result.err_wyt !== undefined)?display_bonus_error(result.err_wyt):false;
+                        // edit bonus entry validation
+                        (result.err_edit_fb !== undefined)?display_bonus_error(result.err_edit_fb):false;
+                        (result.err_edit_ig !== undefined)?display_bonus_error(result.err_edit_ig):false;
+                        (result.err_edit_tw !== undefined)?display_bonus_error(result.err_edit_tw):false;
+                        (result.err_edit_yt !== undefined)?display_bonus_error(result.err_edit_yt):false;
+                        (result.err_edit_pt !== undefined)?display_bonus_error(result.err_edit_pt):false;
+                        (result.err_edit_cl !== undefined)?display_bonus_error(result.err_edit_cl):false;
+                        (result.err_edit_wyt !== undefined)?display_bonus_error(result.err_edit_wyt):false;
+                     */});
 
-                    // edit bonus entry validation
-                    (result.err_edit_fb !== undefined)?display_bonus_error(result.err_edit_fb):false;
-                    (result.err_edit_ig !== undefined)?display_bonus_error(result.err_edit_ig):false;
-                    (result.err_edit_tw !== undefined)?display_bonus_error(result.err_edit_tw):false;
-                    (result.err_edit_yt !== undefined)?display_bonus_error(result.err_edit_yt):false;
-                    (result.err_edit_pt !== undefined)?display_bonus_error(result.err_edit_pt):false;
-                    (result.err_edit_cl !== undefined)?display_bonus_error(result.err_edit_cl):false;
-                    (result.err_edit_wyt !== undefined)?display_bonus_error(result.err_edit_wyt):false;
-                
                     $('html, body').animate({
                         scrollTop: $("#err_scroll").offset().top
                     }, 700);
@@ -822,16 +826,21 @@ function save_data()
     });
 }
 
-function display_bonus_error(results)
+function display_bonus_error(key, ...results)
 {
+    console.log(results.length);
     var len = results.length;
-    for(x=0;x<len;x++){
+    var err_bonus = '';
+
+    // console.log(key +':'+ results+' -- '+len);
+
+    /* for(x=0;x<len;x++){
         if(err_bonus.length !==  len)
         {
             err_bonus += '<li class="list-group-item border-0 text-danger">'+results[x]+'</li>';
         }
     }
-    $("#error_bonus_entry").html(err_bonus);
+    $("#error_bonus_entry").html(err_bonus); */
 }
 
 function count_logic()
