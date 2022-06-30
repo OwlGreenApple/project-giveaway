@@ -52,7 +52,7 @@
             <span id="msg_phone"><!-- validation error --></span>
            
             <div class="form-group mt-3 mb-4">
-                <label>Service</label>
+                <label>{{ Lang::get('table.service')}}</label>
                 <select class="form-select" name="service">
                    <!--  <option if(!is_null($phone) && $phone->service_id == 1) selected endif value="1">WABLAS</option> -->
                     <option @if(!is_null($phone) && $phone->service_id == 2) selected @endif value="2">FONNTE</option>
@@ -70,23 +70,23 @@
             </div> -->
             @if(!is_null($phone))
                 <div class="form-group mb-4">
-                    <label>Nomor Saya</label>
+                    <label>{{ Lang::get('table.service.phone')}}</label>
                     <input readonly disabled value="{{ $phone->number }}" type="text" class="form-control my_phone"/>
                 </div>
             @endif
             <!-- in case if user create phone -->
             <div class="mph form-group mb-4 d-none">
-                <label>Nomor Saya</label>
+                <label>{{ Lang::get('table.service.phone')}}</label>
                 <input readonly disabled type="text" class="form-control my_phone"/>
             </div>
             <div class="form-group mb-4">
-                <label>Nomor WA</label>
+                <label>{{ Lang::get('table.service.phone.selected')}}</label>
                 <input id="phone" name="phone" type="text" class="form-control"/>
                 @if(!is_null($phone))<small class="text-black-50">{{ Lang::get('auth.phone.empty') }}</small>@endif
                 <span class="text-danger err_phone"><!-- error --></span>
             </div>
             <div class="form-group mb-4"> 
-                <label>API KEY</label> 
+                <label>{{ Lang::get('table.service.api')}}</label> 
                 <input name="api_key" value="@if(!is_null($phone)) {{ $phone->device_key }} @endif" type="text" class="form-control"/>
                 <span class="text-danger err_api_key"><!-- error --></span>
             </div>

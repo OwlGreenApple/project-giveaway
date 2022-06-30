@@ -74,7 +74,7 @@ return [
     'terms'=>'Syarat dan ketentuan',
     'total'=>'Total Harga',
     'save'=>'Hemat',
-    'sponsor'=>'Pesan Sponsor',
+    'sponsor'=>'No Watermark',
     'status'=>'Status',
     'step'=>'Silahkan transfer di',
     'step_next'=>'Setelah itu , Silahkan tekan tombol <b>Upload</b> di bawah',

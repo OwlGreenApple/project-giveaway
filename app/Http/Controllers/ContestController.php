@@ -80,7 +80,7 @@ class ContestController extends Controller
             'end_time'=>Lang::get('giveaway.end')." : <b class='text-black-custom'>".Carbon::parse($event->end)->format($format)."</b>",
         ];
 
-        return view('contest',$data);
+        return view('contest',$data); 
     }
 
     public static function convert_timezone($event)
