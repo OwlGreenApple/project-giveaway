@@ -22,6 +22,7 @@ return [
     'email'=>'Email',
     'entry'=>'Entry',
     'ex'=>'https://linkanda.com',
+    'ex.username'=>'Username akun',
     'failed'=>'Gagal',
     'fund'=>'Saldo',
     'image'=>'Gambar',

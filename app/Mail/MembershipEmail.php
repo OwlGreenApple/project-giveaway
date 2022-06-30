@@ -6,6 +6,7 @@ use App\Helpers\Custom;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class MembershipEmail extends Mailable
@@ -42,7 +43,7 @@ class MembershipEmail extends Mailable
     {
         return $this
         ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-        ->subject($this->subject)
+        ->subject(Lang::get("order.order.mail"))
         ->view('emails.MembershipEmail')
         ->with([
           'no' => $this->no,

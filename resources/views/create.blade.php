@@ -193,12 +193,14 @@
                                     <div class="form-group col-md-6 col-lg-6 mb-2">
                                         <label>{{ Lang::get('custom.act') }}<span class="text-danger">*</span></label>
                                         <input value="{{ $row['title'] }}" type="text" class="form-control form-control-lg" name="edit_text_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                        <span class="text-danger err_edit_text_{{ $row['mod'] }}_{{ $row['id'] }}"></span><!-- error text --> 
                                     </div>
 
                                     @if($row['type'] !== '5')
                                     <div class="form-group col-md-6 col-lg-6 mb-2">
                                         <label>{{ $row['col_name'] }}<span class="text-danger">*</span></label>
-                                        <input @if($row['type'] == '7') placeholder="Youtube URL" @endif value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                        <input placeholder="@if($row['type'] == '7')  Youtube URL @elseif($row['type'] == '1' || $row['type'] == '2') {{ Lang::get('table.ex.username') }} @else {{ Lang::get('table.ex') }} @endif" value="{{ $row['url'] }}" type="text" class="@if($row['type'] == '7')em_{{ $row['id'] }}@endif form-control form-control-lg emb" name="edit_url_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                        <span class="text-danger err_edit_url_{{ $row['mod'] }}_{{ $row['id'] }}"></span><!-- error url -->
                                     </div>
                                     @endif
 
@@ -211,6 +213,7 @@
                                         <div class="row g1">
                                             <div class="col-auto">
                                                 <input value="{{ $row['prize'] }}" type="number" min="1" class="form-control form-control-lg" name="edit_entries_{{ $row['mod'] }}[{{ $row['id'] }}]" />
+                                                <span class="text-danger err_edit_entries_{{ $row['mod'] }}_{{ $row['id'] }}"></span><!-- error entries -->
                                             </div>
                                             @if($row['type'] !== '5')
                                             <div class="col-auto">
@@ -568,13 +571,13 @@ function column_entry(val)
             $column += '<input placeholder="your youtube url" autocomplete="off" type="text" class="em_new_'+len+' form-control form-control-lg emb" name="new_url_'+val+'[]" />';
 
         }
-        else if(val == 'cl')
+        else if(val == 'ig' || val == 'tw')
         {
-            $column += '<input placeholder="{{ Lang::get("table.ex") }}" autocomplete="off" type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+            $column += '<input placeholder="{{ Lang::get("table.ex.username") }}" autocomplete="off" type="text" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
         }
         else
         {
-            $column += '<input type="text" autocomplete="off" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
+            $column += '<input placeholder="{{ Lang::get("table.ex") }}" type="text" autocomplete="off" class="form-control form-control-lg" name="new_url_'+val+'[]" />';
         }
 
         $column += '<span class="text-danger err_new_url_'+val+'_'+err_len+'"></span>';//error text
@@ -774,31 +777,12 @@ function save_data()
                     {
                         $(".err_"+key).html(value);
 
-                        // validation for tambah point / add task 
+                        // validation for tambah point / add new task 
                         for($e=1;$e<=$(".entries").length;$e++)
                         {
                             $('.'+key).html(value); 
                         }
-
-                        // new bonus entry validation
-                        /* (result.err_fb !== undefined)?display_bonus_error(result.err_fb):false;
-                        (result.err_ig !== undefined)?display_bonus_error(result.err_ig):false;
-                        (result.err_tw !== undefined)?display_bonus_error(result.err_tw):false;
-                        (result.err_yt !== undefined)?display_bonus_error(result.err_yt):false;
-                        (result.err_pt !== undefined)?display_bonus_error(result.err_pt):false;
-                        (result.err_de !== undefined)?display_bonus_error(result.err_de):false;
-                        (result.err_cl !== undefined)?display_bonus_error(result.err_cl):false;
-                        (result.err_wyt !== undefined)?display_bonus_error(result.err_wyt):false;
-
-                        // edit bonus entry validation
-                        (result.err_edit_fb !== undefined)?display_bonus_error(result.err_edit_fb):false;
-                        (result.err_edit_ig !== undefined)?display_bonus_error(result.err_edit_ig):false;
-                        (result.err_edit_tw !== undefined)?display_bonus_error(result.err_edit_tw):false;
-                        (result.err_edit_yt !== undefined)?display_bonus_error(result.err_edit_yt):false;
-                        (result.err_edit_pt !== undefined)?display_bonus_error(result.err_edit_pt):false;
-                        (result.err_edit_cl !== undefined)?display_bonus_error(result.err_edit_cl):false;
-                        (result.err_edit_wyt !== undefined)?display_bonus_error(result.err_edit_wyt):false;
-                     */});
+                    });
 
                     $('html, body').animate({
                         scrollTop: $("#err_scroll").offset().top

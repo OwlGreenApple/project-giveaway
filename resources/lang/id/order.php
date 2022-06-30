@@ -55,6 +55,7 @@ return [
     'notes'=>'Catatan',
     'only'=>'Hanya',
     'order'=>'Order Sekarang',
+    'order.mail'=>'Selesaikan Order Anda',
     'package'=>'Paket',
     'pay'=>'Silahkan transfer di',
     'pay.proof'=>'dan upload bukti bayar di',

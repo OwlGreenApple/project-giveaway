@@ -285,81 +285,129 @@ class CheckEvents
 
         if(isset($req['edit_text_fb']))
         {
-           $err_fb = $this->filter_validator($req,'fb','edit');
-           if(count($err_fb) > 0)
-           {
+            $type = 'fb';
+            $protocol = 'edit';
+            $err_fb = $this->filter_validator($req,$type,$protocol);
+ 
+            if(count($err_fb) > 0)
+            {
                 $errors['success'] = 'err';
-                $errors['err_edit_fb'] = self::fix_lang('edit','fb',$err_fb);
-           }
-        }
+                foreach($err_fb as $key=> $msg_err):
+                     $key = str_replace(".","_",$key);
+                     $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+                endforeach;
+            }
+        } 
 
         if(isset($req['edit_text_ig']))
         {
-           $err_ig = $this->filter_validator($req,'ig','edit');
+            $type = 'ig';
+            $protocol = 'edit';
+           $err_ig = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_ig) > 0)
            {
                 $errors['success'] = 'err';
-                $errors['err_edit_ig'] = self::fix_lang('edit','ig',$err_ig);
+                foreach($err_ig as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+                endforeach;
            }
         }
 
         if(isset($req['edit_text_tw']))
         {
-           $err_tw = $this->filter_validator($req,'tw','edit');
+           $type = 'tw';
+           $protocol = 'edit';
+           $err_tw = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_tw) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_tw'] = self::fix_lang('edit','tw',$err_tw);
+               foreach($err_tw as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['edit_text_yt']))
         {
-           $err_yt = $this->filter_validator($req,'yt','edit');
+           $type = 'yt';
+           $protocol = 'edit';
+           $err_yt = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_yt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_yt'] = self::fix_lang('edit','yt',$err_yt);
+               foreach($err_yt as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['edit_text_pt']))
-        {
-           $err_pt = $this->filter_validator($req,'pt','edit');
+        {  
+           $type = 'pt';
+           $protocol = 'edit';
+           $err_pt = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_pt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_pt'] = self::fix_lang('edit','pt',$err_pt);
+               foreach($err_pt as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['new_text_de']))
         {
-           $err_de = $this->filter_validator($req,'de','edit');
+           $type = 'de';
+           $protocol = 'edit';
+           $err_de = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_de) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_de'] = self::fix_lang('edit','de',$err_de);
+               foreach($err_de as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['edit_text_cl']))
         {
-           $err_cl = $this->filter_validator($req,'cl','edit');
+           $type = 'cl';
+           $protocol = 'edit';
+           $err_cl = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_cl) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_cl'] = self::fix_lang('edit','cl',$err_cl);
+               foreach($err_cl as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
         if(isset($req['new_text_wyt']))
         {
-           $err_wyt = $this->filter_validator($req,'wyt','edit');
+           $type = 'wyt';
+           $protocol = 'edit';
+           $err_wyt = $this->filter_validator($req,$type,$protocol);
+
            if(count($err_wyt) > 0)
            {
                $errors['success'] = 'err';
-               $errors['err_edit_cl'] = self::fix_lang('edit','wyt',$err_wyt);
+               foreach($err_wyt as $key=> $msg_err):
+                    $key = str_replace(".","_",$key);
+                    $errors[$key] = self::fix_lang($protocol,$type,$msg_err);
+               endforeach;
            }
         }
 
@@ -378,7 +426,7 @@ class CheckEvents
     {
         $rules = [
             $protocol.'_text_'.$init.'.*'=>['required','max:30'],
-            $protocol.'_entries_'.$init.'.*'=>['required','min:1','max:100'],
+            $protocol.'_entries_'.$init.'.*'=>['bail','required','numeric','min:1','max:100'],
         ];
 
         if($init !== 'de' || $init !== 'wyt')
@@ -396,7 +444,12 @@ class CheckEvents
             $rules[$protocol.'_url_'.$init.'.*'] = ['required','max:50'];
         }
 
-        $validator = Validator::make($req,$rules);
+        $messages = [
+            'url' => Lang::get("cvalidation.invalid.url"),
+            'numeric' => Lang::get("cvalidation.invalid.numeric"),
+        ];
+
+        $validator = Validator::make($req,$rules,$messages);
 
         if($validator->fails() == true)
         {
@@ -411,7 +464,7 @@ class CheckEvents
     private static function fix_lang($type,$ent,$err_wyt)
     {
         $replace = [$type.'_text_'.$ent,$type.'_url_'.$ent,$type.'_entries_'.$ent,"."];
-        $target = [Lang::get('cvalidation.act_'.$ent),Lang::get('cvalidation.url_'.$ent),Lang::get('cvalidation.ent_'.$ent)," : "];
+        $target = [Lang::get('cvalidation.act_'.$ent),Lang::get('cvalidation.url_'.$ent)." ",Lang::get('cvalidation.ent_'.$ent)];
         return str_replace($replace,$target,$err_wyt);
     }
 
