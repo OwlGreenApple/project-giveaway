@@ -780,7 +780,11 @@ function save_data()
                         // validation for tambah point / add new task 
                         for($e=1;$e<=$(".entries").length;$e++)
                         {
-                            $('.'+key).html(value); 
+                            // this logic is to avoid validation wih class title take the effects
+                            if(key !== 'title')
+                            {
+                                $('.'+key).html(value);
+                            }
                         }
                     });
 
