@@ -136,7 +136,7 @@
                         </div>
                         <!-- new line -->
                         <div class="border-bottom info">{{ Lang::get('giveaway.banner') }} / {{ Lang::get('giveaway.youtube') }}</div>
-                        <div class="text-justify title mb-3">{{ Lang::get('giveaway.tips') }}</div>
+                        <div class="text-justify title mb-3">{!! Lang::get('giveaway.tips') !!}</div>
                         <div class="form-check form-switch mb-2">
                             <input @if(isset($event) && $event->media == 1) value="on" checked @else value="off" @endif name="media_option" class="form-check-input" type="checkbox" id="media_option">
                             <label class="form-check-label" for="media_option">{{ Lang::get('giveaway.youtube') }}</label>
@@ -677,6 +677,7 @@ function detect_video_or_banner(val)
 function image_uploader()
 {
     $('.input-images').imageUploader({
+        maxSize: 1 * 1024 * 1024,
         label :'{{ Lang::get("giveaway.max") }}',
         "{{ $preloaded }}": [
             @if(count($data) > 0)
