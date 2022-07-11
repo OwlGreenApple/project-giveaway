@@ -12,7 +12,7 @@
           <!-- FORM -->
 						<form id="submit_checkout">
               <h2 class="Daftar-Disini">{{ Lang::get('order.choose') }}</h2>
-							
+              
               <div class="form-group">
                 <div class="col-12 col-md-12">
                   <label class="text" for="formGroupExampleInput">{{ Lang::get('order.package') }} :</label>
@@ -21,11 +21,11 @@
                         @if($row['price'] > 0)
                            @if($index == $page)
                             <option data-title="{{$row['title']}}" data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
-                              {{$row['title']}} - IDR {{ $api::format($row['price']) }} - {{ Lang::get('order.month') }}
+                              {{$row['title']}} - IDR ({{ $api::format($row['price']).Lang::get('order.month') }})
                             </option>
                             @else
                             <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
-                              {{$row['title']}} - IDR {{ $api::format($row['price']) }} - {{ Lang::get('order.month') }}
+                              {{$row['title']}} - IDR ({{ $api::format($row['price']).Lang::get('order.month') }})
                             </option>
                             @endif
                         @endif

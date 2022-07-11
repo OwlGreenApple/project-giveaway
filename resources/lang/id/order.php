@@ -42,7 +42,7 @@ return [
     'id'=>'ID tidak valid',
     'login'=>'Login di sini',
     'log_in'=>'Masuk',
-    'month'=>'Per bulan',
+    'month'=>'/ bulan',
     'month.m'=>'Bulanan',
     'month.t'=>'3 Bulan',
     'month.y'=>'Tahunan',

@@ -33,7 +33,7 @@
     @endfor
     </div>
 </div>
-
+    
 <!-- price list --> 
 <script src="{{ asset('assets/js/pricing.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
