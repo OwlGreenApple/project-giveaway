@@ -43,6 +43,7 @@ return [
     'login'=>'Login di sini',
     'log_in'=>'Masuk',
     'month'=>'/ bulan',
+    'month.sh'=>'bln',
     'month.m'=>'Bulanan',
     'month.t'=>'3 Bulan',
     'month.y'=>'Tahunan',
