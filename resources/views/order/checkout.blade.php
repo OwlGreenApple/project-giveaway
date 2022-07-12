@@ -12,7 +12,7 @@
           <!-- FORM -->
 						<form id="submit_checkout">
               <h2 class="Daftar-Disini">{{ Lang::get('order.choose') }}</h2>
-							
+              
               <div class="form-group">
                 <div class="col-12 col-md-12">
                   <label class="text" for="formGroupExampleInput">{{ Lang::get('order.package') }} :</label>

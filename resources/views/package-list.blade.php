@@ -24,16 +24,20 @@
                 <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-custom text-white shadow-sm text-capitalize">{{ $pc->get_price()[$index]['title'] }}</span>
                 <div class="bg-transparent card-header pt-4 border-0">
                     <h3 class="text-center @if($account == 1) h4 @else h3 @endif font-weight-normal text-custom text-center mb-0" data-pricing-value="30">{{ Lang::get('custom.currency') }}&nbsp;<span class="price">{{ $pc::format($pc->get_price()[$index]['price']) }}</span>
-                    <div class="mt-2 text-muted ml-2 h5 mb-0"><span class="text-capitalize">{{ Lang::get('order.month') }}</span></div></h3>
-                    @if(!in_array($index,[1,4,7]))
-                        <div class="mt-2 text-muted ml-2 h5 mb-0 text-center"><span class="text-capitalize">
-                            <strike>
-                                @if($index == 2 || $index == 3){{ Lang::get('custom.currency') }}&nbsp;{{ $pc::format($pc->get_price()[1]['price']) }}@endif
-                                @if($index == 5 || $index == 6){{ Lang::get('custom.currency') }}&nbsp;{{ $pc::format($pc->get_price()[4]['price']) }}@endif
-                                @if($index == 8 || $index == 9){{ Lang::get('custom.currency') }}&nbsp;{{ $pc::format($pc->get_price()[7]['price']) }}@endif
-                            </strike>
-                        </span></div></h3>
+                    <div class="mt-2 text-muted ml-2 h5 mb-0"><span class="text-capitalize">{{ Lang::get('order.month') }}</span></div>
+
+                    <!--for displaying monthly strikethrough character-->
+                    @if($index == 2 || $index == 3 || $index == 5 || $index == 6 || $index == 8 || $index == 9)
+                    <?php 
+                        if ($index == 2 || $index == 5 || $index == 8) {
+                            $index_strikethrough = $index - 1;
+                        }else {
+                            $index_strikethrough = $index - 2;
+                        }
+                    ?>
+                    <del>{{ Lang::get('custom.currency') }}&nbsp;<span class="price">{{ $pc::format($pc->get_price()[$index_strikethrough]['price']) }}</span></del>
                     @endif
+                    </h3>
                 </div>
                 <hr>
 

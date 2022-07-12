@@ -20,7 +20,7 @@ class Orders extends Model
 		- 6 == order get flagged after 6 hours -- to avoid system send WA after next 6 hours
 		- 7 == order retur
     */
-
+	
     protected $table = 'orders';
 
 	// DISPLAY PRICING LIST
