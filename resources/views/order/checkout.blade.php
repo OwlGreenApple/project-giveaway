@@ -21,11 +21,11 @@
                         @if($row['price'] > 0)
                            @if($index == $page)
                             <option data-title="{{$row['title']}}" data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
-                              {{$row['title']}} - IDR {{ $api::format($row['price']) }} - {{ Lang::get('order.month') }}
+                              {{$row['title']}} (IDR {{ $api::format($row['price']) }} / {{ Lang::get('order.month.sh') }})
                             </option>
                             @else
                             <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
-                              {{$row['title']}} - IDR {{ $api::format($row['price']) }} - {{ Lang::get('order.month') }}
+                              {{$row['title']}} (IDR {{ $api::format($row['price']) }} / {{ Lang::get('order.month.sh') }})
                             </option>
                             @endif
                         @endif

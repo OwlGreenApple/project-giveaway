@@ -25,6 +25,15 @@
                 <div class="bg-transparent card-header pt-4 border-0">
                     <h3 class="text-center @if($account == 1) h4 @else h3 @endif font-weight-normal text-custom text-center mb-0" data-pricing-value="30">{{ Lang::get('custom.currency') }}&nbsp;<span class="price">{{ $pc::format($pc->get_price()[$index]['price']) }}</span>
                     <div class="mt-2 text-muted ml-2 h5 mb-0"><span class="text-capitalize">{{ Lang::get('order.month') }}</span></div></h3>
+                    @if(!in_array($index,[1,4,7]))
+                        <div class="mt-2 text-muted ml-2 h5 mb-0 text-center"><span class="text-capitalize">
+                            <strike>
+                                @if($index == 2 || $index == 3){{ Lang::get('custom.currency') }}&nbsp;{{ $pc::format($pc->get_price()[1]['price']) }}@endif
+                                @if($index == 5 || $index == 6){{ Lang::get('custom.currency') }}&nbsp;{{ $pc::format($pc->get_price()[4]['price']) }}@endif
+                                @if($index == 8 || $index == 9){{ Lang::get('custom.currency') }}&nbsp;{{ $pc::format($pc->get_price()[7]['price']) }}@endif
+                            </strike>
+                        </span></div></h3>
+                    @endif
                 </div>
                 <hr>
 
