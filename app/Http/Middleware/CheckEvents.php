@@ -84,7 +84,7 @@ class CheckEvents
             'start'=>['required',new CheckDate('start',null,$request->timezone,$request->edit)],
             'end'=>['required',new CheckDate('end',$request->start)],
             'award'=>['required',new CheckDate('award',$request->end)],
-            'winner'=>['required','numeric','min:1','max:50'],
+            'winner'=>['required','numeric','min:1','max:150'],
             'timezone'=>['required', new CheckDate('timezone',null)],
             'owner_name'=>['required','max:45'],
             'owner_url'=>['required','url'],

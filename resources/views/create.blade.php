@@ -78,7 +78,7 @@
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>{{ Lang::get('giveaway.winner') }}:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" max="50" class="form-control form-control-lg w-25" name="winner" />
+                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" max="150" class="form-control form-control-lg w-25" name="winner" />
                                 <span class="text-danger err_winner"><!-- --></span>
                             </div>
                         </div>

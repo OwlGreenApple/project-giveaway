@@ -47,7 +47,7 @@ class CheckContestant
                             ->join('events','events.id','=','contestants.event_id')->get()->count();
         $ct = self::check_contestants_membership($user,$total_contestant);
 
-        if($ct === true)
+        if($ct === false)
         {
             if($user->membership == 'free')
             {
