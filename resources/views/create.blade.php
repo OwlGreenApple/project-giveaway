@@ -677,7 +677,7 @@ function detect_video_or_banner(val)
 function image_uploader()
 {
     $('.input-images').imageUploader({
-        maxSize: 1 * 1024 * 1024,
+        maxSize: (2 * 1024 * 1024)/10,
         label :'{{ Lang::get("giveaway.max") }}',
         "{{ $preloaded }}": [
             @if(count($data) > 0)

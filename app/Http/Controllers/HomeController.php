@@ -768,10 +768,16 @@ class HomeController extends Controller
 
         // DELETE BANNER
         $preload = $request->preloaded;
+        $lists = $request->list;
+
+        // IN CASE IF USER DELETED ENTIRE BANNER AND THEN UPLOAD NEW
+        if($preload == null && $lists !== null)
+        {
+            self::delete_banner(NULL,NULL,$lists);
+        }
 
         if($preload !== null)
         {
-            $lists = $request->list;
             $t_preload = count($preload);
             $t_lists = count($lists);
 

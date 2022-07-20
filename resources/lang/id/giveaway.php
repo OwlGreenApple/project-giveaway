@@ -46,7 +46,7 @@ return [
     'start'=>'Dimulai pada',
     'start.not'=>'Event giveaway belum di mulai', 
     'timezone'=>'Zona Waktu',
-    'tips'=>'Tips: gunakan gambar dengan ukuran maks <b>1Mb</b> dan rasio 2:1 (lebar minimal 680px)',
+    'tips'=>'Tips: gunakan gambar dengan ukuran maks <b>200Kb</b> dan rasio 2:1 (lebar minimal 680px)',
     'title'=>'Judul Giveaway',
     'wa'=>'Pesan Whatsapp',
     'wa.connect'=>'Sambungkan',
