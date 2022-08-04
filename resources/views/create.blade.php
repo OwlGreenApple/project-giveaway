@@ -78,7 +78,7 @@
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
                                 <label>{{ Lang::get('giveaway.winner') }}:<span class="text-danger">*</span></label>
-                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" max="150" class="form-control form-control-lg w-25" name="winner" />
+                                <input @if(isset($event)) value="{{ $event->winners }}" @endif type="number" min="1" max="1000" class="form-control form-control-lg w-50" autocomplete="off" name="winner" />
                                 <span class="text-danger err_winner"><!-- --></span>
                             </div>
                         </div>
@@ -268,7 +268,7 @@
                         <div class="mb-2">
                             <div class="border-bottom info">Activrespon</div>
                             <select id="act_api_id" name="act_api_id" class="form-select">
-                            <option value="0">Choose</option>
+                            <option value="0">{{ Lang::get('custom.choose') }}</option>
                                 @foreach($act as $row)
                                     <option value="{{ $row['id'] }}" @if(isset($event) && $event->act_api_id == $row['id']) selected @endif>{{ $row['label'] }}</option>
                                 @endforeach
@@ -281,7 +281,7 @@
                         <div class="mb-2">
                             <div class="border-bottom info">Mailchimp</div>
                             <select id="mlc_api_id" name="mlc_api_id" class="form-select">
-                            <option value="0">Choose</option>
+                            <option value="0">{{ Lang::get('custom.choose') }}</option>
                                 @foreach($mlc as $row)
                                     <option value="{{ $row->id }}" @if(isset($event) && $event->mlc_api_id == $row->id) selected @endif>{{ $row->name }}</option>
                                 @endforeach
@@ -294,7 +294,7 @@
                         <div class="mb-2">
                             <div class="border-bottom info">Sendfox</div>
                             <select id="sdf_api_id" name="sdf_api_id" class="form-select">
-                            <option value="0">Choose</option>
+                            <option value="0">{{ Lang::get('custom.choose') }}</option>
                                 @foreach($sdf['data'] as $index=>$row) 
                                     <option value="{{ $row['id'] }}" @if(isset($event) && $event->sdf_api_id == $row['id']) selected @endif>{{ $row['name'] }}</option>
                                 @endforeach

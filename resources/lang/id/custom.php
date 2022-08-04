@@ -9,6 +9,7 @@ return [
     'balance'=>'Saldo',
     'by'=>'dengan menyelesakan langkah-langkah ini',
     'check'=>'Mohon centang kolom perjanjian ini',
+    'choose'=>'Pilih',
     'cl'=>'Klik sebuah link',
     'cl.col'=>'Aktifitas URL',
     'click'=>'Klik disini',
