@@ -132,7 +132,7 @@
             <!-- footer -->
             <div class="row px-3 py-3">
                 <div class="col-lg-6 desc">{{ Lang::get('custom.giveaway_timezone') }} : <b class="text-black-custom">{{ $event->timezone }}</b></div>
-                <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a><br/>{{ Lang::get('custom.contact') }} : {{ $event->admin_contact }}</div>
+                <div class="col-lg-6 desc">{{ Lang::get('custom.offered') }} : <a href="{{ $event->owner_url }}" class="main-color">{{ $event->owner }}</a><br/>{{ Lang::get('custom.contact') }} : <soan class="text-black-50 text-decoration-none">{{ $event->admin_contact }}</span></div>
             </div>
 
             <div class="mt-2 pb-3 text-center">

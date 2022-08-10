@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no"/>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -174,7 +175,7 @@
                 <div class="d-inline">
                     <a href="{{ url('privacy') }}">{{ Lang::get('auth.terms') }}</a>
                 </div>
-                <div class="mt-2"><small>Copyright&copy; 2022 {{env('APP_NAME')}}.app</small></div>
+                <div class="mt-2"><small>{{ Lang::get('auth.copyright') }} <a href="https://topleads.app">{{env('APP_NAME')}}.app</a></small></div>
             </div>
         </div>
     </div>
