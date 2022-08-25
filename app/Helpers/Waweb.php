@@ -1,0 +1,216 @@
+<?php
+namespace App\Helpers;
+
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Phone;
+use App\Models\User;
+
+class Waweb
+{
+    public static function go_curl($url,$data,$method)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+        if($method == 'POST')
+        {
+            $data_string = json_encode($data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        }
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json')
+        );
+
+        $res=curl_exec($ch);
+        return json_decode($res,true);
+    }
+
+    // CREATE DEVICE
+    public function create_device()
+    {
+        $label = self::generate_event_link();
+        $user = Auth::user();
+        $user_id = $user->id;
+
+        // CREATE DEVICE ON API WAWEB
+        $api = self::get_key($user->ip_server,$user_id,$label);
+
+        if(isset($api['device_key']) && $api['device_key'] == null)
+        {
+            return false;
+        }
+
+        // INSERT DEVICE TO ABLE PHONE
+        $device = new Phone;
+        $device->user_id = $user_id;
+        $device->label = $label;
+        $device->number = 0;
+        $device->device_key = $api['device_key'];
+        $device->device_id = $api['id'];
+
+        try{
+            $device->save();
+            $ret = true;
+        }
+        catch(QueryException $e)
+        {
+            // dd($e->getMessage());
+            $ret = false;
+        }
+
+        return $ret;
+    }
+
+    public static function get_key($server,$user_id,$label)
+    {
+        $url = $server."/create";
+        $data = [
+            'user_id'=>$user_id,
+            'unique'=>$server.$user_id.$label
+        ];
+
+        $res = self::go_curl($url,$data,"POST");
+
+        if(isset($res['device_key']) && isset($res['id']))
+        {
+            return $res;
+        }
+       
+        $arr = array('device_key'=>null,'id'=>0);
+        return $arr;
+    }
+
+    // SCAN DEVICE
+    public function scan() 
+    {
+        $user = Auth::user();
+        $device = Phone::where('user_id',Auth::id())->first();
+
+        if(is_null($device))
+        {
+            return 0;
+        }
+
+        $url = $user->ip_server.'/scan';
+        $data = ["device_key"=>$device->device_key];
+        $scan = self::go_curl($url,$data,'POST');
+        return $scan;
+    }
+
+    // GET QRCODE AND THEN DISPLAYED
+    public function qr()
+    {
+        $user = Auth::user();
+        $device = Phone::where('user_id',Auth::id())->first();
+
+        if(is_null($device))
+        {
+            return 0;
+        }
+
+        $url = $user->ip_server.'/qr?device_key='.$device->device_key.'';
+        $qrcode = self::go_curl($url,null,'GET');
+
+        return $qrcode;
+    }
+
+    // GET PHONE STATUS
+    public function status()
+    {
+        $user = Auth::user();
+        $device = Phone::where('user_id',Auth::id())->first();
+
+        if(is_null($device))
+        {
+            return 0;
+        }
+
+        $url = $user->ip_server.'/status?id='.$device->device_key.'';
+        $status = self::go_curl($url,null,'GET');
+        return $status;
+    }
+
+    // SEND MESSAGE OR MEDIA MESSAGE
+    public function send_message($user_id,$phone,$message,$img = null)
+    {
+        $device = Phone::where('user_id',$user_id)->first();
+        $user = User::find($user_id)->first();
+
+        if(is_null($device))
+        {
+            return 0;
+        }
+
+        $url = $user->ip_server.'/message';
+        $data = [
+            'message'=>$message,
+            'unique'=>env('WA_UNIQUE'),
+            'device_key'=>$device->device_key,
+            'number'=>$phone
+        ];
+        $send = self::go_curl($url,$data,'POST');
+        return $send;
+    }
+
+    public static function generate_event_link()
+    {
+        $link = self::generate_random();
+        $ev = Phone::where('label',$link)->first();
+        if(is_null($ev))
+        {
+            return $link;
+        }
+        else
+        {
+            return self::generate_event_link();
+        }
+    }
+
+    public static function generate_random()
+    {
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return substr(str_shuffle($permitted_chars), 0, 10);
+    }
+
+    // --------------------------------------------------------------
+
+    public static function test()
+    {
+        $url = 'http://192.168.100.96:3200/message';
+        $ch = curl_init($url);
+
+        $data = [
+            'message'=>'aaaa',
+            'unique'=>'Ww7YTPhDWVngJtaf87EdwCCguSKQ6hME',
+            'device_key'=>'a1e6364c220ab0b9d02e09c798b25564',
+            'number'=>'6282302005787'
+        ];
+        $data_string = http_build_query($data);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json')
+        );
+
+        $res=curl_exec($ch);
+        dd($res);
+        return json_decode($res,true);
+    }
+
+/* end class */
+}

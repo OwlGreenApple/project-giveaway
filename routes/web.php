@@ -71,12 +71,12 @@ Route::post('/save-api', [App\Http\Controllers\HomeController::class, 'save_api'
 Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'save_branding']);
 
 /* DEVICES */
-// Route::get('/refresh', [App\Http\Controllers\DeviceController::class, 'refresh']);
-// Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
-// Route::post('/connect', [App\Http\Controllers\DeviceController::class, 'connect']);
-// Route::get('/pair', [App\Http\Controllers\DeviceController::class, 'scan_device']);
-// Route::get('/device', [App\Http\Controllers\DeviceController::class, 'get_phone_status']);
-// Route::post('/message', [App\Http\Controllers\DeviceController::class, 'send_message']);
+Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
+Route::post('/create', [App\Http\Controllers\DeviceController::class, 'create_device']);
+Route::get('/connect', [App\Http\Controllers\DeviceController::class, 'connect']);
+Route::get('/pair', [App\Http\Controllers\DeviceController::class, 'qrcode']);
+Route::get('/device', [App\Http\Controllers\DeviceController::class, 'get_phone_status']);
+Route::post('/message', [App\Http\Controllers\DeviceController::class, 'send_message']);
 // Route::post('/media', [App\Http\Controllers\DeviceController::class, 'send_media']);
 
 /* WABLAS */

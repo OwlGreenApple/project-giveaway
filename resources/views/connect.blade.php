@@ -86,23 +86,77 @@
     $(document).ready(function(){
         connect();
         scan();
-        delete_device();
+        // delete_device();
         test_message();
         checkbox();
     });
 
-    function checkbox(){
-        $("input[name='media']").click(function(){
-            var val = $(this).val();
+    function connect()
+    {
+        $("#con").click(function()
+        {
+            create_device();
+        })
+    }
 
-            if(val == 'off')
+    function create_device()
+    {
+        $.ajax({
+            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            method : 'POST',
+            url : '{{ url("create") }}',
+            dataType : 'json',
+            beforeSend : function()
             {
-                $(this).val('https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png');
-            }
-            else
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+            },
+            success : function(result)
             {
-                $(this).val('off');
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+
+                if(result.status == 1)
+                {
+                   location.href="{{ url('scan') }}";
+                }
+                else
+                {
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                }
+
+                /* if(result.status == 'success')
+                {
+                    $("#con").remove();
+                    waitingTime();
+                }
+                else if(result.status == 'etoken')
+                {
+                    $("#scan").html('<div class="alert alert-info mt-4">{{ Lang::get("custom.try") }}</div>');
+                }
+                else
+                {
+                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                } */
+            },
+            error: function(xhr){
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
             }
+        });
+    }
+
+    function scan()
+    {
+        $("#pair").click(function(){
+            getqr();
+            waitingTime();
+            $("#pair").hide();
+        });
+
+        // REFRESH TOKEN
+        $("#refresh").click(function(){
+            refresh();
         });
     }
 
@@ -125,19 +179,19 @@
                 $("#secs").html('0'+sc);
             }
 
-            if(sc == 60){
+            if(sc == 120){
                 min = min + 1;
                 $("#min").html('0'+min);
                 sc = 0;
                 $("#secs").html('0'+sc);
             }
 
-            if(sc == 6 || sc == 12 || sc == 20 ||sc == 30 || sc == 52)
+            if(sc > 12 && sc % 12 == 0)
             {
                 pairing();
             }
 
-            if(sc > 12 && sc % 6 == 0)
+            if(sc > 40 && sc % 6 == 0)
             {
                 check_connect();
             }
@@ -154,22 +208,54 @@
         },1000);
     };
 
-    function connect()
-    {
-        $("#con").click(function(){
-            // e.preventDefault();
-            // var data = $(this).serializeArray();
-            // data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') });
-            register_login_device();
-        })
-    }
-
-    function register_login_device()
+    function getqr()
     {
         $.ajax({
-            headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            method : 'POST',
+            method : 'GET',
             url : '{{ url("connect") }}',
+            dataType : 'json',
+            success : function(result)
+            {
+                if(result.isConnected == 0)
+                {
+                   location.href="{{ url('scan') }}"
+                }
+            },
+            error: function(xhr){
+               console.log(xhr.responseText);
+            }
+        });
+    }
+
+    function pairing()
+    {
+        $.ajax({
+            method : 'GET',
+            url : '{{ url("pair") }}',
+            dataType : 'html',
+            success : function(result)
+            {
+                if(result == 0)
+                {
+                    $("#scan").html('Loading...');
+                }
+                else
+                {
+                    $("#scan").html(result);
+                    // clearInterval(tm);
+                }
+            },
+            error: function(xhr){
+               console.log(xhr.responseText);
+            }
+        });
+    }
+
+    function check_connect()
+    {
+        $.ajax({
+            method : 'GET',
+            url : '{{ url("device") }}',
             dataType : 'json',
             beforeSend : function()
             {
@@ -178,40 +264,79 @@
             },
             success : function(result)
             {
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
-
-                if(result.status == 'success')
+                if(result.isConnected == 1)
                 {
-                    $("#con").remove();
-                    waitingTime();
-                }
-                else if(result.status == 'etoken')
-                {
-                    $("#scan").html('<div class="alert alert-info mt-4">{{ Lang::get("custom.try") }}</div>');
+                    location.href="{{ url('scan') }}";
                 }
                 else
                 {
-                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
                 }
-            },
-            error: function(xhr){
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
             }
         });
     }
 
-    function scan()
+    function test_message()
     {
-        $("#pair").click(function(){
-            waitingTime();
-            $("#pair").hide();
-        });
+        $("#test_message").submit(function(e){
+            e.preventDefault();
 
-        // REFRESH TOKEN
-        $("#refresh").click(function(){
-            refresh();
+            var data = $(this).serializeArray();
+            var ipt = $("input[name='media']").val();
+            var url;
+
+            if(ipt == 'off')
+            {
+                data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1});
+            }
+            else
+            {
+                // data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1},{name : 'test', value : 1});
+            }
+
+            $.ajax({
+                headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method : 'POST',
+                url : '{{ url("message") }}',
+                data : data,
+                dataType : 'json',
+                beforeSend : function()
+                {
+                    $('#loader').show();
+                    $('.div-loading').addClass('background-load');
+                },
+                success : function(result)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    if(result.id !== undefined)
+                    {
+                        $("#msg_test").html('<div class="alert alert-success">{{ Lang::get("custom.test.success") }}</div>');
+                        // $(".counter").html(result.counter);
+                    }
+                },
+                error: function(xhr){
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+    }
+
+    function checkbox(){
+        $("input[name='media']").click(function(){
+            var val = $(this).val();
+
+            if(val == 'off')
+            {
+                $(this).val('https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png');
+            }
+            else
+            {
+                $(this).val('off');
+            }
         });
     }
 
@@ -257,47 +382,6 @@
         });
     }
 
-    function pairing()
-    {
-        $.ajax({
-            method : 'GET',
-            url : '{{ url("pair") }}',
-            dataType : 'json',
-            // beforeSend : function()
-            // {
-            //     $('#loader').show();
-            //     $('.div-loading').addClass('background-load');
-            // },
-            success : function(result)
-            {
-                // $('#loader').hide();
-                // $('.div-loading').removeClass('background-load');
-
-                if(result.status == 'IDLE')
-                {
-                    $("#scan").html('Loading...');
-                }
-                else if(result.status == 'PAIRING')
-                {
-                    $("#scan").html(result.qr_code);
-                }
-                else if(result.status == 'PAIRED')
-                {
-                    check_connect();
-                }
-                else
-                {
-                    // error scan usually because of expired token
-                    $("#scan").html('<div class="alert alert-warning mt-2">{{ Lang::get("custom.scan") }}</div>');
-                    clearInterval(tm);
-                }
-            },
-            error: function(xhr){
-               console.log(xhr.responseText);
-            }
-        });
-    }
-
     function delete_device()
     {
         $("#status").click(function(){
@@ -316,101 +400,6 @@
             {
                 return false;
             }
-        });
-    }
-
-    function check_connect(data)
-    {
-        if(data !== 1)
-        {
-            data = null;
-        }
-
-        $.ajax({
-            method : 'GET',
-            url : '{{ url("device") }}',
-            data : {'del':data},
-            dataType : 'json',
-            beforeSend : function()
-            {
-                $('#loader').show();
-                $('.div-loading').addClass('background-load');
-            },
-            success : function(result)
-            {
-                if(result.status == 'success')
-                {
-                    location.href="{{ url('scan') }}";
-                }
-                else
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                    $("#msg").html('<div class="alert alert-warning">{{ Lang::get("custom.scan") }}</div>');
-                }
-            },
-            error: function(xhr){
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
-            }
-        });
-    }
-
-    function test_message()
-    {
-        $("#test_message").submit(function(e){
-            e.preventDefault();
-
-            var data = $(this).serializeArray();
-            data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1});
-
-            var ipt = $("input[name='media']").val();
-            var url;
-
-            if(ipt == 'off')
-            {
-                url = '{{ url("message") }}';
-            }
-            else
-            {
-                url = '{{ url("media") }}';
-            }
-
-            $.ajax({
-                headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                method : 'POST',
-                url : url,
-                data : data,
-                dataType : 'json',
-                beforeSend : function()
-                {
-                    $('#loader').show();
-                    $('.div-loading').addClass('background-load');
-                },
-                success : function(result)
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
-                    if(result.err == 1)
-                    {
-                        $("#msg_test").html('<div class="alert alert-danger">{{ Lang::get("custom.test") }}</div>');
-                    }
-                    else if(result.err == 2)
-                    {
-                        $("#msg_test").html('<div class="alert alert-danger">{{ Lang::get("custom.test.invalid") }}</div>');
-                    }
-                    else
-                    {
-                        $("#msg_test").html('<div class="alert alert-success">{{ Lang::get("custom.test.success") }}</div>');
-                        $(".counter").html(result.counter);
-                    }
-                },
-                error: function(xhr){
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                }
-            });
         });
     }
 </script>
