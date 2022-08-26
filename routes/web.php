@@ -77,7 +77,7 @@ Route::get('/connect', [App\Http\Controllers\DeviceController::class, 'connect']
 Route::get('/pair', [App\Http\Controllers\DeviceController::class, 'qrcode']);
 Route::get('/device', [App\Http\Controllers\DeviceController::class, 'get_phone_status']);
 Route::post('/message', [App\Http\Controllers\DeviceController::class, 'send_message']);
-// Route::post('/media', [App\Http\Controllers\DeviceController::class, 'send_media']);
+Route::get('/del-device', [App\Http\Controllers\DeviceController::class, 'delete_device']);
 
 /* WABLAS */
 Route::get('/info', [App\Http\Controllers\WABlasController::class, 'info']);

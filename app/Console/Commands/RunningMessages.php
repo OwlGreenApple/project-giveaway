@@ -114,7 +114,9 @@ class RunningMessages extends Command
             } // end broadcast loop
         endif;
 
-        /* SEND MESSAGE LOGIC */
+        /* 
+            SEND MESSAGE LOGIC 
+        */
         $messagebulk = Messages::where('status',0)->orderBy('id','asc')->get();
         $arr = array(11,8,13,6,9,12); // 59 seconds, because computer will count start from 0
         shuffle($arr);
@@ -190,21 +192,8 @@ class RunningMessages extends Command
                 // print_r($arr[$x]."\n");
 
                 $message = $row->message;
-                $image = $row->img_url;
+                $image = $row->img_url; 
                 $status = $device::sendingwa($user,$row->receiver,$message,$image,$row->sender);
-
-                /* if($row->img_url == null)
-                {
-                    //SEND MESSAGE
-                    $data = [
-                        'number'=>$row->receiver,
-                        'message'=>$message,
-                        'user_id'=>$row->user_id,
-                        'msg_id'=>$row->id
-                    ];
-                    $req = new Request($data);
-                    $device->send_message($req);
-                } */
                
                 // UNCOMMENT IF WANT TO TEST / DEBUG -- temporary opened
                 $mg = Messages::find($row->id);

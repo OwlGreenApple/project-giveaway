@@ -61,14 +61,23 @@ class DeviceController extends Controller
     {
         $api = new Waweb;
         $sc = $api->scan();
+        $phone = Phone::where('user_id',Auth::id())->first();
 
         // if user does not pairing until time's up
-        if(isset($sc['isConnected']) && $sc['isConnected'] == 0)
+        if(isset($sc['isConnected']))
         {
+            if($sc['isConnected'] == 1)
+            {
+                $device = Phone::find($phone->id);
+                $device->number = $sc['phone'];
+                $device->status = $sc['isConnected'];
+                $device->save();
+            }
             return response()->json($sc);
         }
     }
 
+    // DISPLAYING QRCODE
     public function qrcode() 
     {
         $api = new Waweb;
@@ -77,7 +86,7 @@ class DeviceController extends Controller
         if($pair !== null)
         {
             $qr = new QRCode;
-            return '<img src="'.$qr->render($pair).'" alt="QR Code" />';
+            return '<img style="width:200px" src="'.$qr->render($pair).'" alt="QR Code" />';
         }
         else
         {
@@ -85,13 +94,12 @@ class DeviceController extends Controller
         }
     }
 
-    // CHECK AND CHANGE PHONE STATUS AND ALSO CAN DELETE DEVICE
-    public function get_phone_status()
+    // CHECK AND CHANGE PHONE STATUS
+    public function get_phone_status($user_id)
     {
         $api = new Waweb;
         $status = $api->status();
-
-        $phone = Phone::where('user_id',Auth::id())->first();
+        $phone = Phone::where('user_id',$user_id)->first();
 
         if(is_null($phone))
         {
@@ -106,27 +114,29 @@ class DeviceController extends Controller
         return response()->json($status);
     }
    
-   // SEND TEXT MESSAGE
-   public function send_message(Request $req)
-   {
+    // SEND TEXT MESSAGE -- TEST MESSAGE PAGE
+    public function send_message(Request $req)
+    {
+        $user_id = Auth::id();
+        $message = strip_tags($req->message);
+        $img = strip_tags($req->media);
+        $phone = strip_tags($req->code.$req->number);
+
+        // LOGIC TO SEND MESSAGE
+        $api = new Waweb;
+        $send = $api->send_message($user_id,$phone,$message,$img);
+        return response()->json($send);
+    }
+
+    // DELETE DEVICE
+    public function delete_device()
+    {
        $api = new Waweb;
        $user_id = Auth::id();
 
-       $message = $req->message;
-       $img = $req->img;
-       $phone = $req->code.$req->number;
-
-       if($img == null)
-       {
-            $send = $api->send_message($user_id,$phone,$message,null);
-       }
-       else
-       {
-            $send = $api->send_message($user_id,$phone,$message,$img);
-       }
-       
-       return response()->json($send);
-   }
+       $del = $api->delete_device($user_id);
+       return response()->json(['status' => $del]);
+    }
 
 // end controller
 }

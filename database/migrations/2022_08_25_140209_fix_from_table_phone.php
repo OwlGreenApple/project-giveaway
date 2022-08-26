@@ -15,7 +15,6 @@ class FixFromTablePhone extends Migration
     {
         Schema::table('phones', function (Blueprint $table) {
             $table->string('label',50)->nullable()->after('user_id');
-            $table->dropColumn('service_id');
         });
     }
 

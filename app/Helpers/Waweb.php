@@ -48,7 +48,7 @@ class Waweb
             return false;
         }
 
-        // INSERT DEVICE TO ABLE PHONE
+        // INSERT DEVICE TO PHONE
         $device = new Phone;
         $device->user_id = $user_id;
         $device->label = $label;
@@ -154,12 +154,59 @@ class Waweb
             'message'=>$message,
             'unique'=>env('WA_UNIQUE'),
             'device_key'=>$device->device_key,
-            'number'=>$phone
+            'number'=>str_replace("+","",$phone)
         ];
+
+        // SEND MEDIA MESSAGE
+        if($img == null)
+        {
+            unset($data['url']);
+        }
+        else
+        {
+            $data['url'] = $img;
+        }
+
         $send = self::go_curl($url,$data,'POST');
         return $send;
     }
 
+    // DELETE DEVICE
+    public function delete_device($user_id)
+    {
+        $device = Phone::where('user_id',$user_id)->first();
+        $user = User::find($user_id)->first();
+
+        if(is_null($device))
+        {
+            return 0;
+        }
+
+        $url = $user->ip_server.'/del?device_key='.$device->device_key.'&unique='.env('WA_UNIQUE').'';
+        $del = self::go_curl($url,null,'GET');
+
+        if(isset($del['status']) && $del['status'] == 1)
+        {
+            try
+            {
+                Phone::find($device->id)->delete();
+                $res = 1;
+            }
+            catch(QueryException $e)
+            {
+                //dd($e->getMessage());
+                $res = 'error';
+            }
+        }
+        else
+        {
+            $res = 0;
+        }
+
+        return $res;
+    }
+
+    // GENERATE LINK FOR LABEL ON DEVICE
     public static function generate_event_link()
     {
         $link = self::generate_random();
@@ -178,38 +225,6 @@ class Waweb
     {
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         return substr(str_shuffle($permitted_chars), 0, 10);
-    }
-
-    // --------------------------------------------------------------
-
-    public static function test()
-    {
-        $url = 'http://192.168.100.96:3200/message';
-        $ch = curl_init($url);
-
-        $data = [
-            'message'=>'aaaa',
-            'unique'=>'Ww7YTPhDWVngJtaf87EdwCCguSKQ6hME',
-            'device_key'=>'a1e6364c220ab0b9d02e09c798b25564',
-            'number'=>'6282302005787'
-        ];
-        $data_string = http_build_query($data);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, 0);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 360);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json')
-        );
-
-        $res=curl_exec($ch);
-        dd($res);
-        return json_decode($res,true);
     }
 
 /* end class */

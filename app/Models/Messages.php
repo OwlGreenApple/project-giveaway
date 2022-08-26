@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Phone;
 use app\Models\Settings;
 use App\Helpers\Custom;
+use App\Helpers\Waweb;
 
 class Messages extends Model
 {
@@ -96,12 +97,21 @@ class Messages extends Model
         $data['type'] = "image";
       }
 
-      if($service == 1)
+      // waweb api
+      if($service == 0)
+      {
+        // LOGIC TO SEND MESSAGE
+        $api = new Waweb;
+        $api->send_message($user->id,$customer_phone,$customer_message,$image);
+        return 1;
+      }
+      else if($service == 1)
       {
         $sending = self::send_message_wablas($data,$wablas_server);
       }
       else
       {
+        // service  = 2
         $sending = self::send_wa_fonte_message($data);
       }
 

@@ -25,15 +25,17 @@
                         {{-- button --}}
                         <div class="input-group">
                             @if(is_null($phone))
-                                <button type="button" id="con" class="btn bg-custom btn-lg text-white">{{ Lang::get('custom.connect') }}</button>
+                                <button type="button" id="con" class="btn bg-custom text-white w-100"><i class="fas fa-mobile-alt"></i>&nbsp;{{ Lang::get('custom.connect') }}</button>
                             @else
-                                <button type="button" id="pair" class="btn bg-info btn-lg text-white">{{ Lang::get('custom.scan.btn') }}</button>
+                                @if($phone->status == 0)
+                                    <button type="button" id="pair" class="btn bg-info text-white w-100"><i class="fas fa-qrcode"></i>&nbsp;{{ Lang::get('custom.scan.btn') }}</button>
+                                @endif
                             @endif
-                            <button type="button" id="refresh" class="btn bg-warning btn-lg ms-2">{{ Lang::get('custom.refresh') }}</button>
                         </div>
 
                         {{-- qr-code --}}
                         <div class="text-center"><span id="scan"><!-- display scan --></span></div>
+                        <div id="notes_scan" class="text-center mt-1 text-capitalize"><!-- display notes --></div>
 
                         {{-- table --}}
                         <div id="device">@include('connect-table')</div>
@@ -86,9 +88,10 @@
     $(document).ready(function(){
         connect();
         scan();
-        // delete_device();
+        delete_device();
         test_message();
         checkbox();
+        // check_connect()
     });
 
     function connect()
@@ -124,20 +127,6 @@
                 {
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
                 }
-
-                /* if(result.status == 'success')
-                {
-                    $("#con").remove();
-                    waitingTime();
-                }
-                else if(result.status == 'etoken')
-                {
-                    $("#scan").html('<div class="alert alert-info mt-4">{{ Lang::get("custom.try") }}</div>');
-                }
-                else
-                {
-                    $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
-                } */
             },
             error: function(xhr){
                 $('#loader').hide();
@@ -151,6 +140,7 @@
         $("#pair").click(function(){
             getqr();
             waitingTime();
+            $("#device").hide();
             $("#pair").hide();
         });
 
@@ -160,12 +150,12 @@
         });
     }
 
-    var tm;
+    var tm, qrscan;
     function waitingTime()
     {
         var scd = 0;
         var sc = 0;
-        var min = 0;
+        var min = qrscan = 0;
 
         $("#scan").html('{{ Lang::get("custom.loading") }}');
         $("#waiting").removeClass('d-none');
@@ -179,28 +169,16 @@
                 $("#secs").html('0'+sc);
             }
 
-            if(sc == 120){
+            if(sc == 60){
                 min = min + 1;
                 $("#min").html('0'+min);
                 sc = 0;
                 $("#secs").html('0'+sc);
             }
 
-            if(sc > 12 && sc % 12 == 0)
+            if(sc > 12 && sc % 12 == 0 && qrscan == 0)
             {
                 pairing();
-            }
-
-            if(sc > 40 && sc % 6 == 0)
-            {
-                check_connect();
-            }
-
-            if(min == 1)
-            {
-                $("#secs").html('0'+0);
-                clearInterval(tm);
-                location.href="{{ url('scan') }}";
             }
 
             sc++;
@@ -216,10 +194,9 @@
             dataType : 'json',
             success : function(result)
             {
-                if(result.isConnected == 0)
-                {
-                   location.href="{{ url('scan') }}"
-                }
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+                location.href="{{ url('scan') }}";
             },
             error: function(xhr){
                console.log(xhr.responseText);
@@ -242,7 +219,8 @@
                 else
                 {
                     $("#scan").html(result);
-                    // clearInterval(tm);
+                    $("#notes_scan").html('{{ Lang::get("custom.scan") }}');
+                    qrscan = 1; // to stop pairing if qrcode generated
                 }
             },
             error: function(xhr){
@@ -285,15 +263,7 @@
             var data = $(this).serializeArray();
             var ipt = $("input[name='media']").val();
             var url;
-
-            if(ipt == 'off')
-            {
-                data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1});
-            }
-            else
-            {
-                // data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1},{name : 'test', value : 1});
-            }
+            data.push({name : 'code', value : $(".iti__selected-flag").attr('data-code') },{name : 'test', value : 1});
 
             $.ajax({
                 headers : {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -340,11 +310,11 @@
         });
     }
 
-    function refresh()
+    function del_exe()
     {
         $.ajax({
             method : 'GET',
-            url : '{{ url("refresh") }}',
+            url : '{{ url("del-device") }}',
             dataType : 'json',
             beforeSend : function()
             {
@@ -356,18 +326,12 @@
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
 
-                if(result.err == 0)
+                if(result.status == 1)
                 {
                     $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>');
                     setTimeout(function(){
-                        $('#loader').show();
-                        $('.div-loading').addClass('background-load');
                         location.href="{{ url('scan') }}";
-                    },1000);
-                }
-                else if(result.err == 'itoken')
-                {
-                    $("#msg").html('<div class="alert alert-warning">{{ Lang::get("custom.scan.del") }}</div>');
+                    },800);
                 }
                 else
                 {
@@ -393,8 +357,7 @@
 
             if(conf == true)
             {
-                var del = 1;
-                check_connect(del);
+                del_exe();
             }
             else
             {

@@ -1251,6 +1251,7 @@ class HomeController extends Controller
         $password = strip_tags($request->password);
         $lang = strip_tags($request->profile_lang);
         $percentage = strip_tags($request->percentage);
+        $wa_ip = strip_tags($request->wa_ip);
 
         if($percentage == null)
         {
@@ -1259,7 +1260,8 @@ class HomeController extends Controller
 
         $update = [
             'name'=>$name,
-            'lang'=>$lang
+            'lang'=>$lang,
+            'ip_server'=>$wa_ip
         ];
 
         // RESULT "" FROM EMPTY FORM NEED TO CONVERT INTO NULL
@@ -1276,9 +1278,12 @@ class HomeController extends Controller
         try
         {
             // UPDATE ENTIRE ADMIN PERCENTAGE FIELD VALUE ONLY
-            if(Auth::user()->is_admin == 1 && Auth::user()->percentage !== $percentage)
+            if(Auth::user()->is_admin == 1)
             {
-                User::where('is_admin',1)->update(['percentage'=>$percentage]);
+                if(Auth::user()->percentage !== $percentage)
+                {
+                    User::where('is_admin',1)->update(['percentage'=>$percentage]);
+                }
             }
 
             User::where('id',Auth::id())->update($update);
