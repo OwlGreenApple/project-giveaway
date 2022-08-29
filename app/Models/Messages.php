@@ -55,14 +55,14 @@ class Messages extends Model
       {
         $package = $user->membership;
         $category = $cs->check_type($package);
-  
+
         if($category['sponsor'] == 1 || $user->is_admin == 1)
         {
             $customer_message .= $cs::sponsor(null);
         }
       }
 
-      $ph = Phone::where('number',$sender)->first(); 
+      $ph = Phone::where('number',$sender)->first();
       // in case if user has deleted his token or package is free, then using admin phone number
       if(is_null($ph) || $package == 'free')
       {
@@ -70,17 +70,19 @@ class Messages extends Model
         $token =  $phn->device_key;
         $service = $phn->service_id;
         $wablas_server = $phn->device_id;
+        $phone_user = $phn->user_id;
       }
       else
       {
         $token =  $ph->device_key;
         $service = $ph->service_id;
         $wablas_server = $ph->device_id;
+        $phone_user = $ph->user_id;
       }
 
     //   package free = in case if user membership has reach end then turn to free, then use admin number
     //   dd($token);
-      
+
       $data = [
         'token'=>$token,
         'to'=>$customer_phone,
@@ -102,7 +104,7 @@ class Messages extends Model
       {
         // LOGIC TO SEND MESSAGE
         $api = new Waweb;
-        $api->send_message($user->id,$customer_phone,$customer_message,$image);
+        $api->send_message($phone_user,$customer_phone,$customer_message,$image);
         return 1;
       }
       else if($service == 1)
@@ -115,7 +117,7 @@ class Messages extends Model
         $sending = self::send_wa_fonte_message($data);
       }
 
-      //dd($sending); 
+      //dd($sending);
 
       if($sending == null)
       {
@@ -171,9 +173,9 @@ class Messages extends Model
                 'caption' => $data['msg'],
                 'delay' => '1',
                 'schedule' => '0'
-            );    
+            );
         }
-        
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://md.fonnte.com/api/send_message.php",
             CURLOPT_RETURNTRANSFER => true,
@@ -223,7 +225,7 @@ class Messages extends Model
                 'delay' => '1',
                 'schedule' => '0'
             );
-            $url = $cs::get_wablas()[$server]."/api/send-image";    
+            $url = $cs::get_wablas()[$server]."/api/send-image";
         }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,
@@ -241,7 +243,7 @@ class Messages extends Model
 
         $result = curl_exec($curl);
         curl_close($curl);
-      
+
         $res = json_decode($result,true);
         return $res;
     }

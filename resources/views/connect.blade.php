@@ -176,9 +176,12 @@
                 $("#secs").html('0'+sc);
             }
 
-            if(sc > 12 && sc % 12 == 0 && qrscan == 0)
+            if(qrscan == 0)
             {
-                pairing();
+                if(sc % 12 == 0)
+                {
+                    pairing();
+                }
             }
 
             sc++;

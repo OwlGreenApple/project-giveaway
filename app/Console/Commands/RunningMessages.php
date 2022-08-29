@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Broadcast;
 use App\Models\Contestants;
 use App\Helpers\Custom;
+use Illuminate\Support\Facades\Storage;
 // use App\Http\Controllers\DeviceController AS Device;
 use App\Http\Controllers\WABlasController AS Device;
 use App\Console\Commands\CheckDeviceStatus AS CDV;
@@ -95,10 +96,10 @@ class RunningMessages extends Command
 
                     $msge = [
                         'user_id'=>$user_id,
-                        'ev_id'=>0, 
-                        'bc_id'=>$bc_id, 
+                        'ev_id'=>0,
+                        'bc_id'=>$bc_id,
                         'ct_id'=>$ctid,
-                        'sender'=>$sender, 
+                        'sender'=>$sender,
                         'receiver'=>substr($ct->wa_number,1),
                         'message'=>$message,
                         'img_url'=>$url
@@ -114,8 +115,8 @@ class RunningMessages extends Command
             } // end broadcast loop
         endif;
 
-        /* 
-            SEND MESSAGE LOGIC 
+        /*
+            SEND MESSAGE LOGIC
         */
         $messagebulk = Messages::where('status',0)->orderBy('id','asc')->get();
         $arr = array(11,8,13,6,9,12); // 59 seconds, because computer will count start from 0
@@ -192,9 +193,17 @@ class RunningMessages extends Command
                 // print_r($arr[$x]."\n");
 
                 $message = $row->message;
-                $image = $row->img_url; 
+                if($row->img_url == null)
+                {
+                    $image = null;
+                }
+                else
+                {
+                    $image = Storage::disk('s3')->url($row->img_url);
+                }
+
                 $status = $device::sendingwa($user,$row->receiver,$message,$image,$row->sender);
-               
+
                 // UNCOMMENT IF WANT TO TEST / DEBUG -- temporary opened
                 $mg = Messages::find($row->id);
                 $mg->status = $status;
@@ -220,7 +229,7 @@ class RunningMessages extends Command
         $msge->receiver = $data['receiver'];
         $msge->message = $data['message'];
         $msge->img_url = $data['img_url'];
-        
+
         if(isset($data['status']))
         {
             $msge->status = $data['status'];

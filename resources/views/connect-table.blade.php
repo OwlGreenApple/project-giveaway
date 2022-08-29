@@ -11,7 +11,7 @@
     <tbody>
         <tr>
             <td>{{ $phone->number }}</td>
-            <td><span class="text-success">@if($phone->status == 1) <span class="text-success">{{ Lang::get('table.connected') }}</span></span> @else <span class="text-danger">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
+            <td><span class="text-success">@if($phone->status == 1 || $phone->status == 3) <span class="text-success">{{ Lang::get('table.connected') }}</span></span> @else <span class="text-danger">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
             <!-- <td><span class="text-info counter"> Auth::user()->counter_send_message_daily </span></td> -->
             <td><a role="button" id="{{ $phone->id }}" class="del text-danger"><i class="far fa-trash-alt"></i></a></td>
         </tr>

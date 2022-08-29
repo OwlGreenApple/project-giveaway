@@ -78,7 +78,7 @@ class DeviceController extends Controller
     }
 
     // DISPLAYING QRCODE
-    public function qrcode() 
+    public function qrcode()
     {
         $api = new Waweb;
         $pair = $api->qr();
@@ -113,7 +113,7 @@ class DeviceController extends Controller
 
         return response()->json($status);
     }
-   
+
     // SEND TEXT MESSAGE -- TEST MESSAGE PAGE
     public function send_message(Request $req)
     {

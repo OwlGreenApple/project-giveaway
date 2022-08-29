@@ -83,13 +83,13 @@ class Waweb
         {
             return $res;
         }
-       
+
         $arr = array('device_key'=>null,'id'=>0);
         return $arr;
     }
 
     // SCAN DEVICE
-    public function scan() 
+    public function scan()
     {
         $user = Auth::user();
         $device = Phone::where('user_id',Auth::id())->first();
@@ -166,8 +166,8 @@ class Waweb
         {
             $data['url'] = $img;
         }
-
         $send = self::go_curl($url,$data,'POST');
+
         return $send;
     }
 
