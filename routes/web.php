@@ -72,6 +72,7 @@ Route::post('/upload-branding', [App\Http\Controllers\HomeController::class, 'sa
 
 /* DEVICES */
 Route::get('/scan', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
+Route::get('/qrconnect/{id?}', [App\Http\Controllers\DeviceController::class, 'connect_wa']);
 Route::post('/create', [App\Http\Controllers\DeviceController::class, 'create_device']);
 Route::get('/connect', [App\Http\Controllers\DeviceController::class, 'connect']);
 Route::get('/pair', [App\Http\Controllers\DeviceController::class, 'qrcode']);

@@ -14,28 +14,12 @@
             <form id="connect">
                 <div class="card px-5 py-5">
                     <div class="card-body p-0">
-                        <div id="waiting" class="alert alert-info font-bold d-none">
-                            <span>{{ Lang::get('custom.wait') }}</span>
-                            <div class="fw-bold">
-                                <span id="min"></span> :
-                                <span id="secs"></span>
-                            </div>
-                        </div>
-
                         {{-- button --}}
                         <div class="input-group">
-                            @if(is_null($phone))
+                            @if($phone->count() < 3)
                                 <button type="button" id="con" class="btn bg-custom text-white w-100"><i class="fas fa-mobile-alt"></i>&nbsp;{{ Lang::get('custom.connect') }}</button>
-                            @else
-                                @if($phone->status == 0)
-                                    <button type="button" id="pair" class="btn bg-info text-white w-100"><i class="fas fa-qrcode"></i>&nbsp;{{ Lang::get('custom.scan.btn') }}</button>
-                                @endif
                             @endif
                         </div>
-
-                        {{-- qr-code --}}
-                        <div class="text-center"><span id="scan"><!-- display scan --></span></div>
-                        <div id="notes_scan" class="text-center mt-1 text-capitalize"><!-- display notes --></div>
 
                         {{-- table --}}
                         <div id="device">@include('connect-table')</div>
@@ -44,34 +28,48 @@
                 </div>
             </form>
 
-            @if(!is_null($phone) && $phone->status == 1)
-            <!-- TEST SEND MESSAGE -->
-            <div class="container mt-4 card p-3">
-                <span id="msg_test"><!-- --></span>
-                <form id="test_message">
-                    <div class="mb-3">
-                        <div class="form-group iti-wrapper">
-                            <label>{{ Lang::get('custom.number.test') }}:<span class="text-danger">*</span></label>
-                            <input type="text" id="phone" name="number" class="form-control form-control-lg" required/>
-                            <span class="error phone"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>{{ Lang::get('table.message') }}:<span class="text-danger">*</span></label>
-                            <div class="input-group input-group-lg">
-                                <textarea name="message" class="form-control"></textarea>
+            {{-- test message --}}
+                @if($phone->count() > 0)
+                <!-- TEST SEND MESSAGE -->
+                <div class="container mt-4 card p-3">
+                    <h3 class="account-title text-capitalize mb-2"><b><i class="fab fa-whatsapp main-color"></i>&nbsp;{{ Lang::get('table.test.message') }}</b></h3>
+                    <span id="msg_test"><!-- --></span>
+                    <form id="test_message">
+                        <div class="mb-3">
+                            <div class="form-group mb-2">
+                                <label>{{ Lang::get('custom.number.sender') }}:<span class="text-danger">*</span></label>
+                                <select name="sender" class="form-select">
+                                    @foreach($phone as $row)
+                                        @if($row->status > 0)
+                                            <option value="{{ $row->number }}">{{ $row->number }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>{{ Lang::get('table.image') }}:</label>
-                            <div class="input-group input-group-lg">
-                                <input value="off" type="checkbox" class="form-check" name="media" />
+
+                            <div class="form-group iti-wrapper mb-2">
+                                <label>{{ Lang::get('custom.number.test') }}:<span class="text-danger">*</span></label>
+                                <input type="text" id="phone" name="number" class="form-control form-control-lg" required/>
+                                <span class="error phone"></span>
                             </div>
+                            
+                            <div class="form-group mb-2">
+                                <label>{{ Lang::get('table.message') }}:<span class="text-danger">*</span></label>
+                                <div class="input-group input-group-lg">
+                                    <textarea name="message" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>{{ Lang::get('table.image') }}:</label>
+                                <div class="input-group input-group-lg">
+                                    <input value="off" type="checkbox" class="form-check" name="media" />
+                                </div>
+                            </div>
+                            <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
                         </div>
-                        <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
-                    </div>
-                    <button type="submit" class="btn btn-info text-white">{{ Lang::get('table.test') }}</button>
-                </form>
-            </div>
+                        <button type="submit" class="btn btn-outline-secondary w-25">{{ Lang::get('table.test') }}</button>
+                    </form>
+                </div>
             <!-- END TEST SEND -->
             @endif
 
@@ -80,14 +78,12 @@
     </div>
 </div>
 
-@if(!is_null($phone) && $phone->status == 1)
+@if($phone->count() > 0)
     <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 @endif
-
 <script type="text/javascript">
     $(document).ready(function(){
         connect();
-        scan();
         delete_device();
         test_message();
         checkbox();
@@ -100,6 +96,11 @@
         {
             create_device();
         })
+
+        // prevent user to open new tab
+        $('.scanqr').bind("contextmenu",function(e){
+            return false;
+        });
     }
 
     function create_device()
@@ -131,103 +132,6 @@
             error: function(xhr){
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
-            }
-        });
-    }
-
-    function scan()
-    {
-        $("#pair").click(function(){
-            getqr();
-            waitingTime();
-            $("#device").hide();
-            $("#pair").hide();
-        });
-
-        // REFRESH TOKEN
-        $("#refresh").click(function(){
-            refresh();
-        });
-    }
-
-    var tm, qrscan;
-    function waitingTime()
-    {
-        var scd = 0;
-        var sc = 0;
-        var min = qrscan = 0;
-
-        $("#scan").html('{{ Lang::get("custom.loading") }}');
-        $("#waiting").removeClass('d-none');
-
-        tm = setInterval(function(){
-            $("#secs").html(sc);
-            $("#min").html('0'+min);
-
-            if(sc < 10)
-            {
-                $("#secs").html('0'+sc);
-            }
-
-            if(sc == 60){
-                min = min + 1;
-                $("#min").html('0'+min);
-                sc = 0;
-                $("#secs").html('0'+sc);
-            }
-
-            if(qrscan == 0)
-            {
-                if(sc % 12 == 0)
-                {
-                    pairing();
-                }
-            }
-
-            sc++;
-            scd++;
-        },1000);
-    };
-
-    function getqr()
-    {
-        $.ajax({
-            method : 'GET',
-            url : '{{ url("connect") }}',
-            dataType : 'json',
-            success : function(result)
-            {
-                $('#loader').show();
-                $('.div-loading').addClass('background-load');
-                location.href="{{ url('scan') }}";
-            },
-            error: function(xhr){
-               console.log(xhr.responseText);
-            }
-        });
-    }
-
-    function pairing()
-    {
-        $.ajax({
-            method : 'GET',
-            url : '{{ url("pair") }}',
-            dataType : 'html',
-            success : function(result)
-            {
-                if(result == 0)
-                {
-                    $("#scan").html('Loading...');
-                }
-                else
-                {
-                    $("#scan").html(result);
-                    $("#notes_scan").html('{{ Lang::get("custom.scan") }}');
-                    qrscan = 1; // to stop pairing if qrcode generated
-                }
-            },
-            error: function(xhr){
-               console.log(xhr.responseText);
             }
         });
     }
@@ -289,6 +193,11 @@
                         $("#msg_test").html('<div class="alert alert-success">{{ Lang::get("custom.test.success") }}</div>');
                         // $(".counter").html(result.counter);
                     }
+                    
+                    if(result.error === 1)
+                    {
+                        $("#msg_test").html('<div class="alert alert-warning">{{ Lang::get("custom.test.phone") }}</div>');
+                    }
                 },
                 error: function(xhr){
                     $('#loader').hide();
@@ -313,11 +222,12 @@
         });
     }
 
-    function del_exe()
+    function del_exe(phone_id)
     {
         $.ajax({
             method : 'GET',
             url : '{{ url("del-device") }}',
+            data : {'phone_id':phone_id},
             dataType : 'json',
             beforeSend : function()
             {
@@ -326,9 +236,6 @@
             },
             success : function(result)
             {
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
-
                 if(result.status == 1)
                 {
                     $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>');
@@ -338,6 +245,8 @@
                 }
                 else
                 {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
                     $("#msg").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
                 }
             },
@@ -360,7 +269,10 @@
 
             if(conf == true)
             {
-                del_exe();
+                var phone_id = $(this).attr('id');
+                phone_id = phone_id.split('-');
+                phone_id = phone_id[1];
+                del_exe(phone_id);
             }
             else
             {

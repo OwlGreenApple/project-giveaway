@@ -9,6 +9,7 @@ return [
     'contact'=>'Kontak kami',
     'create'=>'Giveaway',
     'order'=>'Pesanan',
+    'pair'=>'Scan WA',
     'profile'=>'Profil',
     'redeem'=>'Tarik Uang',
     'subscription'=>'Berlangganan',

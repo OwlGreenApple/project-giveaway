@@ -11,9 +11,7 @@ use App\Models\Broadcast;
 use App\Models\Contestants;
 use App\Helpers\Custom;
 use Illuminate\Support\Facades\Storage;
-// use App\Http\Controllers\DeviceController AS Device;
 use App\Http\Controllers\WABlasController AS Device;
-use App\Console\Commands\CheckDeviceStatus AS CDV;
 use App\Http\Controllers\BroadcastController AS BDC;
 use Carbon\Carbon;
 
@@ -119,7 +117,7 @@ class RunningMessages extends Command
             SEND MESSAGE LOGIC
         */
         $messagebulk = Messages::where('status',0)->orderBy('id','asc')->get();
-        $arr = array(11,8,13,6,9,12); // 59 seconds, because computer will count start from 0
+        $arr = array(10,8,13,7,9,12); // 59 seconds, because computer will count start from 0
         shuffle($arr);
 
         $msg = $bc_id = $ev_id = array();
@@ -182,10 +180,10 @@ class RunningMessages extends Command
 
                 // CHECK DEVICE STATUS AND COUNTER DAILY
                 /* +++ temp +++ */
-                // if($user->counter_send_message_daily < 1)
-                // {
-                //     continue;
-                // }
+                /* if($user->counter_send_message_daily < 1)
+                {
+                    continue;
+                } */
 
                 // DELAY INTERVAL TO AVOID BANNED FROM WA
                 sleep($arr[$x]);
@@ -204,18 +202,25 @@ class RunningMessages extends Command
 
                 $status = $device::sendingwa($user,$row->receiver,$message,$image,$row->sender);
 
-                // UNCOMMENT IF WANT TO TEST / DEBUG -- temporary opened
+                // RESULT FROM SEND MESSAGE
+                if(is_array($status) == true)
+                {
+                    $msg_id = $status['id'];
+                    $msg_stat = 1;
+                }
+                else
+                {
+                    $msg_id = 0;
+                    $msg_stat = $status;
+                }
+
+                // UPDATE MESSAGE STATUS AND ID
                 $mg = Messages::find($row->id);
-                $mg->status = $status;
+                $mg->msg_id = $msg_id;
+                $mg->status = $msg_stat;
                 $mg->save();
             endforeach;
         }
-    }
-
-    private static function check_device($phone)
-    {
-        $cd = new CDV;
-        $cd->check_device($phone);
     }
 
     public static function ins_message($data)

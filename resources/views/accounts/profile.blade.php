@@ -17,14 +17,6 @@
             <input name="password_confirmation" type="password" class="form-control form-control-lg"/>
             <span class="text-danger err_password_confirmation"><!-- --></span>
         </div>
-
-        @if($user->is_admin == 1)
-        <div class="form-group mb-4">
-            <label>WA IP server: <span class="text-danger">Mengganti IP dapat berpengaruh pada WA</span></label>
-            <input name="wa_ip" type="text" class="form-control form-control-lg" value="{{ $user->ip_server }}"/>
-            <span class="text-danger err_wa_ip"><!-- --></span>
-        </div>
-        @endif
        
         <!-- 
         {{-- <div class="row mb-4">

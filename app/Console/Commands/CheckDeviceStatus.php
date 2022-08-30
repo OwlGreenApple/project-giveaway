@@ -40,7 +40,12 @@ class CheckDeviceStatus extends Command
      */
     public function handle()
     {
-        $ph = Phone::all();
+        return $this->main();
+    }
+
+    public function main()
+    {
+        $ph = Phone::where('service_id',0)->get();
 
         if($ph->count() > 0)
         {
@@ -55,10 +60,9 @@ class CheckDeviceStatus extends Command
         $device = new Device;
         $data = [
             'cron'=>true,
-            'user_id'=>$row->user_id
+            'phone_id'=>$row->id 
         ];
 
-        $req = new Request($data);
-        $device->get_phone_status($req);
+        $device->get_phone_status($data);
     }
 }

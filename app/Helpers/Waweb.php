@@ -39,9 +39,10 @@ class Waweb
         $label = self::generate_event_link();
         $user = Auth::user();
         $user_id = $user->id;
+        $ip = env('WA_SERVER');
 
         // CREATE DEVICE ON API WAWEB
-        $api = self::get_key($user->ip_server,$user_id,$label);
+        $api = self::get_key($ip,$user_id,$label);
 
         if(isset($api['device_key']) && $api['device_key'] == null)
         {
@@ -50,6 +51,7 @@ class Waweb
 
         // INSERT DEVICE TO PHONE
         $device = new Phone;
+        $device->ip_server = $ip;
         $device->user_id = $user_id;
         $device->label = $label;
         $device->number = 0;
@@ -89,67 +91,63 @@ class Waweb
     }
 
     // SCAN DEVICE
-    public function scan()
+    public function scan($phone_id)
     {
-        $user = Auth::user();
-        $device = Phone::where('user_id',Auth::id())->first();
+        $device = Phone::find($phone_id);
 
         if(is_null($device))
         {
             return 0;
         }
 
-        $url = $user->ip_server.'/scan';
+        $url = $device->ip_server.'/scan';
         $data = ["device_key"=>$device->device_key];
         $scan = self::go_curl($url,$data,'POST');
         return $scan;
     }
 
     // GET QRCODE AND THEN DISPLAYED
-    public function qr()
+    public function qr($phone_id)
     {
-        $user = Auth::user();
-        $device = Phone::where('user_id',Auth::id())->first();
+        $device = Phone::find($phone_id);
 
         if(is_null($device))
         {
             return 0;
         }
 
-        $url = $user->ip_server.'/qr?device_key='.$device->device_key.'';
+        $url = $device->ip_server.'/qr?device_key='.$device->device_key.'';
         $qrcode = self::go_curl($url,null,'GET');
 
         return $qrcode;
     }
 
     // GET PHONE STATUS
-    public function status()
+    public function status($phone_id)
     {
-        $user = Auth::user();
-        $device = Phone::where('user_id',Auth::id())->first();
+        $device = Phone::find($phone_id);
 
         if(is_null($device))
         {
             return 0;
         }
 
-        $url = $user->ip_server.'/status?id='.$device->device_key.'';
+        $url = $device->ip_server.'/status?id='.$device->device_key.'';
         $status = self::go_curl($url,null,'GET');
         return $status;
     }
 
     // SEND MESSAGE OR MEDIA MESSAGE
-    public function send_message($user_id,$phone,$message,$img = null)
+    public function send_message($phone_id,$phone,$message,$img = null)
     {
-        $device = Phone::where('user_id',$user_id)->first();
-        $user = User::find($user_id)->first();
+        $device = Phone::find($phone_id);
 
         if(is_null($device))
         {
             return 0;
         }
 
-        $url = $user->ip_server.'/message';
+        $url = $device->ip_server.'/message';
         $data = [
             'message'=>$message,
             'unique'=>env('WA_UNIQUE'),
@@ -172,17 +170,16 @@ class Waweb
     }
 
     // DELETE DEVICE
-    public function delete_device($user_id)
+    public function delete_device($phone_id)
     {
-        $device = Phone::where('user_id',$user_id)->first();
-        $user = User::find($user_id)->first();
-
+        $device = Phone::find($phone_id);
+    
         if(is_null($device))
         {
             return 0;
         }
 
-        $url = $user->ip_server.'/del?device_key='.$device->device_key.'&unique='.env('WA_UNIQUE').'';
+        $url = $device->ip_server.'/del?device_key='.$device->device_key.'&unique='.env('WA_UNIQUE').'';
         $del = self::go_curl($url,null,'GET');
 
         if(isset($del['status']) && $del['status'] == 1)

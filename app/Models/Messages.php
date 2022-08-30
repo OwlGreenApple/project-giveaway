@@ -8,6 +8,7 @@ use App\Models\Phone;
 use app\Models\Settings;
 use App\Helpers\Custom;
 use App\Helpers\Waweb;
+use App\Console\Commands\CheckDeviceStatus AS CDV;
 
 class Messages extends Model
 {
@@ -21,7 +22,7 @@ class Messages extends Model
         1 == message sent
         2 == message delivered
         3 == message READ
-        4 == message FAILED
+        4 == device not available or disconnected
         5 == case winner if user winning_run = 1 but user's phone inactive
     */
 
@@ -62,7 +63,7 @@ class Messages extends Model
         }
       }
 
-      $ph = Phone::where('number',$sender)->first();
+      $ph = Phone::where([['number',$sender],['status','>',0]])->first();
       // in case if user has deleted his token or package is free, then using admin phone number
       if(is_null($ph) || $package == 'free')
       {
@@ -70,18 +71,18 @@ class Messages extends Model
         $token =  $phn->device_key;
         $service = $phn->service_id;
         $wablas_server = $phn->device_id;
-        $phone_user = $phn->user_id;
+        $phone_id = $phn->id;
       }
       else
       {
         $token =  $ph->device_key;
         $service = $ph->service_id;
         $wablas_server = $ph->device_id;
-        $phone_user = $ph->user_id;
+        $phone_id = $ph->id;
       }
 
     //   package free = in case if user membership has reach end then turn to free, then use admin number
-    //   dd($token);
+      // dd($ph);
 
       $data = [
         'token'=>$token,
@@ -102,10 +103,20 @@ class Messages extends Model
       // waweb api
       if($service == 0)
       {
+        // CHECK WHETHER DEVICE IS CONNECTED AND RELOAD ALL DEVICE WHERE service_id = 0
+        $check_phone = new CDV;
+        $check_phone->main();
+
+        // RETURN 4 IF PHONE DISCONNECT OR NOT AVAILABLE in case service_id = 0
+        $phones = Phone::find($phone_id);
+        if($phones->status < 1)
+        {
+            return 4;
+        }
+
         // LOGIC TO SEND MESSAGE
         $api = new Waweb;
-        $api->send_message($phone_user,$customer_phone,$customer_message,$image);
-        return 1;
+        return $api->send_message($phone_id,$customer_phone,$customer_message,$image);
       }
       else if($service == 1)
       {

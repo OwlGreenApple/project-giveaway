@@ -25,20 +25,34 @@ class DeviceController extends Controller
     }
 
     // DEVICE CONNECT PAGE
-    public function connect_wa()
+    public function connect_wa($id = null)
     {
-        $phone = Phone::where('user_id',Auth::id())->first();
-        return view('connect',['phone'=>$phone,'ct'=>new Custom]);
+        $phone = Phone::where('user_id',Auth::id())->get();
+        $ct = new Custom;
+
+        if($id == null)
+        {
+            return view('connect',['phone'=>$phone,'ct'=>$ct]);
+        }
+        else
+        {
+            $ph = Phone::find($id);
+            if(is_null($ph))
+            {
+                return redirect('scan');
+            }
+            return view('connect-pair',['id'=>$id]);
+        }
     }
 
     // CREATE DEVICE
     public function create_device()
     {
-        $ph = Phone::where('user_id',Auth::id())->first();
+        $ph = Phone::where('user_id',Auth::id())->get();
 
-        if(!is_null($ph))
+        if($ph->count() >= 3)
         {
-            return response()->json(['status'=>'error']);
+            return response()->json(['status'=>'max']);
         }
 
         $api = new Waweb;
@@ -57,31 +71,59 @@ class DeviceController extends Controller
     }
 
     //CONNECT DEVICE
-    public function connect()
+    public function connect(Request $request)
     {
         $api = new Waweb;
-        $sc = $api->scan();
-        $phone = Phone::where('user_id',Auth::id())->first();
+        $phone_id = strip_tags($request->phone_id);
+        $phone = Phone::find($phone_id);
+        $sc = $api->scan($phone_id);
 
         // if user does not pairing until time's up
         if(isset($sc['isConnected']))
         {
             if($sc['isConnected'] == 1)
             {
-                $device = Phone::find($phone->id);
-                $device->number = $sc['phone'];
-                $device->status = $sc['isConnected'];
-                $device->save();
+                self::update_phone($phone,$sc,null);
             }
             return response()->json($sc);
         }
     }
 
+    // UPDATE PHONE STATUS
+    public static function update_phone($phone,$sc,$from = null)
+    {
+        /* 
+            $from = null
+            from scan user,
+            otherwise from check phone status
+        */
+        $user = User::find($phone->user_id);
+
+        // IF ADMIN PHONE STATUS WOULD BE 3
+        if($user->is_admin == 1)
+        {
+            $status = 3;
+        }
+        else
+        {
+            $status = $sc['isConnected'];
+        }
+
+        // in case if function call from connect()
+        if($phone == null)
+        {
+            $phone->number = $sc['phone'];
+        }
+        $phone->status = $status;
+        $phone->save();
+    }
+
     // DISPLAYING QRCODE
-    public function qrcode()
+    public function qrcode(Request $request)
     {
         $api = new Waweb;
-        $pair = $api->qr();
+        $phone_id = strip_tags($request->phone_id);
+        $pair = $api->qr($phone_id);
 
         if($pair !== null)
         {
@@ -95,46 +137,50 @@ class DeviceController extends Controller
     }
 
     // CHECK AND CHANGE PHONE STATUS
-    public function get_phone_status($user_id)
+    public function get_phone_status(array $data)
     {
         $api = new Waweb;
-        $status = $api->status();
-        $phone = Phone::where('user_id',$user_id)->first();
+        $status = $api->status($data['phone_id']);
 
-        if(is_null($phone))
+        if($status == 0)
         {
             return response()->json(['isConnected'=>'error']);
         }
 
-        $device = Phone::find($phone->id);
-        $device->number = $status['phone'];
-        $device->status = $status['isConnected'];
-        $device->save();
-
+        $phone = Phone::find($data['phone_id']);
+        self::update_phone($phone,$status,1);
         return response()->json($status);
     }
 
     // SEND TEXT MESSAGE -- TEST MESSAGE PAGE
     public function send_message(Request $req)
     {
-        $user_id = Auth::id();
         $message = strip_tags($req->message);
         $img = strip_tags($req->media);
         $phone = strip_tags($req->code.$req->number);
+        $sender = strip_tags($req->sender);
+
+        $device = Phone::where('number',$sender)->first();
+        if(is_null($device))
+        {
+            return response()->json(['error'=>1]);
+        }
+
+        $phone_id = $device->id;
 
         // LOGIC TO SEND MESSAGE
         $api = new Waweb;
-        $send = $api->send_message($user_id,$phone,$message,$img);
+        $send = $api->send_message($phone_id,$phone,$message,$img);
         return response()->json($send);
     }
 
     // DELETE DEVICE
-    public function delete_device()
+    public function delete_device(Request $req)
     {
        $api = new Waweb;
-       $user_id = Auth::id();
+       $phone_id = $req->phone_id;
 
-       $del = $api->delete_device($user_id);
+       $del = $api->delete_device($phone_id);
        return response()->json(['status' => $del]);
     }
 
