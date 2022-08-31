@@ -8,7 +8,6 @@ use App\Models\Phone;
 use app\Models\Settings;
 use App\Helpers\Custom;
 use App\Helpers\Waweb;
-use App\Console\Commands\CheckDeviceStatus AS CDV;
 
 class Messages extends Model
 {
@@ -24,6 +23,8 @@ class Messages extends Model
         3 == message READ
         4 == device not available or disconnected
         5 == case winner if user winning_run = 1 but user's phone inactive
+
+        device_id : is not api device id but id from table phone
     */
 
     //  DETERMINE ADMIN NUMBER TO SEND MESSAGE
@@ -64,10 +65,22 @@ class Messages extends Model
       }
 
       $ph = Phone::where([['number',$sender],['status','>',0]])->first();
+
       // in case if user has deleted his token or package is free, then using admin phone number
       if(is_null($ph) || $package == 'free')
       {
         $phn = Phone::where('status',3)->inRandomOrder()->first();
+
+        // RETURN 4 IF PHONE DISCONNECT OR NOT AVAILABLE in case service_id = 0
+        if(is_null($phn))
+        {
+          $ret = array(
+            'status'=>4,
+            'device_id'=>0
+          );
+          return $ret;
+        }
+
         $token =  $phn->device_key;
         $service = $phn->service_id;
         $wablas_server = $phn->device_id;
@@ -75,6 +88,7 @@ class Messages extends Model
       }
       else
       {
+        // user's phone api number
         $token =  $ph->device_key;
         $service = $ph->service_id;
         $wablas_server = $ph->device_id;
@@ -103,20 +117,11 @@ class Messages extends Model
       // waweb api
       if($service == 0)
       {
-        // CHECK WHETHER DEVICE IS CONNECTED AND RELOAD ALL DEVICE WHERE service_id = 0
-        $check_phone = new CDV;
-        $check_phone->main();
-
-        // RETURN 4 IF PHONE DISCONNECT OR NOT AVAILABLE in case service_id = 0
-        $phones = Phone::find($phone_id);
-        if($phones->status < 1)
-        {
-            return 4;
-        }
-
         // LOGIC TO SEND MESSAGE
         $api = new Waweb;
-        return $api->send_message($phone_id,$customer_phone,$customer_message,$image);
+        $ret = $api->send_message($phone_id,$customer_phone,$customer_message,$image);
+        $ret['device_id'] = $phone_id;
+        return $ret;
       }
       else if($service == 1)
       {
@@ -132,7 +137,11 @@ class Messages extends Model
 
       if($sending == null)
       {
-         return 3;
+         $ret = array(
+          'status'=>3,
+          'device_id'=>$phone_id
+         );
+         return $ret;
       }
 
       if(isset($sending['status']) == false)
@@ -140,20 +149,36 @@ class Messages extends Model
         $msg = str_replace(" ","_",$sending['message']);
         if($msg == "Please_Upgrade_Your_Account")
         {
-          return 2; //usually if user using package that not supported image / package run out
+          $ret = array(
+            'status'=>2,
+            'device_id'=>$phone_id
+           );
+          return $ret; //usually if user using package that not supported image / package run out
         }
         elseif($msg == "token_invalid")
         {
-          return 4; //invalid token
+          $ret = array(
+            'status'=>4,
+            'device_id'=>$phone_id
+           );
+          return $ret; //invalid token
         }
         else
         {
-          return 3;
+          $ret = array(
+            'status'=>3,
+            'device_id'=>$phone_id
+           );
+          return $ret;
         }
       }
       else
       {
-        return 1;
+        $ret = array(
+          'status'=>1,
+          'device_id'=>$phone_id
+         );
+        return $ret;
       }
     }
 

@@ -165,7 +165,6 @@ class Waweb
             $data['url'] = $img;
         }
         $send = self::go_curl($url,$data,'POST');
-
         return $send;
     }
 
@@ -221,7 +220,7 @@ class Waweb
     public static function generate_random()
     {
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        return substr(str_shuffle($permitted_chars), 0, 10);
+        return substr(str_shuffle($permitted_chars), 0, 12);
     }
 
 /* end class */

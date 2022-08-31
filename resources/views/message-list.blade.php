@@ -28,7 +28,7 @@
                                     @if($phone->status == 1) <span class="text-primary">{{ Lang::get('table.sent') }}</span>
                                     @elseif($phone->status == 2) <span class="text-success">{{ Lang::get('table.delivered') }}</span>
                                     @elseif($phone->status == 3) <span class="text-info">{{ Lang::get('table.read') }}</span>
-                                    @elseif($phone->status == 4) <span class="text-danger">{{ Lang::get('table.failed') }}</span>
+                                    @elseif($phone->status == 4) <span class="text-danger">{{ Lang::get('table.not') }}</span>
                                     @elseif($phone->status == 5) <span class="text-danger">{{ Lang::get('table.not') }}</span>
                                     @else <span class="text-dark">{{ Lang::get('table.queue') }}</span></span>
                                     @endif

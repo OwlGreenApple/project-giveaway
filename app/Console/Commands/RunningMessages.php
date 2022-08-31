@@ -13,6 +13,7 @@ use App\Helpers\Custom;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\WABlasController AS Device;
 use App\Http\Controllers\BroadcastController AS BDC;
+use App\Console\Commands\CheckDeviceStatus AS CDV;
 use Carbon\Carbon;
 
 class RunningMessages extends Command
@@ -48,10 +49,12 @@ class RunningMessages extends Command
      */
     public function handle()
     {
-        // $device = new Device;
         $device = new Messages;
         $bc = Broadcast::where('status','=',0)->get();
         $bdc = new BDC;
+
+        // CHECK PHONE CONNECT STATUS
+        self::check_phone_connect();
 
         if($bc->count() > 0):
             foreach($bc as $row)
@@ -203,24 +206,35 @@ class RunningMessages extends Command
                 $status = $device::sendingwa($user,$row->receiver,$message,$image,$row->sender);
 
                 // RESULT FROM SEND MESSAGE
-                if(is_array($status) == true)
+                if(isset($status['id']))
                 {
                     $msg_id = $status['id'];
+                    $device_id = $status['device_id'];
                     $msg_stat = 1;
                 }
                 else
                 {
                     $msg_id = 0;
-                    $msg_stat = $status;
+                    $device_id = $status['device_id'];
+                    $msg_stat = $status['status'];
                 }
 
                 // UPDATE MESSAGE STATUS AND ID
                 $mg = Messages::find($row->id);
+                $mg->phone_id = $device_id;
                 $mg->msg_id = $msg_id;
                 $mg->status = $msg_stat;
                 $mg->save();
             endforeach;
         }
+    }
+
+    // IN CASE IF USING WAWEB API
+    public static function check_phone_connect()
+    {
+        // CHECK WHETHER DEVICE IS CONNECTED AND RELOAD ALL DEVICE WHERE service_id = 0
+        $check_phone = new CDV;
+        $check_phone->main();
     }
 
     public static function ins_message($data)

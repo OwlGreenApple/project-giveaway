@@ -22,7 +22,7 @@ class CheckMessage extends Command
      *
      * @var string
      */
-    protected $description = 'Check message status and then update';
+    protected $description = 'Check message status and then update, only for phone / device with service_id = 0';
 
     /**
      * Create a new command instance.
@@ -41,36 +41,21 @@ class CheckMessage extends Command
      */
     public function handle()
     {
-        $msg = Messages::whereIn('status',[1,2])->select('id','user_id','msg_id')->get();
-
+        $msg = Messages::whereIn('messages.status',[1,2])->where([['messages.phone_id','>',0],['phones.service_id',0]])
+                ->join('phones','phones.id','=','messages.phone_id')
+                ->select('messages.id','messages.msg_id','messages.phone_id','phones.ip_server')->get();
+    
         if($msg->count() > 0)
         {
             foreach($msg as $row):
-                $phone = Phone::where('user_id',$row->user_id)->first();
-
-                if(is_null($phone))
-                {
-                    continue;
-                }
-
-                // CHECK DEVICE STATUS AND SENT MESSAGE
-                $cd = new CDV;
-                $check_device = $cd->check_device($phone);
-
-                if($phone->status == 0 || $row->msg_id == 0)
-                {
-                    continue;
-                }
-
-                self::get_message_status($row->msg_id,$row->user_id,$row->id,$phone);
+                self::get_message_status($row->msg_id,$row->id,$row->ip_server);
             endforeach;
         }
     }
 
-    public static function get_message_status($message_id,$user_id,$msg_id,$phone)
+    public static function get_message_status($message_id,$msg_id,$ip)
     {
-        $user = User::find($user_id);
-        $url = $user->ip_server."/messages/".$message_id;
+        $url = $ip."/message-check/?msg_id=".$message_id;
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -82,7 +67,6 @@ class CheckMessage extends Command
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'device-key: '.$phone->device_key
         ));
 
         $result = curl_exec($ch);
@@ -94,22 +78,8 @@ class CheckMessage extends Command
         curl_close($ch);
         $result = json_decode($result,true);
 
-        if($result['status'] == 'DELIVERED')
-        {
-            $status = 2;
-        }
-        elseif($result['status'] == 'READ')
-        {
-            $status = 3;
-        }
-        else
-        {
-            //FAILED
-            $status = 4;
-        }
-
         $msg = Messages::find($msg_id);
-        $msg->status = $status;
+        $msg->status = $result['status'];
         $msg->save();
     }
 }
