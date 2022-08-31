@@ -60,6 +60,7 @@ Route::get('/export-contestant/{event_id}', [App\Http\Controllers\HomeController
 Route::get('/del-contestant', [App\Http\Controllers\HomeController::class, 'del_contestant']);
 Route::get('/draw-contestant', [App\Http\Controllers\HomeController::class, 'draw_contestant']);
 Route::get('/contestant-winner/{event_id}', [App\Http\Controllers\HomeController::class, 'winner']);
+Route::post('/prize', [App\Http\Controllers\HomeController::class, 'prize']);
 
 /* ACOUNTS */
 Route::get('/account/{id?}', [App\Http\Controllers\HomeController::class, 'accounts']);

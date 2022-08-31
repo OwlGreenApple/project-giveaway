@@ -13,9 +13,11 @@
                 </div>
 
                 <div class="card-body">
+                <div class="text-left mb-4"><a role="button" class="btn btn-success" id="gprize" ev_id="{{ $ev->id }}">{{ Lang::get('table.award') }}</a></div>
                 <span id="msg"><!-- message --></span>
-                <table id="dashboard_table" class="display responsive nowrap">
+                <table id="dashboard_table" class="display nowrap table">
                     <thead>
+                        <th><input type="checkbox" class="form-checks" id="check_all" /></th>
                         <th>{{ Lang::get('table.no') }}</th>
                         <th>{{ Lang::get('table.email') }}</th>
                         <th>{{ Lang::get('table.name') }}</th>
@@ -28,8 +30,10 @@
                     </thead>
                     <tbody>
                         @if($data->count() > 0)
+                            <form id="prize">
                             @foreach($data as $row) 
                             <tr>
+                                <td class="align-middle"><input type="checkbox" name="winner[]" class="form-checks checks" value="{{ $row->id }}" /></td>
                                 <td class="align-middle">{{ $no++ }}</td>
                                 <td class="align-middle">{{ $row->c_email }}</td>
                                 <td class="align-middle">{{ $row->c_name }}</td>
@@ -53,6 +57,7 @@
                                 </td>
                             </tr>
                             @endforeach
+                            </form>
                         @else
                             <tr><td colspan="9" class="text-center"><div class="alert alert-info">{{ Lang::get('custom.no_data') }}</div></tr> 
                         @endif
@@ -74,13 +79,29 @@
     function action_table()
     {
         // redraw contestants
-        $("body").on("click",".draw",function(){
+        /* $("body").on("click",".draw",function(){
             var id = $(this).attr('id');
             var conf = confirm('{{ Lang::get("custom.redraw") }}');
 
             if(conf == true)
             {
                 redraw_or_delete(id,'{{ url("draw-contestant") }}',0); 
+            }
+            else
+            {
+                return false;
+            }
+        }); */
+
+        //winner contestant
+        $("body").on("click","#gprize",function(){
+            var ev_id = $(this).attr('ev_id');
+            var conf = confirm('{{ Lang::get("custom.redraw") }}');
+
+            if(conf == true)
+            {
+                var data = $("#prize").serializeArray();
+                redraw_or_delete(id,'{{ url("draw-contestant") }}',0,data); 
             }
             else
             {
@@ -129,12 +150,13 @@
         });
     }
 
-    function redraw_or_delete(id,target,remove_winner)
+    function redraw_or_delete(id,target,remove_winner,data)
     {
+        data = data.push({'id':id,'ev_id':"{{ $ev->id }}"});
         $.ajax({
             method:'GET',
             url: target,
-            data : {'id':id,'ev_id':"{{ $ev->id }}"},
+            data : data, 
             dataType:'json',
             beforeSend : function()
             {
@@ -165,7 +187,24 @@
 
     function datatable()
     {
-        $("#dashboard_table").DataTable();
+        // check all logic
+        $("body").on("click","#check_all",function(){
+            var checked = $(this).prop('checked');
+
+            if(checked === true)
+            {
+                $(".checks").prop('checked',true);
+            }
+            else
+            {
+                $(".checks").prop('checked',false);
+            }
+
+        });
+
+        /* $("#dashboard_table").DataTable({
+            "pageLength": 5
+        }); */
     }
 
 </script>

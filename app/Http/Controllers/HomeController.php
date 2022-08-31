@@ -117,7 +117,7 @@ class HomeController extends Controller
         }
     }
 
-    // DRAW CONTESTANTS
+    // DRAW CONTESTANTS ------
     public function draw_contestant(Request $request)
     {
         $id = strip_tags($request->id);
@@ -225,6 +225,12 @@ class HomeController extends Controller
     {
         $ct = Contestants::where([['event_id',$ev_id],['status','=',1]])->orderBy('entries','desc')->orderBy('date_enter', 'asc')->get();
         return $ct->count();
+    }
+
+    // GIVE CONTESTANT PRIZE
+    public function prize(Request $req)
+    {
+        dd($req->all()); 
     }
 
     // DUPLICATE EVENT
