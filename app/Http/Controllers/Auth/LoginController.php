@@ -46,7 +46,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request,$user)
     {
         self::check_banned($request);
-        if($request->remember == 1)
+        if($request->remember == "on")
         {
             $this->setCookie($request->email,$request->password);
         }

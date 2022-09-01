@@ -15,54 +15,69 @@
                 <div class="card-body">
                 <div class="text-left mb-4"><a role="button" class="btn btn-success" id="gprize" ev_id="{{ $ev->id }}">{{ Lang::get('table.award') }}</a></div>
                 <span id="msg"><!-- message --></span>
-                <table id="dashboard_table" class="display nowrap table">
-                    <thead>
-                        <th><input type="checkbox" class="form-checks" id="check_all" /></th>
-                        <th>{{ Lang::get('table.no') }}</th>
-                        <th>{{ Lang::get('table.email') }}</th>
-                        <th>{{ Lang::get('table.name') }}</th>
-                        <th>{{ Lang::get('table.wa') }}</th>
-                        <th>{{ Lang::get('table.entry') }}</th>
-                        <th>{{ Lang::get('table.referral') }}</th>
-                        <th>{{ Lang::get('table.ip') }}</th>
-                        <th>{{ Lang::get('table.date') }}</th>
-                        <th><!-- Lang::get('table.act') --></th>
-                    </thead>
-                    <tbody>
-                        @if($data->count() > 0)
-                            <form id="prize">
-                            @foreach($data as $row) 
-                            <tr>
-                                <td class="align-middle"><input type="checkbox" name="winner[]" class="form-checks checks" value="{{ $row->id }}" /></td>
-                                <td class="align-middle">{{ $no++ }}</td>
-                                <td class="align-middle">{{ $row->c_email }}</td>
-                                <td class="align-middle">{{ $row->c_name }}</td>
-                                <td class="align-middle">{{ $row->wa_number }}</td>
-                                <td class="align-middle">{{ $row->entries }}</td>
-                                <td class="align-middle">{{ $row->referrals }}</td>
-                                <td class="align-middle">{{ $row->ip }}</td>
-                                <td class="align-middle">{{ $row->date_enter }}</td>
-                                <td class="align-middle">
-                                    <div class="input-group">
-                                        @if(isset($winner))
+                <div class="table-responsive">
+                    <table id="dashboard_table" class="display nowrap table">
+                        <thead>
+                            @if(isset($winner))
+                                @if($ungiving > 0)
+                                    <th><input type="checkbox" class="form-checks" id="check_all" /></th>
+                                @endif
+                            @endif
+                            <th>{{ Lang::get('table.no') }}</th>
+                            <th>{{ Lang::get('table.email') }}</th>
+                            <th>{{ Lang::get('table.name') }}</th>
+                            <th>{{ Lang::get('table.wa') }}</th>
+                            <th>{{ Lang::get('table.entry') }}</th>
+                            <th>{{ Lang::get('table.referral') }}</th>
+                            <th>{{ Lang::get('table.ip') }}</th>
+                            <th>{{ Lang::get('table.date') }}</th>
+                            <th><!-- Lang::get('table.act') --></th>
+                        </thead>
+                        <tbody>
+                            @if($data->count() > 0)
+                                <form id="prize">
+                                @foreach($data as $row) 
+                                <tr>
+                                    @if(isset($winner))
+                                        @if($ungiving > 0)
+                                        <td class="align-middle">
                                             @if($row->status == 0)
-                                                <a class="btn btn-warning draw" ev_id="{{ $row->event_id }}" id="{{ $row->id }}">{{ Lang::get('table.award') }}</a>
-                                            @else
-                                                <span class="text-info">{{ Lang::get('table.award.done') }}</span>
+                                                <input type="checkbox" name="winner[]" class="form-checks checks" value="{{ $row->id }}" />
                                             @endif
-                                        @else
-                                            <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>
+                                        </td>
                                         @endif
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                            </form>
-                        @else
-                            <tr><td colspan="9" class="text-center"><div class="alert alert-info">{{ Lang::get('custom.no_data') }}</div></tr> 
-                        @endif
-                    </tbody>
-                </table>
+                                    @endif
+                                    <td class="align-middle">{{ $no++ }}</td>
+                                    <td class="align-middle">{{ $row->c_email }}</td>
+                                    <td class="align-middle">{{ $row->c_name }}</td>
+                                    <td class="align-middle">{{ $row->wa_number }}</td>
+                                    <td class="align-middle">{{ $row->entries }}</td>
+                                    <td class="align-middle">{{ $row->referrals }}</td>
+                                    <td class="align-middle">{{ $row->ip }}</td>
+                                    <td class="align-middle">{{ $row->date_enter }}</td>
+                                    <td class="align-middle">
+                                        <div class="input-group">
+                                            @if(isset($winner))
+                                                @if($row->status == 0)
+                                                    -
+                                                    <!-- <a class="btn btn-warning draw" ev_id="{{ $row->event_id }}" id="{{ $row->id }}">{{ Lang::get('table.award') }}</a> -->
+                                                @else
+                                                    <span class="text-success">{{ Lang::get('table.award.done') }}</span>
+                                                @endif
+                                            @else
+                                                <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                </form>
+                            @else
+                                <tr><td colspan="9" class="text-center"><div class="alert alert-info">{{ Lang::get('custom.no_data') }}</div></tr> 
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 <!--  -->
                 </div>
             </div>
@@ -101,7 +116,8 @@
             if(conf == true)
             {
                 var data = $("#prize").serializeArray();
-                redraw_or_delete(id,'{{ url("draw-contestant") }}',0,data); 
+                data.push({name : 'ev_id', value :"{{ $ev->id }}"});
+                prize(data);
             }
             else
             {
@@ -110,10 +126,41 @@
         });
 
         // delete contestants
-        $("body").on("click",".del",function(){
+        /* $("body").on("click",".del",function(){
             var id = $(this).attr('id');
             var conf = confirm('{{ Lang::get("custom.delete") }}');
             del_contestants(id);
+        }); */
+    }
+
+    function prize(data)
+    {
+        $.ajax({
+            headers: {'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')},
+            method : 'POST',
+            url : "{{ url('prize') }}",
+            data : data,
+            datatType:"json",
+            beforeSend : function(){
+                $("#loader").show();
+                $('.div-loading').addClass('background-load');
+            },
+            success : function(row)
+            {
+                if(row.status === 1)
+                {
+                    location.href="{{ url('contestant-winner') }}/{{ $ev->id }}"
+                }
+                else
+                {
+                    $("#loader").hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            },
+            error : function(xhr)
+            {
+                console.log(xhr.responseText);
+            }
         });
     }
 

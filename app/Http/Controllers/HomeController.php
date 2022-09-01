@@ -209,7 +209,8 @@ class HomeController extends Controller
         }
 
         $ct = self::get_total_winner($ev);
-        return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1,'winner'=>true]);
+        $ungiving = Contestants::where('event_id',$ev->id)->where('status',0)->get()->count();
+        return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1,'winner'=>true,'ungiving'=>$ungiving]);
     }
 
     // GET WINNERS ACCORDING ON EVENT TOTAL WINNERS
@@ -230,7 +231,22 @@ class HomeController extends Controller
     // GIVE CONTESTANT PRIZE
     public function prize(Request $req)
     {
-        dd($req->all()); 
+        $winner = $req->winner;
+        $ev_id = $req->ev_id;
+        $res['status'] = 0; 
+
+        if(count($winner) > 0)
+        {
+            foreach($winner as $id):
+                Contestants::where([['contestants.id',$id],['contestants.event_id',$ev_id],['events.user_id',Auth::id()]])
+                    ->join('events','events.id','=','contestants.event_id')
+                    ->update(['contestants.status'=>1]);
+            endforeach;
+
+            $res['status'] = 1;
+        }
+        
+        return response()->json($res);
     }
 
     // DUPLICATE EVENT

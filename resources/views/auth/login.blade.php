@@ -19,7 +19,7 @@
                         @csrf
                         <div class="input-group mb-3">
                             <span class="input-group-text bg-white border-end-0 title">@</span>
-                            <input placeholder="{{ Lang::get('auth.email') }}" id="email" type="email" class="form-control form-control-lg bg-white border-start-0 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus/>
+                            <input placeholder="{{ Lang::get('auth.email') }}" id="email" type="email" class="form-control form-control-lg bg-white border-start-0 @error('email') is-invalid @enderror" name="email" value="{{ Cookie::get('email') }}" required autocomplete="email" autofocus/>
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -29,7 +29,7 @@
 
                         <div class="input-group mb-3">
                             <span class="input-group-text bg-white border-end-0"><i class="fas fa-key title"></i></span>
-                            <input placeholder="{{ Lang::get('auth.pass') }}" id="password" type="password" class="form-control form-control-lg bg-white border-start-0 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" />
+                            <input placeholder="{{ Lang::get('auth.pass') }}" value="{{ Cookie::get('password') }}" id="password" type="password" class="form-control form-control-lg bg-white border-start-0 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" />
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="form-check mb-3 text-left">
-                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="remember" id="remember" @if(Cookie::get('password') !== null) checked @endif />
 
                             <label class="form-check-label" for="remember">
                                 {{ Lang::get('auth.remember') }}
