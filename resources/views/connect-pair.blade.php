@@ -103,10 +103,10 @@
             },
             error: function(xhr)
             {
-                $("#scan").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                // to prevent error due 504 bad gateway
                 setTimeout(function(){
                     location.href="{{ url('scan') }}";
-                },1500);
+                },800);
             }
         });
     }
