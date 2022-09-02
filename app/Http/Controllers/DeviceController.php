@@ -15,7 +15,6 @@ use App\Models\Messages;
 use Carbon\Carbon;
 use App\Helpers\Waweb;
 use Symfony\Component\CssSelector\Parser\Token;
-use chillerlan\QRCode\QRCode;
 
 class DeviceController extends Controller
 {
@@ -130,8 +129,7 @@ class DeviceController extends Controller
 
         if($pair !== null)
         {
-            $qr = new QRCode;
-            return '<img style="width:200px" src="'.$qr->render($pair).'" alt="QR Code" />';
+            return $pair;
         }
         else
         {

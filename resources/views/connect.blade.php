@@ -72,7 +72,6 @@
                 </div>
             <!-- END TEST SEND -->
             @endif
-
         <!-- end col -->
         </div>
     </div>

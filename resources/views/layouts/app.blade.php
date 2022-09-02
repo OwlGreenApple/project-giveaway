@@ -40,6 +40,11 @@
     <link href="{{ asset('assets/image-uploader/dist/image-uploader.min.css') }}" rel="stylesheet" />
     <script type="text/javascript" src="{{ asset('assets/image-uploader/dist/image-uploader.min.js') }}"></script>
 
+    @if(Request::segment(1) == 'qrconnect') 
+        <!-- QR Generator -->
+        <script src="{{ asset('assets/jquery-qrcode/jquery-qrcode-0.18.0.min.js') }}"></script>
+    @endif
+
     <!-- Data Table -->
     <link href="{{ asset('assets/DataTables/datatables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/DataTables/Responsive/css/responsive.dataTables.min.css') }}" rel="stylesheet">

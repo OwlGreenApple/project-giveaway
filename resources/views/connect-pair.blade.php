@@ -113,7 +113,7 @@
             method : 'GET',
             url : '{{ url("pair") }}',
             data : {'phone_id':'{{ $id }}'},
-            dataType : 'html',
+            dataType : 'text',
             success : function(result)
             {
                 if(result == 0)
@@ -122,7 +122,8 @@
                 }
                 else
                 {
-                    $("#scan").html(result);
+                    $("#scan").html('');
+                    $('#scan').qrcode({size: 180,fill: '#000',text: result});
                     $("#notes_scan").html('{{ Lang::get("custom.scan") }}');
                     qrscan = 1; // to stop pairing if qrcode generated
                 }
