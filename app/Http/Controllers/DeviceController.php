@@ -26,12 +26,14 @@ class DeviceController extends Controller
     // DEVICE CONNECT PAGE
     public function connect_wa($id = null)
     {
-        $phone = Phone::where([['user_id',Auth::id()],['service_id',0]])->get();
+        $phone = Phone::where([['user_id',Auth::id()]])->get();
+        $waphone = Phone::where([['user_id',Auth::id()],['service_id',0]])->get();
+
         $ct = new Custom;
 
         if($id == null)
         {
-            return view('connect',['phone'=>$phone,'ct'=>$ct]);
+            return view('connect',['phone'=>$phone,'waphone'=>$waphone,'ct'=>$ct]);
         }
         else
         {
@@ -47,7 +49,7 @@ class DeviceController extends Controller
     // CREATE DEVICE
     public function create_device()
     {
-        $ph = Phone::where('user_id',Auth::id())->get();
+        $ph = Phone::where([['user_id',Auth::id()],['service_id','=',0]])->get();
 
         if($ph->count() >= 3)
         {

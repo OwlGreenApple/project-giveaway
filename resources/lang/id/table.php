@@ -59,6 +59,7 @@ return [
     'sent'=>'Sedang Dikirim',
     'service'=>'Layanan',
     'service.api'=>'Token API',
+    'service.max'=>'Jumlah WA maksimal : 3',
     'service.phone'=>'Nomor WA',
     'service.phone.selected'=>'Nomor Saya',
     'start.not'=>'Belum dimulai',

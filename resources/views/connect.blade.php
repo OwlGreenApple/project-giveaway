@@ -16,7 +16,7 @@
                     <div class="card-body p-0">
                         {{-- button --}}
                         <div class="input-group">
-                            @if($phone->count() < 3)
+                            @if($waphone->count() < 3)
                                 <button type="button" id="con" class="btn bg-custom text-white w-100"><i class="fas fa-mobile-alt"></i>&nbsp;{{ Lang::get('custom.connect') }}</button>
                             @endif
                         </div>
@@ -29,7 +29,7 @@
             </form>
 
             {{-- test message --}}
-                @if($phone->count() > 0)
+                @if($waphone->count() > 0)
                 <!-- TEST SEND MESSAGE -->
                 <div class="container mt-4 card p-3">
                     <h3 class="account-title text-capitalize mb-2"><b><i class="fab fa-whatsapp main-color"></i>&nbsp;{{ Lang::get('table.test.message') }}</b></h3>
@@ -77,7 +77,7 @@
     </div>
 </div>
 
-@if($phone->count() > 0)
+@if($waphone->count() > 0)
     <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 @endif
 <script type="text/javascript">
@@ -122,6 +122,10 @@
                 if(result.status == 1)
                 {
                    location.href="{{ url('scan') }}";
+                }
+                else if(result.status == 'max')
+                {
+                    $("#msg").html('<div class="alert alert-warning">{{ Lang::get("table.service.max") }}</div>');
                 }
                 else
                 {

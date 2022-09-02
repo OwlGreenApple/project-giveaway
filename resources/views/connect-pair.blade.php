@@ -101,8 +101,12 @@
                 $('.div-loading').addClass('background-load'); 
                 location.href="{{ url('scan') }}";
             },
-            error: function(xhr){
-               console.log(xhr.responseText);
+            error: function(xhr)
+            {
+                $("#scan").html('<div class="alert alert-danger">{{ Lang::get("custom.error") }}</div>');
+                setTimeout(function(){
+                    location.href="{{ url('scan') }}";
+                },1500);
             }
         });
     }

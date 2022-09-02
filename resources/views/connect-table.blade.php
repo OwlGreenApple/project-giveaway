@@ -13,9 +13,9 @@
         @foreach($phone as $col)
         <tr>
             <td>{{ $col->number }}</td>
-            <td><span class="text-success">@if($col->status == 1 || $col->status == 3) <span class="text-success">{{ Lang::get('table.connected') }}</span></span> @else <span class="text-danger">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
+            <td><span class="text-success">@if($col->status == 1 || $col->status == 3) <span class="text-success">{{ Lang::get('table.connected') }}</span></span> @elseif($col->service_id > 0) -  @else <span class="text-danger">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
             <td>
-            @if($col->status == 1 || $col->status == 3)
+            @if($col->status == 1 || $col->status == 3 || $col->service_id > 0)
                 -
             @else
                 <span class="text-info"><a class="btn btn-outline-success btn-sm scanqr" role="button" href="{{ url('qrconnect') }}/{{ $col->id }}"><i class="fas fa-qrcode"></i>&nbsp;{{ Lang::get('table.pair.scan') }}</a></span>
