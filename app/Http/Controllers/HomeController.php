@@ -1260,7 +1260,7 @@ class HomeController extends Controller
         $helper = new Custom;
         $user = User::find(Auth::id());
         $conf = $request->segment(2);
-        $phone = Phone::where([['user_id',Auth::id()],['status',1]])->first();
+        $phone = Phone::where([['user_id',Auth::id()],['service_id',2]])->first();
 
         $price_list = Orders::display_pricing_list();
         $data = ['user'=>$user,'data'=>$price_list,'helper'=>$helper,'lang'=>new Lang,'conf'=>$conf,'pc'=> new Custom,'cond'=>true,'account'=>1,'phone'=>$phone];
@@ -1312,7 +1312,7 @@ class HomeController extends Controller
         $request->user = 1; // so that phone status = 1
  
         $admin = new Admin;
-        $phone = Phone::where([['user_id',Auth::id()],['status',1]])->first();
+        $phone = Phone::where([['user_id',Auth::id()],['service_id',2]])->first();
         $user = User::find(Auth::id());
 
         if(is_null($phone))
@@ -1357,7 +1357,7 @@ class HomeController extends Controller
     // DELETE USER PHONE
     public function del_phone()
     {
-        $phone = Phone::where([['user_id',Auth::id()],['status',1]])->first();
+        $phone = Phone::where([['user_id',Auth::id()],['service_id',2]])->first();
 
         if(is_null($phone))
         {

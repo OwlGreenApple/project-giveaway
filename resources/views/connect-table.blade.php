@@ -13,16 +13,20 @@
         @foreach($phone as $col)
         <tr>
             <td>{{ $col->number }}</td>
-            <td><span class="text-success">@if($col->status == 1 || $col->status == 3) <span class="text-success">{{ Lang::get('table.connected') }}</span></span> @elseif($col->service_id > 0) -  @else <span class="text-danger">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
+            <td>@if(($col->status == 1 || $col->status == 3) && $col->service_id == 0) <span class="badge bg-info">{{ Lang::get('table.connected') }}</span> @elseif($col->service_id > 0) <span class="badge bg-success"> WAfonnte </span> @else <span class="badge bg-warning text-dark">{{ Lang::get('table.disconnected') }}</span></span> @endif</span></td>
             <td>
             @if($col->status == 1 || $col->status == 3 || $col->service_id > 0)
                 -
             @else
-                <span class="text-info"><a class="btn btn-outline-success btn-sm scanqr" role="button" href="{{ url('qrconnect') }}/{{ $col->id }}"><i class="fas fa-qrcode"></i>&nbsp;{{ Lang::get('table.pair.scan') }}</a></span>
+                <span class="text-info"><a class="btn btn-outline-primary btn-sm scanqr" role="button" href="{{ url('qrconnect') }}/{{ $col->id }}"><i class="fas fa-qrcode"></i>&nbsp;{{ Lang::get('table.pair.scan') }}</a></span>
             @endif
             </td>
             <!-- <td><span class="text-info counter"> Auth::user()->counter_send_message_daily </span></td> -->
-            <td><a role="button" id="del-{{ $col->id }}" class="del text-danger"><i class="far fa-trash-alt"></i></a></td>
+            <td>
+                @if($col->service_id == 0)
+                    <a role="button" id="del-{{ $col->id }}" class="del btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                @endif
+            </td>
         </tr>
         @endforeach
     </tbody>

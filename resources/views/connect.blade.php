@@ -17,7 +17,7 @@
                         {{-- button --}}
                         <div class="input-group">
                             @if($waphone->count() < 3)
-                                <button type="button" id="con" class="btn bg-custom text-white w-100"><i class="fas fa-mobile-alt"></i>&nbsp;{{ Lang::get('custom.connect') }}</button>
+                                <button type="button" id="con" class="btn bg-custom text-white w-25"><i class="fas fa-mobile-alt"></i>&nbsp;{{ Lang::get('custom.connect') }}</button>
                             @endif
                         </div>
 
@@ -39,7 +39,7 @@
                             <div class="form-group mb-2">
                                 <label>{{ Lang::get('custom.number.sender') }}:<span class="text-danger">*</span></label>
                                 <select name="sender" class="form-select">
-                                    @foreach($phone as $row)
+                                    @foreach($waphone as $row)
                                         @if($row->status > 0)
                                             <option value="{{ $row->number }}">{{ $row->number }}</option>
                                         @endif
