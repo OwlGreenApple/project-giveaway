@@ -21,7 +21,7 @@ class CheckDeviceStatus extends Command
      *
      * @var string
      */
-    protected $description = 'To check and update device status';
+    protected $description = 'this function run on running:message command';
 
     /**
      * Create a new command instance.
