@@ -33,7 +33,8 @@ class ContactEmail extends Mailable
     public function build()
     {
         return $this
-        ->from($this->email, 'user')
+        //->from($this->email, 'user')
+        ->from("info@topleads.app", 'user')
         ->subject('Kontak user '.env('APP_NAME').'')
         ->view('emails.contacts')
         ->with([
