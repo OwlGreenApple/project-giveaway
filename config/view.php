@@ -35,7 +35,7 @@ return [
     'bank_name'=>'BCA',
     'bank_owner'=>'Sugiarto Lasjim',
     'currency'=>'IDR',
-    'email_admin'=>'info@activomni.com',
+    'email_admin'=>'info@topleads.app',
     'phone_admin'=>'+62817-318-368',
     'no_rek'=>'8290-336-261',
     'WAMATE_EMAIL'=>env('WAMATE_EMAIL'),
