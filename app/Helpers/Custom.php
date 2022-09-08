@@ -288,7 +288,7 @@ class Custom
         {
             Mail::to($email)->send($obj);
             return true;
-        }
+        }   
         else
         {
             return false;
