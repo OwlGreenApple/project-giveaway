@@ -1388,7 +1388,7 @@ class HomeController extends Controller
     public function save_contact(Request $request)
     {
         $user_email = Auth::user()->email;
-        $message = strip_tags($request->message);
+        $message = "email : ".$user_email." nama : ".Auth::user()->name." message : ".strip_tags($request->message);
         $helper = new Custom;
 
         $rule['message'] = ['required','max:255'];
@@ -1405,7 +1405,7 @@ class HomeController extends Controller
 
             return response()->json($errs);
         }
-        
+
         $helper->mail(Config::get('view.email_admin'),new ContactEmail($user_email,$message),'admin');
         return response()->json(['err'=>0]);
     }
