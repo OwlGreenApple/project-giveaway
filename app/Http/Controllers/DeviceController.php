@@ -120,7 +120,16 @@ class DeviceController extends Controller
                 }
             }
 
-            $phone->number = $sc['phone'];
+            if($sc['phone'] == null)
+            {
+                $waphone = 0;
+            }
+            else
+            {
+                $waphone = $sc['phone'];
+            }
+
+            $phone->number = $waphone;
             $phone->status = $status;
             $phone->save();
         }
