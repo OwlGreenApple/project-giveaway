@@ -1326,6 +1326,13 @@ class HomeController extends Controller
 
         $phone_user = $admin->settings_phone($request); // create phone 
         $json = json_decode($phone_user->getContent(),true);
+        $phone_update = $phone_client = 0;
+
+        if(isset($json['phone_update']) || isset($json['phone']))
+        {
+            $phone_update = $json['phone_update'];
+            $phone_client = $json['phone'];
+        }
 
         /* if($activrespon== null && $mailchimp == null && $sendfox == null)
         {
@@ -1341,8 +1348,8 @@ class HomeController extends Controller
         try
         {
             $user->save();
-            $res['phone_update'] = $json['phone_update'];
-            $res['phone'] = $json['phone'];
+            $res['phone_update'] = $phone_update;
+            $res['phone'] = $phone_client;
             $res['success'] = true;
         }
         catch(QueryException $e)

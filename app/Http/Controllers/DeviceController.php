@@ -98,28 +98,32 @@ class DeviceController extends Controller
             from scan user,
             otherwise from check phone status
         */
+
         $user = User::find($phone->user_id);
 
-        if($sc['isConnected'] == 0)
+        if(isset($sc['isConnected']))
         {
-            $status = $sc['isConnected'];
-        }
-        else
-        {
-            // IF ADMIN PHONE STATUS WOULD BE 3
-            if($user->is_admin == 1)
-            {
-                $status = 3;
-            }
-            else
+            if($sc['isConnected'] == 0)
             {
                 $status = $sc['isConnected'];
             }
+            else
+            {
+                // IF ADMIN PHONE STATUS WOULD BE 3
+                if($user->is_admin == 1)
+                {
+                    $status = 3;
+                }
+                else
+                {
+                    $status = $sc['isConnected'];
+                }
+            }
+
+            $phone->number = $sc['phone'];
+            $phone->status = $status;
+            $phone->save();
         }
-        
-        $phone->number = $sc['phone'];
-        $phone->status = $status;
-        $phone->save();
     }
 
     // DISPLAYING QRCODE
@@ -151,7 +155,7 @@ class DeviceController extends Controller
         }
 
         $phone = Phone::find($data['phone_id']);
-        self::update_phone($phone,$status);
+        self::update_phone($phone,$status); 
         return response()->json($status);
     }
 

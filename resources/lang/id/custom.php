@@ -76,7 +76,7 @@ return [
     'redeem'=>'Tarik Uang',
     'redraw'=>'Apakah anda yakin untuk memenangkan kontestan ini?',
     'refresh'=>'Muat Ulang',
-    'scan'=>'Silahkan scan, mohon untuk tidak reload / refresh, tunggu hingga halaman berubah.',
+    'scan'=>'Silahkan scan, mohon untuk tidak reload / refresh / menutup browser, tunggu hingga halaman berubah.',
     'scan.btn'=>'Pindai',
     'scan.del'=>'Silahkan hapus nomer, dan coba sambungkan lagi.',
     'submit'=>'Kirim',
