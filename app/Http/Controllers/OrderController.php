@@ -275,15 +275,16 @@ class OrderController extends Controller
           $order->notes = $request->keterangan;
           $order->save();
 
+          //  SEND EMAIL TO ADMIN IF USER HAS UPLOAD PAYMENT PROOF
           $data = [
             'email'=>$user->email,
             'obj'=>new UserBuyEmail($order,null),
             'cond'=>1
           ];
 
-        //  SEND EMAIL TO ADMIN IF USER HAS UPLOAD PAYMENT PROOF
           $fg = new FG;
           $fg::notify_user($data);
+          //   ----
         }
         else
         {
