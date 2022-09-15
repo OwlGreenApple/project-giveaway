@@ -257,6 +257,22 @@
                     </div>
                 </div>
 
+                <!-- Knows From -->
+                <div class="card px-4 py-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="main-color main-theme">{{ Lang::get('giveaway.knows') }}</h3>
+                        <p class="text-justify title">{{ Lang::get('giveaway.knows.desc') }}</p>
+
+                        <div class="mb-2">
+                            <div class="form-group col-md-12 col-lg-12">
+                               <button type="button" id="create_know" class="btn btn-success btn-sm">{{ Lang::get('giveaway.knows.add') }}</button>
+                            </div>
+                            <!-- adding form -->
+                            <div class="mt-3 col-md-12 col-lg-6" id="knows_form"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Integration -->
                 @if($apicheck == true)
                 <div class="card px-4 py-4 mb-3">
@@ -388,6 +404,7 @@
 <script>
 $(function() {
     editor();
+    add_form_knows();
     // emoji();
     datetimepicker();
     count_logic();
@@ -411,6 +428,28 @@ function emoji()
     });
 
     // $("#divInput-description-post").emojioneArea()[0].emojioneArea.setText('if(isset($event)) $event->message endif');
+}
+
+function add_form_knows()
+{ 
+    $("#create_know").click(function()
+    {              
+        var elm = '';
+        elm += '<div class="input-group mb-2 new_knows">';
+        elm += '<input type="text" class="form-control" name="knows[]" />';
+        elm += '<a role="button" data-cond="new" class="btn btn-danger del_knows pt-2"><i class="fas fa-minus-circle"></i></a>';
+        elm += '</div>';
+        $("#knows_form").append(elm)
+    });
+
+    // delete form knows
+    $("body").on("click",".del_knows",function(){
+        var cond = $(this).attr('data-cond');
+        var order = $(this).attr('data-order');
+
+        var cod = $(".del_knows").index(this);
+        $("."+cond+'_knows').eq(cod).remove();
+    });
 }
 
 function select_timezone()

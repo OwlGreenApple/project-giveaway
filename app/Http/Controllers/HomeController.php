@@ -21,6 +21,7 @@ use App\Models\Messages;
 use App\Models\Redeem;
 use App\Models\Promo;
 use App\Models\Phone;
+use App\Models\Know;
 use App\Mail\ContactEmail;
 use App\Exports\ContestantExport;
 use Illuminate\Database\QueryException;
@@ -492,8 +493,20 @@ class HomeController extends Controller
     }
 
     public static function check_api($user)
-    {
-        if($user->activrespon_api !== null || !empty($user->activrespon_api) || $user->mailchimp_api !== null || !empty($user->mailchimp_api))
+    { 
+        if($user->activrespon_api == null || empty($user->activrespon_api))
+        {
+            return false;
+        }
+        elseif($user->mailchimp_api == null || empty($user->mailchimp_api))
+        {
+            return false;
+        }
+        elseif($user->sendfox_api == null || empty($user->sendfox_api))
+        {
+            return false;
+        }
+        else
         {
             return true;
         }
@@ -775,9 +788,16 @@ class HomeController extends Controller
             return response()->json(['success'=>0]);
         }
 
+        // duplicate events
         if($request->duplicate == 1)
         {
             return $event_id;
+        }
+
+        /* KNOW FROM */
+        if($request->knows !== null)
+        {
+            self::save_knows($request->knows,$event_id);
         }
 
         /* IMAGE WA */
@@ -1023,6 +1043,18 @@ class HomeController extends Controller
         else
         {
             return 0;
+        }
+    }
+
+    //  SAVE KNOWS
+    public static function save_knows(array $data,$ev_id)
+    {
+        foreach($data as $col)
+        {
+            $know = new Know;
+            $know->ev_id = $ev_id;
+            $know->notes = $col;
+            $know->save();
         }
     }
 
