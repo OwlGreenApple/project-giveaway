@@ -13,7 +13,9 @@
                 </div>
 
                 <div class="card-body">
-                <div class="text-left mb-4"><a role="button" class="btn btn-success" id="gprize" ev_id="{{ $ev->id }}">{{ Lang::get('table.award') }}</a></div>
+                @if(isset($winner))
+                    <div class="text-left mb-4"><a role="button" class="btn btn-success" id="gprize" ev_id="{{ $ev->id }}">{{ Lang::get('table.award') }}</a></div>
+                @endif
                 <span id="msg"><!-- message --></span>
                 <div class="table-responsive">
                     <table id="dashboard_table" class="display nowrap table">
@@ -31,7 +33,7 @@
                             <th>{{ Lang::get('table.referral') }}</th>
                             <th>{{ Lang::get('table.ip') }}</th>
                             <th>{{ Lang::get('table.date') }}</th>
-                            <th><!-- Lang::get('table.act') --></th>
+                            <th>{{ Lang::get('table.act') }}</th>
                         </thead>
                         <tbody>
                             @if($data->count() > 0)
@@ -65,7 +67,7 @@
                                                     <span class="text-success">{{ Lang::get('table.award.done') }}</span>
                                                 @endif
                                             @else
-                                                <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger del">{{ Lang::get('table.del') }}</button>
+                                                <button id="{{ $row->id }}" type="button" class="btn btn-outline-danger btn-sm del">{{ Lang::get('table.del') }}</button>
                                             @endif
                                         </div>
                                     </td>
@@ -126,11 +128,14 @@
         });
 
         // delete contestants
-        /* $("body").on("click",".del",function(){
+        $("body").on("click",".del",function(){
             var id = $(this).attr('id');
-            var conf = confirm('{{ Lang::get("custom.delete") }}');
+            var conf = confirm('{{ Lang::get("custom.del") }}');
+
+            if(conf == false) return;
+
             del_contestants(id);
-        }); */
+        });
     }
 
     function prize(data)
@@ -189,10 +194,6 @@
                 $("#loader").hide();
                 $('.div-loading').removeClass('background-load');
                 $("#dashboard").html("<div class='alert alert-danger'>{{ Lang::get('custom.error') }}</div>");
-            },
-            complete : function(xhr)
-            {
-                datatable();
             }
         });
     }
