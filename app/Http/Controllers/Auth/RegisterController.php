@@ -159,7 +159,7 @@ class RegisterController extends Controller
 
         if($request->ajax() == true)
         {
-          return $this->ajax_validator($req,$request);
+           return $this->ajax_validator($req,$request); 
         }
         // else
         // {

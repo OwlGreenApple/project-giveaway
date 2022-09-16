@@ -267,9 +267,24 @@
                             <div class="form-group col-md-12 col-lg-12">
                                <button type="button" id="create_know" class="btn btn-success btn-sm">{{ Lang::get('giveaway.knows.add') }}</button>
                             </div>
+                           
                             <!-- adding form -->
-                            <div class="mt-3 col-md-12 col-lg-6" id="knows_form"></div>
+                            <div class="mt-3 col-md-12 col-lg-6" id="knows_form"> 
+                                <!-- display form in case of edit-->
+                                @if(isset($know))
+                                    @if($know->count() > 0)
+                                        @foreach($know as $row) 
+                                        <div class="input-group mb-2 knows">
+                                            <input type="text" class="form-control" value="{{ $row->notes }}" name="knows_edit[{{ $row->id }}]" />
+                                            <a role="button" data-cond="edit" class="btn btn-danger del_knows pt-2"><i class="fas fa-minus-circle"></i></a>
+                                        </div>
+                                        @endforeach
+                                    @endif
+                                @endif
+                            </div>
                         </div>
+                        <!-- error display -->
+                        <div class="err_knows"></div>
                     </div>
                 </div>
 
@@ -433,9 +448,17 @@ function emoji()
 function add_form_knows()
 { 
     $("#create_know").click(function()
-    {              
+    {   
+        var len = $(".knows").length; 
+
+        if(len >= 50) 
+        {
+            $(".err_knows").html('<span class="text-danger">{{ Lang::get("cvalidation.knows") }}</span>');
+            return false;
+        }
+
         var elm = '';
-        elm += '<div class="input-group mb-2 new_knows">';
+        elm += '<div class="input-group mb-2 knows">';
         elm += '<input type="text" class="form-control" name="knows[]" />';
         elm += '<a role="button" data-cond="new" class="btn btn-danger del_knows pt-2"><i class="fas fa-minus-circle"></i></a>';
         elm += '</div>';
@@ -443,12 +466,24 @@ function add_form_knows()
     });
 
     // delete form knows
-    $("body").on("click",".del_knows",function(){
-        var cond = $(this).attr('data-cond');
-        var order = $(this).attr('data-order');
-
+    $("body").on("click",".del_knows",function()
+    {
         var cod = $(".del_knows").index(this);
-        $("."+cond+'_knows').eq(cod).remove();
+        var cond = $(this).attr("data-cond");
+
+        if(cond == "new")
+        {   
+            $(".knows").eq(cod).remove();
+        }
+        else
+        {
+            var ipt = $(".knows input");
+            var name = ipt.eq(cod).attr('name');
+            name = name.split('_');
+            name = 'del_'+name[1];
+            ipt.eq(cod).attr('name',name);
+            $(".knows").eq(cod).addClass('d-none');
+        }
     });
 }
 
@@ -831,6 +866,11 @@ function save_data()
                     $('html, body').animate({
                         scrollTop: $("#err_scroll").offset().top
                     }, 700);
+                }
+                else if(result.success == 'maxknows')
+                {
+                    error = 1;
+                    $(".err_knows").html('<span class="text-danger">{{ Lang::get("cvalidation.knows") }}</span>');
                 }
                 else
                 {

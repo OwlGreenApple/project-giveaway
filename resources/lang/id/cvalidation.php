@@ -23,6 +23,7 @@ return [
     'invalid'=>'tidak valid',
     'invalid.url'=>'URL tidak valid',
     'invalid.numeric'=>'Kolom harus diisi angka',
+    'knows'=>'Maksimal 50 opsi',
     'lang'=>'Bahas tidak tersedia',
     'phone'=>'Kode telpon tidak valid',
     'prize'=>'Jumlah maksimal hadiah adalah 1.000.000',

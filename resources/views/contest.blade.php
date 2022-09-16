@@ -83,20 +83,31 @@
                             <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
                             <form class="contest-form" id="save_contestant">
                                 <div class="form-group mb-3">
-                                    <label>{{Lang::get('custom.name')}} <i class="far fa-id-card ct_color"></i></label>
+                                    <label class="mb-1"><i class="far fa-id-card ct_color"></i> <b>{{Lang::get('custom.name')}}</b></label>
                                     <input name="contestant" required type="text" class="form-control form-control-lg" />
                                     <span class="text-danger err_contestant"><!-- --></span>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label>{{Lang::get('custom.email')}} <i class="fas fa-at ct_color"></i></label>
+                                    <label class="mb-1"><i class="fas fa-at ct_color"></i> <b>{{Lang::get('custom.email')}}</b></label>
                                     <input name="email" required type="email" class="form-control form-control-lg" />
                                     <span class="text-danger err_email"><!-- --></span>
                                 </div>
                                 <div class="iti-wrapper mb-3">
-                                    <label>{{Lang::get('custom.number')}} <b><i class="fab fa-whatsapp ct_color"></i></b></label>
+                                    <label class="mb-1"><b><i class="fab fa-whatsapp ct_color"></i></b> <b>{{Lang::get('custom.number')}}</b> </label>
                                     <input type="text" required id="phone" name="phone" class="form-control form-control-lg" required/>
                                     <span class="text-danger err_phone"><!-- --></span>
                                 </div>
+                                @if($knows->count() > 0)
+                                <div class="form-group mb-3">
+                                    <label class="mb-1"><i class="fas fa-info-circle ct_color"></i> <b>{{Lang::get('custom.knows')}}</b></label>
+                                    <select name="knows" class="form-select">
+                                        <option>-- - --</option>
+                                        @foreach($knows as $opt)
+                                            <option value="{{ $opt->id }}">{{ $opt->notes }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
                                 <button type="submit" class="btn bg-dark text-white">{{ Lang::get('custom.submit') }}</button>
                             </form>
                         </div>

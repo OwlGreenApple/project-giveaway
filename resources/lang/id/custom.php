@@ -53,6 +53,8 @@ return [
     'ig.col' => 'Instagram Username',
     'in' => 'Anda sudah terdaftar',
     'join' => 'Gabung kontes',
+    'knows' => 'Tahu giveaway ini dari',
+    'knows.choose' => 'Pilih',
     'link'=>'Link event giveaway anda',
     'link.share'=>'Copy Dan Share link',
     'ln.share'=>'Linkedin Share',

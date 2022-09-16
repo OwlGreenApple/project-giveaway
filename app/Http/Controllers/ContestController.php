@@ -15,6 +15,7 @@ use App\Models\Entries;
 use App\Models\Bonus;
 use App\Models\Messages;
 use App\Models\Phone;
+use App\Models\Know;
 use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
@@ -63,6 +64,9 @@ class ContestController extends Controller
         $format = "M-d-Y H:i:s";
         $timezone = self::convert_timezone($event);
 
+        // knows options
+        $knows = Know::where('ev_id',$event->id)->get();
+
         $data = [
             'start'=>$start,
             'end'=>$end,
@@ -76,6 +80,7 @@ class ContestController extends Controller
             'brand_link'=>$user->brand_link,
             'winner'=>$winner,
             'timer'=>$timezone,
+            'knows'=>$knows,
             'start_time'=>Lang::get('giveaway.start')." : <b class='text-black-custom'>".Carbon::parse($event->start)->format($format)."</b>",
             'end_time'=>Lang::get('giveaway.end')." : <b class='text-black-custom'>".Carbon::parse($event->end)->format($format)."</b>",
         ];
@@ -127,6 +132,7 @@ class ContestController extends Controller
         $phone = $phone_code.strip_tags($request->phone);
         $link = strip_tags($request->link);
         $ref = strip_tags($request->ref);
+        $know = strip_tags($request->knows);
 
         $ev = Events::where('url_link',$link)->first();
 
@@ -162,6 +168,22 @@ class ContestController extends Controller
             }
         }
 
+        // check know from
+        if($know !== null)
+        {
+            $check_know = Know::where([['knows.id',$know],['events.user_id',$ev->user_id]])
+            ->join('events','events.id','=','knows.ev_id')->select('knows.id')->first();
+
+            if(is_null($check_know))
+            {
+                $know = 0;
+            }
+        }
+        else
+        {
+            $know = 0;
+        }
+
         if(is_null($check_identity))
         {
             $ct = new Contestants;
@@ -173,6 +195,7 @@ class ContestController extends Controller
             $ct->ref_code = self::generate_ref_link();
             $ct->entries = 3;
             $ct->referrals = 0;
+            $ct->knows_id = $know;
             $ct->ip = $_SERVER['REMOTE_ADDR'];
             $ct->date_enter = Carbon::now($ev->timezone);
 

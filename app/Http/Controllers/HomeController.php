@@ -492,6 +492,7 @@ class HomeController extends Controller
         return view('create',$data);
     }
 
+    // to display or hide integration according on user's API
     public static function check_api($user)
     { 
         if($user->activrespon_api == null || empty($user->activrespon_api))
@@ -603,6 +604,7 @@ class HomeController extends Controller
         return $arr;
     }
 
+    // EDIT EVENT 
     public function edit_event($id)
     {
         $event = Events::where([['events.id',$id],['users.id',Auth::id()]])->join('users','users.id','=','events.user_id')
@@ -636,7 +638,8 @@ class HomeController extends Controller
         $mlc = self::display_api('mlc');
         $sdf = self::display_api('sdf');
 
-        // dd($act);
+        // display knows from if user has setted up
+        $know = Know::where('ev_id',$event->id)->get();
 
         $timezone = $event->timezone;
         $desc = $event->desc;
@@ -653,9 +656,10 @@ class HomeController extends Controller
             'act'=>$act,
             'mlc'=>$mlc,
             'sdf'=>$sdf,
+            'know'=>$know,
             'obj'=> new Homecontroller
         ];
-        return view('create',$arr);
+        return view('create',$arr); 
     }
 
     public function save_events(Request $request)
@@ -795,9 +799,42 @@ class HomeController extends Controller
         }
 
         /* KNOW FROM */
-        if($request->knows !== null)
+        $count_knows = $count_new_knows = $count_edit_knows = 0;
+
+        if($request->knows !== null )
+        {
+            $count_new_knows = count($request->knows);
+            $count_knows += $count_new_knows; //count total new knows
+        }
+
+        if($request->knows_edit !== null)
+        {
+            $count_edit_knows = count($request->knows_edit);
+            $count_knows += $count_edit_knows; //count total edit knows
+        }
+
+        // max knows is 50
+        if($count_knows > 50)
+        {
+            return response()->json(['success'=>'maxknows']);
+        }
+
+        // add new knows
+        if($count_new_knows > 0)
         {
             self::save_knows($request->knows,$event_id);
+        }
+
+        // edit knows
+        if($count_edit_knows > 0)
+        {
+            self::save_knows($request->knows_edit,$event_id,1);
+        }
+
+        //  delete knows
+        if($request->del_edit !== null)
+        {
+            self::save_knows($request->del_edit,$event_id,"del"); 
         }
 
         /* IMAGE WA */
@@ -1047,14 +1084,48 @@ class HomeController extends Controller
     }
 
     //  SAVE KNOWS
-    public static function save_knows(array $data,$ev_id)
+    public static function save_knows(array $data,$ev_id,$edit = null)
     {
-        foreach($data as $col)
+        foreach($data as $id=>$col)
         {
-            $know = new Know;
+            if($edit == null)
+            {
+                $know = new Know;
+            }
+            else
+            {
+                $know = Know::where([['knows.id',$id],['events.user_id',Auth::id()]])
+                        ->join('events','events.id','=','knows.ev_id')->select('knows.id')->first();
+                
+                if(is_null($know))
+                {
+                    continue;
+                }
+            }
+
+            // to prevent if column is blank
+            if(empty($col) || $col == null)
+            {
+                continue;
+            }
+            
             $know->ev_id = $ev_id;
             $know->notes = $col;
             $know->save();
+        }
+
+        //  delete know
+        if($edit == 'del')
+        {
+            $arr = array_keys($data);
+
+            try{
+                $know = Know::whereIn('knows.id',$arr)->join('events','events.id','=','knows.ev_id')->select('knows.id')->delete();
+            }
+            catch(Queryexception $e)
+            {
+                // $e->getMessage()''
+            }
         }
     }
 
