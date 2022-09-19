@@ -64,7 +64,7 @@
         // delete events
         $("body").on("click",".del_ev",function(){
             var id = $(this).attr('id');
-            var conf = confirm('{{ Lang::get("custom.delete") }}');
+            var conf = confirm('{{ Lang::get("custom.delete.ev") }}');
 
             if(conf == true)
             {

@@ -82,7 +82,7 @@ class HomeController extends Controller
             return view('error404');
         }
 
-        $ct = Contestants::where('event_id',$ev_id)->get();
+        $ct = Contestants::where('contestants.event_id',$ev_id)->leftJoin('knows','knows.id','=','contestants.knows_id')->select('contestants.*','knows.notes')->get();
         return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1]);
     }
 
@@ -402,6 +402,7 @@ class HomeController extends Controller
         }
         catch(QueryException $e)
         {
+            // dd($e->getMessage()); 
             $res['success'] = 0;
         }
 

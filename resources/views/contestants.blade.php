@@ -33,6 +33,7 @@
                             <th>{{ Lang::get('table.referral') }}</th>
                             <th>{{ Lang::get('table.ip') }}</th>
                             <th>{{ Lang::get('table.date') }}</th>
+                            <th>{{ Lang::get('table.know') }}</th>
                             <th>{{ Lang::get('table.act') }}</th>
                         </thead>
                         <tbody>
@@ -57,6 +58,7 @@
                                     <td class="align-middle">{{ $row->referrals }}</td>
                                     <td class="align-middle">{{ $row->ip }}</td>
                                     <td class="align-middle">{{ $row->date_enter }}</td>
+                                    <td class="align-middle">{{ $row->notes }}</td>
                                     <td class="align-middle">
                                         <div class="input-group">
                                             @if(isset($winner))

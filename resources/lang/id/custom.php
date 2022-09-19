@@ -27,6 +27,7 @@ return [
     'de'=>'Entry harian',
     'del'=>'Apakah anda yakin mau menghapus?',
     'delete'=>'Apakah anda yakin mau menghapus poin ini?',
+    'delete.ev'=>'Apakah anda yakin mau menghapus event ini?',
     'dropdown'=>'Tampilkan menu',
     'duplicate'=>'Apakah anda yakin mau menduplikasi giveaway ini?',
     'duplicate.btn'=>'Duplikat',

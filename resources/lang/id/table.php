@@ -27,6 +27,7 @@ return [
     'fund'=>'Saldo',
     'image'=>'Gambar',
     'ip'=>'IP',
+    'know'=>'Tahu giveaway',
     'lang'=>'Bahasa',
     'message'=>'Pesan',
     'name'=>'Nama',
