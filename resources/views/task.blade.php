@@ -48,10 +48,33 @@
                 <div class="desc px-0 ms-auto">{{ Lang::get('custom.offered') }} : <a href="{{ $ev->owner_url }}" class="main-color">{{ $ev->owner }}</a></div>
             </div>
 
+            {{-- rank --}}
+            <div class="row mx-0 mt-2">
+                <div class="col-12 col-lg-12">
+                    <ul id="rank" style="height:720px" class="overflow-auto list-group list-group-flush rounded border border-gray-300 shadow">
+                        <li class="list-group-item text-center"><b>Rank</b></li>
+                        @for($x=1;$x<=10;$x++)
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0">
+                            <span>{{$x}}</span>
+                            <span class="text-secondary">
+                                <div>aaaaaaaa</div>
+                                <div>6281111222</div>
+                            </span>
+                            <span class="badge bg-primary badge-pill">10000</span>
+                        </li>
+                        @endfor
+                        <span id="preload">{{-- preload --}}</span>
+                        <li class="list-group-item text-center"><a role="button" id="load-rank" class="btn btn-warning">Load more</a></li>
+                    </ul>
+                </div>
+            </div>
+
             @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
                 <div class="text-center mt-2">{!! $helpers::sponsor(1) !!}</div>
             @endif
         </div>
+
+    <!-- end warpper -->
     </div>
     <!-- end container -->
 </div>
@@ -117,7 +140,26 @@
         hover_plus();
         copyLink(); //type = 13
         confetti();
+        loadRank();
     });
+
+    function loadRank()
+    {
+       var elm = '';
+       elm+='<li class="list-group-item d-flex justify-content-between align-items-center border-0">';
+       elm+='<span>10</span>';
+       elm+='<span class="text-secondary">';
+       elm+='<div>aaaaaaaa</div>';
+       elm+='<div>6281111222</div>';
+       elm+='</span>';
+       elm+='<span class="badge bg-primary badge-pill">10000</span>';
+       elm+='</li>';
+
+       $("#load-rank").click(function()
+       {
+            $("#preload").prepend(elm);
+       });
+    }
 
      function confetti()
     {

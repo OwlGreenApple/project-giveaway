@@ -85,7 +85,7 @@ class ContestController extends Controller
             'end_time'=>Lang::get('giveaway.end')." : <b class='text-black-custom'>".Carbon::parse($event->end)->format($format)."</b>",
         ];
 
-        return view('contest',$data); 
+        return view('contest',$data);
     }
 
     public static function convert_timezone($event)
@@ -258,7 +258,7 @@ class ContestController extends Controller
 
                 // if(!is_null($ph)) +++ temp due wablas +++
                 // { +++ temp due wablas +++
-                    $msg = $ev->message; 
+                    $msg = $ev->message;
                     $msg .= "\n\n".Lang::get('giveaway.confirm').url('confirmation').'/'.bin2hex($contestant_id);
 
                     /* $wa_msg->user_id = $ev->user_id;
@@ -276,10 +276,10 @@ class ContestController extends Controller
 
                     $msge = [
                         'user_id'=>$ev->user_id,
-                        'ev_id'=>$ev->id, 
-                        'bc_id'=>0, 
+                        'ev_id'=>$ev->id,
+                        'bc_id'=>0,
                         'ct_id'=>$contestant_id,
-                        'sender'=>$sender, 
+                        'sender'=>$sender,
                         'receiver'=>$phone,
                         'message'=>$msg,
                         'img_url'=>$ev->img_url
@@ -324,6 +324,18 @@ class ContestController extends Controller
         return view('confirmation');
     }
 
+    // GET RANK FROM EVENT
+    public function get_rank(Request $req)
+    {
+        $ev_id = $req->ev_id;
+        $ct = Contestants::where('event_id',$ev_id)
+            ->orderBy('entries','desc')
+            ->orderBy('id','asc')
+            ->select('entries','wa_number','c_name')->get()->toArray();
+        return json_encode($ct);
+    }
+
+    // PAGE WHERE CONTESTANT DO THEIR TASK
     public function task()
     {
         // put cookie detection

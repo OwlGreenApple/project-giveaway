@@ -27,6 +27,7 @@ Route::post('pass_reset', [App\Http\Controllers\Auth\ForgotPasswordController::c
 Route::get('/c/{event_link}/{referal?}', [App\Http\Controllers\ContestController::class, 'contest']);
 Route::get('/contest', [App\Http\Controllers\ContestController::class, 'task']);
 Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdata']);
+Route::post('get-rank', [App\Http\Controllers\ContestController::class, 'get_rank']);
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
 Route::get('/confirmation/{cid}', [App\Http\Controllers\ContestController::class, 'confirmation']);
