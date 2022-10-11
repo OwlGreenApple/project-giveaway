@@ -29,7 +29,7 @@
         <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
         <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
         <h4 class="text-center text-uppercase px-3">
-            <div class="alert alert-warning">
+            <div class="alert bg-rank">
                 {{ Lang::get('custom.prize') }} : <b class="main-color">{{ $ev->currency }}&nbsp;{{ $helpers::format($ev->prize_value) }}</b>
             </div>
         </h4>
@@ -49,27 +49,17 @@
             </div>
 
             {{-- rank --}}
-            <div class="row mx-0 mt-2">
-                <div class="col-12 col-lg-12">
-                    <ul id="rank" style="height:720px" class="overflow-auto list-group list-group-flush rounded border border-gray-300 shadow">
-                        <li class="list-group-item text-center"><b>Rank</b></li>
-                        @for($x=1;$x<=10;$x++)
-                        <li class="list-group-item d-flex justify-content-between align-items-center border-0">
-                            <span>{{$x}}</span>
-                            <span class="text-secondary">
-                                <div>aaaaaaaa</div>
-                                <div>6281111222</div>
-                            </span>
-                            <span class="badge bg-primary badge-pill">10000</span>
-                        </li>
-                        @endfor
-                        <span id="preload">{{-- preload --}}</span>
-                        <li class="list-group-item text-center"><a role="button" id="load-rank" class="btn btn-warning">Load more</a></li>
+            <div id="rank-wrapper" class="row mx-0 mt-2">
+                <div class="col-12 col-lg-12 px-1">
+                    <li class="list-group-item text-center bg-rank"><b>{{ Lang::get('custom.rank') }}</b></li>
+                    <ul id="rank" class="overflow-auto list-group list-group-flush rounded border border-gray-300 shadow">
+                        <span id="preload"><!-- {{-- preload --}} --></span>
+                        <li class="list-group-item text-center mb-2"><a role="button" id="load-rank" class="btn btn-dark btn-sm d-none">{{ Lang::get('custom.load') }}</a></li>
                     </ul>
                 </div>
-            </div>
+            </div> 
 
-            @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-yearly')
+            @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-3-month' || $user->membership == 'starter-yearly')
                 <div class="text-center mt-2">{!! $helpers::sponsor(1) !!}</div>
             @endif
         </div>
@@ -141,24 +131,70 @@
         copyLink(); //type = 13
         confetti();
         loadRank();
+        rank(0);
     });
 
     function loadRank()
     {
-       var elm = '';
-       elm+='<li class="list-group-item d-flex justify-content-between align-items-center border-0">';
-       elm+='<span>10</span>';
-       elm+='<span class="text-secondary">';
-       elm+='<div>aaaaaaaa</div>';
-       elm+='<div>6281111222</div>';
-       elm+='</span>';
-       elm+='<span class="badge bg-primary badge-pill">10000</span>';
-       elm+='</li>';
-
        $("#load-rank").click(function()
        {
-            $("#preload").prepend(elm);
+            var limit = $(this).attr('limit');
+            rank(limit)
        });
+    }
+
+    function rank(limit)
+    {
+        var elm = '';
+    
+        $.ajax({
+            headers : {'X-CSRF-TOKEN' : $("meta[name='csrf-token']").attr('content')},
+            method : 'POST',
+            data : {'ev_id' : '{{ $ev->id }}','limit':limit},
+            url : '{{ url("get-rank") }}',
+            dataType : 'json',
+            success : function(res){
+                $.each(res,function(i,val)
+                 { 
+                    elm+='<li class="list-group-item d-flex justify-content-between align-items-center border-0">';
+                    elm+='<span>'+i+'</span>';
+                    elm+='<span class="text-secondary">';
+                    elm+='<div>'+val.c_name+'</div>';
+                    elm+='<div>'+val.wa_number+'</div>';
+                    elm+='</span>';
+                    elm+='<span class="badge bg-success badge-pill">'+val.entries+'</span>';
+                    elm+='</li>';
+                });
+
+                // remove button if contestant loaded well
+                if(res.length < 1)
+                {
+                    $("#load-rank").remove();
+                } 
+            },
+            error : function(xhr)
+            {
+                console.log(xhr.responseText);
+            },
+            complete : function()
+            {
+                $("#preload").append(elm);
+                $("#load-rank").removeClass('d-none');
+
+                var next = parseInt('{{ $helpers::rank_display() }}');
+                if(limit === 0) 
+                {
+                    $("#load-rank").attr('limit',next);
+                }
+                else
+                {
+                    var lmn = $("#load-rank").attr('limit');
+                    lmn = parseInt(lmn);
+                    lmn = lmn+next;
+                    $("#load-rank").attr('limit',lmn);
+                }
+            }
+        })
     }
 
      function confetti()

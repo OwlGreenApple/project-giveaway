@@ -253,41 +253,27 @@ class ContestController extends Controller
                 $contestant_id = $ct->id;
 
                 // SET AUTO REPLY WA MESSAGE
-                // $ph = Phone::where('user_id',$ev->user_id)->first(); +++ temp due wablas +++
                 $phone = substr($phone,1); // remove + sign
 
-                // if(!is_null($ph)) +++ temp due wablas +++
-                // { +++ temp due wablas +++
-                    $msg = $ev->message;
-                    $msg .= "\n\n".Lang::get('giveaway.confirm').url('confirmation').'/'.bin2hex($contestant_id);
+                $msg = $ev->message;
+                $msg .= "\n\n".Lang::get('giveaway.confirm').url('confirmation').'/'.bin2hex($contestant_id);
 
-                    /* $wa_msg->user_id = $ev->user_id;
-                    $wa_msg->ev_id = $ev->id;
-                    $wa_msg->ct_id = $contestant_id;
-                    // $wa_msg->sender = $ph->number;
-                    $wa_msg->sender = env('WA_TEMP');
-                    $wa_msg->receiver = $phone;
-                    $wa_msg->message = $msg;
-                    $wa_msg->img_url = $ev->img_url;
-                    $wa_msg->save(); */
+                $mg = new Messages;
+                $sender = $mg::sender($ev->user_id);
 
-                    $mg = new Messages;
-                    $sender = $mg::sender($ev->user_id);
+                $msge = [
+                    'user_id'=>$ev->user_id,
+                    'ev_id'=>$ev->id,
+                    'bc_id'=>0,
+                    'ct_id'=>$contestant_id,
+                    'sender'=>$sender,
+                    'receiver'=>$phone,
+                    'message'=>$msg,
+                    'img_url'=>$ev->img_url
+                ];
 
-                    $msge = [
-                        'user_id'=>$ev->user_id,
-                        'ev_id'=>$ev->id,
-                        'bc_id'=>0,
-                        'ct_id'=>$contestant_id,
-                        'sender'=>$sender,
-                        'receiver'=>$phone,
-                        'message'=>$msg,
-                        'img_url'=>$ev->img_url
-                    ];
-
-                    $wa_msg = new Msg;
-                    $wa_msg::ins_message($msge);
-                // } +++ temp due wablas +++
+                $wa_msg = new Msg;
+                $wa_msg::ins_message($msge);
             }
             else
             {
@@ -327,12 +313,41 @@ class ContestController extends Controller
     // GET RANK FROM EVENT
     public function get_rank(Request $req)
     {
-        $ev_id = $req->ev_id;
+        $data = array();
+        $ev_id = strip_tags($req->ev_id);
+        $limit = strip_tags($req->limit);
+        $take = Custom::rank_display(); 
+
         $ct = Contestants::where('event_id',$ev_id)
             ->orderBy('entries','desc')
-            ->orderBy('id','asc')
-            ->select('entries','wa_number','c_name')->get()->toArray();
-        return json_encode($ct);
+            ->orderBy('id','asc') 
+            ->skip($limit)->take($take) 
+            ->select('entries','wa_number','c_name')->get();
+
+        $total = $ct->count();
+    
+        if($total > 0)
+        {
+            foreach($ct as $index=>$row):
+                $data[$limit+$index+1]=array(
+                    'entries'=>$row->entries,
+                    'wa_number'=>substr($row->wa_number,0,7).'xxxxxxx',
+                    'c_name'=>self::short_name($row->c_name)
+                );
+            endforeach;
+        }
+
+        return json_encode($data);
+    }
+
+    //MAKE SHORT CONTESTANT NAME 
+    private static function short_name($name)
+    {
+        if(strlen($name) > 12)
+        {
+            $name = substr($name,0,12).'.....';
+        }
+        return $name;
     }
 
     // PAGE WHERE CONTESTANT DO THEIR TASK
@@ -381,6 +396,12 @@ class ContestController extends Controller
         $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();
         $user = User::find($ev->user_id);
         $timezone = self::convert_timezone($ev);
+        
+        //  to prevent error in case got hack
+        if(is_null($contestants))
+        {
+            return view('error404');
+        }
 
         $data = [
             'ev'=>$ev,

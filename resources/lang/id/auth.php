@@ -10,7 +10,7 @@ return [
     | The following language lines are used during authentication for various
     | messages that we need to display to the user. You are free to modify
     | these language lines according to your application's requirements.
-    |
+    | 
     */
 
     'account'=>'Nama Akun Dana',
@@ -28,6 +28,9 @@ return [
     'currency' => 'idr', 
     'dashboard' => 'Beranda', 
     'email' => 'Email Anda',
+    'error404' => 'Halaman tidak ditemukan',
+    'error404.note' => 'Maaf halaman yang anda cari tidak tersedia',
+    'error404.back' => 'Kembali ke halaman utama',
     'failed' => 'Akun tidak terdaftar',
     'faq' => 'FAQ',
     'forgot' => 'Lupa Password',

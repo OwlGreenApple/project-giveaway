@@ -37,7 +37,10 @@ class Messages extends Model
         // in case if user has deleted his token or package is free, then using admin phone number
         if(is_null($ph) || $package == 'free')
         {
-            $phn = Phone::where('status',3)->inRandomOrder()->first();
+            $phn = Phone::where('users.is_admin',1)
+                ->join('users','users.id','=','phones.user_id')
+                ->select('phones.number')
+                ->inRandomOrder()->first();
             $sender = $phn->number;
         }
         else

@@ -334,6 +334,11 @@ a.main-color:hover {
     margin-bottom : auto;
 }
 
+.bg-rank {
+    background : antiquewhite;
+    border-color: #ffecb5;
+}
+
 #countdown ul li {
     list-style-type: none;
     display : inline-block;
@@ -357,6 +362,21 @@ a.main-color:hover {
 #countdown .count-space {
     vertical-align: top;
     line-height: 25px;
+}
+
+#rank 
+{
+    height : auto;
+    max-height:728px 
+}
+
+#rank-wrapper
+{
+    position: absolute;
+    top: 30%;
+    right: 8px;
+    width: 100%;
+    max-width: 280px;
 }
 
 .trophy {
@@ -1189,5 +1209,15 @@ h2.congrats {
 
     .task_entries {
         padding : 1rem 0.55rem;
+    }
+}
+
+@media(max-width : 1349px)
+{
+    #rank-wrapper
+    {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
     }
 }

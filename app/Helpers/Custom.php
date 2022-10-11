@@ -84,6 +84,11 @@ class Custom
         return [29000,195000,295000,395000,495000];
     }
 
+    public static function rank_display()
+    {
+        return 10;
+    }
+
     public static function convert_amount($amount)
     {
         $amount = str_replace(",","",$amount);
