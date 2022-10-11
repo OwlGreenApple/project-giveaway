@@ -72,7 +72,7 @@ class HomeController extends Controller
     }
 
     //DISPLAY CONTESTANTS
-    public function contestants($evid)
+    public function contestants($evid) 
     {
         $ev_id = strip_tags($evid);
         $ev = self::check_security_event($ev_id);
@@ -83,7 +83,7 @@ class HomeController extends Controller
         }
 
         $ct = Contestants::where('contestants.event_id',$ev_id)->leftJoin('knows','knows.id','=','contestants.knows_id')->select('contestants.*','knows.notes')->get();
-        return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1]);
+        return view('contestants',['data'=>$ct,'ev'=>$ev,'no'=>1,'datatable'=>1]);
     }
 
     // EXPORT CONTESTANTS

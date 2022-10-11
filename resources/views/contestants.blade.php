@@ -20,7 +20,7 @@
                 <div class="table-responsive">
                     <table id="dashboard_table" class="display nowrap table">
                         <thead>
-                            @if(isset($winner))
+                            @if(isset($winner)) 
                                 @if($ungiving > 0)
                                     <th><input type="checkbox" class="form-checks" id="check_all" /></th>
                                 @endif
@@ -93,6 +93,9 @@
     $(function(){
         action_table();
         datatable();
+        @if(isset($datatable))
+            customize_datatable();
+        @endif
     });
 
     function action_table()
@@ -249,12 +252,17 @@
             {
                 $(".checks").prop('checked',false);
             }
-
         });
+    }
 
-        /* $("#dashboard_table").DataTable({
-            "pageLength": 5
-        }); */
+    function customize_datatable()
+    {
+        $("#dashboard_table").DataTable({
+            "pageLength": 10,
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ]
+        });
     }
 
 </script>
