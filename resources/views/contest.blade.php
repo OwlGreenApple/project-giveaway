@@ -78,7 +78,7 @@
                 </h5>
 
                 <!-- contestant enter -->
-                    @if($end == false) 
+                    @if($end == false)
                         <div id="max_contestant">
                             <div class="text-center mt-4 mb-3 form_title"><h4 class="mb-0">{{ Lang::get('custom.enter') }}</h4></div>
                             <form class="contest-form" id="save_contestant">
@@ -112,14 +112,26 @@
                             </form>
                         </div>
                     @else
-                        <div class="contest-winner">
-                            <h4 class="main-color"><b>{{ Lang::get('giveaway.winner.text') }} : </b></h4>
+                        <div class="contest-winner col-12 col-lg-8 mx-auto">
                             @if($winner->count() > 0)
-                                <ul class="list-group">
-                                @foreach($winner as $row)
-                                    <li class="list-group-item border-0"><i class="fas fa-trophy trophy"></i>&nbsp;{{ $row->c_name }} <i class="fab fa-whatsapp main-color"></i> {{ $row->wa_number }}</li>
-                                @endforeach
-                                </ul>
+                                <div class="row mx-0 mt-2">
+                                    <div class="px-1">
+                                        <li class="list-group-item text-center bg-light"><h4 class="main-color mb-0"><i class="fas fa-trophy trophy"></i>&nbsp;<b>{{ Lang::get('giveaway.winner.text') }} : </b></h4></li>
+                                        <ul id="rank" class="overflow-auto list-group list-group-flush rounded border border-gray-300 shadow">
+                                            @foreach($winner as $i=>$row)
+                                                @php $i++ @endphp
+                                                <li class="list-group-item d-flex justify-content-between align-items-center border-0">
+                                                    <span>{{ $i }}</span>
+                                                    <span class="text-secondary">
+                                                        <div>{{ $cts::short_name($row->c_name) }}</div>
+                                                        <div><i class="fab fa-whatsapp main-color"></i>&nbsp;{{ substr($row->wa_number,0,7) }}xxxxxxx</div>
+                                                    </span>
+                                                    <span class="badge bg-success badge-pill">{{ $row->entries }}</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     @endif
@@ -200,7 +212,7 @@
                     $(".err_"+result[1][1]).html(result[1][0]);
                     $(".err_"+result[2][1]).html(result[2][0]);
                 }
-                else if(result['nmax'] !== undefined) 
+                else if(result['nmax'] !== undefined)
                 {
                     // if contestant full
                     $('#loader').hide();

@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Mail; 
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use App\Helpers\Custom;
 use App\Models\User;
 use App\Models\Orders;
@@ -66,7 +66,7 @@ class AdminController extends Controller
       $settings = Settings::all()->first();
       $helper = new Custom;
       return view('admin.settings',['row'=>$settings,'ct'=>$helper]);
-    } 
+    }
 
     public function settings_save(Request $request)
     {
@@ -89,8 +89,8 @@ class AdminController extends Controller
     }
 
     // SAVE ADMIN PHONE
-    public function settings_phone(Request $request) 
-    { 
+    public function settings_phone(Request $request)
+    {
       $ct = new Custom;
       if($request->phone_id == null)
       {
@@ -120,7 +120,7 @@ class AdminController extends Controller
       }
       else
       {
-        $phn = strip_tags($request->phone); 
+        $phn = strip_tags($request->phone);
         $code = strip_tags($request->pcode);
         $phone_number = $code.$phn;
         $phone_number = substr($phone_number,1);
@@ -128,13 +128,13 @@ class AdminController extends Controller
 
       // in case phone == null (when user doesn't want to update phone)
       if(strlen($phn) > 0)
-      { 
+      {
         $phone->number = $phone_number;
       }
 
       $wablas_server = strip_tags($request->wablas);
 
-      //  in case if data come from user 
+      //  in case if data come from user
       if($wablas_server == null)
       {
         $wablas_server = 0;
@@ -321,7 +321,7 @@ class AdminController extends Controller
         $order->status = 2;
         $order->save();
 
-        $check_active_membership = $this->check_term_membership($user);
+        // $check_active_membership = $this->check_term_membership($user);
         $total_month = $ct->check_type($order->package)['terms'];
 
         //referrer get money from referral
@@ -335,6 +335,8 @@ class AdminController extends Controller
           $refferer->save();
         }
 
+        /*
+        --- order later ---
         if($check_active_membership == 'active')
         {
             $data = [
@@ -348,12 +350,12 @@ class AdminController extends Controller
             return $this->orderLater($data);
         }
         else
-        {
+        { */
             $user->membership = $order->package;
             $user->end_membership = $today->addMonths($total_month);
             $user->status = 2;
             $user->save();
-        }
+        // }
 
         // send mail to user
         $ct->mail($user->email,new UserBuyEmail($order,$user->name),null);

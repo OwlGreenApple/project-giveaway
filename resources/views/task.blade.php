@@ -57,7 +57,7 @@
                         <li class="list-group-item text-center mb-2"><a role="button" id="load-rank" class="btn btn-dark btn-sm d-none">{{ Lang::get('custom.load') }}</a></li>
                     </ul>
                 </div>
-            </div> 
+            </div>
 
             @if($user->membership == 'free' || $user->membership == 'starter' || $user->membership == 'starter-3-month' || $user->membership == 'starter-yearly')
                 <div class="text-center mt-2">{!! $helpers::sponsor(1) !!}</div>
@@ -146,7 +146,7 @@
     function rank(limit)
     {
         var elm = '';
-    
+
         $.ajax({
             headers : {'X-CSRF-TOKEN' : $("meta[name='csrf-token']").attr('content')},
             method : 'POST',
@@ -155,7 +155,7 @@
             dataType : 'json',
             success : function(res){
                 $.each(res,function(i,val)
-                 { 
+                 {
                     elm+='<li class="list-group-item d-flex justify-content-between align-items-center border-0">';
                     elm+='<span>'+i+'</span>';
                     elm+='<span class="text-secondary">';
@@ -170,7 +170,7 @@
                 if(res.length < 1)
                 {
                     $("#load-rank").remove();
-                } 
+                }
             },
             error : function(xhr)
             {
@@ -182,7 +182,7 @@
                 $("#load-rank").removeClass('d-none');
 
                 var next = parseInt('{{ $helpers::rank_display() }}');
-                if(limit === 0) 
+                if(limit === 0)
                 {
                     $("#load-rank").attr('limit',next);
                 }

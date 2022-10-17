@@ -81,6 +81,7 @@ class ContestController extends Controller
             'winner'=>$winner,
             'timer'=>$timezone,
             'knows'=>$knows,
+            'cts'=> new ContestController,
             'start_time'=>Lang::get('giveaway.start')." : <b class='text-black-custom'>".Carbon::parse($event->start)->format($format)."</b>",
             'end_time'=>Lang::get('giveaway.end')." : <b class='text-black-custom'>".Carbon::parse($event->end)->format($format)."</b>",
         ];
@@ -316,16 +317,16 @@ class ContestController extends Controller
         $data = array();
         $ev_id = strip_tags($req->ev_id);
         $limit = strip_tags($req->limit);
-        $take = Custom::rank_display(); 
+        $take = Custom::rank_display();
 
         $ct = Contestants::where('event_id',$ev_id)
             ->orderBy('entries','desc')
-            ->orderBy('id','asc') 
-            ->skip($limit)->take($take) 
+            ->orderBy('id','asc')
+            ->skip($limit)->take($take)
             ->select('entries','wa_number','c_name')->get();
 
         $total = $ct->count();
-    
+
         if($total > 0)
         {
             foreach($ct as $index=>$row):
@@ -340,8 +341,8 @@ class ContestController extends Controller
         return json_encode($data);
     }
 
-    //MAKE SHORT CONTESTANT NAME 
-    private static function short_name($name)
+    //MAKE SHORT CONTESTANT NAME
+    public static function short_name($name)
     {
         if(strlen($name) > 12)
         {
@@ -396,7 +397,7 @@ class ContestController extends Controller
         $contestants = Contestants::where([['event_id',$ev->id],['id',$id]])->first();
         $user = User::find($ev->user_id);
         $timezone = self::convert_timezone($ev);
-        
+
         //  to prevent error in case got hack
         if(is_null($contestants))
         {
