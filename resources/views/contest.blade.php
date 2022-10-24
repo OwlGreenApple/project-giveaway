@@ -212,6 +212,13 @@
                     $(".err_"+result[1][1]).html(result[1][0]);
                     $(".err_"+result[2][1]).html(result[2][0]);
                 }
+                else if(result['ebullshit'] !== undefined)
+                {
+                    // if emai form contestant is bullshit
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $(".err_email").html(result['ebullshit']);
+                }
                 else if(result['nmax'] !== undefined)
                 {
                     // if contestant full

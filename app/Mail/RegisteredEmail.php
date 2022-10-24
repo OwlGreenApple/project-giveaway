@@ -20,12 +20,14 @@ class RegisteredEmail extends Mailable
     public $password;
     public $name;
     public $destination;
+    public $url;
 
-    public function __construct($password,$name,$destination = null)
+    public function __construct($password,$name,$destination = null,$url = null)
     {
         $this->name = $name;
         $this->password = $password;
         $this->destination = $destination;
+        $this->url = $url;
     }
 
     /**
@@ -43,6 +45,7 @@ class RegisteredEmail extends Mailable
           'password' => $this->password,
           'name' => $this->name,
           'destination' => $this->destination,
+          'url' => $this->url,
         ]);
     }
 }

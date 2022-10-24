@@ -16,6 +16,7 @@ use App\Models\Bonus;
 use App\Models\Messages;
 use App\Models\Phone;
 use App\Models\Know;
+use App\Mail\RegisteredEmail;
 use App\Helpers\Custom;
 use Carbon\Carbon;
 use App\Http\Controllers\HomeController as Home;
@@ -23,6 +24,7 @@ use App\Http\Controllers\ApiController as API;
 use App\Console\Commands\RunningMessages AS Msg;
 use Illuminate\Support\Facades\DB;
 use DateTimeZone, Datetime;
+use Illuminate\Support\Facades\Mail;
 
 class ContestController extends Controller
 {
@@ -247,17 +249,19 @@ class ContestController extends Controller
             $ct->wa_number = $phone;
         }
 
+        // verification process
         try{
             $ct->save();
             if(is_null($check_identity))
             {
                 $contestant_id = $ct->id;
+                $conf_url = url('confirmation').'/'.bin2hex($contestant_id);
 
-                // SET AUTO REPLY WA MESSAGE
+                // WA MESSAGE CONFIRMATION
                 $phone = substr($phone,1); // remove + sign
 
                 $msg = $ev->message;
-                $msg .= "\n\n".Lang::get('giveaway.confirm').url('confirmation').'/'.bin2hex($contestant_id);
+                $msg .= "\n\n".Lang::get('giveaway.confirm').$conf_url ;
 
                 $mg = new Messages;
                 $sender = $mg::sender($ev->user_id);
@@ -275,6 +279,10 @@ class ContestController extends Controller
 
                 $wa_msg = new Msg;
                 $wa_msg::ins_message($msge);
+
+                // SET EMAIL VERIFICATION
+                $url = $conf_url.'/1';
+                Mail::to($email)->send(new RegisteredEmail(null,$name,'contestant',$url));
             }
             else
             {
@@ -296,7 +304,7 @@ class ContestController extends Controller
         return response()->json($res);
     }
 
-    public function confirmation($cid)
+    public function confirmation($cid,$is_email = null) 
     {
         $cid = hex2bin($cid);
         $contestant = Contestants::find($cid);
@@ -306,7 +314,17 @@ class ContestController extends Controller
             return view('error404');
         }
 
-        $contestant->confirmed = 1;
+        // verify via wa
+        if($is_email == null)
+        {
+            $contestant->confirmed = 1;
+        }
+        else
+        {
+            // verify via email
+            $contestant->verified_email = 1;
+        }
+
         $contestant->save();
         return view('confirmation');
     }
@@ -402,6 +420,12 @@ class ContestController extends Controller
         if(is_null($contestants))
         {
             return view('error404');
+        }
+
+        // verification email
+        if($contestants->verified_email == 0)
+        {
+            return view('confirmation',['ct'=>1]); 
         }
 
         $data = [

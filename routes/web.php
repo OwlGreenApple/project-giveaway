@@ -30,7 +30,7 @@ Route::post('taskdata', [App\Http\Controllers\ContestController::class, 'taskdat
 Route::post('get-rank', [App\Http\Controllers\ContestController::class, 'get_rank']);
 Route::post('save-entry', [App\Http\Controllers\ContestController::class, 'save_entry']);
 Route::post('save-contestant', [App\Http\Controllers\ContestController::class, 'save_contestant'])->middleware('check_contestants');
-Route::get('/confirmation/{cid}', [App\Http\Controllers\ContestController::class, 'confirmation']);
+Route::get('/confirmation/{cid}/{is_email}', [App\Http\Controllers\ContestController::class, 'confirmation']);
 Route::get('/test-contestant', [App\Http\Controllers\ContestController::class, 'test_contestant']);
 
 //ORDER

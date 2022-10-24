@@ -27,7 +27,7 @@ class CheckBannedEmail implements Rule
     public function passes($attribute, $value)
     {
         // CHECK BALCKLISTED EMAIL
-        $banned = ["driely","alotivi","detectu","dhamsi","unicobd","cream","ahk","magim","owleyes","fuwamofu","ruru","moimoi","eay","honeys","eay","via","hamham","ichigo","mirai","f5","stayhome","usako","effexts","jmvoice","dhnow","jincer","rwstatus","nicloo","gonaute","intobx","yusolar","tirillo","mofpay","oxtenda","onymi","novstan","trynta","azqas","coinxt","mailfm","wwc8","rwstatus","toolve","fabtivia","unite5","mailvs","anidaw","boxnavi","ostinmail","93re","ayfoto","rilemei","xredb","aituvip","doulas","cutsup","techtary","itcess"];
+        $banned = ["driely","alotivi","detectu","dhamsi","unicobd","cream","ahk","magim","owleyes","fuwamofu","ruru","moimoi","eay","honeys","eay","via","hamham","ichigo","mirai","f5","stayhome","usako","effexts","jmvoice","dhnow","jincer","rwstatus","nicloo","gonaute","intobx","yusolar","tirillo","mofpay","oxtenda","onymi","novstan","trynta","azqas","coinxt","mailfm","wwc8","rwstatus","toolve","fabtivia","unite5","mailvs","anidaw","boxnavi","ostinmail","93re","ayfoto","rilemei","xredb","aituvip","doulas","cutsup","techtary","itcess","test"];
         $mail = explode("@", $value);
         $banned_link = explode(".",$mail[1]);
 

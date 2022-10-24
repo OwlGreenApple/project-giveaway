@@ -23,6 +23,7 @@ return [
     'bc' => 'Broadcast',
     'bc.create' => 'Buat Broadcast',
     'bc.list' => 'Daftar Broadcast',
+    'conf' => 'Silahkan konfirmasi dengan me-click link yang sudah kami kirim pada email anda.',
     'contact' => 'Kontak Kami',
     'copyright' => 'Start giveaway anda dengan',
     'currency' => 'idr', 

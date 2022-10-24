@@ -31,6 +31,9 @@ return [
     'pass'=>'Password anda adalah',
     'link'=>'Link ke login',
     'reset'=>'Anda telah mereset password anda, berikut password baru anda',
+    /* RegisteredEmail -- contestant confirmation */
+    'greeting.conf'=>'Terima kasih sudah berpartisipasi dalam kontes',
+    'greeting.link'=>'Silahkan klik link di bawah ini untuk me-verifikasi email anda.',
     /* UserBuyEmail */
     'accept'=>'Konfirmasi pembayaran anda berhasil',
     'activated'=>'Akun anda telah aktif, anda bisa mulai untuk menggunakan service kami',

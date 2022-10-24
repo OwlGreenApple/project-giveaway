@@ -41,6 +41,22 @@
 	<br>
 	{{ Lang::get('email.team') }} {{ env('APP_NAME') }}
 
+@elseif($destination == 'contestant') 
+	{{ Lang::get('email.greet') }} {{$name}}
+	<br>
+	<br>
+	{{ Lang::get('email.greeting.conf') }}, 
+	<br>
+	<br>
+	{{ Lang::get('email.greeting.link') }}
+	<br>
+	<br>
+	{{ $url }} 
+	<br>
+	<br>
+	{{ Lang::get('email.close') }}
+	<br>
+	Team {{ env('APP_NAME') }}
 @else
 	<!-- password reset -->
     {{ Lang::get('email.greet') }} {{$name}},

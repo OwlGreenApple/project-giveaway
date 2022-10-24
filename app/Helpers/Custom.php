@@ -12,15 +12,15 @@ class Custom
 {
     public function get_price()
     {
-        $contestant_starter = 1000;
+        $contestant_starter = 10000;
         $campaign_starter = 2;
         $wa_starter = 100;
 
-        $contestant_gold = 2500;
+        $contestant_gold = 25000;
         $campaign_gold = 3;
         $wa_gold = 200;
 
-        $contestant_platinum = 5000;
+        $contestant_platinum = 50000;
         $campaign_platinum = 5;
         $wa_platinum = 300;
 
