@@ -257,7 +257,7 @@ class ContestController extends Controller
                 $contestant_id = $ct->id;
                 $conf_url = url('confirmation').'/'.bin2hex($contestant_id);
 
-                // WA MESSAGE CONFIRMATION
+                // WA MESSAGE CONFIRMATION -- cancelled
                 $phone = substr($phone,1); // remove + sign
 
                 $msg = $ev->message;
@@ -278,10 +278,10 @@ class ContestController extends Controller
                 ];
 
                 $wa_msg = new Msg;
-                $wa_msg::ins_message($msge);
+                // $wa_msg::ins_message($msge); --cancelled to avoid hacking
 
                 // SET EMAIL VERIFICATION
-                $url = $conf_url.'/1';
+                $url = $conf_url.'/'.bin2hex($ct->c_email);
                 Mail::to($email)->send(new RegisteredEmail(null,$name,'contestant',$url));
             }
             else
@@ -317,7 +317,7 @@ class ContestController extends Controller
         // verify via wa
         if($is_email == null)
         {
-            $contestant->confirmed = 1;
+            $contestant->confirmed = 1; //cancelled to avoid hacking
         }
         else
         {

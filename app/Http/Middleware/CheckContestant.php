@@ -76,7 +76,7 @@ class CheckContestant
         }
 
         // if is_error = 0 or the email was passed
-        if($check_reg_email == 'no-error')
+        if($check_reg_email === 'no-error')
         {
             return $next($request);
         }
@@ -184,6 +184,8 @@ class CheckContestant
             {
                 return false;
             }
+
+            return true;
         }
 
         if(is_null($em))
@@ -192,10 +194,6 @@ class CheckContestant
             $emreg->email = $email;
             $emreg->is_error = $status;
             $emreg->save();
-        }
-        elseif($filter == 1)
-        {
-
         }
         else
         {
@@ -236,6 +234,8 @@ class CheckContestant
             // to prevent counted increase if filter = 1 
             if($filter !== null)
             {
+                $ipf->counted = 0;
+                $ipf->save();
                 return true;
             }
 
