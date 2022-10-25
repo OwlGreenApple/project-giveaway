@@ -494,23 +494,15 @@ class HomeController extends Controller
     }
 
     // to display or hide integration according on user's API
-    public static function check_api($user)
+    public static function check_api($user) 
     { 
-        if($user->activrespon_api == null || empty($user->activrespon_api))
-        {
-            return false;
-        }
-        elseif($user->mailchimp_api == null || empty($user->mailchimp_api))
-        {
-            return false;
-        }
-        elseif($user->sendfox_api == null || empty($user->sendfox_api))
+        if(($user->activrespon_api == null || empty($user->activrespon_api)) && ($user->mailchimp_api == null || empty($user->mailchimp_api)) && ($user->sendfox_api == null || empty($user->sendfox_api)) )
         {
             return false;
         }
         else
         {
-            return true;
+            return true; 
         }
     }
 
@@ -1458,7 +1450,7 @@ class HomeController extends Controller
         }
         catch(QueryException $e)
         {
-            //$e->getMessage();
+            // dd($e->getMessage());
             $res['success'] = false;
         }
 
