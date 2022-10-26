@@ -257,11 +257,11 @@ class ContestController extends Controller
                 $contestant_id = $ct->id;
                 $conf_url = url('confirmation').'/'.bin2hex($contestant_id);
 
-                // WA MESSAGE CONFIRMATION -- cancelled
+                // WA AUTO REPLY
                 $phone = substr($phone,1); // remove + sign
 
                 $msg = $ev->message;
-                $msg .= "\n\n".Lang::get('giveaway.confirm').$conf_url ;
+                // $msg .= "\n\n".Lang::get('giveaway.confirm').$conf_url ; -- cancelled due verification through email only
 
                 $mg = new Messages;
                 $sender = $mg::sender($ev->user_id);
@@ -278,7 +278,7 @@ class ContestController extends Controller
                 ];
 
                 $wa_msg = new Msg;
-                // $wa_msg::ins_message($msge); --cancelled to avoid hacking
+                $wa_msg::ins_message($msge);
 
                 // SET EMAIL VERIFICATION
                 $url = $conf_url.'/'.bin2hex($ct->c_email);
