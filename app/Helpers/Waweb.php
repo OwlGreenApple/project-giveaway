@@ -137,6 +137,21 @@ class Waweb
         return $status;
     }
 
+    // PHONE LOGOUT
+    public function logout($phone_id)
+    {
+        $device = Phone::find($phone_id);
+
+        if(is_null($device))
+        {
+            return 0;
+        }
+
+        $url = $device->ip_server.'/logout?device_key='.$device->device_key.'';
+        $status = self::go_curl($url,null,'GET');
+        return $status;
+    }
+
     // SEND MESSAGE OR MEDIA MESSAGE
     public function send_message($phone_id,$phone,$message,$img = null)
     {

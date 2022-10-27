@@ -25,6 +25,12 @@ class User extends Authenticatable
         is_admin :
         0 == normal user
         1 == admin user
+
+        status : 
+        0 == banned
+        1 == active
+        2 == membership (cancelled)
+        3 == membership that eligible for using own whatsapp, but the membership is end
     */
 
     protected $fillable = [

@@ -26,14 +26,18 @@ class DeviceController extends Controller
     // DEVICE CONNECT PAGE
     public function connect_wa($id = null)
     {
+        $ct = new Custom;
+        if($ct->check_type(Auth::user()->membership)['terms'] < 12 && Auth::user()->is_admin == 0)
+        {
+            return view('error404');
+        }
+
         $phone = Phone::where([['user_id',Auth::id()]])->get();
         $waphone = Phone::where([['user_id',Auth::id()],['service_id',0]])->get();
 
-        $ct = new Custom;
-
         if($id == null)
         {
-            return view('connect',['phone'=>$phone,'waphone'=>$waphone,'ct'=>$ct]);
+            return view('connect',['phone'=>$phone,'waphone'=>$waphone,'ct'=>$ct,'user'=>Auth::user()]);
         }
         else
         {
@@ -171,12 +175,13 @@ class DeviceController extends Controller
     // SEND TEXT MESSAGE -- TEST MESSAGE PAGE
     public function send_message(Request $req)
     {
+        // dd($req->all());
         $message = strip_tags($req->message);
         $img = strip_tags($req->media);
         $phone = strip_tags($req->code.$req->number);
         $sender = strip_tags($req->sender);
 
-        $device = Phone::where('number',$sender)->first();
+        $device = Phone::where('label',$sender)->first();
         if(is_null($device))
         {
             return response()->json(['error'=>1]);

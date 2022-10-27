@@ -5,6 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Membership;
+use App\Helpers\Waweb;
+use App\Models\Phone;
+use Carbon\Carbon;
 
 class CheckMembershipTerms extends Command
 {
@@ -39,13 +42,13 @@ class CheckMembershipTerms extends Command
      */
     public function handle()
     {
-        $membership = User::where('status','>',0)->whereRaw("CONVERT_TZ (NOW(), '+00:00','+07:00') >= STR_TO_DATE(end_membership,'%Y-%m-%d %H:%i:%s')")->select('id','status')->get();
+        $membership = User::where([['status','>',0],['is_admin',0],['membership','<>','free']])->whereRaw("CONVERT_TZ (NOW(), '+00:00','+07:00') >= STR_TO_DATE(end_membership,'%Y-%m-%d %H:%i:%s')")->select('id','status')->get();
         if($membership->count() > 0)
         {
            foreach($membership as $row):
              $user = User::find($row->id);
             
-             if($row->status == 2)
+             /* if($row->status == 2)
              {
                 $mb = Membership::where([['user_id',$row->id],['status','=',0]])->get()->count();
 
@@ -53,11 +56,35 @@ class CheckMembershipTerms extends Command
                 {
                     $user->status = 1;
                 }
-             }
+             } */
 
-             $user->membership = 'free';
+            //  logging out connected phone
+             $phones = Phone::where([['user_id',$user->id],['status','>',0]])->select('id')->get();
+             self::phone_logout($phones);
+           
+             if($phones->count() < 1)
+             {
+                $user->membership = 'free';
+             }
+             else
+             {
+                $user->status = 3;
+             }
              $user->save();
            endforeach;
         }
     }
+
+    public static function phone_logout($phones)
+    {
+        if($phones->count() > 0)
+        {
+            $api = new Waweb;
+            foreach($phones as $row):
+                $api->logout($row->id);
+            endforeach;
+        }
+    }
+
+/* end console */
 }

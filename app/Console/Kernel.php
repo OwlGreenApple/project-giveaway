@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('check:running_events')->everyTenMinutes();
         // $schedule->command('check:membership')->hourly();
+        $schedule->command('delete:phone_week')->everyFourHours();
         $schedule->command('check:purchase')->everySixHours();
         $schedule->command('check:membership_terms')->everyFifteenMinutes();
         $schedule->command('check:message')->everyFiveMinutes();

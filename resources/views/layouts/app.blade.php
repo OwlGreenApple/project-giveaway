@@ -1,3 +1,8 @@
+@php
+    use App\Helpers\Custom;
+    $custom = new Custom;
+@endphp
+
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -130,7 +135,7 @@
                             </li>
                             @endif<!-- +++ temp +++-->
                             <!-- admin -->
-                            @if(Auth::user()->is_admin == 1)
+                            @if(Auth::user()->is_admin == 1 || $custom->check_type(Auth::user()->membership)['terms'] == 12 ) 
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('scan') }}">{{ Lang::get('auth.wa') }}</a>
                             </li>

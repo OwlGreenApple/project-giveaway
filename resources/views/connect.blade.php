@@ -13,10 +13,18 @@
             <span id="msg"><!-- message --></span>
             <form id="connect">
                 <div class="card px-5 py-5">
+                @if($user->status == 3)
+                    <div class="alert alert-warning text-center">
+                        {{ Lang::get('order.package.end') }}, 
+                        {{ Lang::get('order.package.if') }} <br/><a class="btn btn-success btn-sm" href="{{ url('packages') }}">{{ Lang::get('order.package.buy') }}</a> 
+                        <br/>{{ Lang::get('order.package.del') }}
+                    </div>
+                @endif
+
                     <div class="card-body p-0">
                         {{-- button --}}
-                        <div class="input-group">
-                            @if($waphone->count() < 3)
+                        <div class="input-group"> 
+                            @if(($waphone->count() < 3 && $user->is_admin == 1) || ($waphone->count() < 1 && $user->is_admin == 0))
                                 <button type="button" id="con" class="btn bg-custom text-white w-25"><i class="fas fa-mobile-alt"></i>&nbsp;{{ Lang::get('custom.connect') }}</button>
                             @endif
                         </div>
@@ -41,7 +49,7 @@
                                 <select name="sender" class="form-select">
                                     @foreach($waphone as $row)
                                         @if($row->status > 0)
-                                            <option value="{{ $row->number }}">{{ $row->number }}</option>
+                                            <option value="{{ $row->label }}">{{ $row->number }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -165,7 +173,7 @@
         });
     }
 
-    function test_message()
+    function test_message() 
     {
         $("#test_message").submit(function(e){
             e.preventDefault();
@@ -205,7 +213,8 @@
                 error: function(xhr){
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
-                }
+                },
+                timeout : 20000
             });
         });
     }
