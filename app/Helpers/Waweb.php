@@ -4,7 +4,7 @@ namespace App\Helpers;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Phone;
-use App\Models\User;
+use App\Helpers\Server;
 
 class Waweb
 {
@@ -39,7 +39,7 @@ class Waweb
         $label = self::generate_event_link();
         $user = Auth::user();
         $user_id = $user->id;
-        $ip = env('WA_SERVER');
+        $ip = Server::port()[env('WA_SERVER')][0];
 
         // CREATE DEVICE ON API WAWEB
         $api = self::get_key($ip,$user_id,$label);
@@ -64,7 +64,7 @@ class Waweb
         }
         catch(QueryException $e)
         {
-            // dd($e->getMessage());
+            dd($e->getMessage());
             $ret = false;
         }
 
