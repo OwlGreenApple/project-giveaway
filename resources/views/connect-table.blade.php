@@ -6,6 +6,7 @@
             <th>{{ Lang::get('table.status') }}</th>
             <th>{{ Lang::get('table.pair') }}</th>
             <!-- <th>{{ Lang::get('table.quota') }}</th> -->
+            <th>{{ Lang::get('table.expire') }}</th>
             @if($user->is_admin == 1)<th>{{ Lang::get('table.del') }}</th>@endif
         </tr>
     </thead>
@@ -22,6 +23,7 @@
             @endif
             </td>
             <!-- <td><span class="text-info counter"> Auth::user()->counter_send_message_daily </span></td> -->
+            <td><small>{{ Date('d-m-Y H:i:s',strtotime($user->end_membership)) }}</small></td>
             @if($user->is_admin == 1)
             <td>
                 @if($col->service_id == 0)

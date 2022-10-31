@@ -23,6 +23,7 @@ return [
     'entry'=>'Entry',
     'ex'=>'https://linkanda.com',
     'ex.username'=>'Username akun',
+    'expire'=>'Tanggal Kadaluarsa',
     'failed'=>'Gagal',
     'fund'=>'Saldo',
     'image'=>'Gambar',

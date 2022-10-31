@@ -59,7 +59,7 @@ class CheckMembershipTerms extends Command
              } */
 
             //  logging out connected phone
-             $phones = Phone::where([['user_id',$user->id],['status','>',0]])->select('id')->get();
+             $phones = Phone::where('user_id',$user->id)->select('id','status')->get();
              self::phone_logout($phones);
            
              if($phones->count() < 1)
@@ -81,7 +81,14 @@ class CheckMembershipTerms extends Command
         {
             $api = new Waweb;
             foreach($phones as $row):
-                $api->logout($row->id);
+                if($row->status > 0)
+                {
+                    $api->logout($row->id);
+                }
+                else
+                {
+                    continue;
+                } 
             endforeach;
         }
     }

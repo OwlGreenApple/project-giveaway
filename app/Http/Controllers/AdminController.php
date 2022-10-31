@@ -15,6 +15,8 @@ use App\Models\Membership;
 use App\Models\Settings;
 use App\Models\Phone;
 use App\Mail\UserBuyEmail;
+use App\Models\Contestants;
+use App\Models\Events;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -33,8 +35,31 @@ class AdminController extends Controller
     //load and display user from ajax
     public function display_users()
     {
-        $users = User::all()->where('is_admin',0);
-        return view('admin.users',['users'=>$users,'no'=>1]);
+        $data = array();
+        $users = User::where('is_admin',0)->get();
+         
+        if($users->count() > 0)
+        {
+          foreach($users as $row):
+            $events = Events::where('user_id',$row->id);
+            $ev_id = $events->select('id')->get()->toArray();
+            $total_contestants = Contestants::whereIn('event_id',$ev_id)->get()->count();
+
+            $data[] = [
+              'id'=>$row->id,
+              'name'=>$row->name,
+              'email'=>$row->email,
+              'membership'=>$row->membership,
+              'total_giveaway'=>$events->count(),
+              'total_ct'=>$total_contestants,
+              'end_membership'=>$row->end_membership,
+              'created_at'=>$row->created_at,
+              'status'=>$row->status,
+            ];
+          endforeach;
+        }
+
+        return view('admin.users',['users'=>$data,'no'=>1]);
     }
 
     public function ban_user(Request $request)
