@@ -17,7 +17,7 @@
     @endif
 
     <button class="btn btn-info" id="btn-generate">Generate</button>
-    <a href="https://topleads.com/884532300.html" target="_blank"><button class="btn btn-info">Open</button></a>
+    <a href="https://topleads.app/dashboard/884532300.html" target="_blank"><button class="btn btn-info">Open</button></a>
  
     <!-- end container -->
   </div>
