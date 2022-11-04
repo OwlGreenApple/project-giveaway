@@ -116,6 +116,8 @@ Route::get('cancel-order',[App\Http\Controllers\AdminController::class,'cancel_o
 Route::get('settings',[App\Http\Controllers\AdminController::class,'settings']);
 Route::get('admin-phone',[App\Http\Controllers\AdminController::class,'display_admin_phone']);
 Route::get('admin-phone-del',[App\Http\Controllers\AdminController::class,'del_admin_phone']);
+Route::get('metrics',[App\Http\Controllers\AdminController::class,'index_metrics_chart']);
+Route::post('generate-metrics-chart',[App\Http\Controllers\AdminController::class,'generate_metrics_chart']);
 Route::post('save-settings',[App\Http\Controllers\AdminController::class,'settings_save']);
 Route::post('save-admin-phone',[App\Http\Controllers\AdminController::class,'settings_phone']);
 

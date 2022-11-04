@@ -151,6 +151,7 @@
                                         <a class="dropdown-item" href="{{ url('list-user') }}">{{ Lang::get('auth.list.user') }}</a>
                                         <a class="dropdown-item" href="{{ url('list-order') }}">{{ Lang::get('auth.list.order') }}</a>
                                         <a class="dropdown-item" href="{{ url('affiliate-admin') }}">{{ Lang::get('auth.list.redeem') }}</a>
+                                        <a class="dropdown-item" href="{{ url('metrics') }}">Metrics</a>
                                     @else
                                         <a class="dropdown-item" href="{{ url('packages') }}">
                                             <b class="main-color"><i class="fas fa-arrow-alt-circle-up"></i>&nbsp;{{ Lang::get('auth.package') }}</b>

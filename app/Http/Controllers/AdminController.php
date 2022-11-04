@@ -488,5 +488,19 @@ class AdminController extends Controller
     	return response()->json($data);
     }
 
+    // METRIC NGINX
+    public function index_metrics_chart() {
+      return view('admin.metrics-index');
+    }
+
+    public function generate_metrics_chart(Request $request){
+      exec("goaccess /var/log/nginx/access.log -o /var/www/watcherviews.com/public_html/783213900.html --log-format=COMBINED > /dev/null 2>&1 & ");
+
+      return json_encode([
+        "success"=>1,
+        "message"=>"data saved!",
+      ]);
+    }
+
 /* end controller */
 }
