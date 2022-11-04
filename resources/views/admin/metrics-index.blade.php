@@ -8,11 +8,6 @@
         <div class="col-lg-11">
                 <h2>Metrics Website</h2>
         </div>
-        <div class="col-lg-1">
-            <!--
-            <a class="btn btn-success" href="{{ route('user.create') }}">Add</a>
-            -->
-        </div>
     </div>
  
     @if ($message = Session::get('success'))
@@ -22,7 +17,7 @@
     @endif
 
     <button class="btn btn-info" id="btn-generate">Generate</button>
-    <a href="https://watcherviews.com/783213900.html" target="_blank"><button class="btn btn-info">Open</button></a>
+    <a href="https://topleads.com/884532300.html" target="_blank"><button class="btn btn-info">Open</button></a>
  
     <!-- end container -->
   </div>

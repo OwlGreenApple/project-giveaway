@@ -494,7 +494,7 @@ class AdminController extends Controller
     }
 
     public function generate_metrics_chart(Request $request){
-      exec("goaccess /var/log/nginx/access.log -o /var/www/watcherviews.com/public_html/783213900.html --log-format=COMBINED > /dev/null 2>&1 & ");
+      exec("goaccess /var/log/nginx/access.log -o /var/www/watcherviews.com/public_html/884532300.html --log-format=COMBINED > /dev/null 2>&1 & ");
 
       return json_encode([
         "success"=>1,
