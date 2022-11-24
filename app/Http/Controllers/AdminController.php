@@ -349,6 +349,13 @@ class AdminController extends Controller
         // $check_active_membership = $this->check_term_membership($user);
         $total_month = $ct->check_type($order->package)['terms'];
 
+        // --- temp for digimaru ---
+        if($order->package == 'starter-special')
+        {
+          $total_month += 1;
+        }
+        // --- end temp for digimaru ---
+
         //referrer get money from referral
         if($user->myreferral > 0)
         {

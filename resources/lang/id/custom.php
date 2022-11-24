@@ -100,6 +100,7 @@ return [
     'tw.col'=>'Twitter Username',
     'tw.share'=>'Twitter Share',
     'valid'=>'tepat',
+    'valid.no'=>'tidak tepat',
     'view'=>'Lihat',
     'wa.share'=>'Whatsapp Share',
     'wait'=>'Mohon tunggu hingga QR-CODE tampil',

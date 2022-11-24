@@ -38,7 +38,8 @@ class Custom
             ['title'=>'gold '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'gold-yearly','price'=>150000,'terms'=>$term_yearly,'contestants'=>$contestant_gold,'campaign'=>$campaign_gold,'wa'=>$wa_gold,'discount'=>200000,'sponsor'=>0],
             ['title'=>'platinum '.$term_monthly.' '.Lang::get('order.month.text'),'package'=>'platinum','price'=>350000,'terms'=>$term_monthly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'sponsor'=>0],
             ['title'=>'platinum '.$term_3_month.' '.Lang::get('order.month.text'),'package'=>'platinum-3-month','price'=>297500,'terms'=>$term_3_month,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000,'sponsor'=>0],
-            ['title'=>'platinum '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'platinum-yearly','price'=>210000,'terms'=>$term_yearly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000,'sponsor'=>0]
+            ['title'=>'platinum '.$term_yearly.' '.Lang::get('order.month.text'),'package'=>'platinum-yearly','price'=>210000,'terms'=>$term_yearly,'contestants'=>$contestant_platinum,'campaign'=>$campaign_platinum,'wa'=>$wa_platinum,'discount'=>300000,'sponsor'=>0],
+            ['title'=>'Starter-special 2 '.Lang::get('order.month.text'),'package'=>'starter-special','price'=>100000,'terms'=>1,'contestants'=>$contestant_starter,'campaign'=>$campaign_starter,'wa'=>$wa_starter,'sponsor'=>1],
         ];
 
         return $price;
@@ -56,7 +57,8 @@ class Custom
             $this->get_price()[6]['package'] => $this->get_price()[6],
             $this->get_price()[7]['package'] => $this->get_price()[7],
             $this->get_price()[8]['package'] => $this->get_price()[8],
-            $this->get_price()[9]['package'] => $this->get_price()[9]
+            $this->get_price()[9]['package'] => $this->get_price()[9],
+            $this->get_price()[10]['package'] => $this->get_price()[10],
         ];
 
         if(isset($pack[$package]))

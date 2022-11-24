@@ -48,6 +48,6 @@ class CheckPricing implements Rule
      */
     public function message()
     {    
-        return Lang::get('order.package')." ".Lang::get('custom.valid');
+        return Lang::get('order.package')." ".Lang::get('custom.valid.no'); 
     }
 }

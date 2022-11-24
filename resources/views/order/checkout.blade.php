@@ -23,6 +23,14 @@
                             <option data-title="{{$row['title']}}" data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
                               {{$row['title']}} (IDR {{ $api::format($row['price']) }} / {{ Lang::get('order.month.sh') }})
                             </option>
+                            @elseif($page == 'digimaru')
+                              @if($index == 10)
+                                <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
+                                  {{$row['title']}} (IDR {{ $api::format($row['price']) }} / 2 {{ Lang::get('order.month.sh') }})
+                                </option>
+                              @endif
+                            @elseif($index == 10 || $page == 10)
+                              -
                             @else
                             <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
                               {{$row['title']}} (IDR {{ $api::format($row['price']) }} / {{ Lang::get('order.month.sh') }})
@@ -36,21 +44,19 @@
                 <!--  -->
               </div>
 
-             <!--  if(is_coupon == false)
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <div class="col-md-12 col-12">
                   <label class="label-title-test" for="formGroupExampleInput">
-                    Coupon code (optional):
+                    Kode khusus
                   </label>
 
-                  <input type="text" class="form-control form-control-lg" name="kupon" id="kupon" placeholder="Kode Kupon Anda" style="width:100%">  
+                  <input type="text" class="form-control form-control-md" name="kupon" id="kupon" placeholder="Kode Kupon Anda" style="width:100%">  
                   <button type="button" class="btn btn-primary btn-kupon  form-control-lg col-md-3 col-sm-12 col-xs-12 mt-3">
                     Apply
                   </button>  
                 </div>
-              </div>
-              endif;
- -->
+              </div> -->
+          
               <div class="form-group mb-1">
                 <div class="col-md-12 col-12">
                   <div id="pesan"><!-- notification --></div>
