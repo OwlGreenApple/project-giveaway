@@ -29,7 +29,7 @@
                                   {{$row['title']}} (IDR {{ $api::format($row['price']) }} / 2 {{ Lang::get('order.month.sh') }})
                                 </option>
                               @endif
-                            @elseif($index == 10 || $page == 10)
+                            @elseif($index == 10)<!-- temp -- may remove after dec 1 2022 -->
                               -
                             @else
                             <option data-terms="{{ $row['terms'] }}" data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
