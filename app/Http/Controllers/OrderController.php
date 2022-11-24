@@ -43,7 +43,7 @@ class OrderController extends Controller
     	$page = request()->segment(2);
 
         /* -- temp until dec 1 2022 */
-        if($page >= 10)
+        if($page == 10)
         {
             return redirect('checkout/1');
         }
