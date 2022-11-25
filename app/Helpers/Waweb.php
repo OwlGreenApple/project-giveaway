@@ -34,7 +34,7 @@ class Waweb
     }
 
     // CREATE DEVICE
-    public function create_device()
+    public function create_device() 
     {
         $label = self::generate_event_link();
         $user = Auth::user();
@@ -44,7 +44,7 @@ class Waweb
         // CREATE DEVICE ON API WAWEB
         $api = self::get_key($ip,$user_id,$label);
 
-        if(isset($api['device_key']) && $api['device_key'] == null)
+        if((!isset($api['device_key']) && !isset($api['id'])) || (isset($api['device_key']) && $api['device_key'] == null))
         {
             return false;
         }
@@ -64,7 +64,7 @@ class Waweb
         }
         catch(QueryException $e)
         {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             $ret = false;
         }
 
