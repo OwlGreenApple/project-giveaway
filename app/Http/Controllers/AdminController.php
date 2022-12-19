@@ -17,7 +17,11 @@ use App\Models\Phone;
 use App\Mail\UserBuyEmail;
 use App\Models\Contestants;
 use App\Models\Events;
-use Carbon\Carbon;
+use Carbon\Carbon, Excel;
+
+use App\Imports\UserImport;
+
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -508,6 +512,117 @@ class AdminController extends Controller
         "message"=>"data saved!",
       ]);
     }
+
+
+    public function import_excel_user(Request $request){
+      $admin = Auth::user();
+      $arr = [
+        "status" => "success",
+        "message" => "User berhasil di add",
+      ];
+
+      if ($admin->is_admin == 1) {
+        // $data = Excel::load(Input::file('import_file'), function($reader) {
+        // $data = Excel::load($request->import_file, function($reader) {
+        // })->get();
+        $data = Excel::toArray(new UserImport,$request->import_file);
+        // dd($data[0]);
+        
+        if(!empty($data) && count($data)>0){
+          foreach ($data as $key) {
+            foreach ($key as $value) {
+              //echo $value->email;
+              if (!filter_var($value['email'], FILTER_VALIDATE_EMAIL) === false){
+                $password = "";
+                //cek new user or update
+                $user = User::where("email",$value['email'])->first();
+
+                if ( is_null($user) ) {
+                    //klo new user
+                    $pas = $value['name'];
+                    $gh = substr($pas, 0,6);
+                    $chrnd =substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',5)),0,5);
+                    $password = str_replace(' ','', $gh.$chrnd);
+                    $helper = new Custom;
+                    $check = $helper->check_email_bouncing(strip_tags($value['email']),"new");
+            
+                    $user = new User;
+                    $user->name = $value['name'];
+                    $user->email = $value['email'];
+                    $user->password =  Hash::make($password);
+                    $user->membership = $value['membership'];
+                    $valid = Carbon::now()->addDays($value['day']);
+                    $user->end_membership = $valid;
+                    $user->myreferral = 0;
+                    $user->is_valid_email = $check;
+  
+                    $referral_code = "";
+                    $check_user = true;
+                    while (!is_null($check_user)) {
+                      $referral_code = substr(md5(microtime()),rand(0,26),8);
+                      $referral_code = str_replace("0","o",$referral_code);
+                      $referral_code = strtoupper($referral_code);
+                      $check_user = User::where("referral_code",$referral_code)->first();
+                    }
+                    $user->status = 1;
+                    $user->referral_code = $referral_code;
+                    $user->save();
+                    
+
+                    //if($helper->check_email_bouncing($user->email) == true)
+                    if ($check == true) 
+                    {
+                      $data = [
+                        //   'message'=>$msg,
+                        //   'phone_number'=>$phone_number,
+                          'cond'=>"new",
+                          'email'=>$value['email'],
+                          'obj'=>new RegisteredEmail($generated_password,strip_tags($value['name'])),
+                        ];
+                
+                        $adm = new FG;
+                        $adm->notify_user($data);
+                    }
+                        
+                }
+                else {
+                  //klo update user
+                }
+                $update = false;
+                if (is_null($user->end_membership)) {
+                  $update = true;
+                }
+                else {
+                  if (Carbon::now()->diffInDays(Carbon::createFromFormat('Y-m-d H:i:s', $user->end_membership)) > 0){
+                    $update = true;
+                  }
+                }
+
+                  
+                if ($update){
+                  $valid = Carbon::now()->addDays($value['day']);
+                  $user->end_membership = $valid;
+                  $user->membership = $value['membership'];
+                  $user->save();
+                }
+                
+                
+              
+                
+               
+              }
+            }
+          }
+        }
+      }else{
+        $arr = [
+          "status" => "error",
+          "message" => "Not Authorize",
+        ];
+      }
+      return $arr;
+    }
+    
 
 /* end controller */
 }

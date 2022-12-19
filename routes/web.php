@@ -107,6 +107,7 @@ Route::post('/delete-message', [App\Http\Controllers\BroadcastController::class,
 
 /* Admin */
 Route::get('list-user',[App\Http\Controllers\AdminController::class, 'index']);
+Route::post('import-excel-user',[App\Http\Controllers\AdminController::class,'import_excel_user']);
 Route::get('list-order',[App\Http\Controllers\AdminController::class, 'order_list']);
 Route::get('order-load',[App\Http\Controllers\AdminController::class,'order']);
 Route::get('order-confirm',[App\Http\Controllers\AdminController::class,'confirm_order']);

@@ -32,7 +32,7 @@ class User extends Authenticatable
         2 == membership (cancelled)
         3 == membership that eligible for using own whatsapp, but the membership is end
     */
-
+    
     protected $fillable = [
         'name',
         'email',
