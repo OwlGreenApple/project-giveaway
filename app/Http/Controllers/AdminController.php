@@ -18,6 +18,7 @@ use App\Mail\UserBuyEmail;
 use App\Models\Contestants;
 use App\Models\Events;
 use Carbon\Carbon, Excel;
+use App\Mail\RegisteredEmail;
 
 use App\Imports\UserImport;
 

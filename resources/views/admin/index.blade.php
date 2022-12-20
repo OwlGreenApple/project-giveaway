@@ -35,7 +35,7 @@
           <h5 class="modal-title" id="modaltitle">
             Add User
           </h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" class="close" data-dismiss="modal" id="btn-close-modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -55,7 +55,7 @@
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel-modal">
             Cancel
           </button>
           <button type="button" data-dismiss="modal" class="btn btn-primary" id="btn-add-user-free-trial">
@@ -80,6 +80,12 @@
     {
         $("body").on("click","#button-add-user-showmodal",function(){
             $('#modal-add-user').modal('show');
+        });
+        $("body").on("click","#btn-close-modal",function(){
+            $('#modal-add-user').modal('hide');
+        });
+        $("body").on("click","#btn-cancel-modal",function(){
+            $('#modal-add-user').modal('hide');
         });
     }
 
@@ -110,6 +116,7 @@
             $('#pesan').html('<div class="alert alert-success"><strong>Success!</strong> '+data.message+'</div>');
           }*/
           $("#div-loading").hide();
+          $('#modal-add-user').modal('hide');
           alert(data.message);
         }        
          });
