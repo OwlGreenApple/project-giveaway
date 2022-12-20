@@ -124,6 +124,7 @@ class Messages extends Model
         $api = new Waweb;
         $ret = $api->send_message($phone_id,$customer_phone,$customer_message,$image);
         $ret['device_id'] = $phone_id;
+        $ret['status'] = 1; //new rizky
         return $ret;
       }
       else if($service == 1)

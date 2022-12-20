@@ -202,7 +202,7 @@ class RunningMessages extends Command
                 {
                     $image = Storage::disk('s3')->url($row->img_url);
                 }
-
+                
                 $status = $device::sendingwa($user,$row->receiver,$message,$image,$row->sender);
 
                 // RESULT FROM SEND MESSAGE

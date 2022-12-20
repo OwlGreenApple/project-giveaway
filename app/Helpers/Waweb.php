@@ -32,7 +32,7 @@ class Waweb
         $res=curl_exec($ch);
         return json_decode($res,true);
     }
-
+    
     // CREATE DEVICE
     public function create_device() 
     {
