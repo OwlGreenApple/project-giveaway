@@ -23,6 +23,7 @@ use App\Mail\RegisteredEmail;
 use App\Imports\UserImport;
 
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Auth\ForgotPasswordController AS FG;
 
 class AdminController extends Controller
 {
@@ -550,7 +551,8 @@ class AdminController extends Controller
                     $user = new User;
                     $user->name = $value['name'];
                     $user->email = $value['email'];
-                    $user->password =  Hash::make($password);
+                    $generated_password = Hash::make($password);
+                    $user->password =  $generated_password;
                     $user->membership = $value['membership'];
                     $valid = Carbon::now()->addDays($value['day']);
                     $user->end_membership = $valid;

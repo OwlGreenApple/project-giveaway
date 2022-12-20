@@ -104,7 +104,7 @@
         processData:false,
         contentType: false,
         beforeSend: function(result) {
-          $("#div-loading").show();
+          $('.div-loading').addClass('background-load');
         },
         dataType: 'text',
         success: function(result)
@@ -115,7 +115,7 @@
           } else {
             $('#pesan').html('<div class="alert alert-success"><strong>Success!</strong> '+data.message+'</div>');
           }*/
-          $("#div-loading").hide();
+          $('.div-loading').removeClass('background-load');
           $('#modal-add-user').modal('hide');
           alert(data.message);
         }        
