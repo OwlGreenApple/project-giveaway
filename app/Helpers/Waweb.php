@@ -40,7 +40,7 @@ class Waweb
         $user = Auth::user();
         $user_id = $user->id;
         //$ip = Server::port()[env('WA_SERVER')][0];
-        $ip =  env('WA_SERVER');
+        $ip =  "localhost:3200";
 
         // CREATE DEVICE ON API WAWEB
         $api = self::get_key($ip,$user_id,$label);

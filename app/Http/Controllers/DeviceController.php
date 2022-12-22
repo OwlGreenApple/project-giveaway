@@ -59,7 +59,7 @@ class DeviceController extends Controller
         {
             return response()->json(['status'=>'max']);
         }
-
+        
         $api = new Waweb;
         $ret = $api->create_device();
 
