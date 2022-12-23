@@ -63,6 +63,7 @@ class CheckDeviceStatus extends Command
             'phone_id'=>$row->id 
         ];
 
-        $device->get_phone_status($data);
+        $ret = $device->get_phone_status($data);
+        dd($ret);
     }
 }
