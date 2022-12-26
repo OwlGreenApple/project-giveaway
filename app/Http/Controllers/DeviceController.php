@@ -194,7 +194,7 @@ class DeviceController extends Controller
 
         // LOGIC TO SEND MESSAGE
         $api = new Waweb;
-        $send = $api->send_message($phone_id,$phone,$message,$img);
+        $send = $api->send_message($phone_id,$phone,$message);
         return response()->json($send);
     }
 
