@@ -178,7 +178,7 @@ class DeviceController extends Controller
         // dd($req->all());
         $message = strip_tags($req->message);
         $img = null;
-        if (isset($req->media)) { 
+        if (!is_null($req->media)) { 
             $img = strip_tags($req->media);
         }
         $phone = strip_tags($req->code.$req->number);
