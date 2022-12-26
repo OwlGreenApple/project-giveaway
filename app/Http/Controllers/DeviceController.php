@@ -191,6 +191,7 @@ class DeviceController extends Controller
         }
 
         $phone_id = $device->id;
+        return $phone_id.$phone.$message;
 
         // LOGIC TO SEND MESSAGE
         $api = new Waweb;
