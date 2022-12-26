@@ -177,11 +177,14 @@ class DeviceController extends Controller
     {
         // dd($req->all());
         $message = strip_tags($req->message);
-        $img = strip_tags($req->media);
+        $img = null;
+        if (isset($req->media)) { 
+            $img = strip_tags($req->media);
+        }
         $phone = strip_tags($req->code.$req->number);
         $sender = strip_tags($req->sender);
 
-        $device = Phone::where('label',$sender)->first();/// ga tau kenapa diganti label sama gunardi, mungkin ada hubungan dengan fitur membership
+        $device = Phone::where('label',$sender)->first();
         if(is_null($device))
         {
             return response()->json(['error'=>1]);
