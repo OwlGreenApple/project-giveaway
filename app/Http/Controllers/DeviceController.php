@@ -181,7 +181,7 @@ class DeviceController extends Controller
         $phone = strip_tags($req->code.$req->number);
         $sender = strip_tags($req->sender);
 
-        $device = Phone::where('phone',$sender)->first();/// ga tau kenapa diganti label sama gunardi, mungkin ada hubungan dengan fitur membership
+        $device = Phone::where('label',$sender)->first();/// ga tau kenapa diganti label sama gunardi, mungkin ada hubungan dengan fitur membership
         if(is_null($device))
         {
             return response()->json(['error'=>1]);
