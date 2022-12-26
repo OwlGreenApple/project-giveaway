@@ -174,7 +174,7 @@ class Waweb
         // SEND MEDIA MESSAGE
         if($img == null)
         {
-            unset($data['url']);
+            //unset($data['url']);
         }
         else
         {
