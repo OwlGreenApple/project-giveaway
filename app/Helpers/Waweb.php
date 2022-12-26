@@ -166,7 +166,8 @@ class Waweb
         $url = $device->ip_server.'/message';
         $data = [
             'message'=>$message,
-            'unique'=>env('WA_UNIQUE'),
+            //'unique'=>env('WA_UNIQUE'),
+            'unique'=>"Ww7YTPhDWVngJtaf87EdwCCguSKQ6hME",
             'device_key'=>$device->device_key,
             'number'=>str_replace("+","",$phone)
         ];
