@@ -64,6 +64,6 @@ class CheckDeviceStatus extends Command
         ];
 
         $ret = $device->get_phone_status($data);
-        dd($ret);
+        //dd($ret);
     }
 }
