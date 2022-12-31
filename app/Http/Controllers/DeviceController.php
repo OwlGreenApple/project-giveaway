@@ -197,7 +197,7 @@ class DeviceController extends Controller
         $send = $api->send_message($phone_id,$phone,$message);
         return response()->json($send);
     }
-
+    
     // DELETE DEVICE
     public function delete_device(Request $req)
     {
