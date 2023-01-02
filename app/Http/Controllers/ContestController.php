@@ -466,7 +466,7 @@ class ContestController extends Controller
         $ev_link = $ev->url_link;
         $ref_code = $ct->ref_code;
         $share_url = env('APP_URL').'/c/'.$ev_link.'/'.$ref_code;
-
+        
         $data = [
             'ev'=>$ev,
             'ct_id'=>$id,

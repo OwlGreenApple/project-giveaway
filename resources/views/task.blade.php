@@ -25,7 +25,7 @@
             </div>
         </div>
         <!-- end carousel -->
-
+        
         <h1 class="congrats"><b>{{ Lang::get('custom.congrats') }}</b> {{ Lang::get('custom.in') }}</h1>
         <h2 class="congrats"><b>{{ Lang::get('custom.get') }}</b> {{ Lang::get('custom.by') }} :</h2>
         <h4 class="text-center text-uppercase px-3">
