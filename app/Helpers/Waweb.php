@@ -167,9 +167,9 @@ class Waweb
         $url = $device->ip_server.'/message';
         $data = [
             'message'=>$message,
-            //'unique'=>env('WA_UNIQUE'),
+            'unique'=>env('WA_UNIQUE'),
             //'unique'=>"Ww7YTPhDWVngJtaf87EdwCCguSKQ6hME",
-            'unique'=>Config::get('view.WA_UNIQUE'),
+            //'unique'=>Config::get('view.WA_UNIQUE'),
             'device_key'=>$device->device_key,
             'number'=>str_replace("+","",$phone)
         ];
@@ -197,8 +197,8 @@ class Waweb
             return 0;
         }
 
-        //$url = $device->ip_server.'/del?device_key='.$device->device_key.'&unique='.env('WA_UNIQUE').'';
-        $url = $device->ip_server.'/del?device_key='.$device->device_key.'&unique='.Config::get('view.WA_UNIQUE').'';
+        $url = $device->ip_server.'/del?device_key='.$device->device_key.'&unique='.env('WA_UNIQUE').'';
+        //$url = $device->ip_server.'/del?device_key='.$device->device_key.'&unique='.Config::get('view.WA_UNIQUE').'';
         $del = self::go_curl($url,null,'GET');
 
         if(isset($del['status']) && $del['status'] == 1)

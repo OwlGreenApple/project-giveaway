@@ -1179,7 +1179,7 @@ class HomeController extends Controller
             $fl = file_get_contents($file);
             $newfile = env('FOLDER_PATH').'/banner/'.Date('Y-m-d-h-i-s-').$index.'-'.$dpl.".jpg";
             Storage::disk('s3')->put($newfile,$fl, 'public');
-
+            
             $banners = new Banners;
             $banners->event_id = $event_id;
             $banners->url = $newfile;
