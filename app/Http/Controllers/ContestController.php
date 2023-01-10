@@ -321,16 +321,21 @@ class ContestController extends Controller
         }
         else
         {
+            // supaya ga kedobelan dikasi if ini, sama klo verify sama email aja baru masuk point, dan referralnya
+            if ($contestant->verified_email == 0) {
+                $refowner = Contestants::find($contestant->ref_id);
+                $refowner->entries += 3;
+                $refowner->referrals += 1;
+                $refowner->save();
+            }
+    
             // verify via email
             $contestant->verified_email = 1;
         }
 
-        $contestant->save();
 
-        $refowner = Contestants::find($contestant->ref_id);
-        $refowner->entries += 3;
-        $refowner->referrals += 1;
-        $refowner->save();
+
+        $contestant->save();
 
         return view('confirmation');
     }
