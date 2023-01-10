@@ -164,10 +164,10 @@ class ContestController extends Controller
             {
                 $ref_id = $check->id;
                 // referal system
-                $refowner = Contestants::find($ref_id);
+                /*$refowner = Contestants::find($ref_id);
                 $refowner->entries += 3;
                 $refowner->referrals += 1;
-                $refowner->save();
+                $refowner->save();*/
             }
         }
 
@@ -326,6 +326,12 @@ class ContestController extends Controller
         }
 
         $contestant->save();
+
+        $refowner = Contestants::find($contestant->ref_id);
+        $refowner->entries += 3;
+        $refowner->referrals += 1;
+        $refowner->save();
+
         return view('confirmation');
     }
 
