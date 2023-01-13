@@ -324,8 +324,17 @@ class ContestController extends Controller
             // supaya ga kedobelan dikasi if ini, sama klo verify sama email aja baru masuk point, dan referralnya
             if ($contestant->verified_email == 0) {
                 $refowner = Contestants::find($contestant->ref_id);
-                $refowner->entries += 3;
-                $refowner->referrals += 1;
+                if (is_null($refowner->entries)){
+                    $refowner->entries = 3;    
+                } else {
+                    $refowner->entries += 3;
+                }
+                if (is_null($refowner->entries)){
+                    $refowner->referrals = 1;
+                }
+                else {
+                    $refowner->referrals += 1;
+                }
                 $refowner->save();
             }
     
