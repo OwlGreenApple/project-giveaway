@@ -256,7 +256,7 @@ class ContestController extends Controller
             {
                 $contestant_id = $ct->id;
                 $conf_url = url('confirmation').'/'.bin2hex($contestant_id);
-
+/*
                 // WA AUTO REPLY
                 $phone = substr($phone,1); // remove + sign
 
@@ -278,7 +278,7 @@ class ContestController extends Controller
                 ];
 
                 $wa_msg = new Msg;
-                $wa_msg::ins_message($msge);
+                $wa_msg::ins_message($msge);*/
 
                 // SET EMAIL VERIFICATION
                 $url = $conf_url.'/'.bin2hex($ct->c_email);
