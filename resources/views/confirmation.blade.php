@@ -11,7 +11,12 @@
               <i class="fas fa-check-circle"></i>
             </span>
             <h1>{{ Lang::get('custom.thx') }}</h1>
-            <p>{{ Lang::get('auth.conf') }}</p>
+            <p>{{ Lang::get('auth.conf') }}
+              <!--<br>
+              Untuk mendapat notifikasi WA dari kami silahkan lakukan proses dibawah.<br>
+              1. klik (kirim pesan Unique ID anda ke WA TopleadsApp)
+              2. check -->
+            </p>
           @else
             <span class="icon-thankyou" style="font-size: 60px;color: #106BC8">
               <i class="fas fa-check-circle"></i>

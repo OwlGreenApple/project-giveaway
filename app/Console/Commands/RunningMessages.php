@@ -116,7 +116,7 @@ class RunningMessages extends Command
             } // end broadcast loop
         endif;
 
-        /*
+        /*  
             SEND MESSAGE LOGIC
         */
         $messagebulk = Messages::where('status',0)->orderBy('id','asc')->get();
