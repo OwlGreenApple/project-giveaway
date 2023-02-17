@@ -37,7 +37,7 @@ return [
     'currency'=>'IDR',
     'email_admin'=>'info.topleadsapp@gmail.com',
     'phone_admin'=>'+62817-318-368',
-    'no_rek'=>'8290-336-261',
+    'no_rek'=>'8290-812-845',
     'WAMATE_EMAIL'=>env('WAMATE_EMAIL'),
     'WAMATE_URL'=>env('WAMATE_URL'),
 
